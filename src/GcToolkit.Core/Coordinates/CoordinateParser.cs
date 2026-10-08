@@ -6,7 +6,8 @@ namespace GcToolkit.Core.Coordinates;
 /// <summary>
 /// Parses the textual coordinate notations geocaching tools accept. Latitude/longitude formats take a
 /// hemisphere letter (N/S/E/W) or a signed number, allow flexible whitespace, and treat the
-/// <c>° ' "</c> symbols as optional. UTM and MGRS grids are detected by their distinctive shape.
+/// <c>° ' "</c> symbols as optional. Numbers may use a dot or a comma as their decimal separator, whatever
+/// the current culture is. UTM and MGRS grids are detected by their distinctive shape.
 /// Every entry point returns <see langword="false"/> on unparseable input rather than throwing.
 /// </summary>
 public static partial class CoordinateParser
@@ -124,6 +125,10 @@ public static partial class CoordinateParser
         coordinate = default;
         detected = CoordinateFormat.DecimalDegrees;
 
+        // Czech (and most of Europe) writes "49 12,345". Fold the decimal comma into a dot before anything
+        // counts numbers, so the component count — which selects DD/DDM/DMS below — sees the real values.
+        text = NormalizeDecimalCommas(text);
+
         var (latText, lonText) = SplitAxes(text);
         if (latText is null || lonText is null)
         {
@@ -152,6 +157,57 @@ public static partial class CoordinateParser
         return true;
     }
 
+    /// <summary>Rewrites decimal commas ("49 12,345") as dots so the tokenizer and the culture-invariant
+    /// <c>double.Parse</c> below see a single decimal separator. The rewrite preserves length, so the callers'
+    /// index arithmetic still holds. A comma whose number already carries a dot ("49.205, 16.576") is left
+    /// alone — there it divides the two axes rather than a number's integer and fractional parts.</summary>
+    private static string NormalizeDecimalCommas(string text)
+    {
+        if (!text.Contains(','))
+        {
+            return text;
+        }
+
+        var chars = text.ToCharArray();
+        for (var i = 1; i < chars.Length - 1; i++)
+        {
+            if (chars[i] is ',' &&
+                char.IsAsciiDigit(chars[i - 1]) &&
+                char.IsAsciiDigit(chars[i + 1]) &&
+                !NumberRunHasDot(chars, i))
+            {
+                chars[i] = '.';
+            }
+        }
+
+        return new string(chars);
+    }
+
+    /// <summary>Reports whether the uninterrupted number run around <paramref name="index"/> already
+    /// contains a dot, which rules the comma out as a decimal separator.</summary>
+    private static bool NumberRunHasDot(char[] chars, int index)
+    {
+        for (var i = index - 1; i >= 0 && IsNumberRunChar(chars[i]); i--)
+        {
+            if (chars[i] is '.')
+            {
+                return true;
+            }
+        }
+
+        for (var i = index + 1; i < chars.Length && IsNumberRunChar(chars[i]); i++)
+        {
+            if (chars[i] is '.')
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static bool IsNumberRunChar(char c) => char.IsAsciiDigit(c) || c is '.' or ',';
+
     /// <summary>Splits a two-axis string into its latitude and longitude halves. The boundary is the
     /// N/S→E/W hemisphere change, an explicit comma, or (for signed input) the midpoint of the numbers.</summary>
     private static (string? Lat, string? Lon) SplitAxes(string text)
@@ -165,8 +221,8 @@ public static partial class CoordinateParser
             return (lat, lon);
         }
 
-        // Explicit comma separator (only when there is a single comma acting as the axis divider, not a
-        // decimal comma — this library uses '.' as the decimal point).
+        // Explicit comma separator. Decimal commas are already folded to dots, so a lone remaining comma
+        // can only be the axis divider.
         var comma = text.IndexOf(',');
         if (comma > 0 && text.IndexOf(',', comma + 1) < 0)
         {

@@ -37,8 +37,6 @@
         <PackageReference Include="MZikmund.Toolkit.WinUI" />
         <PackageReference Include="CommunityToolkit.WinUI.Controls.SettingsControls" />
         <PackageReference Include="CommunityToolkit.WinUI.Converters" />
-        <PackageReference Include="sqlite-net-e" />
-        <PackageReference Include="SourceGear.sqlite3" />
     </ItemGroup>
 
 </Project>

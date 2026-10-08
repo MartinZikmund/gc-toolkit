@@ -3,6 +3,12 @@ using MZikmund.Toolkit.WinUI.Services;
 
 namespace GcToolkit.Services.Settings;
 
+/// <summary>
+/// Persisted placement of the main window, in physical screen pixels. The maximized state is kept
+/// separately so a maximized window restores maximized without losing its restored bounds.
+/// </summary>
+public sealed record WindowPlacement(int Left, int Top, int Width, int Height, bool IsMaximized);
+
 public sealed class AppPreferences : IAppPreferences
 {
     private readonly IPreferences _preferences;

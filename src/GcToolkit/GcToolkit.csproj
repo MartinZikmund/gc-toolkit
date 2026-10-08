@@ -14,7 +14,7 @@
 
         <!-- Application metadata -->
         <ApplicationPublisher>Martin Zikmund</ApplicationPublisher>
-        <Description>GcToolkit by Martin Zikmund</Description>
+        <Description>An offline, open-source toolkit for geocaching — coordinate converters, ciphers, encoders, calculators, and reference tables for solving puzzle caches.</Description>
     </PropertyGroup>
 
     <!-- Channel-specific identity. See docs/versioning.md. -->
@@ -49,8 +49,6 @@
         <PackageReference Include="MZikmund.Toolkit.WinUI" />
         <PackageReference Include="CommunityToolkit.WinUI.Controls.SettingsControls" />
         <PackageReference Include="CommunityToolkit.WinUI.Converters" />
-        <PackageReference Include="sqlite-net-e" />
-        <PackageReference Include="SourceGear.sqlite3" />
     </ItemGroup>
 
     <ItemGroup>

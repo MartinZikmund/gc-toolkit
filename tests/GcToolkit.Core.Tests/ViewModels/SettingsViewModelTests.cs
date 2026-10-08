@@ -1,6 +1,7 @@
 using GcToolkit.Core.Infrastructure;
 using GcToolkit.Core.Localization;
 using GcToolkit.Core.Recents;
+using GcToolkit.Core.Services;
 using GcToolkit.Core.Services.Dialogs;
 using GcToolkit.Core.Services.Settings;
 using GcToolkit.Core.Services.Theming;
@@ -45,14 +46,25 @@ public sealed class SettingsViewModelTests
     }
 
     [TestMethod]
-    public void ClearPreferencesCommand_ClearsPreferences()
+    public async Task ClearPreferencesCommand_WhenConfirmed_ClearsPreferences()
     {
         var preferences = new FakeAppPreferences();
-        var sut = CreateSut(preferences: preferences);
+        var sut = CreateSut(preferences: preferences, dialog: new FakeConfirmationDialogService(ConfirmationResult.Confirmed));
 
-        sut.ClearPreferencesCommand.Execute(null);
+        await sut.ClearPreferencesCommand.ExecuteAsync(null);
 
         Assert.AreEqual(1, preferences.ClearCallCount);
+    }
+
+    [TestMethod]
+    public async Task ClearPreferencesCommand_WhenDenied_DoesNotClearPreferences()
+    {
+        var preferences = new FakeAppPreferences();
+        var sut = CreateSut(preferences: preferences, dialog: new FakeConfirmationDialogService(ConfirmationResult.Denied));
+
+        await sut.ClearPreferencesCommand.ExecuteAsync(null);
+
+        Assert.AreEqual(0, preferences.ClearCallCount);
     }
 
     [TestMethod]
@@ -104,7 +116,9 @@ public sealed class SettingsViewModelTests
         FakeLanguageService? language = null,
         FakeRecentsService? recents = null,
         FakeConfirmationDialogService? dialog = null,
-        FakeApplication? application = null)
+        FakeApplication? application = null,
+        FakeLauncherService? launcher = null,
+        FakeAppRestartService? appRestart = null)
         => new(
             new FakeStringLocalizer(),
             preferences ?? new FakeAppPreferences(),
@@ -112,7 +126,9 @@ public sealed class SettingsViewModelTests
             language ?? new FakeLanguageService(),
             recents ?? new FakeRecentsService(),
             dialog ?? new FakeConfirmationDialogService(ConfirmationResult.Denied),
-            application ?? new FakeApplication());
+            application ?? new FakeApplication(),
+            launcher ?? new FakeLauncherService(),
+            appRestart ?? new FakeAppRestartService());
 
     private sealed class FakeAppPreferences : IAppPreferences
     {
@@ -175,6 +191,25 @@ public sealed class SettingsViewModelTests
     private sealed class FakeConfirmationDialogService(ConfirmationResult result) : IConfirmationDialogService
     {
         public Task<ConfirmationResult> ShowAsync(string title, string text) => Task.FromResult(result);
+    }
+
+    private sealed class FakeLauncherService : ILauncherService
+    {
+        public Uri? LastUri { get; private set; }
+
+        public Task<bool> LaunchUriAsync(Uri uri)
+        {
+            LastUri = uri;
+            return Task.FromResult(true);
+        }
+    }
+
+    private sealed class FakeAppRestartService : IAppRestartService
+    {
+        public bool CanRestart { get; set; } = true;
+        public int RestartCallCount { get; private set; }
+
+        public void Restart() => RestartCallCount++;
     }
 
     private sealed class FakeApplication : IApplication

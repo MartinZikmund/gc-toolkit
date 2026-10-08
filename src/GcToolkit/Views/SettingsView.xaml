@@ -53,10 +53,16 @@
                 </toolkit:SettingsCard>
 
                 <InfoBar
-                    IsClosable="False"
-                    IsOpen="{x:Bind ViewModel.ShowLanguageRestartNotice, Mode=OneWay}"
+                    IsOpen="{x:Bind ViewModel.ShowLanguageRestartNotice, Mode=TwoWay}"
                     Message="{markup:Localize Key=LanguageRestartNotice}"
-                    Severity="Informational" />
+                    Severity="Informational">
+                    <InfoBar.ActionButton>
+                        <Button
+                            Command="{x:Bind ViewModel.RestartAppCommand}"
+                            Content="{markup:Localize Key=RestartNow}"
+                            Visibility="{x:Bind ViewModel.CanRestartApp}" />
+                    </InfoBar.ActionButton>
+                </InfoBar>
 
                 <toolkit:SettingsCard Header="{markup:Localize Key=ClearRecents}">
                     <toolkit:SettingsCard.HeaderIcon>
@@ -73,6 +79,75 @@
                         <BitmapIcon ShowAsMonochrome="False" UriSource="ms-appx:///Assets/Icons/icon_foreground.png" />
                     </toolkit:SettingsCard.HeaderIcon>
                     <TextBlock Text="{x:Bind ViewModel.AppVersion}" />
+                </toolkit:SettingsCard>
+
+                <!--  GPLv3 warranty disclaimer  -->
+                <TextBlock
+                    Margin="4,0,4,4"
+                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                    Style="{ThemeResource CaptionTextBlockStyle}"
+                    Text="{markup:Localize Key=AboutLicenseNotice}"
+                    TextWrapping="Wrap" />
+
+                <toolkit:SettingsCard
+                    Command="{x:Bind ViewModel.OpenPrivacyPolicyCommand}"
+                    Header="{markup:Localize Key=PrivacyPolicy}"
+                    IsClickEnabled="True">
+                    <toolkit:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE72E;" />
+                    </toolkit:SettingsCard.HeaderIcon>
+                    <toolkit:SettingsCard.ActionIcon>
+                        <FontIcon Glyph="&#xE8A7;" />
+                    </toolkit:SettingsCard.ActionIcon>
+                </toolkit:SettingsCard>
+
+                <toolkit:SettingsCard
+                    Command="{x:Bind ViewModel.OpenSourceCodeCommand}"
+                    Header="{markup:Localize Key=SourceCode}"
+                    IsClickEnabled="True">
+                    <toolkit:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE943;" />
+                    </toolkit:SettingsCard.HeaderIcon>
+                    <toolkit:SettingsCard.ActionIcon>
+                        <FontIcon Glyph="&#xE8A7;" />
+                    </toolkit:SettingsCard.ActionIcon>
+                </toolkit:SettingsCard>
+
+                <toolkit:SettingsCard
+                    Command="{x:Bind ViewModel.OpenLicenseCommand}"
+                    Description="{markup:Localize Key=LicenseDescription}"
+                    Header="{markup:Localize Key=License}"
+                    IsClickEnabled="True">
+                    <toolkit:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE8A5;" />
+                    </toolkit:SettingsCard.HeaderIcon>
+                    <toolkit:SettingsCard.ActionIcon>
+                        <FontIcon Glyph="&#xE8A7;" />
+                    </toolkit:SettingsCard.ActionIcon>
+                </toolkit:SettingsCard>
+
+                <toolkit:SettingsCard
+                    Command="{x:Bind ViewModel.OpenThirdPartyNoticesCommand}"
+                    Header="{markup:Localize Key=ThirdPartyNotices}"
+                    IsClickEnabled="True">
+                    <toolkit:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE7C3;" />
+                    </toolkit:SettingsCard.HeaderIcon>
+                    <toolkit:SettingsCard.ActionIcon>
+                        <FontIcon Glyph="&#xE8A7;" />
+                    </toolkit:SettingsCard.ActionIcon>
+                </toolkit:SettingsCard>
+
+                <toolkit:SettingsCard
+                    Command="{x:Bind ViewModel.OpenFeedbackCommand}"
+                    Header="{markup:Localize Key=SendFeedback}"
+                    IsClickEnabled="True">
+                    <toolkit:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xED15;" />
+                    </toolkit:SettingsCard.HeaderIcon>
+                    <toolkit:SettingsCard.ActionIcon>
+                        <FontIcon Glyph="&#xE8A7;" />
+                    </toolkit:SettingsCard.ActionIcon>
                 </toolkit:SettingsCard>
 
                 <!--  Debug section  -->

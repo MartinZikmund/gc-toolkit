@@ -17,7 +17,6 @@ public enum ToolCategory
     Coordinates,
     Ciphers,
     Numbers,
-    Field,
     Alphabets,
     Text,
 }

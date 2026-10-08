@@ -66,3 +66,24 @@ things worth revisiting after the MVP ships. Each entry notes where it came from
 - **Offline map tiles / downloadable regions** (from Q7): Let users download map areas for offline
   field use (e.g. MBTiles via Mapsui). MVP uses online tiles only. Pairs with offline navigation in
   areas with no signal.
+
+## Cut from the first release
+
+Tools that existed as stubs but were removed before v1 rather than shipped half-done. Nothing here
+is hard — each is a small, self-contained piece of work once its prerequisite exists.
+
+- **Compass** (cut 2026-08-19): A live magnetometer heading with a rotating rose, and eventually a
+  bearing-to-target arrow. Needs a sensor abstraction that Core can depend on — an `ICompassService`
+  in Core with per-head implementations (Windows `Magnetometer`/`Compass`, Android `SensorManager`,
+  iOS `CLLocationManager`), plus a graceful "no magnetometer" state for desktop and WebAssembly.
+  Pairs with the field/navigation tools already parked under *Field & maps*.
+- **Flashlight** (cut 2026-08-19): Torch on/off for reading a cache log in the dark, falling back to
+  a full-brightness white screen where there is no torch. Needs a torch/screen-brightness abstraction
+  per head (Android `CameraManager.setTorchMode`, iOS `AVCaptureDevice.TorchMode`) and a
+  keep-screen-on request; there is no sensible Windows or WebAssembly implementation, so it is a
+  mobile-only tool and the gallery would need to hide it elsewhere.
+- **Checksum / hash** (cut 2026-08-19): Hex digests (MD5, SHA-1, SHA-256, CRC32) of text — pure Core
+  logic with no platform dependency, so it is the cheapest of the three to bring back. Note that the
+  *numeric* checksums cachers actually use most — cross-sum and digital root — already ship inside
+  the **Word value** tool, so a revived tool should be framed as cryptographic hashes rather than as
+  a "checksum" that duplicates what is there.

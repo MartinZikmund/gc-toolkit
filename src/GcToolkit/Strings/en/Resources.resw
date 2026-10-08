@@ -133,13 +133,40 @@
     <value>About</value>
   </data>
   <data name="AboutAppDescription" xml:space="preserve">
-    <value>An Uno Platform application</value>
+    <value>A free, offline toolkit of coordinate converters, ciphers and field tools for geocaching.</value>
+  </data>
+  <data name="AboutLicenseNotice" xml:space="preserve">
+    <value>This app is free software, distributed under the GNU General Public License v3.0. It comes with ABSOLUTELY NO WARRANTY.</value>
+  </data>
+  <data name="PrivacyPolicy" xml:space="preserve">
+    <value>Privacy policy</value>
+  </data>
+  <data name="SourceCode" xml:space="preserve">
+    <value>Source code</value>
+  </data>
+  <data name="License" xml:space="preserve">
+    <value>License</value>
+  </data>
+  <data name="LicenseDescription" xml:space="preserve">
+    <value>GNU General Public License v3.0</value>
+  </data>
+  <data name="ThirdPartyNotices" xml:space="preserve">
+    <value>Third-party notices</value>
+  </data>
+  <data name="SendFeedback" xml:space="preserve">
+    <value>Report a bug or send feedback</value>
   </data>
   <data name="Debugging" xml:space="preserve">
     <value>Debugging</value>
   </data>
   <data name="ClearPreferences" xml:space="preserve">
     <value>Clear preferences</value>
+  </data>
+  <data name="ClearPreferencesConfirmTitle" xml:space="preserve">
+    <value>Clear preferences?</value>
+  </data>
+  <data name="ClearPreferencesConfirmMessage" xml:space="preserve">
+    <value>This resets the theme, language and favorite tools to their defaults. This can't be undone.</value>
   </data>
   <data name="Clear" xml:space="preserve">
     <value>Clear</value>
@@ -171,6 +198,18 @@
   <data name="RateAppMessage" xml:space="preserve">
     <value>If you enjoy using this app, would you mind taking a moment to rate it? Your feedback helps us improve!</value>
   </data>
+  <data name="StartupErrorTitle" xml:space="preserve">
+    <value>Startup problem</value>
+  </data>
+  <data name="StartupErrorMessage" xml:space="preserve">
+    <value>The app couldn't finish starting. Close it and open it again. If this keeps happening, reinstalling the app usually helps.</value>
+  </data>
+  <data name="UnexpectedErrorTitle" xml:space="preserve">
+    <value>Something went wrong</value>
+  </data>
+  <data name="UnexpectedErrorMessage" xml:space="preserve">
+    <value>An unexpected problem interrupted the last action. Your saved data is unaffected. Try again, or restart the app if it keeps happening.</value>
+  </data>
   <data name="Catalog" xml:space="preserve">
     <value>Catalog</value>
   </data>
@@ -182,9 +221,6 @@
   </data>
   <data name="Category_Numbers" xml:space="preserve">
     <value>Numbers</value>
-  </data>
-  <data name="Category_Field" xml:space="preserve">
-    <value>Field</value>
   </data>
   <data name="Category_Alphabets" xml:space="preserve">
     <value>Alphabets</value>
@@ -1443,24 +1479,6 @@
   <data name="BaseConverter_Tooltip" xml:space="preserve">
     <value>Convert numbers between bases (binary, hex, …).</value>
   </data>
-  <data name="Checksum_Name" xml:space="preserve">
-    <value>Checksum</value>
-  </data>
-  <data name="Checksum_Tooltip" xml:space="preserve">
-    <value>Compute checksums and hashes for text.</value>
-  </data>
-  <data name="Flashlight_Name" xml:space="preserve">
-    <value>Flashlight</value>
-  </data>
-  <data name="Flashlight_Tooltip" xml:space="preserve">
-    <value>Turn the screen into a flashlight.</value>
-  </data>
-  <data name="Compass_Name" xml:space="preserve">
-    <value>Compass</value>
-  </data>
-  <data name="Compass_Tooltip" xml:space="preserve">
-    <value>Show your heading with a live compass.</value>
-  </data>
   <data name="FavoriteTools" xml:space="preserve">
     <value>Favorite tools</value>
   </data>
@@ -1514,6 +1532,9 @@
   </data>
   <data name="LanguageRestartNotice" xml:space="preserve">
     <value>Restart the app to finish switching languages.</value>
+  </data>
+  <data name="RestartNow" xml:space="preserve">
+    <value>Restart now</value>
   </data>
   <data name="ClearRecents" xml:space="preserve">
     <value>Clear recent tools</value>

@@ -6,7 +6,8 @@ name: Validate Manifest Version
 
 on:
   push:
-    branches: [ "main" ]
+    # Release branches too — that's where a hand-edited version would do the damage.
+    branches: [ "main", "release/**" ]
     paths:
       - 'src/GcToolkit/Package.appxmanifest'
       - '.github/workflows/validate-manifest-version.yml'

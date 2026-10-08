@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Globalization;
 using GcToolkit.Core.Catalog;
 using GcToolkit.Core.FavoriteTools;
@@ -15,6 +16,7 @@ using GcToolkit.Services.Navigation;
 using GcToolkit.Services.Rating;
 using GcToolkit.Services.Settings;
 using GcToolkit.Services.Theming;
+using Microsoft.UI.Text;
 using Uno.Resizetizer;
 using IPreferences = MZikmund.Toolkit.WinUI.Services.IPreferences;
 using Preferences = MZikmund.Toolkit.WinUI.Services.Preferences;
@@ -23,6 +25,8 @@ namespace GcToolkit;
 
 public partial class App : Application, IApplication
 {
+    private bool _isShowingErrorDialog;
+
     public static new App Current => (App)Application.Current;
 
     public IServiceProvider Services => Host!.Services;
@@ -39,12 +43,33 @@ public partial class App : Application, IApplication
     public App()
     {
         this.InitializeComponent();
+
+        // Subscribed here so even a failure during launch is logged and shown instead of taking the
+        // process down silently.
+        UnhandledException += OnUnhandledException;
+        AppDomain.CurrentDomain.UnhandledException += OnDomainUnhandledException;
+        TaskScheduler.UnobservedTaskException += OnUnobservedTaskException;
     }
 
     protected Window? MainWindow { get; private set; }
     protected IHost? Host { get; private set; }
 
     protected override async void OnLaunched(LaunchActivatedEventArgs args)
+    {
+        try
+        {
+            await LaunchAsync(args);
+        }
+        catch (Exception exception)
+        {
+            // OnLaunched is `async void`: without this the failure is rethrown on the dispatcher after
+            // it returns, and the app vanishes with no error UI and nothing to send back.
+            LogCritical("Application launch failed.", exception);
+            ShowStartupFailure(exception);
+        }
+    }
+
+    private async Task LaunchAsync(LaunchActivatedEventArgs args)
     {
         var builder = this.CreateBuilder(args)
             .Configure(host => host
@@ -103,6 +128,191 @@ public partial class App : Application, IApplication
         MainWindow.Activate();
     }
 
+    #region Failure handling
+
+    private void OnUnhandledException(object sender, Microsoft.UI.Xaml.UnhandledExceptionEventArgs e)
+    {
+        LogCritical("Unhandled exception on the UI thread.", e.Exception);
+
+        if (MainWindow?.Content is WindowShell shell)
+        {
+            // The shell is up, so the app stays usable: report the failure instead of dying on it.
+            e.Handled = true;
+            ShowUnexpectedErrorDialog(shell, e.Exception);
+        }
+        else if (MainWindow is not null)
+        {
+            // Nothing can host a dialog yet — the window itself becomes the diagnostic.
+            e.Handled = true;
+            ShowStartupFailure(e.Exception);
+        }
+    }
+
+    private void OnDomainUnhandledException(object sender, System.UnhandledExceptionEventArgs e)
+        => LogCritical(
+            e.IsTerminating ? "Unhandled exception; the process is terminating." : "Unhandled exception.",
+            e.ExceptionObject as Exception);
+
+    private void OnUnobservedTaskException(object? sender, UnobservedTaskExceptionEventArgs e)
+    {
+        LogCritical("Unobserved task exception.", e.Exception);
+
+        // Logged, so don't let a forgotten task tear the process down.
+        e.SetObserved();
+    }
+
+    private void ShowUnexpectedErrorDialog(WindowShell shell, Exception? exception)
+    {
+        if (_isShowingErrorDialog)
+        {
+            return;
+        }
+
+        try
+        {
+            if (shell.ServiceProvider.GetService<IDialogService>() is not { } dialogService)
+            {
+                return;
+            }
+
+            _isShowingErrorDialog = true;
+            _ = ShowUnexpectedErrorDialogAsync(dialogService, exception);
+        }
+        catch (Exception dialogFailure)
+        {
+            _isShowingErrorDialog = false;
+            LogCritical("Could not report the unhandled exception to the user.", dialogFailure);
+        }
+    }
+
+    private async Task ShowUnexpectedErrorDialogAsync(IDialogService dialogService, Exception? exception)
+    {
+        try
+        {
+            var message = Localize("UnexpectedErrorMessage", "Something went wrong, but the app is still running.");
+            var detail = exception?.Message;
+            var content = string.IsNullOrWhiteSpace(detail)
+                ? message
+                : $"{message}{Environment.NewLine}{Environment.NewLine}{detail}";
+
+            await dialogService.ShowAsync(Localize("UnexpectedErrorTitle", "Unexpected error"), content);
+        }
+        catch (Exception dialogFailure)
+        {
+            LogCritical("Could not report the unhandled exception to the user.", dialogFailure);
+        }
+        finally
+        {
+            _isShowingErrorDialog = false;
+        }
+    }
+
+    /// <summary>Replaces the (empty) window content with a diagnostic when the app cannot start.</summary>
+    private void ShowStartupFailure(Exception exception)
+    {
+        try
+        {
+            MainWindow ??= new Window();
+            MainWindow.Content = BuildStartupFailureView(exception);
+            MainWindow.Activate();
+        }
+        catch (Exception displayFailure)
+        {
+            LogCritical("Could not show the startup failure view.", displayFailure);
+        }
+    }
+
+    private UIElement BuildStartupFailureView(Exception exception)
+    {
+        StackPanel panel = new()
+        {
+            MaxWidth = 720,
+            Margin = new Thickness(32),
+            HorizontalAlignment = HorizontalAlignment.Center,
+            VerticalAlignment = VerticalAlignment.Center,
+            Spacing = 12,
+        };
+
+        panel.Children.Add(new TextBlock
+        {
+            Text = Localize("StartupErrorTitle", "The app could not start"),
+            FontSize = 24,
+            FontWeight = FontWeights.SemiBold,
+            TextWrapping = TextWrapping.Wrap,
+        });
+
+        panel.Children.Add(new TextBlock
+        {
+            Text = Localize("StartupErrorMessage", "An unexpected error stopped the app from starting."),
+            TextWrapping = TextWrapping.Wrap,
+        });
+
+        // The exception text is the only diagnostic a user can send back, so keep it selectable.
+        panel.Children.Add(new TextBox
+        {
+            Text = exception.ToString(),
+            IsReadOnly = true,
+            AcceptsReturn = true,
+            IsSpellCheckEnabled = false,
+            TextWrapping = TextWrapping.Wrap,
+            MaxHeight = 280,
+        });
+
+        Grid root = new();
+        if (Application.Current.Resources.TryGetValue("ApplicationPageBackgroundThemeBrush", out var background)
+            && background is Brush backgroundBrush)
+        {
+            root.Background = backgroundBrush;
+        }
+
+        root.Children.Add(new ScrollViewer { Content = panel });
+        return root;
+    }
+
+    /// <summary>
+    /// Localized text with an English fallback: a failure early in launch can happen before the host —
+    /// and with it <see cref="IStringLocalizer"/> — exists.
+    /// </summary>
+    private string Localize(string key, string fallback)
+    {
+        try
+        {
+            if (Host?.Services.GetService<IStringLocalizer>() is { } localizer)
+            {
+                var localized = localizer[key];
+                return localized.ResourceNotFound ? fallback : localized.Value;
+            }
+        }
+        catch (Exception)
+        {
+            // Falls through to the built-in text below; this path only runs while already failing.
+        }
+
+        return fallback;
+    }
+
+    /// <summary>Best-effort logging: a crash handler that throws is worse than no crash handler.</summary>
+    private void LogCritical(string message, Exception? exception)
+    {
+        try
+        {
+            if (Host?.Services.GetService<ILogger<App>>() is { } logger)
+            {
+                logger.LogCritical(exception, "{Message}", message);
+                return;
+            }
+        }
+        catch (Exception loggingFailure)
+        {
+            Trace.WriteLine($"{message} Logging that failure also failed: {loggingFailure}");
+        }
+
+        // No host (or it is already gone): tracing is the only sink that cannot itself throw.
+        Trace.WriteLine($"{message}{Environment.NewLine}{exception}");
+    }
+
+    #endregion
+
     private static void RegisterServices(HostBuilderContext context, IServiceCollection services)
     {
         // Singleton services
@@ -122,6 +332,7 @@ public partial class App : Application, IApplication
         services.AddScoped<IDialogService, DialogService>();
         services.AddScoped<IConfirmationDialogService, ConfirmationDialogService>();
         services.AddScoped<ILauncherService, LauncherService>();
+        services.AddScoped<IAppRestartService, AppRestartService>();
         services.AddScoped<IShareService, ShareService>();
         services.AddScoped<IClipboardService, ClipboardService>();
         services.AddScoped<IMorseAudioService, MorseAudioService>();

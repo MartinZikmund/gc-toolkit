@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using GcToolkit.Core.Navigation;
 using GcToolkit.Core.Services;
 using GcToolkit.Core.Services.Settings;
@@ -7,9 +8,17 @@ using GcToolkit.Helpers;
 using GcToolkit.Infrastructure;
 using GcToolkit.Services.Localization;
 using GcToolkit.Services.Navigation;
+using GcToolkit.Services.Settings;
+using Microsoft.UI;
 using Microsoft.UI.Composition.SystemBackdrops;
+using Microsoft.UI.Dispatching;
 using Microsoft.UI.Windowing;
+using Microsoft.UI.Xaml.Automation;
+using Microsoft.UI.Xaml.Data;
 using Windows.Foundation.Metadata;
+using Windows.Graphics;
+using Windows.UI;
+using IPreferences = MZikmund.Toolkit.WinUI.Services.IPreferences;
 
 namespace GcToolkit;
 
@@ -20,6 +29,20 @@ public sealed partial class WindowShell : Page, IWindowShell
     private bool _isWindowClosed;
     private ViewModelBase? _currentPageViewModel;
     private bool _suppressSelectionChanged;
+
+#if !HAS_UNO
+    private const string WindowPlacementKey = "MainWindowPlacement";
+
+    // Below these the title-bar search box and the NavigationView content stop being usable. They are
+    // DIPs — AppWindow works in physical pixels, so they are scaled by the monitor's rasterization scale.
+    private const int MinimumWindowWidth = 640;
+    private const int MinimumWindowHeight = 480;
+
+    private AppWindow? _appWindow;
+    private RectInt32? _restoreBounds;
+    private bool _isMaximized;
+    private double _minimumSizeScale;
+#endif
 
     public WindowShell(IServiceProvider serviceProvider, Window associatedWindow)
     {
@@ -39,12 +62,14 @@ public sealed partial class WindowShell : Page, IWindowShell
 
         _associatedWindow = associatedWindow;
         _associatedWindow.Closed += OnWindowClosed;
-        CustomizeWindow();
 
         ViewModel = ServiceProvider.GetRequiredService<WindowShellViewModel>();
         ViewModel.PropertyChanged += ViewModel_PropertyChanged;
 
         Search = ServiceProvider.GetRequiredService<SearchViewModel>();
+
+        // After Search: the no-custom-title-bar fallback rehosts the search box in the navigation pane.
+        CustomizeWindow();
 
         InnerFrame.Navigated += InnerFrame_Navigated;
         Loading += WindowShell_Loading;
@@ -124,6 +149,10 @@ public sealed partial class WindowShell : Page, IWindowShell
     private void OnWindowClosed(object sender, WindowEventArgs args)
     {
         _isWindowClosed = true;
+#if !HAS_UNO
+        SaveWindowPlacement();
+        DetachWindowIntegration();
+#endif
         _associatedWindow.Closed -= OnWindowClosed;
         InnerFrame.Navigated -= InnerFrame_Navigated;
         ViewModel.PropertyChanged -= ViewModel_PropertyChanged;
@@ -142,14 +171,19 @@ public sealed partial class WindowShell : Page, IWindowShell
     {
         var windowShellProvider = (WindowShellProvider)ServiceProvider.GetRequiredService<IWindowShellProvider>();
         windowShellProvider.SetXamlRoot(XamlRoot ?? throw new InvalidOperationException("XamlRoot must be set."));
+
+#if !HAS_UNO
+        // The XamlRoot (and with it the rasterization scale) only exists from here on.
+        ApplyMinimumWindowSize();
+#endif
     }
 
     public void SetTitleBar(UIElement? titleBar)
     {
 #if !HAS_UNO
-        // The WinUI TitleBar control (AppTitleBar) is the Windows custom title bar; other heads use
-        // the system title bar, so SetTitleBar is a no-op there.
-        if (!_isWindowClosed)
+        // The WinUI TitleBar control (AppTitleBar) is the Windows custom title bar; other heads — and
+        // Windows builds without title bar customization — use the system title bar, so this is a no-op.
+        if (!_isWindowClosed && HasCustomTitleBar)
         {
             _associatedWindow.SetTitleBar(titleBar ?? AppTitleBar);
         }
@@ -159,13 +193,31 @@ public sealed partial class WindowShell : Page, IWindowShell
     private void CustomizeWindow()
     {
 #if !HAS_UNO
-        if (AppWindowTitleBar.IsCustomizationSupported())
+        _appWindow = _associatedWindow.AppWindow;
+
+        HasCustomTitleBar = AppWindowTitleBar.IsCustomizationSupported();
+        if (HasCustomTitleBar)
         {
             _associatedWindow.ExtendsContentIntoTitleBar = true;
-            _associatedWindow.AppWindow.TitleBar.PreferredHeightOption = TitleBarHeightOption.Tall;
+            _appWindow.TitleBar.PreferredHeightOption = TitleBarHeightOption.Tall;
             _associatedWindow.SetTitleBar(AppTitleBar);
-            HasCustomTitleBar = true;
+
+            // Caption buttons are drawn by the system, so their colours must follow the effective theme
+            // — including a live OS light/dark switch, which is what ActualThemeChanged reports.
+            ActualThemeChanged += OnActualThemeChanged;
+            ApplyCaptionButtonColors();
         }
+        else
+        {
+            // Windows 10 draws its own caption bar. Keeping ours as well would stack a second title bar
+            // and strand the search box in it, so search moves into the pane as on the non-Windows heads.
+            AppTitleBar.Visibility = Visibility.Collapsed;
+            NavView.AutoSuggestBox = CreatePaneSearchBox();
+        }
+
+        RestoreWindowPlacement();
+        TrackWindowPlacement();
+        _appWindow.Changed += OnAppWindowChanged;
 #endif
 
         if (MicaController.IsSupported())
@@ -174,6 +226,240 @@ public sealed partial class WindowShell : Page, IWindowShell
             Background = null;
         }
     }
+
+#if !HAS_UNO
+    #region Windows window integration
+
+    /// <summary>
+    /// The pane search box used when the title bar cannot host one. It mirrors the XAML declaration in
+    /// <c>NavigationView.AutoSuggestBox</c> that the other heads use.
+    /// </summary>
+    private AutoSuggestBox CreatePaneSearchBox()
+    {
+        var placeholder = Localizer.Instance.GetString("SearchPlaceholder");
+        var searchBox = new AutoSuggestBox
+        {
+            PlaceholderText = placeholder,
+            QueryIcon = new SymbolIcon(Symbol.Find),
+        };
+
+        AutomationProperties.SetName(searchBox, placeholder);
+        searchBox.SetBinding(
+            AutoSuggestBox.TextProperty,
+            new Binding
+            {
+                Source = Search,
+                Path = new PropertyPath(nameof(SearchViewModel.Query)),
+                Mode = BindingMode.TwoWay,
+            });
+
+        return searchBox;
+    }
+
+    private void OnActualThemeChanged(FrameworkElement sender, object args)
+    {
+        ApplyCaptionButtonColors();
+
+        // ThemeManager refreshes the same colours when the system colours change, but derives them from
+        // the app-level theme, which does not follow a live OS switch. Re-applying at low priority makes
+        // the effective theme the last write of that turn.
+        DispatcherQueue.TryEnqueue(DispatcherQueuePriority.Low, ApplyCaptionButtonColors);
+    }
+
+    private void ApplyCaptionButtonColors()
+    {
+        try
+        {
+            if (_appWindow is null)
+            {
+                return;
+            }
+
+            var titleBar = _appWindow.TitleBar;
+            var isDark = ActualTheme == ElementTheme.Dark;
+            var foreground = isDark ? Colors.White : Colors.Black;
+
+            titleBar.BackgroundColor = Colors.Transparent;
+            titleBar.ButtonBackgroundColor = Colors.Transparent;
+            titleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
+            titleBar.ButtonForegroundColor = foreground;
+            titleBar.ButtonHoverForegroundColor = foreground;
+            titleBar.ButtonPressedForegroundColor = foreground;
+            titleBar.ButtonInactiveForegroundColor = Colors.Gray;
+            titleBar.ButtonHoverBackgroundColor = isDark
+                ? Color.FromArgb(100, 100, 100, 100)
+                : Color.FromArgb(100, 200, 200, 200);
+            titleBar.ButtonPressedBackgroundColor = isDark
+                ? Color.FromArgb(200, 100, 100, 100)
+                : Color.FromArgb(200, 200, 200, 200);
+        }
+        catch (Exception exception)
+        {
+            LogFailure("update the caption button colors", exception);
+        }
+    }
+
+    private void RestoreWindowPlacement()
+    {
+        try
+        {
+            var placement = ServiceProvider.GetRequiredService<IPreferences>()
+                .GetComplex<WindowPlacement?>(WindowPlacementKey, null);
+            if (placement is null || _appWindow is null)
+            {
+                return;
+            }
+
+            // Clamping keeps a window saved on a now-disconnected monitor on screen.
+            var bounds = ClampToWorkArea(new RectInt32(placement.Left, placement.Top, placement.Width, placement.Height));
+            _appWindow.MoveAndResize(bounds);
+            _restoreBounds = bounds;
+            _isMaximized = placement.IsMaximized;
+
+            if (placement.IsMaximized && _appWindow.Presenter is OverlappedPresenter presenter)
+            {
+                presenter.Maximize();
+            }
+        }
+        catch (Exception exception)
+        {
+            LogFailure("restore the saved window placement", exception);
+        }
+    }
+
+    private void SaveWindowPlacement()
+    {
+        if (_restoreBounds is not { } bounds)
+        {
+            return;
+        }
+
+        try
+        {
+            ServiceProvider.GetRequiredService<IPreferences>().SetComplex(
+                WindowPlacementKey,
+                new WindowPlacement(bounds.X, bounds.Y, bounds.Width, bounds.Height, _isMaximized));
+        }
+        catch (Exception exception)
+        {
+            LogFailure("save the window placement", exception);
+        }
+    }
+
+    private static RectInt32 ClampToWorkArea(RectInt32 bounds)
+    {
+        var workArea = DisplayArea.GetFromRect(bounds, DisplayAreaFallback.Nearest).WorkArea;
+        var width = Math.Clamp(bounds.Width, 1, workArea.Width);
+        var height = Math.Clamp(bounds.Height, 1, workArea.Height);
+
+        return new RectInt32(
+            Math.Clamp(bounds.X, workArea.X, workArea.X + workArea.Width - width),
+            Math.Clamp(bounds.Y, workArea.Y, workArea.Y + workArea.Height - height),
+            width,
+            height);
+    }
+
+    private void OnAppWindowChanged(AppWindow sender, AppWindowChangedEventArgs args)
+    {
+        if (_isWindowClosed)
+        {
+            return;
+        }
+
+        TrackWindowPlacement();
+
+        // Moving to a differently scaled monitor changes what the DIP minimums are in pixels.
+        if (XamlRoot is { } xamlRoot && Math.Abs(xamlRoot.RasterizationScale - _minimumSizeScale) > 0.01)
+        {
+            ApplyMinimumWindowSize();
+        }
+    }
+
+    /// <summary>Remembers the latest restored bounds — that, not the maximized rectangle, is what is persisted.</summary>
+    private void TrackWindowPlacement()
+    {
+        try
+        {
+            if (_appWindow?.Presenter is not OverlappedPresenter presenter)
+            {
+                return;
+            }
+
+            _isMaximized = presenter.State == OverlappedPresenterState.Maximized;
+            if (presenter.State == OverlappedPresenterState.Restored)
+            {
+                _restoreBounds = new RectInt32(
+                    _appWindow.Position.X,
+                    _appWindow.Position.Y,
+                    _appWindow.Size.Width,
+                    _appWindow.Size.Height);
+            }
+        }
+        catch (Exception exception)
+        {
+            LogFailure("track the window placement", exception);
+        }
+    }
+
+    private void ApplyMinimumWindowSize()
+    {
+        try
+        {
+            if (_appWindow?.Presenter is not OverlappedPresenter presenter)
+            {
+                return;
+            }
+
+            var scale = XamlRoot?.RasterizationScale ?? 1d;
+            var workArea = DisplayArea.GetFromWindowId(_appWindow.Id, DisplayAreaFallback.Nearest).WorkArea;
+
+            // Never demand more than the display can give — a small or heavily scaled screen wins.
+            presenter.PreferredMinimumWidth = Math.Min((int)Math.Round(MinimumWindowWidth * scale), workArea.Width);
+            presenter.PreferredMinimumHeight = Math.Min((int)Math.Round(MinimumWindowHeight * scale), workArea.Height);
+            _minimumSizeScale = scale;
+        }
+        catch (Exception exception)
+        {
+            LogFailure("apply the minimum window size", exception);
+        }
+    }
+
+    private void DetachWindowIntegration()
+    {
+        try
+        {
+            if (_appWindow is not null)
+            {
+                _appWindow.Changed -= OnAppWindowChanged;
+                _appWindow = null;
+            }
+
+            if (HasCustomTitleBar)
+            {
+                ActualThemeChanged -= OnActualThemeChanged;
+            }
+        }
+        catch (Exception exception)
+        {
+            LogFailure("detach the window event handlers", exception);
+        }
+    }
+
+    /// <summary>Best-effort logging: window integration must never take the app down, nor fail silently.</summary>
+    private void LogFailure(string operation, Exception exception)
+    {
+        try
+        {
+            ServiceProvider.GetService<ILogger<WindowShell>>()?.LogWarning(exception, "Failed to {Operation}.", operation);
+        }
+        catch (Exception loggingFailure)
+        {
+            Trace.WriteLine($"Failed to {operation}: {exception}. Logging that failure also failed: {loggingFailure}");
+        }
+    }
+
+    #endregion
+#endif
 
     #region Navigation
 

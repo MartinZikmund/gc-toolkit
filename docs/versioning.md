@@ -18,7 +18,7 @@
 Single MSBuild property: `AppChannel = Dev | Prod`. Defaults to `Dev`. Every CI packaging workflow sets the value from the branch (release/v* → Prod, else Dev) and passes `/p:AppChannel=...` to the build.
 
 What changes per channel:
-- **Identity:** Android `applicationId`, iOS Bundle ID — `…gctoolkit` vs `…gctoolkit.dev`. Windows Identity Name is set by the signing certificate's Publisher CN (Prod cert vs Dev self-signed cert).
+- **Identity:** all three come from the `ApplicationId` MSBuild property — Android `applicationId`, iOS Bundle ID, and the Windows manifest `Identity/Name` (`dev.mzikmund.gctoolkit` vs `dev.mzikmund.gctoolkit.dev`). The Windows `Identity/Publisher` comes from `ApplicationPublisher` (`O=Martin Zikmund`), **not** from the signing certificate; the certificate only has to match it.
 - **Display name:** `GC Toolkit` vs `GC Toolkit Dev`.
 - **App icon:** the Dev channel overrides the icon *foreground* (`Assets/Icons/icon_foreground.svg` vs `icon_foreground_dev.svg`); the background is shared. Uno derives the generated icon resource name from the background file, so the background must stay constant across channels — only the foreground changes.
 - **In-app banner:** a `DEV` corner badge appears when `AppEnvironment.IsDevChannel` is true.
@@ -29,12 +29,13 @@ What changes per channel:
 
 | Workflow | Trigger | Channel | Publishes? |
 |---|---|---|---|
-| `ci.yml` | push: main, PR: main + release/** | n/a (Debug smoke test) | n/a |
-| `validate-manifest-version.yml` | push: main, PR: main + release/** | n/a | n/a |
+| `pr.yml` | PR: main + release/** | n/a (Debug smoke of the desktop + WinAppSDK heads; unit tests ride the desktop leg) | n/a |
+| `main.yml` | push: main | n/a (Release build of every target, build-only — no signing or packaging) | n/a |
+| `validate-manifest-version.yml` | push: main, PR: main + release/** — only when `Package.appxmanifest` changes | n/a | n/a |
 | `package-windows.yml` | push: main + release/v* + workflow_dispatch | Dev on main (self-signed), Prod on release/v* (Store-signed) | No — manual Partner Center upload from artifact |
 | `package-android.yml` | push: main + release/v* + workflow_dispatch | Dev applicationId on main, Prod on release/v* | release/v* → Play Production track via `r0adkll/upload-google-play` |
 | `package-ios.yml` | push: main + release/v* + workflow_dispatch | Dev Bundle ID on main, Prod on release/v* | release/v* → TestFlight via `apple-actions/upload-testflight-build` (manual "Submit for Review") |
-| `tag-release.yml` | workflow_run after the three packaging workflows on release/v* | n/a | Pushes annotated tag `v{version}` |
+| `tag-release.yml` | workflow_run after the packaging workflows on release/v* | n/a | Pushes annotated tag `v{version}` once every *required* platform is green — all three by default, narrowable with the `REQUIRED_RELEASE_PLATFORMS` repository variable |
 | `prepare-release.yml` | workflow_dispatch | n/a | Cuts release/v{current}, opens PR for main bump |
 | `static-web-apps-deploy.yml` | push: release/v*, PR: main | Prod on release/v*, Dev on PR previews | release/v* → production Static Web App; PRs → Azure SWA preview env (public repos only) |
 
@@ -54,7 +55,7 @@ git push origin main release/v{current}
 
 ### Building releases
 
-Push to `release/v0.2` → packaging workflows fire (subject to the public/private gate) → Prod identity, Store-signed → Android auto-publishes to Play Production, iOS auto-uploads to TestFlight (manual review submission), Windows produces a `.msixupload` for manual Partner Center upload → `tag-release.yml` pushes `v0.2.0` after all three succeed.
+Push to `release/v0.2` → packaging workflows fire (subject to the public/private gate) → Prod identity, Store-signed → Android auto-publishes to Play Production, iOS auto-uploads to TestFlight (manual review submission), Windows produces a `.msixupload` for manual Partner Center upload → `tag-release.yml` pushes `v0.2.0` once every required platform succeeds.
 
 ### Patching a release
 
@@ -72,6 +73,11 @@ Set `version.json` on main to `1.0` manually instead of running `prepare-release
 
 ## Secrets reference
 
+> **None of these secrets are configured on the repository yet** — the table is aspirational, and
+> describes what each workflow *expects*. Until they exist, the packaging workflows fail at their
+> signing steps. See [release-runbook.md](release-runbook.md) for how to ship a Windows-only first
+> release while the Android and iOS secrets are still missing.
+
 | Secret | Purpose | Consumed by |
 |---|---|---|
 | `BASE64_ENCODED_WINDOWS_PFX` | Prod Windows signing cert (Store-trusted) | `package-windows.yml` on release/v* |
@@ -87,4 +93,4 @@ Because the branch isn't a release branch. NBGV's `publicReleaseRefSpec` only ma
 
 ## Why is the Dev app a separate install from the Store version?
 
-Because their package identities differ: `dev.mzikmund.gctoolkit.dev` vs `dev.mzikmund.gctoolkit` on Android and iOS, and `GcToolkit.Dev`/Dev-Publisher-CN vs `GcToolkit`/Prod-Publisher-CN on Windows. Different identities mean separate AppData, separate user state, no upgrade collision.
+Because their package identities differ: `dev.mzikmund.gctoolkit.dev` vs `dev.mzikmund.gctoolkit` — on Android and iOS, and equally in the Windows manifest's `Identity/Name`. Different identities mean separate AppData, separate user state, no upgrade collision.

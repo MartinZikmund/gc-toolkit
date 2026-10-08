@@ -5,12 +5,23 @@
   xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
   IgnorableNamespaces="uap rescap">
 
+  <!--  Do not fill in Identity by hand. Version stays 0.0.0.0: Nerdbank.GitVersioning stamps the
+        real version at build time, and CI fails the build if the placeholder changes
+        (.github/workflows/validate-manifest-version.yml). Name and Publisher are injected at build
+        time from $(ApplicationId) / $(ApplicationPublisher) and must ultimately match the Partner
+        Center reservation, which does not exist yet. See docs/versioning.md.  -->
   <Identity Version="0.0.0.0" />
   <Properties />
 
   <Dependencies>
-    <TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.17763.0" MaxVersionTested="10.0.19041.0" />
-    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.17763.0" MaxVersionTested="10.0.19041.0" />
+    <!--  Windows.Desktop only. This is a full-trust WinAppSDK desktop app (rescap:runFullTrust), so
+          it cannot run on the other device families a Windows.Universal entry would advertise to the
+          Store (Xbox, HoloLens, IoT, Surface Hub); the WinUI 3 packaged template declares Desktop
+          alone for the same reason. MinVersion is the floor Uno's WinAppSdk targets apply via
+          TargetPlatformMinVersion (Windows App SDK itself supports back to 10.0.17763.0);
+          MaxVersionTested matches the 26100 SDK the Windows head is built against. The build
+          re-stamps both from the project's target platform versions, so keep them in sync here.  -->
+    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.18362.0" MaxVersionTested="10.0.26100.0" />
   </Dependencies>
 
   <Resources>

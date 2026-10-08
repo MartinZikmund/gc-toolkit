@@ -41,6 +41,7 @@ jobs:
 
     outputs:
       channel: ${{ steps.channel.outputs.value }}
+      version: ${{ steps.version.outputs.value }}
 
     env:
       # .NET niceties
@@ -87,13 +88,39 @@ jobs:
     - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v3
 
+    # The checked-in Package.appxmanifest is pinned to Identity Version="0.0.0.0"
+    # (guarded by validate-manifest-version.yml) because Nerdbank.GitVersioning stamps
+    # the real one into the *generated* manifest at build time. Reproduce that here so
+    # the `merge` job can bundle under the same version: src/Directory.Build.targets
+    # (SetNbgvVersionForUnoWindows) sets ApplicationDisplayVersion=$(BuildVersionSimple)
+    # and ApplicationVersion=0, i.e. "{SimpleVersion}.0".
+    # Only the x64 leg emits it — every matrix leg writes to the same job outputs.
+    - name: Compute the package version
+      id: version
+      if: matrix.platform == 'x64'
+      shell: pwsh
+      run: |
+        dotnet tool install -g nbgv
+        # The global tool dir isn't guaranteed to be on PATH for this step's shell.
+        $env:PATH = "$env:USERPROFILE\.dotnet\tools;$env:PATH"
+        $version = "$(nbgv get-version -v SimpleVersion).0"
+        Write-Host "Package version: $version"
+        "value=$version" >> $env:GITHUB_OUTPUT
+
     # Restore the application to populate the obj folder with RuntimeIdentifiers.
     # The project (not the solution) is targeted so the test projects don't get
     # dragged through every matrix leg; P2P references restore transitively.
     # SingleTargetFramework collapses to Windows so restore doesn't evaluate the
     # android/ios/wasm TFMs (no reliance on those workloads being on the runner).
+    #
+    # Do NOT add /p:TargetFramework here (or to the packaging step below). As a
+    # *global* property it flows down the P2P graph into GcToolkit.SourceGenerators,
+    # which is pinned to netstandard2.0 and knows nothing of SingleTargetFramework;
+    # restore then writes its assets for the Windows TFM and the build dies with
+    # NETSDK1005 ("Assets file ... doesn't have a target for 'netstandard2.0'").
+    # SingleTargetFramework alone is enough — that's what main.yml builds green with.
     - name: Restore the application
-      run: msbuild $env:PROJECT_FILE /m /t:Restore /p:Configuration=$env:Configuration /p:TargetFramework=$env:WINDOWS_TARGET_FRAMEWORK /p:SingleTargetFramework=$env:WINDOWS_TARGET_FRAMEWORK /p:PublishReadyToRun=true /p:AppChannel=${{ steps.channel.outputs.value }}
+      run: msbuild $env:PROJECT_FILE /m /t:Restore /p:Configuration=$env:Configuration /p:SingleTargetFramework=$env:WINDOWS_TARGET_FRAMEWORK /p:PublishReadyToRun=true /p:AppChannel=${{ steps.channel.outputs.value }}
       env:
         Configuration: ${{ matrix.configuration }}
 
@@ -113,8 +140,9 @@ jobs:
     # Create the app package by building and packaging the project.
     # Dev-channel (main/dispatch) packages skip ReadyToRun — R2R compilation is
     # a large chunk of packaging time and only matters for shipped Prod builds.
+    # (No /p:TargetFramework here either — see the Restore step for why.)
     - name: Create the app package
-      run: msbuild $env:PROJECT_FILE /m /p:TargetFramework=$env:WINDOWS_TARGET_FRAMEWORK /p:SingleTargetFramework=$env:WINDOWS_TARGET_FRAMEWORK /p:Configuration=$env:Configuration /p:Platform=$env:Platform /p:UapAppxPackageBuildMode=$env:Appx_Package_Build_Mode /p:AppxBundle=$env:Appx_Bundle /p:AppxPackageDir="$env:Appx_Package_Dir" /p:GenerateAppxPackageOnBuild=true /p:AppChannel=${{ steps.channel.outputs.value }} $env:R2R_ARGS
+      run: msbuild $env:PROJECT_FILE /m /p:SingleTargetFramework=$env:WINDOWS_TARGET_FRAMEWORK /p:Configuration=$env:Configuration /p:Platform=$env:Platform /p:UapAppxPackageBuildMode=$env:Appx_Package_Build_Mode /p:AppxBundle=$env:Appx_Bundle /p:AppxPackageDir="$env:Appx_Package_Dir" /p:GenerateAppxPackageOnBuild=true /p:AppChannel=${{ steps.channel.outputs.value }} $env:R2R_ARGS
       env:
         Appx_Bundle: Never
         Appx_Package_Build_Mode: CI
@@ -147,18 +175,20 @@ jobs:
     runs-on: windows-latest
     timeout-minutes: 15
     needs: create_package
+    env:
+      # Never read this out of the checked-in manifest: it is pinned to 0.0.0.0, and a
+      # 0.0.0.0 /bv makes makeappx invent a date-time version that disagrees with the
+      # payload packages — which Partner Center rejects, irreversibly burning versions.
+      PACKAGE_VERSION: ${{ needs.create_package.outputs.version }}
+    # No checkout: everything this job needs comes from the uploaded artifacts.
     steps:
-      # Shallow checkout — this job only reads Package.appxmanifest.
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Read package version from manifest
-        id: manifest
+      - name: Verify the package version resolved
         shell: pwsh
         run: |
-          [xml]$xml = Get-Content "$env:PROJECT_PATH/Package.appxmanifest"
-          $version = $xml.Package.Identity.Version
-          echo "version=$version" >> $env:GITHUB_OUTPUT
+          if ([string]::IsNullOrWhiteSpace($env:PACKAGE_VERSION) -or $env:PACKAGE_VERSION -eq '0.0.0.0') {
+            throw "create_package published no usable version (got '$env:PACKAGE_VERSION'). Refusing to build a bundle Partner Center would reject."
+          }
+          Write-Host "Bundling version $env:PACKAGE_VERSION"
 
       - name: Download all MSIX_Package_* artifacts
         uses: actions/download-artifact@v4
@@ -168,8 +198,19 @@ jobs:
 
       - name: Copy all .msix files to temporary location
         id: copymsix
+        shell: pwsh
         run: |
-          $msixFiles = Get-ChildItem -Path ./msix -Filter *.msix -Recurse
+          # Even with AppxBundle=Never, WinAppSDK stages the framework packages
+          # (WindowsAppRuntime, its DDLM/Main/Singleton, VCLibs) into
+          # <package>_Test\Dependencies\<arch>\. makeappx requires every payload package
+          # to share one identity, so those foreign packages must not be swept in.
+          $msixFiles = @(Get-ChildItem -Path ./msix -Filter *.msix -Recurse |
+            Where-Object { $_.FullName -notmatch '\\Dependencies\\' })
+          # One artifact directory per matrix architecture, one payload package each.
+          $expected = @(Get-ChildItem -Path ./msix -Directory -Filter MSIX_Package_*).Count
+          if ($msixFiles.Count -ne $expected) {
+            throw "Expected exactly one payload .msix per architecture ($expected), found $($msixFiles.Count): $($msixFiles.FullName -join ', ')"
+          }
           $tmp = Join-Path $env:RUNNER_TEMP ([IO.Path]::GetRandomFileName()); New-Item $tmp -ItemType Directory | Out-Null
           Copy-Item $msixFiles -Destination $tmp
           echo "msix_temp_dir=$tmp" >> $env:GITHUB_OUTPUT
@@ -179,13 +220,13 @@ jobs:
         uses: LanceMcCarthy/Action-MsixBundler@v2.0.0
         with:
           msix-folder: ${{ steps.copymsix.outputs.msix_temp_dir }}
-          msixbundle-filepath: "./msix/${{ env.APP_NAME }}_${{ steps.manifest.outputs.version }}.msixbundle"
-          msixbundle-version: ${{ steps.manifest.outputs.version }}
+          msixbundle-filepath: "./msix/${{ env.APP_NAME }}_${{ env.PACKAGE_VERSION }}.msixbundle"
+          msixbundle-version: ${{ env.PACKAGE_VERSION }}
 
       - name: Make .msixupload
         shell: pwsh
         run: |
-          $bundle = "./msix/${{ env.APP_NAME }}_${{ steps.manifest.outputs.version }}.msixbundle"
+          $bundle = "./msix/${{ env.APP_NAME }}_${{ env.PACKAGE_VERSION }}.msixbundle"
           $syms = Get-ChildItem -Path ./msix -Recurse -Filter *.msixsym
           foreach ($sym in $syms) {
             $newName = [IO.Path]::ChangeExtension($sym.FullName, ".appxsym")
@@ -195,10 +236,10 @@ jobs:
           $tmp = Join-Path $env:RUNNER_TEMP ([IO.Path]::GetRandomFileName()); New-Item $tmp -ItemType Directory | Out-Null
           Copy-Item $bundle $tmp
           Copy-Item $appxsymFiles $tmp
-          Compress-Archive -Path (Join-Path $tmp '*') -DestinationPath ${{ env.APP_NAME }}_${{ steps.manifest.outputs.version }}.msixupload -Force
+          Compress-Archive -Path (Join-Path $tmp '*') -DestinationPath ${{ env.APP_NAME }}_${{ env.PACKAGE_VERSION }}.msixupload -Force
 
       - name: Upload .msixupload
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.APP_NAME }}_${{ steps.manifest.outputs.version }}.msixupload
-          path: ${{ env.APP_NAME }}_${{ steps.manifest.outputs.version }}.msixupload
+          name: ${{ env.APP_NAME }}_${{ env.PACKAGE_VERSION }}.msixupload
+          path: ${{ env.APP_NAME }}_${{ env.PACKAGE_VERSION }}.msixupload

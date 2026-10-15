@@ -4041,4 +4041,97 @@
   <data name="Base64_Tooltip" xml:space="preserve">
     <value>Zakódujte text do Base64 a zase zpět – se zalomenými řádky i chybějící výplní si poradí.</value>
   </data>
+  <data name="Utf8_Name" xml:space="preserve">
+    <value>UTF-8</value>
+  </data>
+  <data name="Utf8_Tooltip" xml:space="preserve">
+    <value>Převeďte text na bajty UTF-8 (hex, desítkově, binárně, kódové body, UTF-16/32) a bajty zpět na text.</value>
+  </data>
+  <data name="Utf8Encode" xml:space="preserve">
+    <value>Text → bajty</value>
+  </data>
+  <data name="Utf8Decode" xml:space="preserve">
+    <value>Bajty → text</value>
+  </data>
+  <data name="Utf8InputLabel" xml:space="preserve">
+    <value>Vstup</value>
+  </data>
+  <data name="Utf8InputPlaceholder" xml:space="preserve">
+    <value>Napište text nebo vložte hex bajty (48 65, 0x48, \x48, %48) či kódové body (U+0048)…</value>
+  </data>
+  <data name="Utf8OutputLabel" xml:space="preserve">
+    <value>Výsledek</value>
+  </data>
+  <data name="Utf8Example" xml:space="preserve">
+    <value>Příklad</value>
+  </data>
+  <data name="Utf8Clear" xml:space="preserve">
+    <value>Obnovit</value>
+  </data>
+  <data name="Utf8Copy" xml:space="preserve">
+    <value>Kopírovat</value>
+  </data>
+  <data name="Utf8Share" xml:space="preserve">
+    <value>Sdílet</value>
+  </data>
+  <data name="Utf8OptionsLabel" xml:space="preserve">
+    <value>Formát výstupu</value>
+  </data>
+  <data name="Utf8RepresentationLabel" xml:space="preserve">
+    <value>Reprezentace</value>
+  </data>
+  <data name="Utf8RepHex" xml:space="preserve">
+    <value>UTF-8 hex</value>
+  </data>
+  <data name="Utf8RepDecimal" xml:space="preserve">
+    <value>UTF-8 desítkově</value>
+  </data>
+  <data name="Utf8RepBinary" xml:space="preserve">
+    <value>UTF-8 binárně</value>
+  </data>
+  <data name="Utf8RepOctal" xml:space="preserve">
+    <value>UTF-8 osmičkově</value>
+  </data>
+  <data name="Utf8RepPercent" xml:space="preserve">
+    <value>URL procentové kódování</value>
+  </data>
+  <data name="Utf8RepCodePoints" xml:space="preserve">
+    <value>Kódové body Unicode</value>
+  </data>
+  <data name="Utf8SeparatorLabel" xml:space="preserve">
+    <value>Oddělovač bajtů</value>
+  </data>
+  <data name="Utf8SepSpace" xml:space="preserve">
+    <value>Mezera</value>
+  </data>
+  <data name="Utf8SepNone" xml:space="preserve">
+    <value>Žádný</value>
+  </data>
+  <data name="Utf8SepComma" xml:space="preserve">
+    <value>Čárka</value>
+  </data>
+  <data name="Utf8Uppercase" xml:space="preserve">
+    <value>Velká písmena v hex</value>
+  </data>
+  <data name="Utf8EmitBom" xml:space="preserve">
+    <value>Přidat značku pořadí bajtů (BOM)</value>
+  </data>
+  <data name="Utf8BreakdownLabel" xml:space="preserve">
+    <value>Rozbor po znacích (znak, kódový bod, bajty, hex, desítkově, binárně, osmičkově)</value>
+  </data>
+  <data name="Utf8ErrorOddLength" xml:space="preserve">
+    <value>Lichý počet hex číslic – bajt potřebuje dvě.</value>
+  </data>
+  <data name="Utf8ErrorInvalidHex" xml:space="preserve">
+    <value>Vstup obsahuje znaky, které nejsou hexadecimální číslice.</value>
+  </data>
+  <data name="Utf8ErrorInvalidSequence" xml:space="preserve">
+    <value>Neplatné UTF-8 (chybná, useknutá nebo zbytečně dlouhá posloupnost bajtů).</value>
+  </data>
+  <data name="Utf8ErrorInvalidCodePoint" xml:space="preserve">
+    <value>Kódový bod je mimo rozsah Unicode nebo jde o náhradní bod (surrogate).</value>
+  </data>
+  <data name="Utf8ErrorLoneSurrogate" xml:space="preserve">
+    <value>Text obsahuje osamocený náhradní znak, který nelze v UTF-8 zakódovat.</value>
+  </data>
 </root>

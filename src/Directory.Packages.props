@@ -3,7 +3,7 @@
     <PackageVersion Include="Microsoft.Xaml.Behaviors.WinUI.Managed" Version="3.0.1" />
     <PackageVersion Include="Uno.Microsoft.Xaml.Behaviors.WinUI.Managed" Version="2.4.2" />
     <PackageVersion Include="MZikmund.Toolkit.WinUI" Version="0.1.22-dev.70" />
-    <PackageVersion Include="Nerdbank.GitVersioning" Version="3.10.91" />
+    <PackageVersion Include="Nerdbank.GitVersioning" Version="3.10.94" />
     <!-- Enables `dotnet run` for the packaged WinAppSDK head. -->
     <PackageVersion Include="Microsoft.Windows.SDK.BuildTools.WinApp" Version="0.3.1" />
     <!-- Pinned directly to resolve NU1605: Uno.UI.HotDesign requires a newer BuildTools

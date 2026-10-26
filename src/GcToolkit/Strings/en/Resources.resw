@@ -4041,4 +4041,157 @@
   <data name="Base64_Tooltip" xml:space="preserve">
     <value>Encode text to Base64 and decode it back — line breaks and missing padding are no problem.</value>
   </data>
+  <data name="Isbn_Name" xml:space="preserve">
+    <value>ISBN Tool</value>
+  </data>
+  <data name="Isbn_Tooltip" xml:space="preserve">
+    <value>Validate, complete and convert ISBN-10/13, ISSN, EAN-13 and UPC-A — and solve for missing digits.</value>
+  </data>
+  <data name="IsbnStandardHeader" xml:space="preserve">
+    <value>Code type</value>
+  </data>
+  <data name="IsbnStandard_Isbn" xml:space="preserve">
+    <value>ISBN</value>
+  </data>
+  <data name="IsbnStandard_Issn" xml:space="preserve">
+    <value>ISSN</value>
+  </data>
+  <data name="IsbnStandard_Ean13" xml:space="preserve">
+    <value>EAN-13 / ISMN</value>
+  </data>
+  <data name="IsbnStandard_UpcA" xml:space="preserve">
+    <value>UPC-A</value>
+  </data>
+  <data name="IsbnFormat_Isbn10" xml:space="preserve">
+    <value>ISBN-10</value>
+  </data>
+  <data name="IsbnFormat_Isbn13" xml:space="preserve">
+    <value>ISBN-13</value>
+  </data>
+  <data name="IsbnFormat_Issn" xml:space="preserve">
+    <value>ISSN</value>
+  </data>
+  <data name="IsbnFormat_Ean13" xml:space="preserve">
+    <value>EAN-13</value>
+  </data>
+  <data name="IsbnFormat_UpcA" xml:space="preserve">
+    <value>UPC-A</value>
+  </data>
+  <data name="IsbnInputLabel" xml:space="preserve">
+    <value>Code</value>
+  </data>
+  <data name="IsbnInputPlaceholder" xml:space="preserve">
+    <value>e.g. 978-0-13-468599-1 — use ? for an unknown digit</value>
+  </data>
+  <data name="IsbnExample" xml:space="preserve">
+    <value>Example</value>
+  </data>
+  <data name="IsbnClear" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="IsbnShowWorking" xml:space="preserve">
+    <value>Show the check-digit calculation</value>
+  </data>
+  <data name="IsbnEmptyHint" xml:space="preserve">
+    <value>Type or paste a code. Hyphens and spaces are ignored. Leave out the last digit (or type ?) to compute the check digit, and use ? for any other unknown digit to list every valid fill.</value>
+  </data>
+  <data name="IsbnStatusValidTitle" xml:space="preserve">
+    <value>Valid {0}</value>
+  </data>
+  <data name="IsbnStatusValidMessage" xml:space="preserve">
+    <value>The check digit {0} is correct.</value>
+  </data>
+  <data name="IsbnStatusComputedTitle" xml:space="preserve">
+    <value>Check digit computed</value>
+  </data>
+  <data name="IsbnStatusComputedMessage" xml:space="preserve">
+    <value>The check digit of this {0} is {1}.</value>
+  </data>
+  <data name="IsbnStatusInvalidTitle" xml:space="preserve">
+    <value>Invalid check digit</value>
+  </data>
+  <data name="IsbnStatusInvalidMessage" xml:space="preserve">
+    <value>The check digit is {0}, but this {1} needs {2}. A typo elsewhere is just as likely — see the suggested fixes below.</value>
+  </data>
+  <data name="IsbnStatusNoSolutionTitle" xml:space="preserve">
+    <value>No solution</value>
+  </data>
+  <data name="IsbnStatusNoSolutionMessage" xml:space="preserve">
+    <value>No digits in place of the ? marks give a valid {0}.</value>
+  </data>
+  <data name="IsbnStatusSolvedTitle" xml:space="preserve">
+    <value>Solutions: {0}</value>
+  </data>
+  <data name="IsbnStatusSolvedMessage" xml:space="preserve">
+    <value>Every way to fill the {0} unknown digit(s) that gives a valid {1}.</value>
+  </data>
+  <data name="IsbnStatusTooManyWildcardsTitle" xml:space="preserve">
+    <value>Too many unknown digits</value>
+  </data>
+  <data name="IsbnStatusTooManyWildcardsMessage" xml:space="preserve">
+    <value>Use at most {0} ? marks — more would give too many candidates to be useful.</value>
+  </data>
+  <data name="IsbnStatusInvalidCharacterTitle" xml:space="preserve">
+    <value>Unexpected character</value>
+  </data>
+  <data name="IsbnStatusInvalidCharacterMessage" xml:space="preserve">
+    <value>“{0}” at position {1} isn't allowed. Use digits, X as an ISBN-10/ISSN check digit, and ? for an unknown digit.</value>
+  </data>
+  <data name="IsbnStatusMisplacedXTitle" xml:space="preserve">
+    <value>X in the wrong place</value>
+  </data>
+  <data name="IsbnStatusMisplacedXMessage" xml:space="preserve">
+    <value>X stands for 10 and is only allowed as the last (check) character of an ISBN-10 or ISSN.</value>
+  </data>
+  <data name="IsbnStatusWrongLengthTitle" xml:space="preserve">
+    <value>Wrong length</value>
+  </data>
+  <data name="IsbnStatusWrongLengthMessage" xml:space="preserve">
+    <value>You entered {0} characters. A {1} has {2} — or one fewer to compute the check digit.</value>
+  </data>
+  <data name="IsbnOr" xml:space="preserve">
+    <value> or </value>
+  </data>
+  <data name="IsbnNote979" xml:space="preserve">
+    <value>ISBN-13s starting with 979 have no ISBN-10 equivalent — ISBN-10 only ever covered the 978 range.</value>
+  </data>
+  <data name="IsbnNoteNotBookland" xml:space="preserve">
+    <value>The check digit is valid, but an ISBN-13 starts with 978 or 979 — this looks like some other EAN-13 barcode.</value>
+  </data>
+  <data name="IsbnFormsHeader" xml:space="preserve">
+    <value>Equivalent forms</value>
+  </data>
+  <data name="IsbnCopyCode" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="IsbnWorkingHeader" xml:space="preserve">
+    <value>Check-digit calculation</value>
+  </data>
+  <data name="IsbnSolutionsHeader" xml:space="preserve">
+    <value>Candidates</value>
+  </data>
+  <data name="IsbnSolutionsTruncatedNote" xml:space="preserve">
+    <value>Showing the first {0} of {1}.</value>
+  </data>
+  <data name="IsbnCorrectionsHeader" xml:space="preserve">
+    <value>Possible typo fixes</value>
+  </data>
+  <data name="IsbnCorrectionsHint" xml:space="preserve">
+    <value>Codes one swap or one changed digit away that would be valid. Swapped neighbours are the most common typing error, so they're listed first.</value>
+  </data>
+  <data name="IsbnCorrectionSwap" xml:space="preserve">
+    <value>Swap positions {0} and {1}</value>
+  </data>
+  <data name="IsbnCorrectionReplace" xml:space="preserve">
+    <value>Position {0}: {1} → {2}</value>
+  </data>
+  <data name="IsbnLookupHeader" xml:space="preserve">
+    <value>Look up the book</value>
+  </data>
+  <data name="IsbnLookupNote" xml:space="preserve">
+    <value>Opens the catalogue in your browser and needs an internet connection. Everything else works offline.</value>
+  </data>
+  <data name="IsbnMethodNote" xml:space="preserve">
+    <value>ISBNs were 10 digits until January 2007, when they grew to 13: an ISBN-13 is the ISBN-10 with a 978 prefix and a recomputed check digit. ISBN-10 and ISSN weight the digits 10, 9, 8, … (8, 7, … for ISSN) and work modulo 11, so a check value of 10 is written X. ISBN-13, EAN-13 and ISMN weight the digits 1, 3, 1, 3, … and UPC-A weights them 3, 1, 3, …, all modulo 10.</value>
+  </data>
 </root>

@@ -26,7 +26,6 @@
         <NoWarn>$(NoWarn);IL2121</NoWarn>
 
         <UnoFeatures>
-            SkiaRenderer;
             Hosting;
             Logging;
             Mvvm;

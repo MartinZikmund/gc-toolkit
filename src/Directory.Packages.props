@@ -2,7 +2,7 @@
   <ItemGroup>
     <PackageVersion Include="Microsoft.Xaml.Behaviors.WinUI.Managed" Version="3.0.1" />
     <PackageVersion Include="Uno.Microsoft.Xaml.Behaviors.WinUI.Managed" Version="2.4.2" />
-    <PackageVersion Include="MZikmund.Toolkit.WinUI" Version="0.1.22-dev.70" />
+    <PackageVersion Include="MZikmund.Toolkit.WinUI" Version="1.0.0-dev.71" />
     <PackageVersion Include="Nerdbank.GitVersioning" Version="3.10.91" />
     <!-- Enables `dotnet run` for the packaged WinAppSDK head. -->
     <PackageVersion Include="Microsoft.Windows.SDK.BuildTools.WinApp" Version="0.3.1" />
@@ -15,11 +15,6 @@
     <!-- SQLite -->
     <PackageVersion Include="sqlite-net-e" Version="1.11.0" />
     <PackageVersion Include="SourceGear.sqlite3" Version="3.50.4.5" />
-    <!-- Community Toolkit -->
-    <PackageVersion Include="CommunityToolkit.WinUI.Controls.SettingsControls" Version="8.2.251219" />
-    <PackageVersion Include="CommunityToolkit.WinUI.Controls.Primitives" Version="8.1.240916" />
-    <PackageVersion Include="CommunityToolkit.WinUI.Converters" Version="8.2.251219" />
-    <PackageVersion Include="CommunityToolkit.WinUI.Helpers" Version="8.1.240916" />
     <!-- Test packages -->
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
     <PackageVersion Include="MSTest.TestAdapter" Version="3.7.0" />

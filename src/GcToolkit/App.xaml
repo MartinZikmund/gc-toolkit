@@ -16,6 +16,7 @@
                 <ResourceDictionary Source="/Resources/Styles.xaml" />
                 <!--  After Converters + Styles: ToolPage's template resolves both at parse time.  -->
                 <ResourceDictionary Source="/Resources/ToolPage.xaml" />
+                <ResourceDictionary Source="/Resources/SettingsCard.xaml" />
                 <resources:DataTemplates />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

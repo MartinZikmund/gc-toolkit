@@ -94,7 +94,7 @@ src/
 
 ### Dependencies (examples commonly found in Uno projects)
 - Uno Platform SDK
-- CommunityToolkit.WinUI packages for controls and helpers
+- CommunityToolkit.Mvvm for MVVM (CommunityToolkit.WinUI was dropped: its Uno build is not yet compatible with Uno 7)
 - Optional: local storage or database libraries (e.g., LiteDB) and graphics libraries (e.g., SkiaSharp)
 
 ### Build Timing Expectations

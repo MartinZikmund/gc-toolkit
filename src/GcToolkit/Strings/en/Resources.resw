@@ -4041,4 +4041,133 @@
   <data name="Base64_Tooltip" xml:space="preserve">
     <value>Encode text to Base64 and decode it back — line breaks and missing padding are no problem.</value>
   </data>
+  <data name="UpsideDownText_Name" xml:space="preserve">
+    <value>Upside-down text</value>
+  </data>
+  <data name="UpsideDownText_Tooltip" xml:space="preserve">
+    <value>Flip text 180° with rotated look-alike glyphs, or read upside-down text back to normal.</value>
+  </data>
+  <data name="UpsideDownDirection" xml:space="preserve">
+    <value>Direction</value>
+  </data>
+  <data name="UpsideDownDirectionAuto" xml:space="preserve">
+    <value>Auto</value>
+  </data>
+  <data name="UpsideDownDirectionFlip" xml:space="preserve">
+    <value>Flip</value>
+  </data>
+  <data name="UpsideDownDirectionUnflip" xml:space="preserve">
+    <value>Unflip</value>
+  </data>
+  <data name="UpsideDownDetectedNote" xml:space="preserve">
+    <value>Detected direction:</value>
+  </data>
+  <data name="UpsideDownInputLabel" xml:space="preserve">
+    <value>Input</value>
+  </data>
+  <data name="UpsideDownInputPlaceholder" xml:space="preserve">
+    <value>Text to flip, or upside-down text to read</value>
+  </data>
+  <data name="UpsideDownOutputLabel" xml:space="preserve">
+    <value>Result</value>
+  </data>
+  <data name="UpsideDownOptions" xml:space="preserve">
+    <value>Options</value>
+  </data>
+  <data name="UpsideDownReverse" xml:space="preserve">
+    <value>Reverse order (mirror)</value>
+  </data>
+  <data name="UpsideDownRotate" xml:space="preserve">
+    <value>Rotate glyphs</value>
+  </data>
+  <data name="UpsideDownVariant" xml:space="preserve">
+    <value>Glyph set</value>
+  </data>
+  <data name="UpsideDownVariantFull" xml:space="preserve">
+    <value>Full</value>
+  </data>
+  <data name="UpsideDownVariantCompatible" xml:space="preserve">
+    <value>Compatible (lower-case glyphs only)</value>
+  </data>
+  <data name="UpsideDownUnmapped" xml:space="preserve">
+    <value>Characters without a rotated form</value>
+  </data>
+  <data name="UpsideDownUnmappedKeep" xml:space="preserve">
+    <value>Keep as is</value>
+  </data>
+  <data name="UpsideDownUnmappedPlaceholder" xml:space="preserve">
+    <value>Replace with ▯</value>
+  </data>
+  <data name="UpsideDownUnmappedRemove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="UpsideDownCase" xml:space="preserve">
+    <value>Case</value>
+  </data>
+  <data name="UpsideDownCaseNone" xml:space="preserve">
+    <value>Unchanged</value>
+  </data>
+  <data name="UpsideDownCaseUpper" xml:space="preserve">
+    <value>UPPER</value>
+  </data>
+  <data name="UpsideDownCaseLower" xml:space="preserve">
+    <value>lower</value>
+  </data>
+  <data name="UpsideDownCaseFirst" xml:space="preserve">
+    <value>First Letter</value>
+  </data>
+  <data name="UpsideDownGroup" xml:space="preserve">
+    <value>Group every</value>
+  </data>
+  <data name="UpsideDownGroupOff" xml:space="preserve">
+    <value>Off</value>
+  </data>
+  <data name="UpsideDownGroup2" xml:space="preserve">
+    <value>2 characters</value>
+  </data>
+  <data name="UpsideDownGroup3" xml:space="preserve">
+    <value>3 characters</value>
+  </data>
+  <data name="UpsideDownGroup4" xml:space="preserve">
+    <value>4 characters</value>
+  </data>
+  <data name="UpsideDownGroup5" xml:space="preserve">
+    <value>5 characters</value>
+  </data>
+  <data name="UpsideDownPerLine" xml:space="preserve">
+    <value>Keep line order (transform each line separately)</value>
+  </data>
+  <data name="UpsideDownRemoveSpaces" xml:space="preserve">
+    <value>Remove spaces and tabs</value>
+  </data>
+  <data name="UpsideDownFontSize" xml:space="preserve">
+    <value>Result text size</value>
+  </data>
+  <data name="UpsideDownExample" xml:space="preserve">
+    <value>Example</value>
+  </data>
+  <data name="UpsideDownClear" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="UpsideDownSwap" xml:space="preserve">
+    <value>Use result as input</value>
+  </data>
+  <data name="UpsideDownCoverage" xml:space="preserve">
+    <value>{0} of {1} characters have a rotated form.</value>
+  </data>
+  <data name="UpsideDownUnmappedWarning" xml:space="preserve">
+    <value>No rotated form for: {0}. The round trip is lossy.</value>
+  </data>
+  <data name="UpsideDownLossyWarning" xml:space="preserve">
+    <value>Flipping this back would not restore the original exactly.</value>
+  </data>
+  <data name="UpsideDownNoFlippable" xml:space="preserve">
+    <value>No flippable characters.</value>
+  </data>
+  <data name="UpsideDownCoordinateLabel" xml:space="preserve">
+    <value>Coordinate found</value>
+  </data>
+  <data name="UpsideDownCopyCoordinate" xml:space="preserve">
+    <value>Copy coordinate</value>
+  </data>
 </root>

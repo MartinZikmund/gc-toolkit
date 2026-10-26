@@ -1,0 +1,158 @@
+<local:UpsideDownTextViewBase
+    x:Class="GcToolkit.Views.UpsideDownTextView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:GcToolkit.Controls"
+    xmlns:local="using:GcToolkit.Views"
+    xmlns:markup="using:GcToolkit.Markup">
+
+    <controls:ToolPage
+        CopyCommand="{x:Bind ViewModel.CopyOutputCommand}"
+        ShareCommand="{x:Bind ViewModel.ShareOutputCommand}"
+        Tool="{x:Bind ViewModel}">
+        <StackPanel Spacing="16">
+
+            <!--  Direction — auto-detect, with a manual override  -->
+            <RadioButtons
+                Header="{markup:Localize Key=UpsideDownDirection}"
+                MaxColumns="3"
+                SelectedIndex="{x:Bind ViewModel.DirectionIndex, Mode=TwoWay}">
+                <RadioButton Content="{markup:Localize Key=UpsideDownDirectionAuto}" />
+                <RadioButton Content="{markup:Localize Key=UpsideDownDirectionFlip}" />
+                <RadioButton Content="{markup:Localize Key=UpsideDownDirectionUnflip}" />
+            </RadioButtons>
+
+            <!--  Input  -->
+            <TextBox
+                MinHeight="96"
+                AcceptsReturn="True"
+                Header="{markup:Localize Key=UpsideDownInputLabel}"
+                IsSpellCheckEnabled="False"
+                PlaceholderText="{markup:Localize Key=UpsideDownInputPlaceholder}"
+                Text="{x:Bind ViewModel.InputText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                TextWrapping="Wrap" />
+
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Command="{x:Bind ViewModel.ExampleCommand}" Content="{markup:Localize Key=UpsideDownExample}" />
+                <Button Command="{x:Bind ViewModel.ClearCommand}" Content="{markup:Localize Key=UpsideDownClear}" />
+                <Button Command="{x:Bind ViewModel.SwapCommand}" Content="{markup:Localize Key=UpsideDownSwap}" />
+            </StackPanel>
+
+            <!--  Result  -->
+            <StackPanel Spacing="8">
+                <TextBox
+                    MinHeight="96"
+                    AcceptsReturn="True"
+                    FontSize="{x:Bind ViewModel.OutputFontSize, Mode=OneWay}"
+                    Header="{markup:Localize Key=UpsideDownOutputLabel}"
+                    IsReadOnly="True"
+                    IsSpellCheckEnabled="False"
+                    Text="{x:Bind ViewModel.OutputText, Mode=OneWay}"
+                    TextWrapping="Wrap" />
+
+                <StackPanel
+                    Orientation="Horizontal"
+                    Spacing="6"
+                    Visibility="{x:Bind ViewModel.HasOutput, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <TextBlock
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        Style="{ThemeResource CaptionTextBlockStyle}"
+                        Text="{markup:Localize Key=UpsideDownDetectedNote}" />
+                    <TextBlock
+                        Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"
+                        Style="{ThemeResource CaptionTextBlockStyle}"
+                        Text="{x:Bind ViewModel.DetectedDirectionName, Mode=OneWay}" />
+                </StackPanel>
+
+                <TextBlock
+                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                    Style="{ThemeResource CaptionTextBlockStyle}"
+                    Text="{x:Bind ViewModel.CoverageText, Mode=OneWay}"
+                    Visibility="{x:Bind ViewModel.CoverageText, Mode=OneWay, Converter={StaticResource StringVisibilityConverter}}" />
+            </StackPanel>
+
+            <InfoBar
+                IsClosable="False"
+                IsOpen="{x:Bind ViewModel.HasWarning, Mode=OneWay}"
+                Message="{x:Bind ViewModel.WarningMessage, Mode=OneWay}"
+                Severity="Warning" />
+
+            <!--  Coordinate found in the readable text  -->
+            <StackPanel
+                Orientation="Horizontal"
+                Spacing="12"
+                Visibility="{x:Bind ViewModel.HasCoordinate, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                <StackPanel>
+                    <TextBlock
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        Style="{ThemeResource CaptionTextBlockStyle}"
+                        Text="{markup:Localize Key=UpsideDownCoordinateLabel}" />
+                    <TextBlock
+                        FontFamily="{ThemeResource AppMonoFontFamily}"
+                        IsTextSelectionEnabled="True"
+                        Text="{x:Bind ViewModel.CoordinateText, Mode=OneWay}" />
+                </StackPanel>
+                <Button
+                    VerticalAlignment="Bottom"
+                    Command="{x:Bind ViewModel.CopyCoordinateCommand}"
+                    Content="{markup:Localize Key=UpsideDownCopyCoordinate}" />
+            </StackPanel>
+
+            <!--  Options  -->
+            <StackPanel Spacing="8">
+                <TextBlock Style="{ThemeResource BodyStrongTextBlockStyle}" Text="{markup:Localize Key=UpsideDownOptions}" />
+                <CheckBox Content="{markup:Localize Key=UpsideDownReverse}" IsChecked="{x:Bind ViewModel.ReverseEnabled, Mode=TwoWay}" />
+                <CheckBox Content="{markup:Localize Key=UpsideDownRotate}" IsChecked="{x:Bind ViewModel.RotateEnabled, Mode=TwoWay}" />
+                <CheckBox Content="{markup:Localize Key=UpsideDownPerLine}" IsChecked="{x:Bind ViewModel.PerLine, Mode=TwoWay}" />
+                <CheckBox Content="{markup:Localize Key=UpsideDownRemoveSpaces}" IsChecked="{x:Bind ViewModel.RemoveSpaces, Mode=TwoWay}" />
+
+                <ComboBox
+                    HorizontalAlignment="Stretch"
+                    Header="{markup:Localize Key=UpsideDownVariant}"
+                    SelectedIndex="{x:Bind ViewModel.VariantIndex, Mode=TwoWay}">
+                    <ComboBoxItem Content="{markup:Localize Key=UpsideDownVariantFull}" />
+                    <ComboBoxItem Content="{markup:Localize Key=UpsideDownVariantCompatible}" />
+                </ComboBox>
+
+                <ComboBox
+                    HorizontalAlignment="Stretch"
+                    Header="{markup:Localize Key=UpsideDownUnmapped}"
+                    SelectedIndex="{x:Bind ViewModel.UnmappedIndex, Mode=TwoWay}">
+                    <ComboBoxItem Content="{markup:Localize Key=UpsideDownUnmappedKeep}" />
+                    <ComboBoxItem Content="{markup:Localize Key=UpsideDownUnmappedPlaceholder}" />
+                    <ComboBoxItem Content="{markup:Localize Key=UpsideDownUnmappedRemove}" />
+                </ComboBox>
+
+                <ComboBox
+                    HorizontalAlignment="Stretch"
+                    Header="{markup:Localize Key=UpsideDownCase}"
+                    SelectedIndex="{x:Bind ViewModel.CaseIndex, Mode=TwoWay}">
+                    <ComboBoxItem Content="{markup:Localize Key=UpsideDownCaseNone}" />
+                    <ComboBoxItem Content="{markup:Localize Key=UpsideDownCaseUpper}" />
+                    <ComboBoxItem Content="{markup:Localize Key=UpsideDownCaseLower}" />
+                    <ComboBoxItem Content="{markup:Localize Key=UpsideDownCaseFirst}" />
+                </ComboBox>
+
+                <ComboBox
+                    HorizontalAlignment="Stretch"
+                    Header="{markup:Localize Key=UpsideDownGroup}"
+                    SelectedIndex="{x:Bind ViewModel.GroupIndex, Mode=TwoWay}">
+                    <ComboBoxItem Content="{markup:Localize Key=UpsideDownGroupOff}" />
+                    <ComboBoxItem Content="{markup:Localize Key=UpsideDownGroup2}" />
+                    <ComboBoxItem Content="{markup:Localize Key=UpsideDownGroup3}" />
+                    <ComboBoxItem Content="{markup:Localize Key=UpsideDownGroup4}" />
+                    <ComboBoxItem Content="{markup:Localize Key=UpsideDownGroup5}" />
+                </ComboBox>
+
+                <Slider
+                    AutomationProperties.Name="{markup:Localize Key=UpsideDownFontSize}"
+                    Header="{markup:Localize Key=UpsideDownFontSize}"
+                    Maximum="48"
+                    Minimum="14"
+                    StepFrequency="2"
+                    Value="{x:Bind ViewModel.OutputFontSize, Mode=TwoWay}" />
+            </StackPanel>
+
+        </StackPanel>
+    </controls:ToolPage>
+</local:UpsideDownTextViewBase>

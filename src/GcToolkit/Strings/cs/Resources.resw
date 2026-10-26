@@ -4041,4 +4041,133 @@
   <data name="Base64_Tooltip" xml:space="preserve">
     <value>Zakódujte text do Base64 a zase zpět – se zalomenými řádky i chybějící výplní si poradí.</value>
   </data>
+  <data name="UpsideDownText_Name" xml:space="preserve">
+    <value>Text vzhůru nohama</value>
+  </data>
+  <data name="UpsideDownText_Tooltip" xml:space="preserve">
+    <value>Otočte text o 180° pomocí podobných znaků, nebo převraťte text vzhůru nohama zpět.</value>
+  </data>
+  <data name="UpsideDownDirection" xml:space="preserve">
+    <value>Směr</value>
+  </data>
+  <data name="UpsideDownDirectionAuto" xml:space="preserve">
+    <value>Automaticky</value>
+  </data>
+  <data name="UpsideDownDirectionFlip" xml:space="preserve">
+    <value>Otočit</value>
+  </data>
+  <data name="UpsideDownDirectionUnflip" xml:space="preserve">
+    <value>Otočit zpět</value>
+  </data>
+  <data name="UpsideDownDetectedNote" xml:space="preserve">
+    <value>Rozpoznaný směr:</value>
+  </data>
+  <data name="UpsideDownInputLabel" xml:space="preserve">
+    <value>Vstup</value>
+  </data>
+  <data name="UpsideDownInputPlaceholder" xml:space="preserve">
+    <value>Text k otočení nebo otočený text ke čtení</value>
+  </data>
+  <data name="UpsideDownOutputLabel" xml:space="preserve">
+    <value>Výsledek</value>
+  </data>
+  <data name="UpsideDownOptions" xml:space="preserve">
+    <value>Možnosti</value>
+  </data>
+  <data name="UpsideDownReverse" xml:space="preserve">
+    <value>Obrátit pořadí (zrcadlit)</value>
+  </data>
+  <data name="UpsideDownRotate" xml:space="preserve">
+    <value>Otočit znaky</value>
+  </data>
+  <data name="UpsideDownVariant" xml:space="preserve">
+    <value>Sada znaků</value>
+  </data>
+  <data name="UpsideDownVariantFull" xml:space="preserve">
+    <value>Úplná</value>
+  </data>
+  <data name="UpsideDownVariantCompatible" xml:space="preserve">
+    <value>Kompatibilní (jen malá písmena)</value>
+  </data>
+  <data name="UpsideDownUnmapped" xml:space="preserve">
+    <value>Znaky bez otočené podoby</value>
+  </data>
+  <data name="UpsideDownUnmappedKeep" xml:space="preserve">
+    <value>Ponechat</value>
+  </data>
+  <data name="UpsideDownUnmappedPlaceholder" xml:space="preserve">
+    <value>Nahradit znakem ▯</value>
+  </data>
+  <data name="UpsideDownUnmappedRemove" xml:space="preserve">
+    <value>Odstranit</value>
+  </data>
+  <data name="UpsideDownCase" xml:space="preserve">
+    <value>Velikost písmen</value>
+  </data>
+  <data name="UpsideDownCaseNone" xml:space="preserve">
+    <value>Beze změny</value>
+  </data>
+  <data name="UpsideDownCaseUpper" xml:space="preserve">
+    <value>VELKÁ</value>
+  </data>
+  <data name="UpsideDownCaseLower" xml:space="preserve">
+    <value>malá</value>
+  </data>
+  <data name="UpsideDownCaseFirst" xml:space="preserve">
+    <value>První Velké</value>
+  </data>
+  <data name="UpsideDownGroup" xml:space="preserve">
+    <value>Seskupit po</value>
+  </data>
+  <data name="UpsideDownGroupOff" xml:space="preserve">
+    <value>Vypnuto</value>
+  </data>
+  <data name="UpsideDownGroup2" xml:space="preserve">
+    <value>2 znacích</value>
+  </data>
+  <data name="UpsideDownGroup3" xml:space="preserve">
+    <value>3 znacích</value>
+  </data>
+  <data name="UpsideDownGroup4" xml:space="preserve">
+    <value>4 znacích</value>
+  </data>
+  <data name="UpsideDownGroup5" xml:space="preserve">
+    <value>5 znacích</value>
+  </data>
+  <data name="UpsideDownPerLine" xml:space="preserve">
+    <value>Zachovat pořadí řádků (každý řádek zvlášť)</value>
+  </data>
+  <data name="UpsideDownRemoveSpaces" xml:space="preserve">
+    <value>Odstranit mezery a tabulátory</value>
+  </data>
+  <data name="UpsideDownFontSize" xml:space="preserve">
+    <value>Velikost textu výsledku</value>
+  </data>
+  <data name="UpsideDownExample" xml:space="preserve">
+    <value>Příklad</value>
+  </data>
+  <data name="UpsideDownClear" xml:space="preserve">
+    <value>Vymazat</value>
+  </data>
+  <data name="UpsideDownSwap" xml:space="preserve">
+    <value>Použít výsledek jako vstup</value>
+  </data>
+  <data name="UpsideDownCoverage" xml:space="preserve">
+    <value>Otočenou podobu má {0} z {1} znaků.</value>
+  </data>
+  <data name="UpsideDownUnmappedWarning" xml:space="preserve">
+    <value>Bez otočené podoby: {0}. Zpětná cesta není bezeztrátová.</value>
+  </data>
+  <data name="UpsideDownLossyWarning" xml:space="preserve">
+    <value>Otočením zpět by se původní text přesně neobnovil.</value>
+  </data>
+  <data name="UpsideDownNoFlippable" xml:space="preserve">
+    <value>Žádné znaky k otočení.</value>
+  </data>
+  <data name="UpsideDownCoordinateLabel" xml:space="preserve">
+    <value>Nalezená souřadnice</value>
+  </data>
+  <data name="UpsideDownCopyCoordinate" xml:space="preserve">
+    <value>Kopírovat souřadnici</value>
+  </data>
 </root>

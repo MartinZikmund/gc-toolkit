@@ -35,6 +35,9 @@
             Localization;
         </UnoFeatures>
         <WinAppSdkBuildToolsVersion>10.0.28000.1839</WinAppSdkBuildToolsVersion>
+        <!-- Uno 7's Windows packages are built against WinRT.Runtime 2.3.1; the .NET SDK's default
+             Windows SDK projection still ships 2.2.0 (CS1705). .86 is the first 26100 ref with 2.3.1. -->
+        <WindowsSdkPackageVersion>10.0.26100.86</WindowsSdkPackageVersion>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="Nerdbank.GitVersioning" PrivateAssets="All" />

@@ -71,10 +71,8 @@ jobs:
         run:
           dotnet workload restore "${{ env.SOLUTION_FILE }}"
 
-      - name: Select Xcode Latest
-        uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: latest-stable
+      # No Xcode selection: the iOS workload requires one exact version, which is the image's
+      # default. "latest-stable" picks a newer Xcode and fails the build.
 
       # This device-only build needs the iphoneos SDK, not the simulator
       # runtime — download the platform only when the SDK is actually missing

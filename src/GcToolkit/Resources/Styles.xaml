@@ -108,6 +108,9 @@
             favourite star aligns to the outer Grid — putting the star outside the card's border.
         -->
         <Setter Property="Padding" Value="0" />
+        <!--  Button defaults to Left: the card would hug its text while the star stays at the cell's edge.  -->
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="VerticalAlignment" Value="Stretch" />
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="VerticalContentAlignment" Value="Stretch" />
         <Setter Property="Template">

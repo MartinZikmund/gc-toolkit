@@ -80,21 +80,45 @@ jobs:
 
       # --- Signing setup (requires your keystore + secrets) ---
       # Create upload keystore file from a base64 secret
+      # Dev builds fall back to the default debug key when the secrets aren't set (nothing is
+      # uploaded on Dev). Prod must never ship that, so it fails instead.
       - name: Decode Android upload keystore
+        id: keystore
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
         run: |
-          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > "$GITHUB_WORKSPACE/android-upload.keystore"
+          if [[ -n "$ANDROID_KEYSTORE_BASE64" ]]; then
+            echo "$ANDROID_KEYSTORE_BASE64" | base64 -d > "$GITHUB_WORKSPACE/android-upload.keystore"
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          elif [[ "${{ steps.channel.outputs.value }}" == "Prod" ]]; then
+            echo "::error::ANDROID_KEYSTORE_BASE64 is required for Prod builds."
+            exit 1
+          else
+            echo "::warning::Android signing secrets are not set; signing with the default debug key."
+            echo "present=false" >> "$GITHUB_OUTPUT"
+          fi
 
       # --- Build Google Play bundle (AAB) ---
-      - name: Publish AAB (signed with Upload Key)
+      - name: Publish AAB
+        env:
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          ANDROID_STORE_PASSWORD: ${{ secrets.ANDROID_STORE_PASSWORD }}
         run: |
+          signing=()
+          if [[ "${{ steps.keystore.outputs.present }}" == "true" ]]; then
+            signing=(
+              -p:AndroidKeyStore=true
+              -p:AndroidSigningKeyStore="$GITHUB_WORKSPACE/android-upload.keystore"
+              -p:AndroidSigningKeyAlias="$ANDROID_KEY_ALIAS"
+              -p:AndroidSigningKeyPass="$ANDROID_KEY_PASSWORD"
+              -p:AndroidSigningStorePass="$ANDROID_STORE_PASSWORD"
+            )
+          fi
           dotnet publish "${{ env.PROJECT_FILE }}" -c Release -f ${{ env.ANDROID_TARGET_FRAMEWORK }} \
             -p:SingleTargetFramework=${{ env.ANDROID_TARGET_FRAMEWORK }} \
             -p:AppChannel=${{ steps.channel.outputs.value }} \
-            -p:AndroidKeyStore=true \
-            -p:AndroidSigningKeyStore="$GITHUB_WORKSPACE/android-upload.keystore" \
-            -p:AndroidSigningKeyAlias='${{ secrets.ANDROID_KEY_ALIAS }}' \
-            -p:AndroidSigningKeyPass='${{ secrets.ANDROID_KEY_PASSWORD }}' \
-            -p:AndroidSigningStorePass='${{ secrets.ANDROID_STORE_PASSWORD }}' \
+            "${signing[@]}" \
             -p:AndroidPackageFormat=aab -p:PackageFormat=aab
 
       - name: Upload AAB artifact

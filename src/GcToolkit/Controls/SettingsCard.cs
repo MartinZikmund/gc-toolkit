@@ -1,5 +1,7 @@
 using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Automation;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Controls.Primitives;
 
 namespace GcToolkit.Controls;
 
@@ -10,7 +12,8 @@ namespace GcToolkit.Controls;
 public sealed partial class SettingsCard : ContentControl
 {
     public static readonly DependencyProperty HeaderProperty = DependencyProperty.Register(
-        nameof(Header), typeof(object), typeof(SettingsCard), new PropertyMetadata(null));
+        nameof(Header), typeof(object), typeof(SettingsCard),
+        new PropertyMetadata(null, (d, _) => ((SettingsCard)d).SetAccessibleContentName()));
 
     public static readonly DependencyProperty DescriptionProperty = DependencyProperty.Register(
         nameof(Description), typeof(object), typeof(SettingsCard), new PropertyMetadata(null));
@@ -36,5 +39,23 @@ public sealed partial class SettingsCard : ContentControl
     {
         get => (IconElement?)GetValue(HeaderIconProperty);
         set => SetValue(HeaderIconProperty, value);
+    }
+
+    protected override void OnContentChanged(object oldContent, object newContent)
+    {
+        base.OnContentChanged(oldContent, newContent);
+        SetAccessibleContentName();
+    }
+
+    // As the toolkit card did: name the trailing control after the header so a screen reader
+    // announces which setting it changes. Buttons and text already announce their own content.
+    private void SetAccessibleContentName()
+    {
+        if (Header is string { Length: > 0 } header
+            && Content is UIElement element and not ButtonBase and not TextBlock
+            && string.IsNullOrEmpty(AutomationProperties.GetName(element)))
+        {
+            AutomationProperties.SetName(element, header);
+        }
     }
 }

@@ -93,7 +93,7 @@ jobs:
     # SingleTargetFramework collapses to Windows so restore doesn't evaluate the
     # android/ios/wasm TFMs (no reliance on those workloads being on the runner).
     - name: Restore the application
-      run: msbuild $env:PROJECT_FILE /m /t:Restore /p:Configuration=$env:Configuration /p:TargetFramework=$env:WINDOWS_TARGET_FRAMEWORK /p:SingleTargetFramework=$env:WINDOWS_TARGET_FRAMEWORK /p:PublishReadyToRun=true /p:AppChannel=${{ steps.channel.outputs.value }}
+      run: msbuild $env:PROJECT_FILE /m /t:Restore /p:Configuration=$env:Configuration /p:SingleTargetFramework=$env:WINDOWS_TARGET_FRAMEWORK /p:PublishReadyToRun=true /p:AppChannel=${{ steps.channel.outputs.value }}
       env:
         Configuration: ${{ matrix.configuration }}
 
@@ -114,7 +114,7 @@ jobs:
     # Dev-channel (main/dispatch) packages skip ReadyToRun — R2R compilation is
     # a large chunk of packaging time and only matters for shipped Prod builds.
     - name: Create the app package
-      run: msbuild $env:PROJECT_FILE /m /p:TargetFramework=$env:WINDOWS_TARGET_FRAMEWORK /p:SingleTargetFramework=$env:WINDOWS_TARGET_FRAMEWORK /p:Configuration=$env:Configuration /p:Platform=$env:Platform /p:UapAppxPackageBuildMode=$env:Appx_Package_Build_Mode /p:AppxBundle=$env:Appx_Bundle /p:AppxPackageDir="$env:Appx_Package_Dir" /p:GenerateAppxPackageOnBuild=true /p:AppChannel=${{ steps.channel.outputs.value }} $env:R2R_ARGS
+      run: msbuild $env:PROJECT_FILE /m /p:SingleTargetFramework=$env:WINDOWS_TARGET_FRAMEWORK /p:Configuration=$env:Configuration /p:Platform=$env:Platform /p:UapAppxPackageBuildMode=$env:Appx_Package_Build_Mode /p:AppxBundle=$env:Appx_Bundle /p:AppxPackageDir="$env:Appx_Package_Dir" /p:GenerateAppxPackageOnBuild=true /p:AppChannel=${{ steps.channel.outputs.value }} $env:R2R_ARGS
       env:
         Appx_Bundle: Never
         Appx_Package_Build_Mode: CI

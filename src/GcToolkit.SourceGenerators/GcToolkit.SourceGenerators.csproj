@@ -8,6 +8,8 @@
   -->
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <!-- The compiler can't load an analyzer built for the app's Platform (CS8034), e.g. x86 or ARM64 packages. -->
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <ImplicitUsings>disable</ImplicitUsings>

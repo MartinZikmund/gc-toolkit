@@ -5,6 +5,8 @@
     <LangVersion>latest</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <!-- Uno 7's UNOB0029 head check exempts test projects via IsTestProject, which MSTest.Sdk sets too late for it. -->
+    <IsTestProject>true</IsTestProject>
     <!--
       Uno's _UnoAddAssetsFilesToCopyLocal rewrites content Links to sit under a folder named after the
       project, which catches MSTest 4.4.0's localized adapter resources: they land in

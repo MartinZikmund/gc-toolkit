@@ -22,7 +22,13 @@
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
 
-                        <ScrollViewer x:Name="PART_Scroller" Padding="24">
+                        <!--
+                            Not PART_Scroller: Uno's ScrollViewer probes that template part name first, and its
+                            GetTemplateChild falls back to the outer namescope, so it finds this ScrollViewer
+                            itself and never wires up its ScrollContentPresenter. Content then lays out at
+                            width 0 (every word wrapped onto its own line), on all Uno heads.
+                        -->
+                        <ScrollViewer x:Name="ContentScroller" Padding="24">
                             <!--
                                 WinUI #4619 (won't-fix): a MaxWidth panel that is a ScrollViewer's
                                 DIRECT child renders off-centre and jumps while typing. This Grid
@@ -188,7 +194,7 @@
                                         <AdaptiveTrigger MinWindowWidth="0" />
                                     </VisualState.StateTriggers>
                                     <VisualState.Setters>
-                                        <Setter Target="PART_Scroller.Padding" Value="16" />
+                                        <Setter Target="ContentScroller.Padding" Value="16" />
                                         <Setter Target="PART_ActionBar.Padding" Value="16,12" />
                                     </VisualState.Setters>
                                 </VisualState>
@@ -218,7 +224,7 @@
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
 
-                        <Grid x:Name="PART_Scroller" Padding="24">
+                        <Grid x:Name="ContentScroller" Padding="24">
                             <!--  Same WinUI #4619 wrapper as the scrolling template.  -->
                             <Grid>
                                 <Grid
@@ -368,7 +374,7 @@
                                         <AdaptiveTrigger MinWindowWidth="0" />
                                     </VisualState.StateTriggers>
                                     <VisualState.Setters>
-                                        <Setter Target="PART_Scroller.Padding" Value="16" />
+                                        <Setter Target="ContentScroller.Padding" Value="16" />
                                         <Setter Target="PART_ActionBar.Padding" Value="16,12" />
                                     </VisualState.Setters>
                                 </VisualState>

@@ -3,7 +3,7 @@
     "allowPrerelease": false
   },
   "msbuild-sdks": {
-    "Uno.Sdk": "7.0.0-dev.89",
+    "Uno.Sdk": "7.0.0-dev.173",
     "MSTest.Sdk": "4.4.0"
   },
   "test": {

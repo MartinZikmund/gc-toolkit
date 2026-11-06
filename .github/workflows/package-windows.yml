@@ -148,18 +148,6 @@ jobs:
     timeout-minutes: 15
     needs: create_package
     steps:
-      # Shallow checkout — this job only reads Package.appxmanifest.
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Read package version from manifest
-        id: manifest
-        shell: pwsh
-        run: |
-          [xml]$xml = Get-Content "$env:PROJECT_PATH/Package.appxmanifest"
-          $version = $xml.Package.Identity.Version
-          echo "version=$version" >> $env:GITHUB_OUTPUT
-
       - name: Download all MSIX_Package_* artifacts
         uses: actions/download-artifact@v4
         with:
@@ -173,19 +161,23 @@ jobs:
           $tmp = Join-Path $env:RUNNER_TEMP ([IO.Path]::GetRandomFileName()); New-Item $tmp -ItemType Directory | Out-Null
           Copy-Item $msixFiles -Destination $tmp
           echo "msix_temp_dir=$tmp" >> $env:GITHUB_OUTPUT
+          # The source manifest stays 0.0.0.0: the real version is injected at build time.
+          $version = ($msixFiles | Select-Object -First 1).BaseName.Split('_')[1]
+          if ($version -notmatch '^\d+\.\d+\.\d+\.\d+$') { throw "Unexpected package version '$version'." }
+          echo "version=$version" >> $env:GITHUB_OUTPUT
 
       - name: Make msixbundle
         id: bundler
-        uses: LanceMcCarthy/Action-MsixBundler@v2.0.0
+        uses: LanceMcCarthy/Action-MsixBundler@v3.0.0
         with:
           msix-folder: ${{ steps.copymsix.outputs.msix_temp_dir }}
-          msixbundle-filepath: "./msix/${{ env.APP_NAME }}_${{ steps.manifest.outputs.version }}.msixbundle"
-          msixbundle-version: ${{ steps.manifest.outputs.version }}
+          msixbundle-filepath: "./msix/${{ env.APP_NAME }}_${{ steps.copymsix.outputs.version }}.msixbundle"
+          msixbundle-version: ${{ steps.copymsix.outputs.version }}
 
       - name: Make .msixupload
         shell: pwsh
         run: |
-          $bundle = "./msix/${{ env.APP_NAME }}_${{ steps.manifest.outputs.version }}.msixbundle"
+          $bundle = "./msix/${{ env.APP_NAME }}_${{ steps.copymsix.outputs.version }}.msixbundle"
           $syms = Get-ChildItem -Path ./msix -Recurse -Filter *.msixsym
           foreach ($sym in $syms) {
             $newName = [IO.Path]::ChangeExtension($sym.FullName, ".appxsym")
@@ -195,10 +187,10 @@ jobs:
           $tmp = Join-Path $env:RUNNER_TEMP ([IO.Path]::GetRandomFileName()); New-Item $tmp -ItemType Directory | Out-Null
           Copy-Item $bundle $tmp
           Copy-Item $appxsymFiles $tmp
-          Compress-Archive -Path (Join-Path $tmp '*') -DestinationPath ${{ env.APP_NAME }}_${{ steps.manifest.outputs.version }}.msixupload -Force
+          Compress-Archive -Path (Join-Path $tmp '*') -DestinationPath ${{ env.APP_NAME }}_${{ steps.copymsix.outputs.version }}.msixupload -Force
 
       - name: Upload .msixupload
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.APP_NAME }}_${{ steps.manifest.outputs.version }}.msixupload
-          path: ${{ env.APP_NAME }}_${{ steps.manifest.outputs.version }}.msixupload
+          name: ${{ env.APP_NAME }}_${{ steps.copymsix.outputs.version }}.msixupload
+          path: ${{ env.APP_NAME }}_${{ steps.copymsix.outputs.version }}.msixupload

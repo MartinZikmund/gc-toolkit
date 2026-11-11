@@ -4050,6 +4050,9 @@
   <data name="Scratchpad_SavedMinutesAgo" xml:space="preserve">
     <value>Saved {0} min ago</value>
   </data>
+  <data name="Scratchpad_SavedHoursAgo" xml:space="preserve">
+    <value>Saved {0} h ago</value>
+  </data>
   <data name="Scratchpad_Saving" xml:space="preserve">
     <value>Saving…</value>
   </data>

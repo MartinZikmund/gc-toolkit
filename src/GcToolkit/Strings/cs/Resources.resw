@@ -4050,6 +4050,9 @@
   <data name="Scratchpad_SavedMinutesAgo" xml:space="preserve">
     <value>Uloženo před {0} min</value>
   </data>
+  <data name="Scratchpad_SavedHoursAgo" xml:space="preserve">
+    <value>Uloženo před {0} h</value>
+  </data>
   <data name="Scratchpad_Saving" xml:space="preserve">
     <value>Ukládání…</value>
   </data>

@@ -182,10 +182,13 @@ public partial class ScratchpadViewModel : ViewModelBase
             return _localizer["Scratchpad_Saved"];
         }
 
-        var minutes = (int)(_time.GetUtcNow() - savedAt).TotalMinutes;
-        return minutes < 1
-            ? _localizer["Scratchpad_SavedJustNow"]
-            : string.Format(CultureInfo.CurrentCulture, _localizer["Scratchpad_SavedMinutesAgo"].Value, minutes);
+        var age = _time.GetUtcNow() - savedAt;
+        return age switch
+        {
+            { TotalMinutes: < 1 } => _localizer["Scratchpad_SavedJustNow"],
+            { TotalHours: < 1 } => string.Format(CultureInfo.CurrentCulture, _localizer["Scratchpad_SavedMinutesAgo"].Value, (int)age.TotalMinutes),
+            _ => string.Format(CultureInfo.CurrentCulture, _localizer["Scratchpad_SavedHoursAgo"].Value, (int)age.TotalHours),
+        };
     }
 
     // WinUI's TextBox turns every line break into '\r', so stored and typed text can differ only in those.

@@ -22,6 +22,7 @@ public partial class ContinueSolvingViewModel : ViewModelBase
     private readonly INavigationService _navigation;
     private readonly IStringLocalizer _localizer;
     private readonly TimeProvider _time;
+    private readonly SynchronizationContext? _uiContext = SynchronizationContext.Current;
     private bool _subscribed;
 
     public ContinueSolvingViewModel(
@@ -51,21 +52,27 @@ public partial class ContinueSolvingViewModel : ViewModelBase
 
     public override void ViewCreated()
     {
+        RestoredCount = _session.RestoredCount;
+        IsRestoredNoticeVisible = RestoredCount > 0;
+        Refresh();
+    }
+
+    // The provider is a singleton, so hold its event only while the view is on screen.
+    public override void ViewLoaded()
+    {
         if (!_subscribed)
         {
-            _progress.ProgressChanged += (_, _) => Refresh();
+            _progress.ProgressChanged += OnProgressChanged;
             _subscribed = true;
-            RestoredCount = _session.RestoredCount;
-            IsRestoredNoticeVisible = RestoredCount > 0;
         }
 
         Refresh();
     }
 
-    public override void OnNavigatedTo(object? parameter)
+    public override void ViewUnloaded()
     {
-        base.OnNavigatedTo(parameter);
-        Refresh();
+        _progress.ProgressChanged -= OnProgressChanged;
+        _subscribed = false;
     }
 
     [RelayCommand]
@@ -77,6 +84,17 @@ public partial class ContinueSolvingViewModel : ViewModelBase
 
     [RelayCommand]
     private void DismissRestoredNotice() => IsRestoredNoticeVisible = false;
+
+    private void OnProgressChanged(object? sender, EventArgs e)
+    {
+        if (_uiContext is null || SynchronizationContext.Current == _uiContext)
+        {
+            Refresh();
+            return;
+        }
+
+        _uiContext.Post(_ => Refresh(), null);
+    }
 
     private void Refresh()
     {

@@ -4071,4 +4071,22 @@
   <data name="Workbench_SessionRestored" xml:space="preserve">
     <value>Znovu otevřeny keše z minulé relace.</value>
   </data>
+  <data name="Scratchpad_Saved" xml:space="preserve">
+    <value>Uloženo</value>
+  </data>
+  <data name="Scratchpad_SavedJustNow" xml:space="preserve">
+    <value>Uloženo právě teď</value>
+  </data>
+  <data name="Scratchpad_SavedMinutesAgo" xml:space="preserve">
+    <value>Uloženo před {0} min</value>
+  </data>
+  <data name="Scratchpad_SavedHoursAgo" xml:space="preserve">
+    <value>Uloženo před {0} h</value>
+  </data>
+  <data name="Scratchpad_Saving" xml:space="preserve">
+    <value>Ukládání…</value>
+  </data>
+  <data name="Scratchpad_Unsaved" xml:space="preserve">
+    <value>Neuložené změny</value>
+  </data>
 </root>

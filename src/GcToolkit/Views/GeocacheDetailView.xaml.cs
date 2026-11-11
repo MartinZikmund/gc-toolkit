@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using GcToolkit.Core.Geocaches.Detail;
 using GcToolkit.Core.Navigation;
 using GcToolkit.Core.ViewModels;
 using Microsoft.UI.Xaml.Controls;
@@ -81,9 +82,15 @@ public sealed partial class GeocacheDetailView : GeocacheDetailViewBase
     // The listing itself is a data: document; anything else is a link the user clicked.
     private static void OnNavigationStarting(CoreWebView2 sender, CoreWebView2NavigationStartingEventArgs args)
     {
-        if (IsExternal(args.Uri))
+        var action = ListingLinkPolicy.Decide(args.Uri);
+        if (action == ListingLinkAction.Allow)
         {
-            args.Cancel = true;
+            return;
+        }
+
+        args.Cancel = true;
+        if (action == ListingLinkAction.OpenExternally)
+        {
             _ = Windows.System.Launcher.LaunchUriAsync(new Uri(args.Uri));
         }
     }
@@ -91,14 +98,11 @@ public sealed partial class GeocacheDetailView : GeocacheDetailViewBase
     private static void OnNewWindowRequested(CoreWebView2 sender, CoreWebView2NewWindowRequestedEventArgs args)
     {
         args.Handled = true;
-        if (IsExternal(args.Uri))
+        if (ListingLinkPolicy.Decide(args.Uri) == ListingLinkAction.OpenExternally)
         {
             _ = Windows.System.Launcher.LaunchUriAsync(new Uri(args.Uri));
         }
     }
-
-    private static bool IsExternal(string? uri)
-        => Uri.TryCreate(uri, UriKind.Absolute, out var parsed) && parsed.Scheme is "http" or "https" or "mailto";
 
     private void OnSectionChanged(SelectorBar sender, SelectorBarSelectionChangedEventArgs args)
     {

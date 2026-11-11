@@ -185,7 +185,12 @@ public sealed partial class WindowShell : Page, IWindowShell
     #region Navigation
 
     private void NavView_Loaded(object sender, RoutedEventArgs e)
-        => NavigateToSection(NavigationSection.Home);
+    {
+        NavigateToSection(NavigationSection.Home);
+#if DEBUG
+        _ = Infrastructure.DebugSampleCache.OpenIfRequestedAsync(ServiceProvider);
+#endif
+    }
 
     private void NavView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
     {

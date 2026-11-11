@@ -64,6 +64,11 @@
         <Content Include="Assets\Fonts\**" CopyToOutputDirectory="PreserveNewest" />
     </ItemGroup>
 
+    <!-- WebView2 renders the cache listing; the Skia desktop head needs the feature. -->
+    <PropertyGroup>
+        <UnoFeatures>$(UnoFeatures);WebView;</UnoFeatures>
+    </PropertyGroup>
+
     <ItemGroup>
         <PackageReference Include="MZikmund.Toolkit.WinUI" />
         <PackageReference Include="sqlite-net-e" />

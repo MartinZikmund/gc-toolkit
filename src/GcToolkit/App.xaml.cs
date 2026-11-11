@@ -198,6 +198,7 @@ public partial class App : Application, IApplication
         services.AddTransient<ScratchpadViewModel>();
         services.AddTransient<CatalogViewModel>();
         services.AddTransient<SettingsViewModel>();
+        services.AddTransient<GeocacheDetailViewModel>();
     }
 
     /// <summary>

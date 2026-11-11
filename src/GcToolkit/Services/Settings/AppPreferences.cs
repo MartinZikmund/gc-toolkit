@@ -1,3 +1,4 @@
+using GcToolkit.Core.Coordinates;
 using GcToolkit.Core.Services.Settings;
 using MZikmund.Toolkit.WinUI.Services;
 
@@ -45,6 +46,13 @@ public sealed class AppPreferences : IAppPreferences
     {
         get => _preferences.GetComplex(ThemeKey, ElementTheme.Default);
         set => _preferences.SetComplex(ThemeKey, value);
+    }
+
+    private const string CoordinateFormatKey = "AppCoordinateFormat";
+    public CoordinateFormat CoordinateFormat
+    {
+        get => (CoordinateFormat)_preferences.Get(CoordinateFormatKey, (int)CoordinateFormat.DegreesDecimalMinutes);
+        set => _preferences.Set(CoordinateFormatKey, (int)value);
     }
 
     public void Clear() => Windows.Storage.ApplicationData.Current.LocalSettings.Values.Clear();

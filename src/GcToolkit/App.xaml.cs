@@ -15,6 +15,7 @@ using GcToolkit.Core.Services.Dialogs;
 using GcToolkit.Core.Services.Settings;
 using GcToolkit.Core.Services.Theming;
 using GcToolkit.Core.ViewModels;
+using GcToolkit.Core.Workbench;
 using GcToolkit.Services.Devices;
 using GcToolkit.Services.Dialogs;
 using GcToolkit.Services.Navigation;
@@ -178,6 +179,11 @@ public partial class App : Application, IApplication
             sp.GetRequiredService<IPreferences>(),
             CultureInfo.CurrentUICulture.TwoLetterISOLanguageName));
 
+        // Workbench session is app-wide; the progress source is a placeholder until the store lands.
+        services.AddSingleton(TimeProvider.System);
+        services.AddSingleton<IWorkbenchProgressProvider, EmptyWorkbenchProgressProvider>();
+        services.AddSingleton<IWorkbenchSessionService, WorkbenchSessionService>();
+
         // Scoped ViewModels
         services.AddScoped<WindowShellViewModel>();
         services.AddScoped<SearchViewModel>();
@@ -185,6 +191,8 @@ public partial class App : Application, IApplication
         // Transient ViewModels (new instance per navigation). Discovered tool ViewModels are
         // registered by AddDiscoveredTools() above.
         services.AddTransient<HomeViewModel>();
+        services.AddTransient<ContinueSolvingViewModel>();
+        services.AddTransient<WorkbenchViewModel>();
         services.AddTransient<CatalogViewModel>();
         services.AddTransient<SettingsViewModel>();
     }

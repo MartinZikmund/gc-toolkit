@@ -1,0 +1,380 @@
+﻿<local:GeocacheDetailViewBase
+    x:Class="GcToolkit.Views.GeocacheDetailView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:GcToolkit.Views"
+    xmlns:markup="using:GcToolkit.Markup"
+    xmlns:vm="using:GcToolkit.Core.ViewModels">
+
+    <Grid Background="{ThemeResource AppGroundBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <InfoBar
+            Margin="24"
+            VerticalAlignment="Top"
+            AutomationProperties.AutomationId="GeocacheNotFoundInfoBar"
+            IsClosable="False"
+            IsOpen="{x:Bind ViewModel.NotFound, Mode=OneWay}"
+            Message="{markup:Localize Key=GeocacheNotFound}"
+            Severity="Warning" />
+
+        <!--  Header  -->
+        <Grid
+            Grid.Row="0"
+            MaxWidth="960"
+            Padding="24,16,24,8"
+            HorizontalAlignment="Center"
+            RowSpacing="12"
+            Visibility="{x:Bind ViewModel.IsLoaded, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0" Spacing="4">
+                <Grid ColumnSpacing="12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                        AutomationProperties.AutomationId="GeocacheName"
+                        Style="{ThemeResource TitleTextBlockStyle}"
+                        Text="{x:Bind ViewModel.Name, Mode=OneWay}"
+                        TextTrimming="CharacterEllipsis" />
+                    <StackPanel
+                        Grid.Column="1"
+                        VerticalAlignment="Center"
+                        Orientation="Horizontal"
+                        Spacing="8">
+                        <Border
+                            Padding="8,2"
+                            Background="{ThemeResource AccentFoundSoftBrush}"
+                            CornerRadius="4"
+                            Visibility="{x:Bind ViewModel.IsSolved, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                            <TextBlock
+                                Foreground="{ThemeResource AccentFoundTextBrush}"
+                                Style="{ThemeResource CaptionTextBlockStyle}"
+                                Text="{markup:Localize Key=GeocacheSolved}" />
+                        </Border>
+                        <Border
+                            Padding="8,2"
+                            Background="{ThemeResource AccentFoundSoftBrush}"
+                            CornerRadius="4"
+                            Visibility="{x:Bind ViewModel.IsFound, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                            <TextBlock
+                                Foreground="{ThemeResource AccentFoundTextBrush}"
+                                Style="{ThemeResource CaptionTextBlockStyle}"
+                                Text="{markup:Localize Key=GeocacheFound}" />
+                        </Border>
+                        <Border
+                            Padding="8,2"
+                            Background="{ThemeResource BrandPrimarySoftBrush}"
+                            CornerRadius="4">
+                            <TextBlock
+                                AutomationProperties.AutomationId="GeocacheStatus"
+                                Foreground="{ThemeResource BrandOnPrimarySoftBrush}"
+                                Style="{ThemeResource CaptionTextBlockStyle}"
+                                Text="{x:Bind ViewModel.StatusLabel, Mode=OneWay}" />
+                        </Border>
+                    </StackPanel>
+                </Grid>
+                <TextBlock
+                    AutomationProperties.AutomationId="GeocacheSummary"
+                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                    Text="{x:Bind ViewModel.SummaryLine, Mode=OneWay}"
+                    TextWrapping="Wrap" />
+                <TextBlock
+                    AutomationProperties.AutomationId="GeocacheDetails"
+                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                    Text="{x:Bind ViewModel.DetailLine, Mode=OneWay}"
+                    TextWrapping="Wrap" />
+            </StackPanel>
+
+            <Grid
+                Grid.Row="1"
+                ColumnSpacing="24"
+                RowSpacing="8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0">
+                    <TextBlock
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        Style="{ThemeResource CaptionTextBlockStyle}"
+                        Text="{markup:Localize Key=GeocachePostedCoordinates}" />
+                    <TextBlock
+                        AutomationProperties.AutomationId="GeocachePostedCoordinate"
+                        IsTextSelectionEnabled="True"
+                        Style="{StaticResource CoordinateTextBlockStyle}"
+                        Text="{x:Bind ViewModel.PostedCoordinate, Mode=OneWay}" />
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Visibility="{x:Bind ViewModel.HasCorrectedCoordinate, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <TextBlock
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        Style="{ThemeResource CaptionTextBlockStyle}"
+                        Text="{markup:Localize Key=GeocacheCorrectedCoordinates}" />
+                    <TextBlock
+                        AutomationProperties.AutomationId="GeocacheCorrectedCoordinate"
+                        IsTextSelectionEnabled="True"
+                        Style="{StaticResource CoordinateTextBlockStyle}"
+                        Text="{x:Bind ViewModel.CorrectedCoordinate, Mode=OneWay}" />
+                </StackPanel>
+
+                <StackPanel
+                    Grid.Column="2"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Orientation="Horizontal"
+                    Spacing="8">
+                    <Button
+                        AutomationProperties.AutomationId="CopyCoordinatesButton"
+                        AutomationProperties.Name="{markup:Localize Key=GeocacheCopyCoordinates}"
+                        Command="{x:Bind ViewModel.CopyCoordinatesCommand}"
+                        ToolTipService.ToolTip="{markup:Localize Key=GeocacheCopyCoordinates}">
+                        <FontIcon FontSize="16" Glyph="&#xE8C8;" />
+                    </Button>
+                    <Button
+                        AutomationProperties.AutomationId="ConvertCoordinatesButton"
+                        AutomationProperties.Name="{markup:Localize Key=GeocacheConvertCoordinates}"
+                        Command="{x:Bind ViewModel.OpenInConversionToolCommand}"
+                        ToolTipService.ToolTip="{markup:Localize Key=GeocacheConvertCoordinates}">
+                        <FontIcon FontSize="16" Glyph="&#xE8AB;" />
+                    </Button>
+                    <Button
+                        AutomationProperties.AutomationId="SolveButton"
+                        Command="{x:Bind ViewModel.SolveCommand}"
+                        Content="{markup:Localize Key=GeocacheSolve}"
+                        Style="{StaticResource AccentButtonStyle}"
+                        ToolTipService.ToolTip="{markup:Localize Key=GeocacheSolveUnavailable}" />
+                </StackPanel>
+            </Grid>
+        </Grid>
+
+        <!--  Sections  -->
+        <SelectorBar
+            Grid.Row="1"
+            MaxWidth="960"
+            Margin="16,0"
+            HorizontalAlignment="Center"
+            AutomationProperties.AutomationId="GeocacheSections"
+            AutomationProperties.Name="{markup:Localize Key=GeocacheDetailSections}"
+            SelectionChanged="OnSectionChanged"
+            Visibility="{x:Bind ViewModel.IsLoaded, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+            <SelectorBarItem
+                x:Name="ListingItem"
+                AutomationProperties.AutomationId="SectionListing"
+                IsSelected="True"
+                Tag="Listing"
+                Text="{markup:Localize Key=GeocacheSectionListing}" />
+            <SelectorBarItem
+                AutomationProperties.AutomationId="SectionHint"
+                Tag="Hint"
+                Text="{markup:Localize Key=GeocacheSectionHint}" />
+            <SelectorBarItem
+                AutomationProperties.AutomationId="SectionWaypoints"
+                Tag="Waypoints"
+                Text="{markup:Localize Key=GeocacheSectionWaypoints}" />
+            <SelectorBarItem
+                AutomationProperties.AutomationId="SectionLogs"
+                Tag="Logs"
+                Text="{markup:Localize Key=GeocacheSectionLogs}" />
+        </SelectorBar>
+
+        <Grid Grid.Row="2" Visibility="{x:Bind ViewModel.IsLoaded, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+
+            <!--  Listing: the description is HTML, so it gets a WebView with our own CSS  -->
+            <WebView2
+                x:Name="ListingWebView"
+                AutomationProperties.AutomationId="ListingWebView"
+                Visibility="{x:Bind ViewModel.IsListingSelected, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+
+            <!--  Hint  -->
+            <ScrollViewer Visibility="{x:Bind ViewModel.IsHintSelected, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                <StackPanel
+                    MaxWidth="720"
+                    Padding="24"
+                    HorizontalAlignment="Center"
+                    Spacing="16">
+                    <TextBlock
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        Text="{markup:Localize Key=GeocacheNoHint}"
+                        TextWrapping="Wrap"
+                        Visibility="{x:Bind ViewModel.HasHint, Mode=OneWay, Converter={StaticResource InvertedBoolToVisibilityConverter}}" />
+                    <StackPanel Spacing="16" Visibility="{x:Bind ViewModel.HasHint, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                        <Border
+                            Padding="16"
+                            Background="{ThemeResource ReadoutBackgroundBrush}"
+                            CornerRadius="8">
+                            <TextBlock
+                                AutomationProperties.AutomationId="GeocacheHintText"
+                                IsTextSelectionEnabled="True"
+                                Style="{StaticResource ReadoutTextBlockStyle}"
+                                Text="{x:Bind ViewModel.DisplayedHint, Mode=OneWay}"
+                                TextWrapping="Wrap" />
+                        </Border>
+                        <Button
+                            AutomationProperties.AutomationId="ToggleHintButton"
+                            Command="{x:Bind ViewModel.ToggleHintCommand}"
+                            Content="{x:Bind ViewModel.HintToggleText, Mode=OneWay}"
+                            Style="{StaticResource AccentButtonStyle}" />
+                        <TextBlock
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Style="{ThemeResource CaptionTextBlockStyle}"
+                            Text="{markup:Localize Key=GeocacheHintEncodedInfo}"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!--  Waypoints  -->
+            <ScrollViewer Visibility="{x:Bind ViewModel.IsWaypointsSelected, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                <StackPanel
+                    MaxWidth="720"
+                    Padding="24"
+                    HorizontalAlignment="Center"
+                    Spacing="8">
+                    <TextBlock
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        Text="{markup:Localize Key=GeocacheNoWaypoints}"
+                        Visibility="{x:Bind ViewModel.HasWaypoints, Mode=OneWay, Converter={StaticResource InvertedBoolToVisibilityConverter}}" />
+                    <ItemsControl AutomationProperties.AutomationId="WaypointList" ItemsSource="{x:Bind ViewModel.Waypoints, Mode=OneWay}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Spacing="8" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="vm:WaypointItem">
+                                <Border
+                                    Padding="16,12"
+                                    Background="{ThemeResource AppSurfaceBrush}"
+                                    BorderBrush="{ThemeResource AppStrokeBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="8">
+                                    <Grid ColumnSpacing="16">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="48" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                            VerticalAlignment="Top"
+                                            Style="{StaticResource MonoTextBlockStyle}"
+                                            Text="{x:Bind Prefix}" />
+                                        <StackPanel Grid.Column="1" Spacing="2">
+                                            <TextBlock Style="{ThemeResource BodyStrongTextBlockStyle}" Text="{x:Bind Name}" />
+                                            <TextBlock
+                                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                                Style="{ThemeResource CaptionTextBlockStyle}"
+                                                Text="{x:Bind TypeLabel}" />
+                                            <TextBlock
+                                                IsTextSelectionEnabled="True"
+                                                Style="{StaticResource CoordinateTextBlockStyle}"
+                                                Text="{x:Bind CoordinateText}"
+                                                Visibility="{x:Bind IsHidden, Converter={StaticResource InvertedBoolToVisibilityConverter}}" />
+                                            <TextBlock
+                                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                                Text="{markup:Localize Key=GeocacheWaypointHidden}"
+                                                Visibility="{x:Bind IsHidden, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                            <TextBlock
+                                                Text="{x:Bind Note}"
+                                                TextWrapping="Wrap"
+                                                Visibility="{x:Bind Note, Converter={StaticResource StringVisibilityConverter}}" />
+                                        </StackPanel>
+                                        <Button
+                                            Grid.Column="2"
+                                            VerticalAlignment="Top"
+                                            AutomationProperties.Name="{markup:Localize Key=GeocacheCopyWaypoint}"
+                                            Click="OnCopyWaypointClick"
+                                            DataContext="{x:Bind}"
+                                            ToolTipService.ToolTip="{markup:Localize Key=GeocacheCopyWaypoint}"
+                                            Visibility="{x:Bind IsHidden, Converter={StaticResource InvertedBoolToVisibilityConverter}}">
+                                            <FontIcon FontSize="16" Glyph="&#xE8C8;" />
+                                        </Button>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!--  Logs  -->
+            <Grid
+                MaxWidth="720"
+                Padding="24,16,24,0"
+                HorizontalAlignment="Stretch"
+                RowSpacing="8"
+                Visibility="{x:Bind ViewModel.IsLogsSelected, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <ComboBox
+                    AutomationProperties.AutomationId="LogFilter"
+                    DisplayMemberPath="Display"
+                    Header="{markup:Localize Key=GeocacheLogsFilter}"
+                    ItemsSource="{x:Bind ViewModel.LogFilters, Mode=OneWay}"
+                    SelectedItem="{x:Bind ViewModel.SelectedLogFilter, Mode=TwoWay}" />
+                <TextBlock
+                    Grid.Row="1"
+                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                    Text="{markup:Localize Key=GeocacheNoLogs}"
+                    Visibility="{x:Bind ViewModel.HasLogs, Mode=OneWay, Converter={StaticResource InvertedBoolToVisibilityConverter}}" />
+                <ListView
+                    Grid.Row="1"
+                    AutomationProperties.AutomationId="LogList"
+                    ItemsSource="{x:Bind ViewModel.Logs, Mode=OneWay}"
+                    SelectionMode="None">
+                    <ListView.ItemContainerStyle>
+                        <Style BasedOn="{StaticResource DefaultListViewItemStyle}" TargetType="ListViewItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                            <Setter Property="Padding" Value="0,0,0,8" />
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="vm:LogItem">
+                            <Border
+                                Padding="16,12"
+                                Background="{ThemeResource AppSurfaceBrush}"
+                                BorderBrush="{ThemeResource AppStrokeBrush}"
+                                BorderThickness="1"
+                                CornerRadius="8">
+                                <StackPanel Spacing="4">
+                                    <Grid ColumnSpacing="12">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Style="{ThemeResource BodyStrongTextBlockStyle}" Text="{x:Bind Author}" />
+                                        <TextBlock
+                                            Grid.Column="1"
+                                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                            Text="{x:Bind DateText}" />
+                                    </Grid>
+                                    <TextBlock
+                                        Foreground="{ThemeResource BrandPrimaryBrush}"
+                                        Style="{ThemeResource CaptionTextBlockStyle}"
+                                        Text="{x:Bind TypeLabel}" />
+                                    <TextBlock
+                                        IsTextSelectionEnabled="True"
+                                        Text="{x:Bind Text}"
+                                        TextWrapping="Wrap" />
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid>
+        </Grid>
+    </Grid>
+</local:GeocacheDetailViewBase>

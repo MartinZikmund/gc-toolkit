@@ -4041,6 +4041,968 @@
   <data name="Base64_Tooltip" xml:space="preserve">
     <value>Zakódujte text do Base64 a zase zpět – se zalomenými řádky i chybějící výplní si poradí.</value>
   </data>
+  <data name="VariableCoordinateCalculator_Name" xml:space="preserve">
+    <value>Kalkulačka proměnných souřadnic</value>
+  </data>
+  <data name="VariableCoordinateCalculator_Tooltip" xml:space="preserve">
+    <value>Napište souřadnice s písmeny nebo vzorci, doplňte proměnné a hned uvidíte výsledné souřadnice.</value>
+  </data>
+  <data name="VariableCoordinateTemplateHint" xml:space="preserve">
+    <value>Písmena zastupují číslice (N 50° 0A.BCD), závorky počítají (N 49° 1(A+B).(C*2)). N, S, E a W zůstávají světovými stranami.</value>
+  </data>
+  <data name="VariableCoordinateTemplatePlaceholder" xml:space="preserve">
+    <value>N 50° 0A.BCD E 014° 2E.FGH</value>
+  </data>
+  <data name="VariableCoordinateTemplateLabel" xml:space="preserve">
+    <value>Šablona souřadnic</value>
+  </data>
+  <data name="VariableCoordinateStageName" xml:space="preserve">
+    <value>Etapa {0}</value>
+  </data>
+  <data name="VariableCoordinateStageNameLabel" xml:space="preserve">
+    <value>Název etapy</value>
+  </data>
+  <data name="VariableCoordinateVariablesHeader" xml:space="preserve">
+    <value>Proměnné</value>
+  </data>
+  <data name="VariableCoordinateVariablesEmpty" xml:space="preserve">
+    <value>Proměnné se tu objeví, jakmile šablona použije písmeno.</value>
+  </data>
+  <data name="VariableCoordinateVariableValue" xml:space="preserve">
+    <value>Hodnota proměnné</value>
+  </data>
+  <data name="VariableCoordinateValuePlaceholder" xml:space="preserve">
+    <value>?</value>
+  </data>
+  <data name="VariableCoordinatePostedLabel" xml:space="preserve">
+    <value>Zveřejněné souřadnice (nepovinné)</value>
+  </data>
+  <data name="VariableCoordinatePostedPlaceholder" xml:space="preserve">
+    <value>N 50° 01.000 E 014° 25.000</value>
+  </data>
+  <data name="VariableCoordinatePostedError" xml:space="preserve">
+    <value>Zveřejněné souřadnice se nepodařilo přečíst.</value>
+  </data>
+  <data name="VariableCoordinateFormatLabel" xml:space="preserve">
+    <value>Formát výsledku</value>
+  </data>
+  <data name="VariableCoordinateResultLabel" xml:space="preserve">
+    <value>Výsledek</value>
+  </data>
+  <data name="VariableCoordinateResultNone" xml:space="preserve">
+    <value>Doplňte všechny proměnné a uvidíte souřadnice.</value>
+  </data>
+  <data name="VariableCoordinateWaitingFor" xml:space="preserve">
+    <value>Chybí {0}</value>
+  </data>
+  <data name="VariableCoordinateErrorAt" xml:space="preserve">
+    <value>Znak {0}: {1}</value>
+  </data>
+  <data name="VariableCoordinateDistance" xml:space="preserve">
+    <value>od zveřejněných souřadnic</value>
+  </data>
+  <data name="VariableCoordinateWithinTwoMiles" xml:space="preserve">
+    <value>Do 2 mil</value>
+  </data>
+  <data name="VariableCoordinateBeyondTwoMiles" xml:space="preserve">
+    <value>Dál než 2 míle</value>
+  </data>
+  <data name="VariableCoordinateAddStage" xml:space="preserve">
+    <value>Přidat etapu</value>
+  </data>
+  <data name="VariableCoordinateRemoveStage" xml:space="preserve">
+    <value>Odebrat etapu</value>
+  </data>
+  <data name="VariableCoordinateCopy" xml:space="preserve">
+    <value>Kopírovat</value>
+  </data>
+  <data name="VariableCoordinateCopyAll" xml:space="preserve">
+    <value>Kopírovat vše</value>
+  </data>
+  <data name="VariableCoordinateShare" xml:space="preserve">
+    <value>Sdílet</value>
+  </data>
+  <data name="VariableCoordinateExample" xml:space="preserve">
+    <value>Příklad</value>
+  </data>
+  <data name="VariableCoordinateClear" xml:space="preserve">
+    <value>Vymazat</value>
+  </data>
+  <data name="FormulaError_Syntax" xml:space="preserve">
+    <value>Neplatný vzorec (zkontrolujte závorky a operátory).</value>
+  </data>
+  <data name="FormulaError_UnknownVariable" xml:space="preserve">
+    <value>Proměnná zatím nemá hodnotu.</value>
+  </data>
+  <data name="FormulaError_UnknownFunction" xml:space="preserve">
+    <value>Neznámá funkce.</value>
+  </data>
+  <data name="FormulaError_WrongArgumentCount" xml:space="preserve">
+    <value>Nesprávný počet argumentů funkce.</value>
+  </data>
+  <data name="FormulaError_DivisionByZero" xml:space="preserve">
+    <value>Dělení nulou.</value>
+  </data>
+  <data name="FormulaError_InvalidValue" xml:space="preserve">
+    <value>Hodnota není číslo nebo je mimo rozsah.</value>
+  </data>
+  <data name="FormulaError_NotWholeNumber" xml:space="preserve">
+    <value>Závorka dává záporné nebo desetinné číslo, které nejde zapsat jako číslice.</value>
+  </data>
+  <data name="FormulaError_InvalidCoordinate" xml:space="preserve">
+    <value>Výsledek není platná souřadnice.</value>
+  </data>
+  <data name="GeocacheType_Unknown" xml:space="preserve">
+    <value>Neznámý</value>
+  </data>
+  <data name="GeocacheType_Traditional" xml:space="preserve">
+    <value>Tradiční</value>
+  </data>
+  <data name="GeocacheType_Multi" xml:space="preserve">
+    <value>Multi</value>
+  </data>
+  <data name="GeocacheType_Mystery" xml:space="preserve">
+    <value>Mystery</value>
+  </data>
+  <data name="GeocacheType_Letterbox" xml:space="preserve">
+    <value>Letterbox</value>
+  </data>
+  <data name="GeocacheType_Wherigo" xml:space="preserve">
+    <value>Wherigo</value>
+  </data>
+  <data name="GeocacheType_Earth" xml:space="preserve">
+    <value>EarthCache</value>
+  </data>
+  <data name="GeocacheType_Virtual" xml:space="preserve">
+    <value>Virtuální</value>
+  </data>
+  <data name="GeocacheType_Webcam" xml:space="preserve">
+    <value>Webkamera</value>
+  </data>
+  <data name="GeocacheType_Event" xml:space="preserve">
+    <value>Event</value>
+  </data>
+  <data name="GeocacheType_MegaEvent" xml:space="preserve">
+    <value>Mega event</value>
+  </data>
+  <data name="GeocacheType_GigaEvent" xml:space="preserve">
+    <value>Giga event</value>
+  </data>
+  <data name="GeocacheType_CacheInTrashOutEvent" xml:space="preserve">
+    <value>Cache In Trash Out</value>
+  </data>
+  <data name="GeocacheType_CommunityCelebrationEvent" xml:space="preserve">
+    <value>Community Celebration</value>
+  </data>
+  <data name="GeocacheType_GeocachingHqEvent" xml:space="preserve">
+    <value>Geocaching HQ event</value>
+  </data>
+  <data name="GeocacheType_AdventureLab" xml:space="preserve">
+    <value>Adventure Lab</value>
+  </data>
+  <data name="GeocacheType_Locationless" xml:space="preserve">
+    <value>Bez umístění</value>
+  </data>
+  <data name="GeocacheSize_Unknown" xml:space="preserve">
+    <value>Neznámá</value>
+  </data>
+  <data name="GeocacheSize_NotChosen" xml:space="preserve">
+    <value>Nezvolena</value>
+  </data>
+  <data name="GeocacheSize_Micro" xml:space="preserve">
+    <value>Mikro</value>
+  </data>
+  <data name="GeocacheSize_Small" xml:space="preserve">
+    <value>Malá</value>
+  </data>
+  <data name="GeocacheSize_Regular" xml:space="preserve">
+    <value>Střední</value>
+  </data>
+  <data name="GeocacheSize_Large" xml:space="preserve">
+    <value>Velká</value>
+  </data>
+  <data name="GeocacheSize_Other" xml:space="preserve">
+    <value>Jiná</value>
+  </data>
+  <data name="GeocacheSize_Virtual" xml:space="preserve">
+    <value>Virtuální</value>
+  </data>
+  <data name="GeocacheStatus_Available" xml:space="preserve">
+    <value>Dostupná</value>
+  </data>
+  <data name="GeocacheStatus_Disabled" xml:space="preserve">
+    <value>Dočasně nedostupná</value>
+  </data>
+  <data name="GeocacheStatus_Archived" xml:space="preserve">
+    <value>Archivovaná</value>
+  </data>
+  <data name="GeocacheLogType_Unknown" xml:space="preserve">
+    <value>Neznámý</value>
+  </data>
+  <data name="GeocacheLogType_Found" xml:space="preserve">
+    <value>Nalezeno</value>
+  </data>
+  <data name="GeocacheLogType_DidNotFind" xml:space="preserve">
+    <value>Nenalezeno</value>
+  </data>
+  <data name="GeocacheLogType_WriteNote" xml:space="preserve">
+    <value>Poznámka</value>
+  </data>
+  <data name="GeocacheLogType_Attended" xml:space="preserve">
+    <value>Zúčastnil se</value>
+  </data>
+  <data name="GeocacheLogType_WillAttend" xml:space="preserve">
+    <value>Zúčastním se</value>
+  </data>
+  <data name="GeocacheLogType_WebcamPhotoTaken" xml:space="preserve">
+    <value>Webcam fotka</value>
+  </data>
+  <data name="GeocacheLogType_NeedsMaintenance" xml:space="preserve">
+    <value>Potřebuje údržbu</value>
+  </data>
+  <data name="GeocacheLogType_OwnerMaintenance" xml:space="preserve">
+    <value>Údržba vlastníkem</value>
+  </data>
+  <data name="GeocacheLogType_NeedsArchived" xml:space="preserve">
+    <value>Navrženo k archivaci</value>
+  </data>
+  <data name="GeocacheLogType_TemporarilyDisableListing" xml:space="preserve">
+    <value>Dočasně deaktivováno</value>
+  </data>
+  <data name="GeocacheLogType_EnableListing" xml:space="preserve">
+    <value>Aktivováno</value>
+  </data>
+  <data name="GeocacheLogType_UpdateCoordinates" xml:space="preserve">
+    <value>Aktualizace souřadnic</value>
+  </data>
+  <data name="GeocacheLogType_Publish" xml:space="preserve">
+    <value>Publikováno</value>
+  </data>
+  <data name="GeocacheLogType_Archive" xml:space="preserve">
+    <value>Archivováno</value>
+  </data>
+  <data name="GeocacheLogType_Unarchive" xml:space="preserve">
+    <value>Obnoveno z archivu</value>
+  </data>
+  <data name="GeocacheLogType_ReviewerNote" xml:space="preserve">
+    <value>Poznámka reviewera</value>
+  </data>
+  <data name="GeocacheLogType_Announcement" xml:space="preserve">
+    <value>Oznámení</value>
+  </data>
+  <data name="WaypointType_Unknown" xml:space="preserve">
+    <value>Neznámý</value>
+  </data>
+  <data name="WaypointType_Parking" xml:space="preserve">
+    <value>Parkování</value>
+  </data>
+  <data name="WaypointType_Stage" xml:space="preserve">
+    <value>Etapa</value>
+  </data>
+  <data name="WaypointType_Question" xml:space="preserve">
+    <value>Otázka</value>
+  </data>
+  <data name="WaypointType_Final" xml:space="preserve">
+    <value>Finální lokace</value>
+  </data>
+  <data name="WaypointType_Trailhead" xml:space="preserve">
+    <value>Začátek stezky</value>
+  </data>
+  <data name="WaypointType_ReferencePoint" xml:space="preserve">
+    <value>Referenční bod</value>
+  </data>
+  <data name="WaypointType_User" xml:space="preserve">
+    <value>Vlastní</value>
+  </data>
+  <data name="GeocacheAttribute_1" xml:space="preserve">
+    <value>Psi povoleni</value>
+  </data>
+  <data name="GeocacheAttribute_2" xml:space="preserve">
+    <value>Poplatek za vstup nebo parkování</value>
+  </data>
+  <data name="GeocacheAttribute_3" xml:space="preserve">
+    <value>Nutné horolezecké vybavení</value>
+  </data>
+  <data name="GeocacheAttribute_4" xml:space="preserve">
+    <value>Nutná loď</value>
+  </data>
+  <data name="GeocacheAttribute_5" xml:space="preserve">
+    <value>Nutné potápěčské vybavení</value>
+  </data>
+  <data name="GeocacheAttribute_6" xml:space="preserve">
+    <value>Vhodné pro děti</value>
+  </data>
+  <data name="GeocacheAttribute_7" xml:space="preserve">
+    <value>Zabere méně než hodinu</value>
+  </data>
+  <data name="GeocacheAttribute_8" xml:space="preserve">
+    <value>Pěkný výhled</value>
+  </data>
+  <data name="GeocacheAttribute_9" xml:space="preserve">
+    <value>Náročná túra</value>
+  </data>
+  <data name="GeocacheAttribute_10" xml:space="preserve">
+    <value>Náročné lezení</value>
+  </data>
+  <data name="GeocacheAttribute_11" xml:space="preserve">
+    <value>Možnost brodění</value>
+  </data>
+  <data name="GeocacheAttribute_12" xml:space="preserve">
+    <value>Možnost plavání</value>
+  </data>
+  <data name="GeocacheAttribute_13" xml:space="preserve">
+    <value>Dostupné kdykoli</value>
+  </data>
+  <data name="GeocacheAttribute_14" xml:space="preserve">
+    <value>Doporučeno v noci</value>
+  </data>
+  <data name="GeocacheAttribute_15" xml:space="preserve">
+    <value>Dostupné v zimě</value>
+  </data>
+  <data name="GeocacheAttribute_17" xml:space="preserve">
+    <value>Jedovaté rostliny</value>
+  </data>
+  <data name="GeocacheAttribute_18" xml:space="preserve">
+    <value>Nebezpečná zvířata</value>
+  </data>
+  <data name="GeocacheAttribute_19" xml:space="preserve">
+    <value>Klíšťata</value>
+  </data>
+  <data name="GeocacheAttribute_20" xml:space="preserve">
+    <value>Opuštěné doly</value>
+  </data>
+  <data name="GeocacheAttribute_21" xml:space="preserve">
+    <value>Útes / padající kamení</value>
+  </data>
+  <data name="GeocacheAttribute_22" xml:space="preserve">
+    <value>Lov</value>
+  </data>
+  <data name="GeocacheAttribute_23" xml:space="preserve">
+    <value>Nebezpečná oblast</value>
+  </data>
+  <data name="GeocacheAttribute_24" xml:space="preserve">
+    <value>Přístupné na vozíku</value>
+  </data>
+  <data name="GeocacheAttribute_25" xml:space="preserve">
+    <value>Dostupné parkování</value>
+  </data>
+  <data name="GeocacheAttribute_26" xml:space="preserve">
+    <value>Veřejná doprava</value>
+  </data>
+  <data name="GeocacheAttribute_27" xml:space="preserve">
+    <value>Pitná voda poblíž</value>
+  </data>
+  <data name="GeocacheAttribute_28" xml:space="preserve">
+    <value>Veřejné toalety poblíž</value>
+  </data>
+  <data name="GeocacheAttribute_29" xml:space="preserve">
+    <value>Telefon poblíž</value>
+  </data>
+  <data name="GeocacheAttribute_30" xml:space="preserve">
+    <value>Piknikové stoly poblíž</value>
+  </data>
+  <data name="GeocacheAttribute_31" xml:space="preserve">
+    <value>Možnost kempování</value>
+  </data>
+  <data name="GeocacheAttribute_32" xml:space="preserve">
+    <value>Kola</value>
+  </data>
+  <data name="GeocacheAttribute_33" xml:space="preserve">
+    <value>Motorky</value>
+  </data>
+  <data name="GeocacheAttribute_34" xml:space="preserve">
+    <value>Čtyřkolky</value>
+  </data>
+  <data name="GeocacheAttribute_35" xml:space="preserve">
+    <value>Terénní vozidla</value>
+  </data>
+  <data name="GeocacheAttribute_36" xml:space="preserve">
+    <value>Sněžné skútry</value>
+  </data>
+  <data name="GeocacheAttribute_37" xml:space="preserve">
+    <value>Koně</value>
+  </data>
+  <data name="GeocacheAttribute_38" xml:space="preserve">
+    <value>Ohně</value>
+  </data>
+  <data name="GeocacheAttribute_39" xml:space="preserve">
+    <value>Trny</value>
+  </data>
+  <data name="GeocacheAttribute_40" xml:space="preserve">
+    <value>Nutná nenápadnost</value>
+  </data>
+  <data name="GeocacheAttribute_41" xml:space="preserve">
+    <value>Přístupné s kočárkem</value>
+  </data>
+  <data name="GeocacheAttribute_42" xml:space="preserve">
+    <value>Potřebuje údržbu</value>
+  </data>
+  <data name="GeocacheAttribute_43" xml:space="preserve">
+    <value>Pozor na dobytek</value>
+  </data>
+  <data name="GeocacheAttribute_44" xml:space="preserve">
+    <value>Nutná svítilna</value>
+  </data>
+  <data name="GeocacheAttribute_45" xml:space="preserve">
+    <value>Lost &amp; Found tour</value>
+  </data>
+  <data name="GeocacheAttribute_46" xml:space="preserve">
+    <value>Kamion / karavan</value>
+  </data>
+  <data name="GeocacheAttribute_47" xml:space="preserve">
+    <value>Terénní hádanka</value>
+  </data>
+  <data name="GeocacheAttribute_48" xml:space="preserve">
+    <value>Nutné UV světlo</value>
+  </data>
+  <data name="GeocacheAttribute_49" xml:space="preserve">
+    <value>Sněžnice</value>
+  </data>
+  <data name="GeocacheAttribute_50" xml:space="preserve">
+    <value>Běžky</value>
+  </data>
+  <data name="GeocacheAttribute_51" xml:space="preserve">
+    <value>Nutné speciální nářadí</value>
+  </data>
+  <data name="GeocacheAttribute_52" xml:space="preserve">
+    <value>Noční keška</value>
+  </data>
+  <data name="GeocacheAttribute_53" xml:space="preserve">
+    <value>Zaparkuj a vezmi</value>
+  </data>
+  <data name="GeocacheAttribute_54" xml:space="preserve">
+    <value>Opuštěná stavba</value>
+  </data>
+  <data name="GeocacheAttribute_55" xml:space="preserve">
+    <value>Krátká túra (do 1 km)</value>
+  </data>
+  <data name="GeocacheAttribute_56" xml:space="preserve">
+    <value>Střední túra (1–10 km)</value>
+  </data>
+  <data name="GeocacheAttribute_57" xml:space="preserve">
+    <value>Dlouhá túra (nad 10 km)</value>
+  </data>
+  <data name="GeocacheAttribute_58" xml:space="preserve">
+    <value>Čerpací stanice poblíž</value>
+  </data>
+  <data name="GeocacheAttribute_59" xml:space="preserve">
+    <value>Jídlo poblíž</value>
+  </data>
+  <data name="GeocacheAttribute_60" xml:space="preserve">
+    <value>Bezdrátový maják</value>
+  </data>
+  <data name="GeocacheAttribute_61" xml:space="preserve">
+    <value>Partnerská keška</value>
+  </data>
+  <data name="GeocacheAttribute_62" xml:space="preserve">
+    <value>Sezónní přístup</value>
+  </data>
+  <data name="GeocacheAttribute_63" xml:space="preserve">
+    <value>Vhodné pro turisty</value>
+  </data>
+  <data name="GeocacheAttribute_64" xml:space="preserve">
+    <value>Lezení na strom</value>
+  </data>
+  <data name="GeocacheAttribute_65" xml:space="preserve">
+    <value>Předzahrádka (soukromý pozemek)</value>
+  </data>
+  <data name="GeocacheAttribute_66" xml:space="preserve">
+    <value>Nutná týmová spolupráce</value>
+  </data>
+  <data name="GeocacheAttribute_67" xml:space="preserve">
+    <value>GeoTour</value>
+  </data>
+  <data name="GeocacheAttribute_68" xml:space="preserve">
+    <value>Bonusová keška</value>
+  </data>
+  <data name="GeocacheAttribute_69" xml:space="preserve">
+    <value>Power trail</value>
+  </data>
+  <data name="GeocacheAttribute_70" xml:space="preserve">
+    <value>Challenge keška</value>
+  </data>
+  <data name="GeocacheAttribute_71" xml:space="preserve">
+    <value>Kontrola řešení</value>
+  </data>
+  <data name="GeocacheSectionListing" xml:space="preserve">
+    <value>Listing</value>
+  </data>
+  <data name="GeocacheSectionHint" xml:space="preserve">
+    <value>Nápověda</value>
+  </data>
+  <data name="GeocacheSectionWaypoints" xml:space="preserve">
+    <value>Waypointy</value>
+  </data>
+  <data name="GeocacheSectionLogs" xml:space="preserve">
+    <value>Logy</value>
+  </data>
+  <data name="GeocacheAttributes" xml:space="preserve">
+    <value>Atributy</value>
+  </data>
+  <data name="GeocacheYourNote" xml:space="preserve">
+    <value>Tvoje poznámka</value>
+  </data>
+  <data name="GeocacheImages" xml:space="preserve">
+    <value>Obrázky</value>
+  </data>
+  <data name="GeocacheHintReveal" xml:space="preserve">
+    <value>Dekódovat nápovědu</value>
+  </data>
+  <data name="GeocacheHintHide" xml:space="preserve">
+    <value>Zakódovat nápovědu</value>
+  </data>
+  <data name="GeocacheHintEncodedInfo" xml:space="preserve">
+    <value>Nápověda je zobrazena zakódovaná (ROT13), aby neprozradila celé hledání.</value>
+  </data>
+  <data name="GeocacheNoHint" xml:space="preserve">
+    <value>Tato keška nemá nápovědu.</value>
+  </data>
+  <data name="GeocacheNoWaypoints" xml:space="preserve">
+    <value>Žádné další waypointy.</value>
+  </data>
+  <data name="GeocacheNoLogs" xml:space="preserve">
+    <value>Zatím žádné logy.</value>
+  </data>
+  <data name="GeocacheLogsAll" xml:space="preserve">
+    <value>Vše</value>
+  </data>
+  <data name="GeocacheLogsFilter" xml:space="preserve">
+    <value>Typ logu</value>
+  </data>
+  <data name="GeocacheAttributeUnknownFormat" xml:space="preserve">
+    <value>Atribut {0}</value>
+  </data>
+  <data name="GeocacheOwnerFormat" xml:space="preserve">
+    <value>od {0}</value>
+  </data>
+  <data name="GeocachePlacedFormat" xml:space="preserve">
+    <value>založeno {0}</value>
+  </data>
+  <data name="GeocachePostedCoordinates" xml:space="preserve">
+    <value>Zveřejněné souřadnice</value>
+  </data>
+  <data name="GeocacheCorrectedCoordinates" xml:space="preserve">
+    <value>Opravené souřadnice</value>
+  </data>
+  <data name="GeocacheCopyCoordinates" xml:space="preserve">
+    <value>Kopírovat souřadnice</value>
+  </data>
+  <data name="GeocacheConvertCoordinates" xml:space="preserve">
+    <value>Otevřít v převodníku souřadnic</value>
+  </data>
+  <data name="GeocacheSolve" xml:space="preserve">
+    <value>Řešit</value>
+  </data>
+  <data name="GeocacheSolveUnavailable" xml:space="preserve">
+    <value>Řešitelská pracovna přijde brzy.</value>
+  </data>
+  <data name="GeocacheWaypointHidden" xml:space="preserve">
+    <value>Souřadnice skryty</value>
+  </data>
+  <data name="GeocacheCopyWaypoint" xml:space="preserve">
+    <value>Kopírovat souřadnice waypointu</value>
+  </data>
+  <data name="GeocacheNotFound" xml:space="preserve">
+    <value>Tato keška není ve tvé offline sbírce.</value>
+  </data>
+  <data name="GeocacheFound" xml:space="preserve">
+    <value>Nalezeno</value>
+  </data>
+  <data name="GeocacheSolved" xml:space="preserve">
+    <value>Vyřešeno</value>
+  </data>
+  <data name="GeocachePremium" xml:space="preserve">
+    <value>Premium</value>
+  </data>
+  <data name="GeocacheDetailSections" xml:space="preserve">
+    <value>Sekce kešky</value>
+  </data>
+  <data name="PolygonArea_Name" xml:space="preserve">
+    <value>Plocha a těžiště mnohoúhelníku</value>
+  </data>
+  <data name="PolygonArea_Tooltip" xml:space="preserve">
+    <value>Plocha, obvod a střed libovolného obrazce ze souřadnic jeho rohů.</value>
+  </data>
+  <data name="PolygonAreaExample" xml:space="preserve">
+    <value>Příklad</value>
+  </data>
+  <data name="PolygonAreaClear" xml:space="preserve">
+    <value>Vymazat</value>
+  </data>
+  <data name="PolygonAreaInputLabel" xml:space="preserve">
+    <value>Souřadnice rohů</value>
+  </data>
+  <data name="PolygonAreaInputPlaceholder" xml:space="preserve">
+    <value>N 50° 05.100' E 014° 25.000'
+50.085 14.4233
+...</value>
+  </data>
+  <data name="PolygonAreaInputHint" xml:space="preserve">
+    <value>Jeden roh na řádek, v pořadí kolem obrazce. Funguje jakýkoli formát souřadnic; poslední strana zpět k prvnímu rohu se doplní sama.</value>
+  </data>
+  <data name="PolygonAreaUnitLabel" xml:space="preserve">
+    <value>Jednotka plochy</value>
+  </data>
+  <data name="PolygonAreaLengthUnitLabel" xml:space="preserve">
+    <value>Jednotka délky</value>
+  </data>
+  <data name="PolygonAreaParseError" xml:space="preserve">
+    <value>Nelze přečíst řádky: {0}. Byly přeskočeny.</value>
+  </data>
+  <data name="PolygonAreaNeedPoints" xml:space="preserve">
+    <value>Mnohoúhelník potřebuje alespoň 3 různé rohy.</value>
+  </data>
+  <data name="PolygonAreaSelfIntersectTitle" xml:space="preserve">
+    <value>Strany se protínají</value>
+  </data>
+  <data name="PolygonAreaSelfIntersectNote" xml:space="preserve">
+    <value>Rohy jsou pravděpodobně ve špatném pořadí. Čísla níže platí pro obrazec tak, jak byl zadán, a nemusí znamenat to, co čekáte.</value>
+  </data>
+  <data name="PolygonAreaClosedNote" xml:space="preserve">
+    <value>Poslední řádek opakuje první roh, proto byl ignorován.</value>
+  </data>
+  <data name="PolygonAreaVertexCount" xml:space="preserve">
+    <value>Počet rohů: {0}</value>
+  </data>
+  <data name="PolygonAreaArea" xml:space="preserve">
+    <value>Plocha</value>
+  </data>
+  <data name="PolygonAreaPerimeter" xml:space="preserve">
+    <value>Obvod</value>
+  </data>
+  <data name="PolygonAreaCentroid" xml:space="preserve">
+    <value>Těžiště (střed plochy)</value>
+  </data>
+  <data name="PolygonAreaCentroidNote" xml:space="preserve">
+    <value>Bod, ve kterém by se obrazec vyvážil. Většinou právě ten mají hádanky na mysli.</value>
+  </data>
+  <data name="PolygonAreaVertexMean" xml:space="preserve">
+    <value>Průměr rohů</value>
+  </data>
+  <data name="PolygonAreaVertexMeanNote" xml:space="preserve">
+    <value>Prostý průměr bodů rohů, stejně jako nástroj Těžiště bodů. U nepravidelných obrazců se liší od výše uvedeného.</value>
+  </data>
+  <data name="PolygonAreaEdgesHeader" xml:space="preserve">
+    <value>Strany</value>
+  </data>
+  <data name="PolygonAreaColumnEdge" xml:space="preserve">
+    <value>Strana</value>
+  </data>
+  <data name="PolygonAreaColumnLength" xml:space="preserve">
+    <value>Délka</value>
+  </data>
+  <data name="PolygonAreaColumnBearing" xml:space="preserve">
+    <value>Azimut</value>
+  </data>
+  <data name="PolygonAreaAccuracyNote" xml:space="preserve">
+    <value>Plocha je geodetická na elipsoidu WGS84 (shoduje se s GeographicLib na miliardtiny). Strany jsou nejkratší spojnice rohů.</value>
+  </data>
+  <data name="RhumbLine_Name" xml:space="preserve">
+    <value>Loxodroma</value>
+  </data>
+  <data name="RhumbLine_Tooltip" xml:space="preserve">
+    <value>Kurz s konstantním azimutem a vzdálenost mezi dvěma body, nebo cílový bod na takové dráze.</value>
+  </data>
+  <data name="RhumbLineModeInverse" xml:space="preserve">
+    <value>Kurz mezi dvěma body</value>
+  </data>
+  <data name="RhumbLineModeDirect" xml:space="preserve">
+    <value>Určit cílový bod</value>
+  </data>
+  <data name="RhumbLineHint" xml:space="preserve">
+    <value>Loxodroma drží po celou cestu jeden azimut, na rozdíl od nejkratší dráhy po ortodromě.</value>
+  </data>
+  <data name="RhumbLineStart" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="RhumbLineEnd" xml:space="preserve">
+    <value>Cíl</value>
+  </data>
+  <data name="RhumbLineCoordinatePlaceholder" xml:space="preserve">
+    <value>např. N 49° 12.345' E 016° 34.567'</value>
+  </data>
+  <data name="RhumbLineBearing" xml:space="preserve">
+    <value>Azimut (°)</value>
+  </data>
+  <data name="RhumbLineBearingPlaceholder" xml:space="preserve">
+    <value>0 až 360, od severu po směru hodin</value>
+  </data>
+  <data name="RhumbLineDistance" xml:space="preserve">
+    <value>Vzdálenost</value>
+  </data>
+  <data name="RhumbLineDistancePlaceholder" xml:space="preserve">
+    <value>např. 500</value>
+  </data>
+  <data name="RhumbLineUnit" xml:space="preserve">
+    <value>Jednotka</value>
+  </data>
+  <data name="RhumbLineUnitMeter" xml:space="preserve">
+    <value>Metry</value>
+  </data>
+  <data name="RhumbLineUnitKilometer" xml:space="preserve">
+    <value>Kilometry</value>
+  </data>
+  <data name="RhumbLineUnitFeet" xml:space="preserve">
+    <value>Stopy</value>
+  </data>
+  <data name="RhumbLineUnitYard" xml:space="preserve">
+    <value>Yardy</value>
+  </data>
+  <data name="RhumbLineUnitMile" xml:space="preserve">
+    <value>Míle</value>
+  </data>
+  <data name="RhumbLineUnitNauticalMile" xml:space="preserve">
+    <value>Námořní míle</value>
+  </data>
+  <data name="RhumbLineFormat" xml:space="preserve">
+    <value>Formát výstupu</value>
+  </data>
+  <data name="RhumbLineFormatDdm" xml:space="preserve">
+    <value>Stupně, desetinné minuty</value>
+  </data>
+  <data name="RhumbLineFormatDd" xml:space="preserve">
+    <value>Desetinné stupně</value>
+  </data>
+  <data name="RhumbLineFormatDms" xml:space="preserve">
+    <value>Stupně, minuty, vteřiny</value>
+  </data>
+  <data name="RhumbLineFormatUtm" xml:space="preserve">
+    <value>UTM</value>
+  </data>
+  <data name="RhumbLineFormatMgrs" xml:space="preserve">
+    <value>MGRS</value>
+  </data>
+  <data name="RhumbLineResults" xml:space="preserve">
+    <value>Výsledky</value>
+  </data>
+  <data name="RhumbLineResultRhumb" xml:space="preserve">
+    <value>Loxodroma</value>
+  </data>
+  <data name="RhumbLineResultGreatCircle" xml:space="preserve">
+    <value>Ortodroma (nejkratší dráha)</value>
+  </data>
+  <data name="RhumbLineRhumbDistance" xml:space="preserve">
+    <value>Vzdálenost po loxodromě</value>
+  </data>
+  <data name="RhumbLineRhumbBearing" xml:space="preserve">
+    <value>Konstantní azimut</value>
+  </data>
+  <data name="RhumbLineGreatCircleDistance" xml:space="preserve">
+    <value>Vzdálenost po ortodromě</value>
+  </data>
+  <data name="RhumbLineGreatCircleInitialBearing" xml:space="preserve">
+    <value>Počáteční azimut</value>
+  </data>
+  <data name="RhumbLineGreatCircleFinalBearing" xml:space="preserve">
+    <value>Koncový azimut</value>
+  </data>
+  <data name="RhumbLineExtraDistance" xml:space="preserve">
+    <value>Loxodroma je delší o</value>
+  </data>
+  <data name="RhumbLineDestination" xml:space="preserve">
+    <value>Cílový bod</value>
+  </data>
+  <data name="RhumbLineCopy" xml:space="preserve">
+    <value>Kopírovat</value>
+  </data>
+  <data name="RhumbLineCopyValue" xml:space="preserve">
+    <value>Kopírovat hodnotu</value>
+  </data>
+  <data name="RhumbLineShare" xml:space="preserve">
+    <value>Sdílet</value>
+  </data>
+  <data name="RhumbLineSwap" xml:space="preserve">
+    <value>Prohodit</value>
+  </data>
+  <data name="RhumbLineClear" xml:space="preserve">
+    <value>Vymazat</value>
+  </data>
+  <data name="RhumbLineExample" xml:space="preserve">
+    <value>Příklad</value>
+  </data>
+  <data name="RhumbLineErrorStart" xml:space="preserve">
+    <value>Souřadnici startu se nepodařilo přečíst.</value>
+  </data>
+  <data name="RhumbLineErrorEnd" xml:space="preserve">
+    <value>Souřadnici cíle se nepodařilo přečíst.</value>
+  </data>
+  <data name="RhumbLineErrorSamePoint" xml:space="preserve">
+    <value>Start a cíl jsou stejný bod, takže není co navigovat.</value>
+  </data>
+  <data name="RhumbLineErrorBearing" xml:space="preserve">
+    <value>Zadejte azimut jako číslo ve stupních.</value>
+  </data>
+  <data name="RhumbLineErrorDistance" xml:space="preserve">
+    <value>Zadejte vzdálenost jako kladné číslo.</value>
+  </data>
+  <data name="RhumbLineNotePole" xml:space="preserve">
+    <value>Tato vzdálenost vede za pól, cílem je proto sám pól.</value>
+  </data>
+  <data name="RhumbLineNotePoleEastWest" xml:space="preserve">
+    <value>Cesta z pólu na východ nebo západ nikam nevede.</value>
+  </data>
+  <data name="Workbench_VariablesProgress" xml:space="preserve">
+    <value>{0} z {1} proměnných</value>
+  </data>
+  <data name="Workbench_VariablesProgressOne" xml:space="preserve">
+    <value>{0} z {1} proměnné</value>
+  </data>
+  <data name="Workbench_ScratchpadLinesOne" xml:space="preserve">
+    <value>{0} řádek poznámek</value>
+  </data>
+  <data name="Workbench_ScratchpadLinesFew" xml:space="preserve">
+    <value>{0} řádky poznámek</value>
+  </data>
+  <data name="Workbench_ScratchpadLinesMany" xml:space="preserve">
+    <value>{0} řádků poznámek</value>
+  </data>
+  <data name="Workbench_EditedJustNow" xml:space="preserve">
+    <value>Upraveno právě teď</value>
+  </data>
+  <data name="Workbench_EditedMinutesAgo" xml:space="preserve">
+    <value>Upraveno před {0} min</value>
+  </data>
+  <data name="Workbench_EditedHoursAgo" xml:space="preserve">
+    <value>Upraveno před {0} h</value>
+  </data>
+  <data name="Workbench_EditedYesterday" xml:space="preserve">
+    <value>Upraveno včera</value>
+  </data>
+  <data name="Workbench_EditedDaysAgo" xml:space="preserve">
+    <value>Upraveno před {0} dny</value>
+  </data>
+  <data name="Workbench_ContinueSolving" xml:space="preserve">
+    <value>Pokračovat v luštění</value>
+  </data>
+  <data name="Workbench_Resume" xml:space="preserve">
+    <value>Pokračovat</value>
+  </data>
+  <data name="Workbench_SessionRestored" xml:space="preserve">
+    <value>Znovu otevřeny keše z minulé relace.</value>
+  </data>
+  <data name="Scratchpad_Saved" xml:space="preserve">
+    <value>Uloženo</value>
+  </data>
+  <data name="Scratchpad_SavedJustNow" xml:space="preserve">
+    <value>Uloženo právě teď</value>
+  </data>
+  <data name="Scratchpad_SavedMinutesAgo" xml:space="preserve">
+    <value>Uloženo před {0} min</value>
+  </data>
+  <data name="Scratchpad_SavedHoursAgo" xml:space="preserve">
+    <value>Uloženo před {0} h</value>
+  </data>
+  <data name="Scratchpad_Saving" xml:space="preserve">
+    <value>Ukládání…</value>
+  </data>
+  <data name="Scratchpad_Unsaved" xml:space="preserve">
+    <value>Neuložené změny</value>
+  </data>
+  <data name="GpxImport_MissingCoordinates" xml:space="preserve">
+    <value>{0}: přeskočeno, souřadnice chybí nebo jsou neplatné.</value>
+  </data>
+  <data name="GpxImport_InvalidCacheCode" xml:space="preserve">
+    <value>{0}: přeskočeno, keš nemá platný kód.</value>
+  </data>
+  <data name="GpxImport_UnknownCacheType" xml:space="preserve">
+    <value>{0}: neznámý typ keše „{1}“.</value>
+  </data>
+  <data name="GpxImport_UnknownContainerSize" xml:space="preserve">
+    <value>{0}: neznámá velikost schránky „{1}“.</value>
+  </data>
+  <data name="GpxImport_UnknownLogType" xml:space="preserve">
+    <value>{0}: neznámý typ logu „{1}“.</value>
+  </data>
+  <data name="GpxImport_DuplicateCache" xml:space="preserve">
+    <value>{0} je v importu vícekrát; použila se poslední kopie.</value>
+  </data>
+  <data name="GpxImport_NotGpx" xml:space="preserve">
+    <value>{0} není soubor GPX.</value>
+  </data>
+  <data name="GpxImport_InvalidXml" xml:space="preserve">
+    <value>{0} je poškozený ({1}). Vše před chybou se naimportovalo.</value>
+  </data>
+  <data name="GpxImport_DamagedZip" xml:space="preserve">
+    <value>Archiv ZIP {0} je poškozený ({1}).</value>
+  </data>
+  <data name="GpxImport_NoGpxInZip" xml:space="preserve">
+    <value>Archiv ZIP {0} neobsahuje žádné soubory GPX.</value>
+  </data>
+  <data name="ChecksumCoordinateHeader" xml:space="preserve">
+    <value>Kontrolní součet souřadnic</value>
+  </data>
+  <data name="ChecksumCoordinateLabel" xml:space="preserve">
+    <value>Jedna souřadnice na řádek</value>
+  </data>
+  <data name="ChecksumCoordinateHint" xml:space="preserve">
+    <value>Přidejte = 62 na řádek pro ověření proti zveřejněnému součtu.</value>
+  </data>
+  <data name="ChecksumCoordinatePlaceholder" xml:space="preserve">
+    <value>např. N 49° 12.345' E 016° 30.678' = 59</value>
+  </data>
+  <data name="ChecksumModeDdm" xml:space="preserve">
+    <value>Stupně a desetinné minuty (standard)</value>
+  </data>
+  <data name="ChecksumModeAsEntered" xml:space="preserve">
+    <value>Jak zadáno</value>
+  </data>
+  <data name="ChecksumLatLabel" xml:space="preserve">
+    <value>Šířka</value>
+  </data>
+  <data name="ChecksumLonLabel" xml:space="preserve">
+    <value>Délka</value>
+  </data>
+  <data name="ChecksumMatch" xml:space="preserve">
+    <value>Odpovídá očekávanému součtu ({0})</value>
+  </data>
+  <data name="ChecksumMismatch" xml:space="preserve">
+    <value>Očekáváno {0}, vypočteno {1}</value>
+  </data>
+  <data name="ChecksumErrorCoordinate" xml:space="preserve">
+    <value>Nerozpoznaná souřadnice.</value>
+  </data>
+  <data name="ChecksumErrorNoDigits" xml:space="preserve">
+    <value>Žádné číslice k sečtení.</value>
+  </data>
+  <data name="ChecksumVariantsHeader" xml:space="preserve">
+    <value>Další ciferné součty</value>
+  </data>
+  <data name="ChecksumVariantsHint" xml:space="preserve">
+    <value>Střídavý součet se zobrazuje vždy. Pro další zvolte číselnou soustavu nebo modulo.</value>
+  </data>
+  <data name="ChecksumInputBaseLabel" xml:space="preserve">
+    <value>Číslo je v soustavě</value>
+  </data>
+  <data name="ChecksumDigitBaseLabel" xml:space="preserve">
+    <value>Sčítat číslice v soustavě</value>
+  </data>
+  <data name="ChecksumModulusLabel" xml:space="preserve">
+    <value>Ciferný součet mod n</value>
+  </data>
+  <data name="ChecksumModulusPlaceholder" xml:space="preserve">
+    <value>vypnuto</value>
+  </data>
+  <data name="ChecksumAlternatingLabel" xml:space="preserve">
+    <value>Střídavý ciferný součet</value>
+  </data>
+  <data name="ChecksumBaseSumLabel" xml:space="preserve">
+    <value>Ciferný součet (soustava {0})</value>
+  </data>
+  <data name="ChecksumModuloLabel" xml:space="preserve">
+    <value>Ciferný součet mod {0}</value>
+  </data>
+  <data name="ChecksumErrorDigit" xml:space="preserve">
+    <value>'{0}' není číslice v soustavě {1}.</value>
+  </data>
+  <data name="ChecksumErrorBase" xml:space="preserve">
+    <value>Soustavy jsou od 2 do 36.</value>
+  </data>
+  <data name="ChecksumErrorModulus" xml:space="preserve">
+    <value>Modulo musí být celé číslo větší než 0.</value>
+  </data>
+  <data name="ChecksumErrorTooLong" xml:space="preserve">
+    <value>Příliš dlouhé pro převod mezi soustavami (přes {0} číslic).</value>
+  </data>
   <data name="Triangulation_Name" xml:space="preserve">
     <value>Triangulace</value>
   </data>
@@ -4184,92 +5146,5 @@
   </data>
   <data name="BearingFixPlotNote" xml:space="preserve">
     <value>Pouze schéma, sever nahoře. Kružnice ukazuje střední (RMS) odchylku přímek.</value>
-  </data>
-  <data name="Workbench_VariablesProgress" xml:space="preserve">
-    <value>{0} z {1} proměnných</value>
-  </data>
-  <data name="Workbench_VariablesProgressOne" xml:space="preserve">
-    <value>{0} z {1} proměnné</value>
-  </data>
-  <data name="Workbench_ScratchpadLinesOne" xml:space="preserve">
-    <value>{0} řádek poznámek</value>
-  </data>
-  <data name="Workbench_ScratchpadLinesFew" xml:space="preserve">
-    <value>{0} řádky poznámek</value>
-  </data>
-  <data name="Workbench_ScratchpadLinesMany" xml:space="preserve">
-    <value>{0} řádků poznámek</value>
-  </data>
-  <data name="Workbench_EditedJustNow" xml:space="preserve">
-    <value>Upraveno právě teď</value>
-  </data>
-  <data name="Workbench_EditedMinutesAgo" xml:space="preserve">
-    <value>Upraveno před {0} min</value>
-  </data>
-  <data name="Workbench_EditedHoursAgo" xml:space="preserve">
-    <value>Upraveno před {0} h</value>
-  </data>
-  <data name="Workbench_EditedYesterday" xml:space="preserve">
-    <value>Upraveno včera</value>
-  </data>
-  <data name="Workbench_EditedDaysAgo" xml:space="preserve">
-    <value>Upraveno před {0} dny</value>
-  </data>
-  <data name="Workbench_ContinueSolving" xml:space="preserve">
-    <value>Pokračovat v luštění</value>
-  </data>
-  <data name="Workbench_Resume" xml:space="preserve">
-    <value>Pokračovat</value>
-  </data>
-  <data name="Workbench_SessionRestored" xml:space="preserve">
-    <value>Znovu otevřeny keše z minulé relace.</value>
-  </data>
-  <data name="Scratchpad_Saved" xml:space="preserve">
-    <value>Uloženo</value>
-  </data>
-  <data name="Scratchpad_SavedJustNow" xml:space="preserve">
-    <value>Uloženo právě teď</value>
-  </data>
-  <data name="Scratchpad_SavedMinutesAgo" xml:space="preserve">
-    <value>Uloženo před {0} min</value>
-  </data>
-  <data name="Scratchpad_SavedHoursAgo" xml:space="preserve">
-    <value>Uloženo před {0} h</value>
-  </data>
-  <data name="Scratchpad_Saving" xml:space="preserve">
-    <value>Ukládání…</value>
-  </data>
-  <data name="Scratchpad_Unsaved" xml:space="preserve">
-    <value>Neuložené změny</value>
-  </data>
-  <data name="GpxImport_MissingCoordinates" xml:space="preserve">
-    <value>{0}: přeskočeno, souřadnice chybí nebo jsou neplatné.</value>
-  </data>
-  <data name="GpxImport_InvalidCacheCode" xml:space="preserve">
-    <value>{0}: přeskočeno, keš nemá platný kód.</value>
-  </data>
-  <data name="GpxImport_UnknownCacheType" xml:space="preserve">
-    <value>{0}: neznámý typ keše „{1}“.</value>
-  </data>
-  <data name="GpxImport_UnknownContainerSize" xml:space="preserve">
-    <value>{0}: neznámá velikost schránky „{1}“.</value>
-  </data>
-  <data name="GpxImport_UnknownLogType" xml:space="preserve">
-    <value>{0}: neznámý typ logu „{1}“.</value>
-  </data>
-  <data name="GpxImport_DuplicateCache" xml:space="preserve">
-    <value>{0} je v importu vícekrát; použila se poslední kopie.</value>
-  </data>
-  <data name="GpxImport_NotGpx" xml:space="preserve">
-    <value>{0} není soubor GPX.</value>
-  </data>
-  <data name="GpxImport_InvalidXml" xml:space="preserve">
-    <value>{0} je poškozený ({1}). Vše před chybou se naimportovalo.</value>
-  </data>
-  <data name="GpxImport_DamagedZip" xml:space="preserve">
-    <value>Archiv ZIP {0} je poškozený ({1}).</value>
-  </data>
-  <data name="GpxImport_NoGpxInZip" xml:space="preserve">
-    <value>Archiv ZIP {0} neobsahuje žádné soubory GPX.</value>
   </data>
 </root>

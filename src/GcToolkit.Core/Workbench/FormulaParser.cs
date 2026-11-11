@@ -191,8 +191,12 @@ internal sealed record FormulaFunction(int MinArguments, int MaxArguments, Func<
 /// <summary>Recursive descent parser: additive, multiplicative, unary, power, primary.</summary>
 internal sealed class FormulaParser
 {
+    // Deep enough for any real puzzle; a pathological paste must fail cleanly, not overflow the stack.
+    private const int MaxDepth = 200;
+
     private readonly string _text;
     private int _pos;
+    private int _depth;
 
     private FormulaParser(string text) => _text = text;
 
@@ -273,7 +277,25 @@ internal sealed class FormulaParser
         }
     }
 
+    // Every recursive path (brackets, unary signs, powers, call arguments) passes through here.
     private FormulaNode ParseUnary()
+    {
+        if (++_depth > MaxDepth)
+        {
+            throw new FormulaException(FormulaErrorKind.Syntax, "The formula is nested too deeply.", _pos);
+        }
+
+        try
+        {
+            return ParseUnaryCore();
+        }
+        finally
+        {
+            _depth--;
+        }
+    }
+
+    private FormulaNode ParseUnaryCore()
     {
         SkipWhitespace();
         if (!AtEnd && Current is '-' or '−')

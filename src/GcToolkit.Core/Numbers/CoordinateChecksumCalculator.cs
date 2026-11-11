@@ -65,7 +65,8 @@ public static partial class CoordinateChecksumCalculator
         }
 
         List<CoordinateChecksumRow> rows = [];
-        foreach (var line in text.Split('\n'))
+        // WinUI text boxes use a bare '\r' for Enter.
+        foreach (var line in text.Split(["\r\n", "\r", "\n"], StringSplitOptions.None))
         {
             if (rows.Count >= MaxRows)
             {

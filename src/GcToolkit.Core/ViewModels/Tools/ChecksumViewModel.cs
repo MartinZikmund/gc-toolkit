@@ -1,4 +1,4 @@
-using System.Globalization;
+﻿using System.Globalization;
 using System.Text;
 using System.Threading.Tasks;
 using GcToolkit.Core.Catalog;
@@ -71,6 +71,32 @@ public sealed partial class ChecksumViewModel : ToolViewModelBase
 
     [ObservableProperty]
     public partial bool HasOutput { get; set; }
+
+    public static IReadOnlyList<int> BaseOptions { get; } = [.. Enumerable.Range(2, 35)];
+
+    /// <summary>The base the number is written in (2-36).</summary>
+    [ObservableProperty]
+    public partial int InputBase { get; set; } = 10;
+
+    /// <summary>The base whose digits are summed (2-36).</summary>
+    [ObservableProperty]
+    public partial int DigitBase { get; set; } = 10;
+
+    /// <summary>The n for "cross sum mod n". NaN (an empty NumberBox) leaves it off.</summary>
+    [ObservableProperty]
+    public partial double Modulus { get; set; } = double.NaN;
+
+    [ObservableProperty]
+    public partial IReadOnlyList<ChecksumVariantLine> VariantRows { get; set; } = [];
+
+    [ObservableProperty]
+    public partial bool HasVariants { get; set; }
+
+    [ObservableProperty]
+    public partial string VariantError { get; set; } = string.Empty;
+
+    [ObservableProperty]
+    public partial bool HasVariantError { get; set; }
 
     /// <summary>One coordinate per line; a trailing <c>= 62</c> verifies the line.</summary>
     [ObservableProperty]
@@ -370,6 +396,12 @@ public sealed partial class ChecksumViewModel : ToolViewModelBase
 
     [RelayCommand]
     private void ClearCoordinates() => CoordinateText = string.Empty;
+}
+
+/// <summary>One row of the cross-sum variants card: what it is, its value, and the sum written out.</summary>
+public sealed record ChecksumVariantLine(string Label, string Value, string Working)
+{
+    public bool HasWorking => Working.Length > 0;
 }
 
 /// <summary>One coordinate line, ready to display. <see cref="Normalized"/> is the DDM form, empty in as-entered mode.</summary>

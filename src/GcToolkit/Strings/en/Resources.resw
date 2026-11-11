@@ -4128,4 +4128,28 @@
   <data name="VariableCoordinateClear" xml:space="preserve">
     <value>Clear</value>
   </data>
+  <data name="FormulaError_Syntax" xml:space="preserve">
+    <value>Not a valid formula (check the brackets and operators).</value>
+  </data>
+  <data name="FormulaError_UnknownVariable" xml:space="preserve">
+    <value>A variable has no value yet.</value>
+  </data>
+  <data name="FormulaError_UnknownFunction" xml:space="preserve">
+    <value>Unknown function.</value>
+  </data>
+  <data name="FormulaError_WrongArgumentCount" xml:space="preserve">
+    <value>Wrong number of function arguments.</value>
+  </data>
+  <data name="FormulaError_DivisionByZero" xml:space="preserve">
+    <value>Division by zero.</value>
+  </data>
+  <data name="FormulaError_InvalidValue" xml:space="preserve">
+    <value>A value is not a number or is out of range.</value>
+  </data>
+  <data name="FormulaError_NotWholeNumber" xml:space="preserve">
+    <value>A bracket gives a negative or fractional number, which cannot be written as digits.</value>
+  </data>
+  <data name="FormulaError_InvalidCoordinate" xml:space="preserve">
+    <value>The result is not a valid coordinate.</value>
+  </data>
 </root>

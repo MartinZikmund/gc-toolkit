@@ -4128,4 +4128,28 @@
   <data name="VariableCoordinateClear" xml:space="preserve">
     <value>Vymazat</value>
   </data>
+  <data name="FormulaError_Syntax" xml:space="preserve">
+    <value>Neplatný vzorec (zkontrolujte závorky a operátory).</value>
+  </data>
+  <data name="FormulaError_UnknownVariable" xml:space="preserve">
+    <value>Proměnná zatím nemá hodnotu.</value>
+  </data>
+  <data name="FormulaError_UnknownFunction" xml:space="preserve">
+    <value>Neznámá funkce.</value>
+  </data>
+  <data name="FormulaError_WrongArgumentCount" xml:space="preserve">
+    <value>Nesprávný počet argumentů funkce.</value>
+  </data>
+  <data name="FormulaError_DivisionByZero" xml:space="preserve">
+    <value>Dělení nulou.</value>
+  </data>
+  <data name="FormulaError_InvalidValue" xml:space="preserve">
+    <value>Hodnota není číslo nebo je mimo rozsah.</value>
+  </data>
+  <data name="FormulaError_NotWholeNumber" xml:space="preserve">
+    <value>Závorka dává záporné nebo desetinné číslo, které nejde zapsat jako číslice.</value>
+  </data>
+  <data name="FormulaError_InvalidCoordinate" xml:space="preserve">
+    <value>Výsledek není platná souřadnice.</value>
+  </data>
 </root>

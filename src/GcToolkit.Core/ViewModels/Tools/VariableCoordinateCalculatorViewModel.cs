@@ -147,7 +147,7 @@ public sealed partial class VariableCoordinateCalculatorViewModel : ToolViewMode
                 CultureInfo.CurrentCulture,
                 _localizer["VariableCoordinateErrorAt"].Value,
                 error.Position + 1,
-                error.Message);
+                _localizer[$"FormulaError_{error.Kind}"].Value);
         }
         else
         {

@@ -1,6 +1,5 @@
 using System.Globalization;
 using GcToolkit.Core.Geocaches;
-using GcToolkit.Core.Infrastructure;
 
 namespace GcToolkit.Core.ViewModels;
 
@@ -18,6 +17,7 @@ public partial class ScratchpadViewModel : ViewModelBase
     private readonly ITimer _debounceTimer;
     private readonly ITimer _statusTimer;
     private readonly SemaphoreSlim _saveLock = new(1, 1);
+    private readonly SynchronizationContext? _uiContext = SynchronizationContext.Current;
     private GeocacheCode? _code;
     private string _savedText = string.Empty;
     private DateTimeOffset? _savedAt;
@@ -188,15 +188,15 @@ public partial class ScratchpadViewModel : ViewModelBase
             : string.Format(CultureInfo.CurrentCulture, _localizer["Scratchpad_SavedMinutesAgo"].Value, minutes);
     }
 
-    private static void RunOnUi(Action action)
+    // Timers fire on the thread pool; bound properties must change on the thread that created the VM.
+    private void RunOnUi(Action action)
     {
-        var dispatcher = UiDispatcher.TryGetForCurrentThread();
-        if (dispatcher is null || dispatcher.HasThreadAccess)
+        if (_uiContext is null || SynchronizationContext.Current == _uiContext)
         {
             action();
             return;
         }
 
-        dispatcher.TryEnqueue(() => action());
+        _uiContext.Post(_ => action(), null);
     }
 }

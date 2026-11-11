@@ -3,6 +3,7 @@ using System.Text.Json;
 using GcToolkit.Core.Catalog;
 using GcToolkit.Core.FavoriteTools;
 using GcToolkit.Core.Geocaches;
+using GcToolkit.Core.Geocaches.Gpx;
 using GcToolkit.Core.Geocaches.Storage;
 using GcToolkit.Core.Infrastructure;
 using GcToolkit.Core.Localization;
@@ -11,6 +12,7 @@ using GcToolkit.Core.Search;
 using GcToolkit.Core.Serialization;
 using GcToolkit.Core.Services;
 using GcToolkit.Core.Services.Devices;
+using GcToolkit.Core.Services.Files;
 using GcToolkit.Core.Services.Dialogs;
 using GcToolkit.Core.Services.Settings;
 using GcToolkit.Core.Services.Theming;
@@ -18,6 +20,7 @@ using GcToolkit.Core.ViewModels;
 using GcToolkit.Core.Workbench;
 using GcToolkit.Services.Devices;
 using GcToolkit.Services.Dialogs;
+using GcToolkit.Services.Files;
 using GcToolkit.Services.Navigation;
 using GcToolkit.Services.Rating;
 using GcToolkit.Services.Settings;
@@ -132,6 +135,7 @@ public partial class App : Application, IApplication
         services.AddSingleton<IGeocacheStore>(sp => new SqliteGeocacheStore(
             GeocacheDatabaseLocation.GetPathAsync,
             sp.GetRequiredService<IStorageFlusher>()));
+        services.AddSingleton<GpxImporter>();
         services.AddSingleton<IDisplayRequestManager, DisplayRequestManager>();
         services.AddSingleton<IAppUpdater, Infrastructure.AppUpdater>();
         services.AddScoped<IAppRatingService, AppRatingService>();
@@ -143,6 +147,8 @@ public partial class App : Application, IApplication
         services.AddScoped<IXamlRootProvider>(sp => sp.GetRequiredService<WindowShellProvider>());
         services.AddScoped<IDialogCoordinator, DialogCoordinator>();
         services.AddScoped<IDialogService, DialogService>();
+        services.AddScoped<ITextPromptService, TextPromptService>();
+        services.AddScoped<IFilePickerService, FilePickerService>();
         services.AddScoped<IConfirmationDialogService, ConfirmationDialogService>();
         services.AddScoped<ILauncherService, LauncherService>();
         services.AddScoped<IShareService, ShareService>();
@@ -198,7 +204,9 @@ public partial class App : Application, IApplication
         services.AddTransient<ContinueSolvingViewModel>();
         services.AddTransient<ScratchpadViewModel>();
         services.AddTransient<CatalogViewModel>();
+        services.AddTransient<CachesViewModel>();
         services.AddTransient<SettingsViewModel>();
+        services.AddTransient<GeocacheDetailViewModel>();
     }
 
     /// <summary>

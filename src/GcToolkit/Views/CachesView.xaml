@@ -1,0 +1,502 @@
+﻿<local:CachesViewBase
+    x:Class="GcToolkit.Views.CachesView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:geo="using:GcToolkit.Core.Geocaches"
+    xmlns:local="using:GcToolkit.Views"
+    xmlns:markup="using:GcToolkit.Markup"
+    xmlns:vm="using:GcToolkit.Core.ViewModels"
+    Background="{ThemeResource AppGroundBrush}"
+    NavigationCacheMode="Required"
+    SizeChanged="OnPageSizeChanged">
+
+    <Grid Padding="24,16,24,0" RowSpacing="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!--  Header: title, count, and the page actions  -->
+        <Grid ColumnSpacing="16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel VerticalAlignment="Center" Spacing="4">
+                <TextBlock Style="{ThemeResource TitleTextBlockStyle}" Text="{x:Bind ViewModel.PageTitle, Mode=OneWay}" />
+                <TextBlock
+                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                    Style="{ThemeResource CaptionTextBlockStyle}"
+                    Text="{x:Bind ViewModel.CountText, Mode=OneWay}"
+                    Typography.NumeralAlignment="Tabular" />
+            </StackPanel>
+
+            <CommandBar
+                Grid.Column="1"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Background="Transparent"
+                DefaultLabelPosition="Right"
+                IsOpen="False">
+                <AppBarButton
+                    x:Name="ImportButton"
+                    AutomationProperties.AutomationId="CachesImportButton"
+                    Command="{x:Bind ViewModel.ImportGpxCommand}"
+                    Label="{markup:Localize Key=CachesImportGpx}"
+                    ToolTipService.ToolTip="{markup:Localize Key=CachesImportGpxTooltip}">
+                    <AppBarButton.Icon>
+                        <FontIcon Glyph="&#xE896;" />
+                    </AppBarButton.Icon>
+                </AppBarButton>
+                <AppBarButton AutomationProperties.AutomationId="CachesListsButton" Label="{markup:Localize Key=CachesLists}">
+                    <AppBarButton.Icon>
+                        <FontIcon Glyph="&#xE8FD;" />
+                    </AppBarButton.Icon>
+                    <AppBarButton.Flyout>
+                        <MenuFlyout>
+                            <MenuFlyoutItem
+                                AutomationProperties.AutomationId="CachesNewListItem"
+                                Command="{x:Bind ViewModel.NewListCommand}"
+                                Text="{markup:Localize Key=CachesNewList}" />
+                            <MenuFlyoutItem
+                                AutomationProperties.AutomationId="CachesRenameListItem"
+                                Command="{x:Bind ViewModel.RenameListCommand}"
+                                Text="{markup:Localize Key=CachesRenameList}" />
+                            <MenuFlyoutItem
+                                AutomationProperties.AutomationId="CachesDeleteListItem"
+                                Command="{x:Bind ViewModel.DeleteListCommand}"
+                                Text="{markup:Localize Key=CachesDeleteListCommand}" />
+                        </MenuFlyout>
+                    </AppBarButton.Flyout>
+                </AppBarButton>
+                <AppBarSeparator />
+                <AppBarButton
+                    x:Name="MoveButton"
+                    AutomationProperties.AutomationId="CachesMoveButton"
+                    IsEnabled="{x:Bind ViewModel.HasSelection, Mode=OneWay}"
+                    Label="{markup:Localize Key=CachesMoveToList}">
+                    <AppBarButton.Icon>
+                        <FontIcon Glyph="&#xE8DE;" />
+                    </AppBarButton.Icon>
+                    <AppBarButton.Flyout>
+                        <MenuFlyout x:Name="MoveFlyout" Opening="OnMoveFlyoutOpening" />
+                    </AppBarButton.Flyout>
+                </AppBarButton>
+                <AppBarButton
+                    AutomationProperties.AutomationId="CachesDeleteButton"
+                    Command="{x:Bind ViewModel.DeleteSelectedCommand}"
+                    Label="{markup:Localize Key=CachesDelete}">
+                    <AppBarButton.Icon>
+                        <FontIcon Glyph="&#xE74D;" />
+                    </AppBarButton.Icon>
+                </AppBarButton>
+            </CommandBar>
+        </Grid>
+
+        <!--  Import result and list errors  -->
+        <InfoBar
+            x:Name="NoticeBar"
+            Title="{x:Bind local:CachesView.NoticeTitle(ViewModel.Notice), Mode=OneWay}"
+            Grid.Row="1"
+            AutomationProperties.AutomationId="CachesNoticeBar"
+            CloseButtonCommand="{x:Bind ViewModel.DismissNoticeCommand}"
+            IsClosable="True"
+            IsOpen="{x:Bind local:CachesView.IsNotNull(ViewModel.Notice), Mode=OneWay}"
+            Message="{x:Bind ViewModel.Notice.Message, Mode=OneWay}"
+            Severity="{x:Bind local:CachesView.ToSeverity(ViewModel.Notice), Mode=OneWay}">
+            <ItemsControl
+                MaxHeight="120"
+                Margin="0,0,0,12"
+                ItemsSource="{x:Bind local:CachesView.NoticeIssues(ViewModel.Notice), Mode=OneWay}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="x:String">
+                        <TextBlock
+                            Style="{ThemeResource CaptionTextBlockStyle}"
+                            Text="{x:Bind}"
+                            TextWrapping="Wrap" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </InfoBar>
+
+        <!--  Search, sort and filters. Row 2 is split into two rows on narrow widths.  -->
+        <Grid
+            x:Name="ToolbarGrid"
+            Grid.Row="2"
+            ColumnSpacing="8"
+            RowSpacing="8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <AutoSuggestBox
+                x:Name="SearchBox"
+                MinWidth="200"
+                VerticalAlignment="Center"
+                AutomationProperties.AutomationId="CachesSearchBox"
+                AutomationProperties.Name="{markup:Localize Key=CachesSearchPlaceholder}"
+                PlaceholderText="{markup:Localize Key=CachesSearchPlaceholder}"
+                QueryIcon="Find"
+                Text="{x:Bind ViewModel.SearchText, Mode=TwoWay}" />
+
+            <ComboBox
+                x:Name="ListCombo"
+                Grid.Column="1"
+                MinWidth="160"
+                AutomationProperties.AutomationId="CachesListCombo"
+                AutomationProperties.Name="{markup:Localize Key=CachesFilterList}"
+                DisplayMemberPath="Label"
+                ItemsSource="{x:Bind ViewModel.ListOptions, Mode=OneWay}"
+                SelectedItem="{x:Bind ViewModel.SelectedListOption, Mode=TwoWay}" />
+
+            <ComboBox
+                x:Name="SortCombo"
+                Grid.Column="2"
+                MinWidth="140"
+                AutomationProperties.AutomationId="CachesSortCombo"
+                AutomationProperties.Name="{markup:Localize Key=CachesSortBy}"
+                DisplayMemberPath="Label"
+                ItemsSource="{x:Bind ViewModel.SortOptions}"
+                SelectedItem="{x:Bind ViewModel.SelectedSortOption, Mode=TwoWay}" />
+
+            <ToggleButton
+                x:Name="SortToggle"
+                Grid.Column="3"
+                AutomationProperties.AutomationId="CachesSortDescendingToggle"
+                AutomationProperties.Name="{markup:Localize Key=CachesSortDescending}"
+                IsChecked="{x:Bind ViewModel.IsDescending, Mode=TwoWay}"
+                ToolTipService.ToolTip="{markup:Localize Key=CachesSortDescending}">
+                <FontIcon FontSize="16" Glyph="&#xE8CB;" />
+            </ToggleButton>
+
+            <DropDownButton
+                x:Name="FiltersButton"
+                Grid.Column="4"
+                AutomationProperties.AutomationId="CachesFiltersButton"
+                Content="{markup:Localize Key=CachesFilters}">
+                <DropDownButton.Flyout>
+                    <Flyout Placement="BottomEdgeAlignedRight">
+                        <StackPanel Width="320" Spacing="12">
+                            <TextBlock Style="{ThemeResource BodyStrongTextBlockStyle}" Text="{markup:Localize Key=CachesFiltersFlyoutTitle}" />
+                            <ComboBox
+                                HorizontalAlignment="Stretch"
+                                AutomationProperties.AutomationId="CachesTypeFilter"
+                                DisplayMemberPath="Label"
+                                Header="{markup:Localize Key=CachesFilterType}"
+                                ItemsSource="{x:Bind ViewModel.TypeOptions}"
+                                SelectedItem="{x:Bind ViewModel.SelectedTypeOption, Mode=TwoWay}" />
+                            <Grid ColumnSpacing="12">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <ComboBox
+                                    HorizontalAlignment="Stretch"
+                                    AutomationProperties.AutomationId="CachesSizeFilter"
+                                    DisplayMemberPath="Label"
+                                    Header="{markup:Localize Key=CachesFilterSize}"
+                                    ItemsSource="{x:Bind ViewModel.SizeOptions}"
+                                    SelectedItem="{x:Bind ViewModel.SelectedSizeOption, Mode=TwoWay}" />
+                                <ComboBox
+                                    Grid.Column="1"
+                                    HorizontalAlignment="Stretch"
+                                    AutomationProperties.AutomationId="CachesStatusFilter"
+                                    DisplayMemberPath="Label"
+                                    Header="{markup:Localize Key=CachesFilterStatus}"
+                                    ItemsSource="{x:Bind ViewModel.StatusOptions}"
+                                    SelectedItem="{x:Bind ViewModel.SelectedStatusOption, Mode=TwoWay}" />
+                            </Grid>
+                            <Grid ColumnSpacing="12" RowSpacing="12">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <ComboBox
+                                    HorizontalAlignment="Stretch"
+                                    AutomationProperties.AutomationId="CachesDifficultyMinFilter"
+                                    DisplayMemberPath="Label"
+                                    Header="{markup:Localize Key=CachesFilterDifficultyMin}"
+                                    ItemsSource="{x:Bind ViewModel.RatingOptions}"
+                                    SelectedItem="{x:Bind ViewModel.MinDifficultyOption, Mode=TwoWay}" />
+                                <ComboBox
+                                    Grid.Column="1"
+                                    HorizontalAlignment="Stretch"
+                                    AutomationProperties.AutomationId="CachesDifficultyMaxFilter"
+                                    DisplayMemberPath="Label"
+                                    Header="{markup:Localize Key=CachesFilterDifficultyMax}"
+                                    ItemsSource="{x:Bind ViewModel.RatingOptions}"
+                                    SelectedItem="{x:Bind ViewModel.MaxDifficultyOption, Mode=TwoWay}" />
+                                <ComboBox
+                                    Grid.Row="1"
+                                    HorizontalAlignment="Stretch"
+                                    AutomationProperties.AutomationId="CachesTerrainMinFilter"
+                                    DisplayMemberPath="Label"
+                                    Header="{markup:Localize Key=CachesFilterTerrainMin}"
+                                    ItemsSource="{x:Bind ViewModel.RatingOptions}"
+                                    SelectedItem="{x:Bind ViewModel.MinTerrainOption, Mode=TwoWay}" />
+                                <ComboBox
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    HorizontalAlignment="Stretch"
+                                    AutomationProperties.AutomationId="CachesTerrainMaxFilter"
+                                    DisplayMemberPath="Label"
+                                    Header="{markup:Localize Key=CachesFilterTerrainMax}"
+                                    ItemsSource="{x:Bind ViewModel.RatingOptions}"
+                                    SelectedItem="{x:Bind ViewModel.MaxTerrainOption, Mode=TwoWay}" />
+                            </Grid>
+                            <Grid ColumnSpacing="12">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <ComboBox
+                                    HorizontalAlignment="Stretch"
+                                    AutomationProperties.AutomationId="CachesSolvedFilter"
+                                    DisplayMemberPath="Label"
+                                    Header="{markup:Localize Key=CachesFilterSolved}"
+                                    ItemsSource="{x:Bind ViewModel.YesNoOptions}"
+                                    SelectedItem="{x:Bind ViewModel.SolvedOption, Mode=TwoWay}" />
+                                <ComboBox
+                                    Grid.Column="1"
+                                    HorizontalAlignment="Stretch"
+                                    AutomationProperties.AutomationId="CachesFoundFilter"
+                                    DisplayMemberPath="Label"
+                                    Header="{markup:Localize Key=CachesFilterFound}"
+                                    ItemsSource="{x:Bind ViewModel.YesNoOptions}"
+                                    SelectedItem="{x:Bind ViewModel.FoundOption, Mode=TwoWay}" />
+                                <ComboBox
+                                    Grid.Column="2"
+                                    HorizontalAlignment="Stretch"
+                                    AutomationProperties.AutomationId="CachesCorrectedFilter"
+                                    DisplayMemberPath="Label"
+                                    Header="{markup:Localize Key=CachesFilterCorrected}"
+                                    ItemsSource="{x:Bind ViewModel.YesNoOptions}"
+                                    SelectedItem="{x:Bind ViewModel.CorrectedOption, Mode=TwoWay}" />
+                            </Grid>
+                            <Button
+                                AutomationProperties.AutomationId="CachesClearFiltersButton"
+                                Command="{x:Bind ViewModel.ClearFiltersCommand}"
+                                Content="{markup:Localize Key=CachesClearFilters}"
+                                IsEnabled="{x:Bind ViewModel.HasActiveFilters, Mode=OneWay}" />
+                        </StackPanel>
+                    </Flyout>
+                </DropDownButton.Flyout>
+            </DropDownButton>
+        </Grid>
+
+        <ProgressBar
+            Grid.Row="3"
+            IsIndeterminate="True"
+            Visibility="{x:Bind local:CachesView.ToVisibility(ViewModel.IsImporting), Mode=OneWay}" />
+
+        <!--  List and detail. Side by side when wide, stacked when narrow (see OnPageSizeChanged).  -->
+        <Grid
+            x:Name="ContentGrid"
+            Grid.Row="4"
+            ColumnSpacing="16"
+            RowSpacing="12">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition x:Name="DetailColumn" Width="360" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition x:Name="DetailRow" Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <ListView
+                x:Name="CacheList"
+                AutomationProperties.AutomationId="CachesList"
+                AutomationProperties.Name="{markup:Localize Key=CachesListLabel}"
+                IsMultiSelectCheckBoxEnabled="True"
+                ItemsSource="{x:Bind ViewModel.Items}"
+                Loaded="OnListLoaded"
+                SelectionChanged="OnSelectionChanged"
+                SelectionMode="Extended">
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="geo:GeocacheSummary">
+                        <Grid
+                            Padding="0,8"
+                            AutomationProperties.Name="{x:Bind Name}"
+                            ColumnSpacing="12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <!--  Placeholder glyph per type until real cache-type icons land (#412).  -->
+                            <Border
+                                Width="36"
+                                Height="36"
+                                Background="{ThemeResource BrandPrimarySoftBrush}"
+                                CornerRadius="8">
+                                <FontIcon
+                                    FontSize="16"
+                                    Foreground="{ThemeResource BrandOnPrimarySoftBrush}"
+                                    Glyph="{x:Bind local:CachesView.TypeGlyph(Type)}" />
+                            </Border>
+
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                <TextBlock
+                                    Style="{ThemeResource BodyStrongTextBlockStyle}"
+                                    Text="{x:Bind Name}"
+                                    TextTrimming="CharacterEllipsis" />
+                                <TextBlock
+                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                    Style="{ThemeResource CaptionTextBlockStyle}"
+                                    Text="{x:Bind local:CachesView.Subtitle(Code, Difficulty, Terrain, Size)}"
+                                    TextTrimming="CharacterEllipsis"
+                                    Typography.NumeralAlignment="Tabular" />
+                            </StackPanel>
+
+                            <StackPanel
+                                Grid.Column="2"
+                                VerticalAlignment="Center"
+                                Orientation="Horizontal"
+                                Spacing="8">
+                                <Border
+                                    Padding="6,2"
+                                    Background="{ThemeResource SubtleFillColorSecondaryBrush}"
+                                    CornerRadius="4"
+                                    Visibility="{x:Bind local:CachesView.StatusBadgeVisibility(Status)}">
+                                    <TextBlock
+                                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                        Style="{ThemeResource CaptionTextBlockStyle}"
+                                        Text="{x:Bind local:CachesView.StatusText(Status)}" />
+                                </Border>
+                                <FontIcon
+                                    FontSize="14"
+                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                    Glyph="&#xE70F;"
+                                    ToolTipService.ToolTip="{markup:Localize Key=CachesBadgeCorrected}"
+                                    Visibility="{x:Bind local:CachesView.ToVisibility(HasCorrectedCoordinate)}" />
+                                <FontIcon
+                                    FontSize="14"
+                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                    Glyph="&#xE785;"
+                                    ToolTipService.ToolTip="{markup:Localize Key=CachesBadgeSolved}"
+                                    Visibility="{x:Bind local:CachesView.ToVisibility(IsSolved)}" />
+                                <FontIcon
+                                    FontSize="14"
+                                    Foreground="{ThemeResource BrandPrimaryBrush}"
+                                    Glyph="&#xE73E;"
+                                    ToolTipService.ToolTip="{markup:Localize Key=CachesBadgeFound}"
+                                    Visibility="{x:Bind local:CachesView.ToVisibility(IsFound)}" />
+                            </StackPanel>
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+            <!--  Empty store: point at importing  -->
+            <StackPanel
+                MaxWidth="420"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Spacing="16"
+                Visibility="{x:Bind local:CachesView.ToVisibility(ViewModel.IsEmpty), Mode=OneWay}">
+                <FontIcon
+                    FontSize="48"
+                    Foreground="{ThemeResource BrandPrimaryBrush}"
+                    Glyph="&#xE896;"
+                    Opacity="0.5" />
+                <TextBlock
+                    HorizontalAlignment="Center"
+                    Style="{ThemeResource SubtitleTextBlockStyle}"
+                    Text="{markup:Localize Key=CachesEmptyTitle}" />
+                <TextBlock
+                    HorizontalAlignment="Center"
+                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                    HorizontalTextAlignment="Center"
+                    Text="{markup:Localize Key=CachesEmptyHint}"
+                    TextWrapping="Wrap" />
+                <Button
+                    HorizontalAlignment="Center"
+                    AutomationProperties.AutomationId="CachesEmptyImportButton"
+                    Command="{x:Bind ViewModel.ImportGpxCommand}"
+                    Content="{markup:Localize Key=CachesImportGpx}"
+                    Style="{ThemeResource AccentButtonStyle}" />
+            </StackPanel>
+
+            <!--  Filters hide everything  -->
+            <StackPanel
+                MaxWidth="420"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Spacing="16"
+                Visibility="{x:Bind local:CachesView.ToVisibility(ViewModel.HasNoMatches), Mode=OneWay}">
+                <TextBlock
+                    HorizontalAlignment="Center"
+                    Style="{ThemeResource SubtitleTextBlockStyle}"
+                    Text="{markup:Localize Key=CachesNoMatchesTitle}" />
+                <TextBlock
+                    HorizontalAlignment="Center"
+                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                    HorizontalTextAlignment="Center"
+                    Text="{markup:Localize Key=CachesNoMatchesHint}"
+                    TextWrapping="Wrap" />
+                <Button
+                    HorizontalAlignment="Center"
+                    AutomationProperties.AutomationId="CachesNoMatchesClearButton"
+                    Command="{x:Bind ViewModel.ClearFiltersCommand}"
+                    Content="{markup:Localize Key=CachesClearFilters}" />
+            </StackPanel>
+
+            <!--  Detail: summary of the selected cache; Open shows the full page  -->
+            <Border
+                x:Name="DetailPanel"
+                Grid.Column="1"
+                Padding="16"
+                VerticalAlignment="Top"
+                AutomationProperties.AutomationId="CachesDetailPanel"
+                AutomationProperties.Name="{markup:Localize Key=CachesDetailLabel}"
+                Background="{ThemeResource AppSurfaceBrush}"
+                BorderBrush="{ThemeResource AppStrokeBrush}"
+                BorderThickness="1"
+                CornerRadius="{ThemeResource OverlayCornerRadius}">
+                <StackPanel Spacing="12">
+                    <TextBlock
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        Text="{x:Bind local:CachesView.DetailHint(ViewModel.SelectedCount), Mode=OneWay}"
+                        TextWrapping="Wrap"
+                        Visibility="{x:Bind local:CachesView.VisibleWhenNull(ViewModel.Detail), Mode=OneWay}" />
+
+                    <StackPanel Spacing="12" Visibility="{x:Bind local:CachesView.VisibleWhenNotNull(ViewModel.Detail), Mode=OneWay}">
+                        <TextBlock
+                            Style="{ThemeResource SubtitleTextBlockStyle}"
+                            Text="{x:Bind ViewModel.Detail.Name, Mode=OneWay}"
+                            TextWrapping="Wrap" />
+                        <TextBlock
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Text="{x:Bind local:CachesView.DetailSubtitle(ViewModel.Detail), Mode=OneWay}"
+                            TextWrapping="Wrap"
+                            Typography.NumeralAlignment="Tabular" />
+                        <Button
+                            AutomationProperties.AutomationId="CachesOpenButton"
+                            AutomationProperties.Name="{markup:Localize Key=CachesOpenAutomation}"
+                            Command="{x:Bind ViewModel.OpenCommand}"
+                            Content="{markup:Localize Key=CachesOpen}" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Grid>
+</local:CachesViewBase>

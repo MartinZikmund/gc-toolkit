@@ -102,6 +102,14 @@
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
 
+                <NavigationViewItem
+                    x:Name="CachesNavItem"
+                    Content="{markup:Localize Key=Caches}"
+                    Tag="Caches">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE81D;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
                 <!--  Temporary entry until the cache detail page's Solve button and Home's Continue solving lead here.  -->
                 <NavigationViewItem
                     x:Name="WorkbenchNavItem"

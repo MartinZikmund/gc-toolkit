@@ -1,0 +1,28 @@
+﻿<local:ResectionViewBase
+    x:Class="GcToolkit.Views.ResectionView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:GcToolkit.Controls"
+    xmlns:local="using:GcToolkit.Views"
+    xmlns:markup="using:GcToolkit.Markup">
+
+    <controls:ToolPage
+        CopyCommand="{x:Bind ViewModel.CopyOutputCommand}"
+        ShareCommand="{x:Bind ViewModel.ShareOutputCommand}"
+        Tool="{x:Bind ViewModel}">
+
+        <controls:ToolPage.Actions>
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Command="{x:Bind ViewModel.LoadExampleCommand}" Content="{markup:Localize Key=BearingFixExample}" />
+                <Button Command="{x:Bind ViewModel.ClearCommand}" Content="{markup:Localize Key=BearingFixClear}" />
+            </StackPanel>
+        </controls:ToolPage.Actions>
+
+        <controls:BearingFixPanel
+            AddRowText="{markup:Localize Key=ResectionAddPoint}"
+            Hint="{markup:Localize Key=ResectionBearingHint}"
+            PointsHeader="{markup:Localize Key=ResectionPointsHeader}"
+            ResultHeader="{markup:Localize Key=ResectionResultLabel}"
+            ViewModel="{x:Bind ViewModel}" />
+    </controls:ToolPage>
+</local:ResectionViewBase>

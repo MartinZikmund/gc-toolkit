@@ -15,6 +15,7 @@ namespace GcToolkit.Core.Serialization;
 [JsonSerializable(typeof(List<RecentEntry>))]
 [JsonSerializable(typeof(List<FavoriteToolEntry>))]
 [JsonSerializable(typeof(ElementTheme))]
+[JsonSerializable(typeof(SavedVariableSheet))]
 [JsonSerializable(typeof(RhumbLineState))]
 [JsonSerializable(typeof(WorkbenchSessionState))]
 [JsonSerializable(typeof(WorkbenchToolsState))]

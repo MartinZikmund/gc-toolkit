@@ -98,6 +98,17 @@ public sealed partial class CoordinateConversionViewModel : ToolViewModelBase, I
     [ObservableProperty]
     public partial DatumOption? SelectedOutputDatum { get; set; }
 
+    /// <summary>A string parameter (e.g. from a cache listing) pre-fills the input.</summary>
+    public override void OnNavigatedTo(object? parameter)
+    {
+        base.OnNavigatedTo(parameter);
+
+        if (parameter is string text && !string.IsNullOrWhiteSpace(text))
+        {
+            InputText = text;
+        }
+    }
+
     partial void OnInputTextChanged(string value) => Recompute();
 
     partial void OnInputDatumChanged(Datum value)

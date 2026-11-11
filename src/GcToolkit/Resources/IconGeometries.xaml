@@ -14,7 +14,7 @@
         parses a fresh tree per call, so the nav, the card and the tool page each get their own.
     -->
 
-    <!--  Tools (47)  -->
+    <!--  Tools (53)  -->
     <DataTemplate x:Key="ToolIcon_AffineCipher">
         <PathIcon Data="M 6 3 L 6 6 L 3 6 L 3 8 L 6 8 L 6 11 L 8 11 L 8 8 L 11 8 L 11 6 L 8 6 L 8 3 L 6 3 z M 13 6 L 13 8 L 21 8 L 21 6 L 13 6 z M 4.7070312 13.292969 L 3.2929688 14.707031 L 5.5859375 17 L 3.2929688 19.292969 L 4.7070312 20.707031 L 7 18.414062 L 9.2929688 20.707031 L 10.707031 19.292969 L 8.4140625 17 L 10.707031 14.707031 L 9.2929688 13.292969 L 7 15.585938 L 4.7070312 13.292969 z M 13 14 L 13 16 L 21 16 L 21 14 L 13 14 z M 13 18 L 13 20 L 21 20 L 21 18 L 13 18 z" />
     </DataTemplate>
@@ -65,6 +65,15 @@
     </DataTemplate>
     <DataTemplate x:Key="ToolIcon_CoordinateProjection">
         <PathIcon Data="M3,10v1l7,3l3,7h1l7-18L3,10z M13.434,16.936l-1.911-4.46l-4.46-1.911l10.425-4.054L13.434,16.936z" />
+    </DataTemplate>
+    <DataTemplate x:Key="ToolIcon_Triangulation">
+        <PathIcon Data="M 3.61 19.52 L 2.39 18.48 L 13.39 5.48 L 14.61 6.52 z M 20.3 18.62 L 21.7 19.38 L 14.7 6.38 L 13.3 5.62 z M 16.5 6 A 2.5 2.5 0 1 0 11.5 6 A 2.5 2.5 0 1 0 16.5 6 z M 15.2 6 A 1.2 1.2 0 1 0 12.8 6 A 1.2 1.2 0 1 0 15.2 6 z M 5 19 A 2 2 0 1 0 1 19 A 2 2 0 1 0 5 19 z M 23 19 A 2 2 0 1 0 19 19 A 2 2 0 1 0 23 19 z" />
+    </DataTemplate>
+    <DataTemplate x:Key="ToolIcon_Resection">
+        <PathIcon Data="M 10.73 10.73 L 5.91 5.91 L 4.92 6.91 L 9.74 11.73 z M 14.27 11.73 L 19.08 6.91 L 18.09 5.91 L 13.28 10.73 z M 11.3 15.5 L 12.7 15.5 L 12.7 19 L 11.3 19 z M 6 5 A 2 2 0 1 0 2 5 A 2 2 0 1 0 6 5 z M 22 5 A 2 2 0 1 0 18 5 A 2 2 0 1 0 22 5 z M 14 21 A 2 2 0 1 0 10 21 A 2 2 0 1 0 14 21 z M 14.5 13 A 2.5 2.5 0 1 0 9.5 13 A 2.5 2.5 0 1 0 14.5 13 z M 13.2 13 A 1.2 1.2 0 1 0 10.8 13 A 1.2 1.2 0 1 0 13.2 13 z" />
+    </DataTemplate>
+    <DataTemplate x:Key="ToolIcon_VariableCoordinateCalculator">
+        <PathIcon Data="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zM6.25 7.72h5v1.5h-5zM13 15.75h5v1.5h-5zM13 13.25h5v1.5h-5zM8 18h1.5v-1.75h1.75v-1.5H9.5V13H8v1.75H6.25v1.5H8zM14.09 10.95l1.41-1.41 1.41 1.41 1.06-1.06-1.41-1.42 1.41-1.41-1.06-1.06-1.41 1.41-1.41-1.41-1.06 1.06 1.41 1.41-1.41 1.42z" />
     </DataTemplate>
     <DataTemplate x:Key="ToolIcon_DvorakKeyboard">
         <PathIcon Data="M 3 6 C 1.895 6 1 6.895 1 8 L 1 17 C 1 18.105 1.895 19 3 19 L 21 19 C 22.105 19 23 18.105 23 17 L 23 8 C 23 6.895 22.105 6 21 6 L 3 6 z M 3 8 L 21 8 L 21 17 L 3 17 L 3 8 z M 5 10 L 5 12 L 7 12 L 7 10 L 5 10 z M 8 10 L 8 12 L 10 12 L 10 10 L 8 10 z M 11 10 L 11 12 L 13 12 L 13 10 L 11 10 z M 14 10 L 14 12 L 16 12 L 16 10 L 14 10 z M 17 10 L 17 12 L 19 12 L 19 10 L 17 10 z M 5 13 L 5 15 L 7 15 L 7 13 L 5 13 z M 8 13 L 8 15 L 16 15 L 16 13 L 8 13 z M 17 13 L 17 15 L 19 15 L 19 13 L 17 13 z" />

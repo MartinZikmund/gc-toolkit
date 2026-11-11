@@ -19,6 +19,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <!-- NOAA NCEI's 100-point WMM2025 test table (public domain), from WMM2025COF.zip -->
+    <EmbeddedResource Include="Coordinates\Data\WMM2025_TestValues.txt" LogicalName="GcToolkit.Core.Tests.Coordinates.Data.WMM2025_TestValues.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\src\GcToolkit.Core\GcToolkit.Core.csproj" />
   </ItemGroup>
 

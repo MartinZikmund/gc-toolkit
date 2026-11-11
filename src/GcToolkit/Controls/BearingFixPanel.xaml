@@ -1,0 +1,299 @@
+﻿<UserControl
+    x:Class="GcToolkit.Controls.BearingFixPanel"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:GcToolkit.Controls"
+    xmlns:markup="using:GcToolkit.Markup"
+    xmlns:tools="using:GcToolkit.Core.ViewModels.Tools">
+
+    <!--  Shared body of the bearing tools (Triangulation, Resection); tool wording comes in via the string properties.  -->
+    <StackPanel Spacing="16">
+
+        <!--  2..N point + bearing rows  -->
+        <StackPanel Spacing="8">
+            <TextBlock Style="{StaticResource BodyStrongTextBlockStyle}" Text="{x:Bind PointsHeader, Mode=OneWay}" />
+            <ItemsControl IsTabStop="False" ItemsSource="{x:Bind ViewModel.Rows, Mode=OneWay}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="tools:BearingObservationRow">
+                        <Grid Margin="0,0,0,12" ColumnSpacing="8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition
+                                    Width="*"
+                                    MinWidth="104"
+                                    MaxWidth="160" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <TextBox
+                                FontFamily="{StaticResource AppMonoFontFamily}"
+                                Header="{x:Bind CoordinateHeader, Mode=OneWay}"
+                                IsSpellCheckEnabled="False"
+                                PlaceholderText="{markup:Localize Key=BearingFixPointPlaceholder}"
+                                Text="{x:Bind Coordinate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <TextBox
+                                Grid.Column="1"
+                                FontFamily="{StaticResource AppMonoFontFamily}"
+                                Header="{x:Bind BearingHeader, Mode=OneWay}"
+                                InputScope="Number"
+                                PlaceholderText="{markup:Localize Key=BearingFixBearingPlaceholder}"
+                                Text="{x:Bind Bearing, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <Button
+                                Grid.Column="2"
+                                Width="32"
+                                Height="32"
+                                Padding="0"
+                                VerticalAlignment="Bottom"
+                                AutomationProperties.Name="{markup:Localize Key=BearingFixRemovePoint}"
+                                Command="{x:Bind RemoveCommand}"
+                                Style="{StaticResource SubtleButtonStyle}"
+                                ToolTipService.ToolTip="{markup:Localize Key=BearingFixRemovePoint}">
+                                <FontIcon FontSize="14" Glyph="&#xE711;" />
+                            </Button>
+                            <TextBlock
+                                Grid.Row="1"
+                                Grid.ColumnSpan="3"
+                                Margin="0,4,0,0"
+                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                Style="{StaticResource CaptionTextBlockStyle}"
+                                Text="{x:Bind DeclinationText, Mode=OneWay}"
+                                Visibility="{x:Bind HasDeclination, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            <Button AutomationProperties.AutomationId="AddRowButton" Command="{x:Bind ViewModel.AddRowCommand, Mode=OneWay}">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <FontIcon FontSize="14" Glyph="&#xE710;" />
+                    <TextBlock Text="{x:Bind AddRowText, Mode=OneWay}" />
+                </StackPanel>
+            </Button>
+            <TextBlock
+                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                Style="{StaticResource CaptionTextBlockStyle}"
+                Text="{x:Bind Hint, Mode=OneWay}"
+                TextWrapping="Wrap" />
+        </StackPanel>
+
+        <!--  Magnetic -> true  -->
+        <Border
+            Padding="16,12"
+            Background="{ThemeResource AppSurfaceBrush}"
+            BorderBrush="{ThemeResource AppStrokeBrush}"
+            BorderThickness="1"
+            CornerRadius="8">
+            <StackPanel Spacing="8">
+                <ToggleSwitch
+                    AutomationProperties.AutomationId="MagneticToggle"
+                    Header="{markup:Localize Key=BearingFixMagneticToggle}"
+                    IsOn="{x:Bind ViewModel.BearingsAreMagnetic, Mode=TwoWay}" />
+                <StackPanel Spacing="8" Visibility="{x:Bind ViewModel.BearingsAreMagnetic, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <StackPanel Orientation="Horizontal" Spacing="16">
+                        <RadioButton
+                            Content="{markup:Localize Key=BearingFixDeclinationAuto}"
+                            GroupName="DeclinationMode"
+                            IsChecked="{x:Bind ViewModel.UseAutomaticDeclination, Mode=TwoWay}" />
+                        <RadioButton
+                            Content="{markup:Localize Key=BearingFixDeclinationManual}"
+                            GroupName="DeclinationMode"
+                            IsChecked="{x:Bind ViewModel.UseManualDeclination, Mode=TwoWay}" />
+                    </StackPanel>
+                    <StackPanel Spacing="4" Visibility="{x:Bind ViewModel.UseAutomaticDeclination, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                        <CalendarDatePicker Date="{x:Bind ViewModel.DeclinationDate, Mode=TwoWay}" Header="{markup:Localize Key=BearingFixDeclinationDate}" />
+                        <TextBlock
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Style="{StaticResource CaptionTextBlockStyle}"
+                            Text="{markup:Localize Key=BearingFixDeclinationHint}"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                    <TextBox
+                        MaxWidth="240"
+                        HorizontalAlignment="Left"
+                        Header="{markup:Localize Key=BearingFixDeclinationLabel}"
+                        PlaceholderText="{markup:Localize Key=BearingFixDeclinationPlaceholder}"
+                        Text="{x:Bind ViewModel.ManualDeclination, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        Visibility="{x:Bind ViewModel.UseManualDeclination, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                </StackPanel>
+            </StackPanel>
+        </Border>
+
+        <InfoBar
+            IsClosable="False"
+            IsOpen="{x:Bind ViewModel.HasError, Mode=OneWay}"
+            Message="{x:Bind ViewModel.ErrorMessage, Mode=OneWay}"
+            Severity="Error" />
+
+        <InfoBar
+            IsClosable="False"
+            IsOpen="{x:Bind ViewModel.HasWarning, Mode=OneWay}"
+            Message="{x:Bind ViewModel.WarningMessage, Mode=OneWay}"
+            Severity="Warning" />
+
+        <!--  Result, on the dark readout surface  -->
+        <Border Style="{StaticResource ToolReadoutSurfaceStyle}" Visibility="{x:Bind ViewModel.HasResult, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+            <StackPanel Spacing="12">
+                <TextBlock
+                    Foreground="{ThemeResource ReadoutForegroundBrush}"
+                    Opacity="0.7"
+                    Style="{StaticResource CaptionTextBlockStyle}"
+                    Text="{x:Bind ResultHeader, Mode=OneWay}" />
+                <TextBlock
+                    AutomationProperties.AutomationId="ResultDdm"
+                    AutomationProperties.Name="{markup:Localize Key=BearingFixFormatDdm}"
+                    FontSize="22"
+                    Style="{StaticResource ToolReadoutTextStyle}"
+                    Text="{x:Bind ViewModel.DegreesDecimalMinutes, Mode=OneWay}" />
+                <Grid ColumnSpacing="16" RowSpacing="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <TextBlock
+                        Foreground="{ThemeResource ReadoutForegroundBrush}"
+                        Opacity="0.7"
+                        Style="{StaticResource CaptionTextBlockStyle}"
+                        Text="{markup:Localize Key=BearingFixFormatDd}" />
+                    <TextBlock
+                        Grid.Column="1"
+                        FontSize="14"
+                        Style="{StaticResource ToolReadoutTextStyle}"
+                        Text="{x:Bind ViewModel.DecimalDegrees, Mode=OneWay}" />
+                    <TextBlock
+                        Grid.Row="1"
+                        Foreground="{ThemeResource ReadoutForegroundBrush}"
+                        Opacity="0.7"
+                        Style="{StaticResource CaptionTextBlockStyle}"
+                        Text="{markup:Localize Key=BearingFixFormatDms}" />
+                    <TextBlock
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        FontSize="14"
+                        Style="{StaticResource ToolReadoutTextStyle}"
+                        Text="{x:Bind ViewModel.DegreesMinutesSeconds, Mode=OneWay}" />
+                </Grid>
+                <TextBlock
+                    Foreground="{ThemeResource ReadoutForegroundBrush}"
+                    Style="{StaticResource CaptionTextBlockStyle}"
+                    Text="{x:Bind ViewModel.AccuracyText, Mode=OneWay}"
+                    TextWrapping="Wrap"
+                    Visibility="{x:Bind ViewModel.HasAccuracy, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+            </StackPanel>
+        </Border>
+
+        <!--  Sketch  -->
+        <Border
+            Padding="12"
+            Background="{ThemeResource AppSurfaceBrush}"
+            BorderBrush="{ThemeResource AppStrokeBrush}"
+            BorderThickness="1"
+            CornerRadius="8"
+            Visibility="{x:Bind ViewModel.HasPlot, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+            <StackPanel Spacing="8">
+                <TextBlock Style="{StaticResource BodyStrongTextBlockStyle}" Text="{markup:Localize Key=BearingFixPlotLabel}" />
+                <controls:BearingPlotCanvas
+                    Height="320"
+                    AutomationProperties.AutomationId="BearingPlot"
+                    AutomationProperties.Name="{markup:Localize Key=BearingFixPlotDescription}"
+                    Plot="{x:Bind ViewModel.Plot, Mode=OneWay}" />
+                <TextBlock
+                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                    Style="{StaticResource CaptionTextBlockStyle}"
+                    Text="{markup:Localize Key=BearingFixPlotNote}"
+                    TextWrapping="Wrap" />
+            </StackPanel>
+        </Border>
+
+        <!--  Per-row sanity check  -->
+        <StackPanel Spacing="8" Visibility="{x:Bind ViewModel.HasResult, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+            <TextBlock Style="{StaticResource BodyStrongTextBlockStyle}" Text="{markup:Localize Key=BearingFixReadoutsLabel}" />
+            <Grid Padding="8,0" ColumnSpacing="12">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="48" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="2*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock
+                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                    Style="{StaticResource CaptionTextBlockStyle}"
+                    Text="{markup:Localize Key=BearingFixReadoutPoint}" />
+                <TextBlock
+                    Grid.Column="1"
+                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                    Style="{StaticResource CaptionTextBlockStyle}"
+                    Text="{markup:Localize Key=BearingFixReadoutDistance}" />
+                <TextBlock
+                    Grid.Column="2"
+                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                    Style="{StaticResource CaptionTextBlockStyle}"
+                    Text="{markup:Localize Key=BearingFixReadoutBearing}" />
+                <TextBlock
+                    Grid.Column="3"
+                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                    Style="{StaticResource CaptionTextBlockStyle}"
+                    Text="{markup:Localize Key=BearingFixReadoutOffset}"
+                    Visibility="{x:Bind ViewModel.HasAccuracy, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+            </Grid>
+            <ItemsControl IsTabStop="False" ItemsSource="{x:Bind ViewModel.Rows, Mode=OneWay}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="tools:BearingObservationRow">
+                        <Grid
+                            Margin="0,2"
+                            Padding="8,6"
+                            Background="{ThemeResource AppSurfaceBrush}"
+                            ColumnSpacing="12"
+                            CornerRadius="6">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="48" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="2*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Style="{StaticResource BodyStrongTextBlockStyle}" Text="{x:Bind Label, Mode=OneWay}" />
+                            <TextBlock
+                                Grid.Column="1"
+                                Style="{StaticResource MonoTextBlockStyle}"
+                                Text="{x:Bind DistanceText, Mode=OneWay}" />
+                            <TextBlock
+                                Grid.Column="2"
+                                Style="{StaticResource MonoTextBlockStyle}"
+                                Text="{x:Bind MeasuredBearingText, Mode=OneWay}" />
+                            <TextBlock
+                                Grid.Column="3"
+                                Style="{StaticResource MonoTextBlockStyle}"
+                                Text="{x:Bind OffsetText, Mode=OneWay}" />
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            <StackPanel
+                Orientation="Horizontal"
+                Spacing="8"
+                Visibility="{x:Bind ViewModel.HasBaseline, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                <TextBlock
+                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                    Style="{StaticResource CaptionTextBlockStyle}"
+                    Text="{markup:Localize Key=BearingFixReadoutBaseline}" />
+                <TextBlock Style="{StaticResource MonoTextBlockStyle}" Text="{x:Bind ViewModel.BaselineDistance, Mode=OneWay}" />
+            </StackPanel>
+            <StackPanel Spacing="2" Visibility="{x:Bind ViewModel.HasAlternate, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                <TextBlock
+                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                    Style="{StaticResource CaptionTextBlockStyle}"
+                    Text="{markup:Localize Key=BearingFixAlternateLabel}" />
+                <TextBlock
+                    IsTextSelectionEnabled="True"
+                    Style="{StaticResource MonoTextBlockStyle}"
+                    Text="{x:Bind ViewModel.AlternateDegreesDecimalMinutes, Mode=OneWay}" />
+            </StackPanel>
+        </StackPanel>
+
+    </StackPanel>
+</UserControl>

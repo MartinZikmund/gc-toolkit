@@ -4041,6 +4041,582 @@
   <data name="Base64_Tooltip" xml:space="preserve">
     <value>Encode text to Base64 and decode it back — line breaks and missing padding are no problem.</value>
   </data>
+  <data name="VariableCoordinateCalculator_Name" xml:space="preserve">
+    <value>Variable coordinate calculator</value>
+  </data>
+  <data name="VariableCoordinateCalculator_Tooltip" xml:space="preserve">
+    <value>Type a coordinate with letters or formulas, fill in the variables and get the final coordinates live.</value>
+  </data>
+  <data name="VariableCoordinateTemplateHint" xml:space="preserve">
+    <value>Use letters for digits (N 50° 0A.BCD) and brackets for maths (N 49° 1(A+B).(C*2)). N, S, E and W stay hemispheres.</value>
+  </data>
+  <data name="VariableCoordinateTemplatePlaceholder" xml:space="preserve">
+    <value>N 50° 0A.BCD E 014° 2E.FGH</value>
+  </data>
+  <data name="VariableCoordinateTemplateLabel" xml:space="preserve">
+    <value>Coordinate template</value>
+  </data>
+  <data name="VariableCoordinateStageName" xml:space="preserve">
+    <value>Stage {0}</value>
+  </data>
+  <data name="VariableCoordinateStageNameLabel" xml:space="preserve">
+    <value>Stage name</value>
+  </data>
+  <data name="VariableCoordinateVariablesHeader" xml:space="preserve">
+    <value>Variables</value>
+  </data>
+  <data name="VariableCoordinateVariablesEmpty" xml:space="preserve">
+    <value>Variables show up here as soon as the template uses a letter.</value>
+  </data>
+  <data name="VariableCoordinateVariableValue" xml:space="preserve">
+    <value>Value of</value>
+  </data>
+  <data name="VariableCoordinateValuePlaceholder" xml:space="preserve">
+    <value>?</value>
+  </data>
+  <data name="VariableCoordinatePostedLabel" xml:space="preserve">
+    <value>Posted coordinates (optional)</value>
+  </data>
+  <data name="VariableCoordinatePostedPlaceholder" xml:space="preserve">
+    <value>N 50° 01.000 E 014° 25.000</value>
+  </data>
+  <data name="VariableCoordinatePostedError" xml:space="preserve">
+    <value>These posted coordinates cannot be read.</value>
+  </data>
+  <data name="VariableCoordinateFormatLabel" xml:space="preserve">
+    <value>Result format</value>
+  </data>
+  <data name="VariableCoordinateResultLabel" xml:space="preserve">
+    <value>Result</value>
+  </data>
+  <data name="VariableCoordinateResultNone" xml:space="preserve">
+    <value>Fill in all variables to see the coordinates.</value>
+  </data>
+  <data name="VariableCoordinateWaitingFor" xml:space="preserve">
+    <value>Waiting for {0}</value>
+  </data>
+  <data name="VariableCoordinateErrorAt" xml:space="preserve">
+    <value>Character {0}: {1}</value>
+  </data>
+  <data name="VariableCoordinateDistance" xml:space="preserve">
+    <value>from the posted coordinates</value>
+  </data>
+  <data name="VariableCoordinateWithinTwoMiles" xml:space="preserve">
+    <value>Within 2 miles</value>
+  </data>
+  <data name="VariableCoordinateBeyondTwoMiles" xml:space="preserve">
+    <value>More than 2 miles away</value>
+  </data>
+  <data name="VariableCoordinateAddStage" xml:space="preserve">
+    <value>Add stage</value>
+  </data>
+  <data name="VariableCoordinateRemoveStage" xml:space="preserve">
+    <value>Remove stage</value>
+  </data>
+  <data name="VariableCoordinateCopy" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="VariableCoordinateCopyAll" xml:space="preserve">
+    <value>Copy all</value>
+  </data>
+  <data name="VariableCoordinateShare" xml:space="preserve">
+    <value>Share</value>
+  </data>
+  <data name="VariableCoordinateExample" xml:space="preserve">
+    <value>Example</value>
+  </data>
+  <data name="VariableCoordinateClear" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="FormulaError_Syntax" xml:space="preserve">
+    <value>Not a valid formula (check the brackets and operators).</value>
+  </data>
+  <data name="FormulaError_UnknownVariable" xml:space="preserve">
+    <value>A variable has no value yet.</value>
+  </data>
+  <data name="FormulaError_UnknownFunction" xml:space="preserve">
+    <value>Unknown function.</value>
+  </data>
+  <data name="FormulaError_WrongArgumentCount" xml:space="preserve">
+    <value>Wrong number of function arguments.</value>
+  </data>
+  <data name="FormulaError_DivisionByZero" xml:space="preserve">
+    <value>Division by zero.</value>
+  </data>
+  <data name="FormulaError_InvalidValue" xml:space="preserve">
+    <value>A value is not a number or is out of range.</value>
+  </data>
+  <data name="FormulaError_NotWholeNumber" xml:space="preserve">
+    <value>A bracket gives a negative or fractional number, which cannot be written as digits.</value>
+  </data>
+  <data name="FormulaError_InvalidCoordinate" xml:space="preserve">
+    <value>The result is not a valid coordinate.</value>
+  </data>
+  <data name="GeocacheType_Unknown" xml:space="preserve">
+    <value>Unknown</value>
+  </data>
+  <data name="GeocacheType_Traditional" xml:space="preserve">
+    <value>Traditional</value>
+  </data>
+  <data name="GeocacheType_Multi" xml:space="preserve">
+    <value>Multi-cache</value>
+  </data>
+  <data name="GeocacheType_Mystery" xml:space="preserve">
+    <value>Mystery</value>
+  </data>
+  <data name="GeocacheType_Letterbox" xml:space="preserve">
+    <value>Letterbox</value>
+  </data>
+  <data name="GeocacheType_Wherigo" xml:space="preserve">
+    <value>Wherigo</value>
+  </data>
+  <data name="GeocacheType_Earth" xml:space="preserve">
+    <value>EarthCache</value>
+  </data>
+  <data name="GeocacheType_Virtual" xml:space="preserve">
+    <value>Virtual</value>
+  </data>
+  <data name="GeocacheType_Webcam" xml:space="preserve">
+    <value>Webcam</value>
+  </data>
+  <data name="GeocacheType_Event" xml:space="preserve">
+    <value>Event</value>
+  </data>
+  <data name="GeocacheType_MegaEvent" xml:space="preserve">
+    <value>Mega event</value>
+  </data>
+  <data name="GeocacheType_GigaEvent" xml:space="preserve">
+    <value>Giga event</value>
+  </data>
+  <data name="GeocacheType_CacheInTrashOutEvent" xml:space="preserve">
+    <value>Cache In Trash Out</value>
+  </data>
+  <data name="GeocacheType_CommunityCelebrationEvent" xml:space="preserve">
+    <value>Community Celebration</value>
+  </data>
+  <data name="GeocacheType_GeocachingHqEvent" xml:space="preserve">
+    <value>Geocaching HQ event</value>
+  </data>
+  <data name="GeocacheType_AdventureLab" xml:space="preserve">
+    <value>Adventure Lab</value>
+  </data>
+  <data name="GeocacheType_Locationless" xml:space="preserve">
+    <value>Locationless</value>
+  </data>
+  <data name="GeocacheSize_Unknown" xml:space="preserve">
+    <value>Unknown</value>
+  </data>
+  <data name="GeocacheSize_NotChosen" xml:space="preserve">
+    <value>Not chosen</value>
+  </data>
+  <data name="GeocacheSize_Micro" xml:space="preserve">
+    <value>Micro</value>
+  </data>
+  <data name="GeocacheSize_Small" xml:space="preserve">
+    <value>Small</value>
+  </data>
+  <data name="GeocacheSize_Regular" xml:space="preserve">
+    <value>Regular</value>
+  </data>
+  <data name="GeocacheSize_Large" xml:space="preserve">
+    <value>Large</value>
+  </data>
+  <data name="GeocacheSize_Other" xml:space="preserve">
+    <value>Other</value>
+  </data>
+  <data name="GeocacheSize_Virtual" xml:space="preserve">
+    <value>Virtual</value>
+  </data>
+  <data name="GeocacheStatus_Available" xml:space="preserve">
+    <value>Available</value>
+  </data>
+  <data name="GeocacheStatus_Disabled" xml:space="preserve">
+    <value>Temporarily disabled</value>
+  </data>
+  <data name="GeocacheStatus_Archived" xml:space="preserve">
+    <value>Archived</value>
+  </data>
+  <data name="GeocacheLogType_Unknown" xml:space="preserve">
+    <value>Unknown</value>
+  </data>
+  <data name="GeocacheLogType_Found" xml:space="preserve">
+    <value>Found it</value>
+  </data>
+  <data name="GeocacheLogType_DidNotFind" xml:space="preserve">
+    <value>Didn't find it</value>
+  </data>
+  <data name="GeocacheLogType_WriteNote" xml:space="preserve">
+    <value>Note</value>
+  </data>
+  <data name="GeocacheLogType_Attended" xml:space="preserve">
+    <value>Attended</value>
+  </data>
+  <data name="GeocacheLogType_WillAttend" xml:space="preserve">
+    <value>Will attend</value>
+  </data>
+  <data name="GeocacheLogType_WebcamPhotoTaken" xml:space="preserve">
+    <value>Webcam photo taken</value>
+  </data>
+  <data name="GeocacheLogType_NeedsMaintenance" xml:space="preserve">
+    <value>Needs maintenance</value>
+  </data>
+  <data name="GeocacheLogType_OwnerMaintenance" xml:space="preserve">
+    <value>Owner maintenance</value>
+  </data>
+  <data name="GeocacheLogType_NeedsArchived" xml:space="preserve">
+    <value>Needs archived</value>
+  </data>
+  <data name="GeocacheLogType_TemporarilyDisableListing" xml:space="preserve">
+    <value>Temporarily disabled</value>
+  </data>
+  <data name="GeocacheLogType_EnableListing" xml:space="preserve">
+    <value>Enabled</value>
+  </data>
+  <data name="GeocacheLogType_UpdateCoordinates" xml:space="preserve">
+    <value>Coordinates updated</value>
+  </data>
+  <data name="GeocacheLogType_Publish" xml:space="preserve">
+    <value>Published</value>
+  </data>
+  <data name="GeocacheLogType_Archive" xml:space="preserve">
+    <value>Archived</value>
+  </data>
+  <data name="GeocacheLogType_Unarchive" xml:space="preserve">
+    <value>Unarchived</value>
+  </data>
+  <data name="GeocacheLogType_ReviewerNote" xml:space="preserve">
+    <value>Reviewer note</value>
+  </data>
+  <data name="GeocacheLogType_Announcement" xml:space="preserve">
+    <value>Announcement</value>
+  </data>
+  <data name="WaypointType_Unknown" xml:space="preserve">
+    <value>Unknown</value>
+  </data>
+  <data name="WaypointType_Parking" xml:space="preserve">
+    <value>Parking</value>
+  </data>
+  <data name="WaypointType_Stage" xml:space="preserve">
+    <value>Stage</value>
+  </data>
+  <data name="WaypointType_Question" xml:space="preserve">
+    <value>Question</value>
+  </data>
+  <data name="WaypointType_Final" xml:space="preserve">
+    <value>Final location</value>
+  </data>
+  <data name="WaypointType_Trailhead" xml:space="preserve">
+    <value>Trailhead</value>
+  </data>
+  <data name="WaypointType_ReferencePoint" xml:space="preserve">
+    <value>Reference point</value>
+  </data>
+  <data name="WaypointType_User" xml:space="preserve">
+    <value>Custom</value>
+  </data>
+  <data name="GeocacheAttribute_1" xml:space="preserve">
+    <value>Dogs allowed</value>
+  </data>
+  <data name="GeocacheAttribute_2" xml:space="preserve">
+    <value>Access or parking fee</value>
+  </data>
+  <data name="GeocacheAttribute_3" xml:space="preserve">
+    <value>Climbing gear required</value>
+  </data>
+  <data name="GeocacheAttribute_4" xml:space="preserve">
+    <value>Boat required</value>
+  </data>
+  <data name="GeocacheAttribute_5" xml:space="preserve">
+    <value>Scuba gear required</value>
+  </data>
+  <data name="GeocacheAttribute_6" xml:space="preserve">
+    <value>Recommended for kids</value>
+  </data>
+  <data name="GeocacheAttribute_7" xml:space="preserve">
+    <value>Takes less than an hour</value>
+  </data>
+  <data name="GeocacheAttribute_8" xml:space="preserve">
+    <value>Scenic view</value>
+  </data>
+  <data name="GeocacheAttribute_9" xml:space="preserve">
+    <value>Significant hike</value>
+  </data>
+  <data name="GeocacheAttribute_10" xml:space="preserve">
+    <value>Difficult climbing</value>
+  </data>
+  <data name="GeocacheAttribute_11" xml:space="preserve">
+    <value>May require wading</value>
+  </data>
+  <data name="GeocacheAttribute_12" xml:space="preserve">
+    <value>May require swimming</value>
+  </data>
+  <data name="GeocacheAttribute_13" xml:space="preserve">
+    <value>Available at all times</value>
+  </data>
+  <data name="GeocacheAttribute_14" xml:space="preserve">
+    <value>Recommended at night</value>
+  </data>
+  <data name="GeocacheAttribute_15" xml:space="preserve">
+    <value>Available during winter</value>
+  </data>
+  <data name="GeocacheAttribute_17" xml:space="preserve">
+    <value>Poison plants</value>
+  </data>
+  <data name="GeocacheAttribute_18" xml:space="preserve">
+    <value>Dangerous animals</value>
+  </data>
+  <data name="GeocacheAttribute_19" xml:space="preserve">
+    <value>Ticks</value>
+  </data>
+  <data name="GeocacheAttribute_20" xml:space="preserve">
+    <value>Abandoned mines</value>
+  </data>
+  <data name="GeocacheAttribute_21" xml:space="preserve">
+    <value>Cliff / falling rocks</value>
+  </data>
+  <data name="GeocacheAttribute_22" xml:space="preserve">
+    <value>Hunting</value>
+  </data>
+  <data name="GeocacheAttribute_23" xml:space="preserve">
+    <value>Dangerous area</value>
+  </data>
+  <data name="GeocacheAttribute_24" xml:space="preserve">
+    <value>Wheelchair accessible</value>
+  </data>
+  <data name="GeocacheAttribute_25" xml:space="preserve">
+    <value>Parking available</value>
+  </data>
+  <data name="GeocacheAttribute_26" xml:space="preserve">
+    <value>Public transportation</value>
+  </data>
+  <data name="GeocacheAttribute_27" xml:space="preserve">
+    <value>Drinking water nearby</value>
+  </data>
+  <data name="GeocacheAttribute_28" xml:space="preserve">
+    <value>Public restrooms nearby</value>
+  </data>
+  <data name="GeocacheAttribute_29" xml:space="preserve">
+    <value>Telephone nearby</value>
+  </data>
+  <data name="GeocacheAttribute_30" xml:space="preserve">
+    <value>Picnic tables nearby</value>
+  </data>
+  <data name="GeocacheAttribute_31" xml:space="preserve">
+    <value>Camping available</value>
+  </data>
+  <data name="GeocacheAttribute_32" xml:space="preserve">
+    <value>Bicycles</value>
+  </data>
+  <data name="GeocacheAttribute_33" xml:space="preserve">
+    <value>Motorcycles</value>
+  </data>
+  <data name="GeocacheAttribute_34" xml:space="preserve">
+    <value>Quads</value>
+  </data>
+  <data name="GeocacheAttribute_35" xml:space="preserve">
+    <value>Off-road vehicles</value>
+  </data>
+  <data name="GeocacheAttribute_36" xml:space="preserve">
+    <value>Snowmobiles</value>
+  </data>
+  <data name="GeocacheAttribute_37" xml:space="preserve">
+    <value>Horses</value>
+  </data>
+  <data name="GeocacheAttribute_38" xml:space="preserve">
+    <value>Campfires</value>
+  </data>
+  <data name="GeocacheAttribute_39" xml:space="preserve">
+    <value>Thorns</value>
+  </data>
+  <data name="GeocacheAttribute_40" xml:space="preserve">
+    <value>Stealth required</value>
+  </data>
+  <data name="GeocacheAttribute_41" xml:space="preserve">
+    <value>Stroller accessible</value>
+  </data>
+  <data name="GeocacheAttribute_42" xml:space="preserve">
+    <value>Needs maintenance</value>
+  </data>
+  <data name="GeocacheAttribute_43" xml:space="preserve">
+    <value>Watch for livestock</value>
+  </data>
+  <data name="GeocacheAttribute_44" xml:space="preserve">
+    <value>Flashlight required</value>
+  </data>
+  <data name="GeocacheAttribute_45" xml:space="preserve">
+    <value>Lost and Found tour</value>
+  </data>
+  <data name="GeocacheAttribute_46" xml:space="preserve">
+    <value>Truck driver / RV</value>
+  </data>
+  <data name="GeocacheAttribute_47" xml:space="preserve">
+    <value>Field puzzle</value>
+  </data>
+  <data name="GeocacheAttribute_48" xml:space="preserve">
+    <value>UV light required</value>
+  </data>
+  <data name="GeocacheAttribute_49" xml:space="preserve">
+    <value>Snowshoes</value>
+  </data>
+  <data name="GeocacheAttribute_50" xml:space="preserve">
+    <value>Cross country skis</value>
+  </data>
+  <data name="GeocacheAttribute_51" xml:space="preserve">
+    <value>Special tool required</value>
+  </data>
+  <data name="GeocacheAttribute_52" xml:space="preserve">
+    <value>Night cache</value>
+  </data>
+  <data name="GeocacheAttribute_53" xml:space="preserve">
+    <value>Park and grab</value>
+  </data>
+  <data name="GeocacheAttribute_54" xml:space="preserve">
+    <value>Abandoned structure</value>
+  </data>
+  <data name="GeocacheAttribute_55" xml:space="preserve">
+    <value>Short hike (under 1 km)</value>
+  </data>
+  <data name="GeocacheAttribute_56" xml:space="preserve">
+    <value>Medium hike (1–10 km)</value>
+  </data>
+  <data name="GeocacheAttribute_57" xml:space="preserve">
+    <value>Long hike (over 10 km)</value>
+  </data>
+  <data name="GeocacheAttribute_58" xml:space="preserve">
+    <value>Fuel nearby</value>
+  </data>
+  <data name="GeocacheAttribute_59" xml:space="preserve">
+    <value>Food nearby</value>
+  </data>
+  <data name="GeocacheAttribute_60" xml:space="preserve">
+    <value>Wireless beacon</value>
+  </data>
+  <data name="GeocacheAttribute_61" xml:space="preserve">
+    <value>Partnership cache</value>
+  </data>
+  <data name="GeocacheAttribute_62" xml:space="preserve">
+    <value>Seasonal access</value>
+  </data>
+  <data name="GeocacheAttribute_63" xml:space="preserve">
+    <value>Tourist friendly</value>
+  </data>
+  <data name="GeocacheAttribute_64" xml:space="preserve">
+    <value>Tree climbing</value>
+  </data>
+  <data name="GeocacheAttribute_65" xml:space="preserve">
+    <value>Front yard (private residence)</value>
+  </data>
+  <data name="GeocacheAttribute_66" xml:space="preserve">
+    <value>Teamwork required</value>
+  </data>
+  <data name="GeocacheAttribute_67" xml:space="preserve">
+    <value>GeoTour</value>
+  </data>
+  <data name="GeocacheAttribute_68" xml:space="preserve">
+    <value>Bonus cache</value>
+  </data>
+  <data name="GeocacheAttribute_69" xml:space="preserve">
+    <value>Power trail</value>
+  </data>
+  <data name="GeocacheAttribute_70" xml:space="preserve">
+    <value>Challenge cache</value>
+  </data>
+  <data name="GeocacheAttribute_71" xml:space="preserve">
+    <value>Solution checker</value>
+  </data>
+  <data name="GeocacheSectionListing" xml:space="preserve">
+    <value>Listing</value>
+  </data>
+  <data name="GeocacheSectionHint" xml:space="preserve">
+    <value>Hint</value>
+  </data>
+  <data name="GeocacheSectionWaypoints" xml:space="preserve">
+    <value>Waypoints</value>
+  </data>
+  <data name="GeocacheSectionLogs" xml:space="preserve">
+    <value>Logs</value>
+  </data>
+  <data name="GeocacheAttributes" xml:space="preserve">
+    <value>Attributes</value>
+  </data>
+  <data name="GeocacheYourNote" xml:space="preserve">
+    <value>Your note</value>
+  </data>
+  <data name="GeocacheImages" xml:space="preserve">
+    <value>Images</value>
+  </data>
+  <data name="GeocacheHintReveal" xml:space="preserve">
+    <value>Decode hint</value>
+  </data>
+  <data name="GeocacheHintHide" xml:space="preserve">
+    <value>Encode hint</value>
+  </data>
+  <data name="GeocacheHintEncodedInfo" xml:space="preserve">
+    <value>The hint is shown encoded (ROT13) so it does not spoil the hunt.</value>
+  </data>
+  <data name="GeocacheNoHint" xml:space="preserve">
+    <value>This cache has no hint.</value>
+  </data>
+  <data name="GeocacheNoWaypoints" xml:space="preserve">
+    <value>No additional waypoints.</value>
+  </data>
+  <data name="GeocacheNoLogs" xml:space="preserve">
+    <value>No logs yet.</value>
+  </data>
+  <data name="GeocacheLogsAll" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="GeocacheLogsFilter" xml:space="preserve">
+    <value>Log type</value>
+  </data>
+  <data name="GeocacheAttributeUnknownFormat" xml:space="preserve">
+    <value>Attribute {0}</value>
+  </data>
+  <data name="GeocacheOwnerFormat" xml:space="preserve">
+    <value>by {0}</value>
+  </data>
+  <data name="GeocachePlacedFormat" xml:space="preserve">
+    <value>placed {0}</value>
+  </data>
+  <data name="GeocachePostedCoordinates" xml:space="preserve">
+    <value>Posted coordinates</value>
+  </data>
+  <data name="GeocacheCorrectedCoordinates" xml:space="preserve">
+    <value>Corrected coordinates</value>
+  </data>
+  <data name="GeocacheCopyCoordinates" xml:space="preserve">
+    <value>Copy coordinates</value>
+  </data>
+  <data name="GeocacheConvertCoordinates" xml:space="preserve">
+    <value>Open in coordinate converter</value>
+  </data>
+  <data name="GeocacheSolve" xml:space="preserve">
+    <value>Solve</value>
+  </data>
+  <data name="GeocacheSolveUnavailable" xml:space="preserve">
+    <value>The solving workbench is coming soon.</value>
+  </data>
+  <data name="GeocacheWaypointHidden" xml:space="preserve">
+    <value>Coordinates hidden</value>
+  </data>
+  <data name="GeocacheCopyWaypoint" xml:space="preserve">
+    <value>Copy waypoint coordinates</value>
+  </data>
+  <data name="GeocacheNotFound" xml:space="preserve">
+    <value>This cache is not in your offline collection.</value>
+  </data>
+  <data name="GeocacheFound" xml:space="preserve">
+    <value>Found</value>
+  </data>
+  <data name="GeocacheSolved" xml:space="preserve">
+    <value>Solved</value>
+  </data>
+  <data name="GeocachePremium" xml:space="preserve">
+    <value>Premium</value>
+  </data>
+  <data name="GeocacheDetailSections" xml:space="preserve">
+    <value>Cache sections</value>
+  </data>
   <data name="PolygonArea_Name" xml:space="preserve">
     <value>Polygon Area &amp; Centroid</value>
   </data>
@@ -4429,5 +5005,476 @@
   </data>
   <data name="GpxImport_NoGpxInZip" xml:space="preserve">
     <value>The ZIP archive {0} contains no GPX files.</value>
+  </data>
+  <data name="ChecksumCoordinateHeader" xml:space="preserve">
+    <value>Coordinate checksum</value>
+  </data>
+  <data name="ChecksumCoordinateLabel" xml:space="preserve">
+    <value>One coordinate per line</value>
+  </data>
+  <data name="ChecksumCoordinateHint" xml:space="preserve">
+    <value>Add = 62 to a line to verify it against a published checksum.</value>
+  </data>
+  <data name="ChecksumCoordinatePlaceholder" xml:space="preserve">
+    <value>e.g. N 49° 12.345' E 016° 30.678' = 59</value>
+  </data>
+  <data name="ChecksumModeDdm" xml:space="preserve">
+    <value>Degrees decimal minutes (standard)</value>
+  </data>
+  <data name="ChecksumModeAsEntered" xml:space="preserve">
+    <value>As entered</value>
+  </data>
+  <data name="ChecksumLatLabel" xml:space="preserve">
+    <value>Lat</value>
+  </data>
+  <data name="ChecksumLonLabel" xml:space="preserve">
+    <value>Lon</value>
+  </data>
+  <data name="ChecksumMatch" xml:space="preserve">
+    <value>Matches the expected checksum ({0})</value>
+  </data>
+  <data name="ChecksumMismatch" xml:space="preserve">
+    <value>Expected {0}, calculated {1}</value>
+  </data>
+  <data name="ChecksumErrorCoordinate" xml:space="preserve">
+    <value>Not a recognised coordinate.</value>
+  </data>
+  <data name="ChecksumErrorNoDigits" xml:space="preserve">
+    <value>No digits to add up.</value>
+  </data>
+  <data name="ChecksumVariantsHeader" xml:space="preserve">
+    <value>More cross sums</value>
+  </data>
+  <data name="ChecksumVariantsHint" xml:space="preserve">
+    <value>Alternating sum is always shown. Pick a number base or a modulus for more.</value>
+  </data>
+  <data name="ChecksumInputBaseLabel" xml:space="preserve">
+    <value>Number is in base</value>
+  </data>
+  <data name="ChecksumDigitBaseLabel" xml:space="preserve">
+    <value>Sum digits in base</value>
+  </data>
+  <data name="ChecksumModulusLabel" xml:space="preserve">
+    <value>Cross sum mod n</value>
+  </data>
+  <data name="ChecksumModulusPlaceholder" xml:space="preserve">
+    <value>off</value>
+  </data>
+  <data name="ChecksumAlternatingLabel" xml:space="preserve">
+    <value>Alternating cross sum</value>
+  </data>
+  <data name="ChecksumBaseSumLabel" xml:space="preserve">
+    <value>Cross sum (base {0})</value>
+  </data>
+  <data name="ChecksumModuloLabel" xml:space="preserve">
+    <value>Cross sum mod {0}</value>
+  </data>
+  <data name="ChecksumErrorDigit" xml:space="preserve">
+    <value>'{0}' is not a digit in base {1}.</value>
+  </data>
+  <data name="ChecksumErrorBase" xml:space="preserve">
+    <value>Bases run from 2 to 36.</value>
+  </data>
+  <data name="ChecksumErrorModulus" xml:space="preserve">
+    <value>The modulus must be a whole number above 0.</value>
+  </data>
+  <data name="ChecksumErrorTooLong" xml:space="preserve">
+    <value>Too long to convert between bases (over {0} digits).</value>
+  </data>
+  <data name="Triangulation_Name" xml:space="preserve">
+    <value>Triangulation</value>
+  </data>
+  <data name="Triangulation_Tooltip" xml:space="preserve">
+    <value>Find the point where bearings sighted from two or more known points cross.</value>
+  </data>
+  <data name="TriangulationPointsHeader" xml:space="preserve">
+    <value>Known points and the bearing sighted from each</value>
+  </data>
+  <data name="TriangulationPointHeader" xml:space="preserve">
+    <value>Point {0}</value>
+  </data>
+  <data name="TriangulationBearingHeader" xml:space="preserve">
+    <value>Bearing from {0} (°)</value>
+  </data>
+  <data name="BearingFixPointPlaceholder" xml:space="preserve">
+    <value>N 49 12.345 E 016 34.567</value>
+  </data>
+  <data name="BearingFixBearingPlaceholder" xml:space="preserve">
+    <value>0–360</value>
+  </data>
+  <data name="TriangulationBearingHint" xml:space="preserve">
+    <value>Bearings are measured clockwise from North. With three or more points the result is the least-squares best fit.</value>
+  </data>
+  <data name="TriangulationAddPoint" xml:space="preserve">
+    <value>Add point</value>
+  </data>
+  <data name="BearingFixRemovePoint" xml:space="preserve">
+    <value>Remove row</value>
+  </data>
+  <data name="TriangulationResultLabel" xml:space="preserve">
+    <value>Intersection</value>
+  </data>
+  <data name="BearingFixFormatDdm" xml:space="preserve">
+    <value>Degrees decimal minutes</value>
+  </data>
+  <data name="BearingFixFormatDd" xml:space="preserve">
+    <value>Decimal degrees</value>
+  </data>
+  <data name="BearingFixFormatDms" xml:space="preserve">
+    <value>Degrees minutes seconds</value>
+  </data>
+  <data name="BearingFixAlternateLabel" xml:space="preserve">
+    <value>Other solution (opposite side of the Earth)</value>
+  </data>
+  <data name="BearingFixReadoutsLabel" xml:space="preserve">
+    <value>Sanity check</value>
+  </data>
+  <data name="BearingFixReadoutPoint" xml:space="preserve">
+    <value>Point</value>
+  </data>
+  <data name="BearingFixReadoutDistance" xml:space="preserve">
+    <value>Distance</value>
+  </data>
+  <data name="BearingFixReadoutBearing" xml:space="preserve">
+    <value>Bearing</value>
+  </data>
+  <data name="BearingFixReadoutOffset" xml:space="preserve">
+    <value>Line misses by</value>
+  </data>
+  <data name="BearingFixReadoutBaseline" xml:space="preserve">
+    <value>Distance between A and B</value>
+  </data>
+  <data name="BearingFixCopy" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="BearingFixShare" xml:space="preserve">
+    <value>Share</value>
+  </data>
+  <data name="BearingFixExample" xml:space="preserve">
+    <value>Example</value>
+  </data>
+  <data name="BearingFixClear" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="TriangulationErrorPoint" xml:space="preserve">
+    <value>Enter a valid coordinate for point {0}.</value>
+  </data>
+  <data name="TriangulationErrorBearing" xml:space="preserve">
+    <value>Enter the bearing from {0} as a number in degrees.</value>
+  </data>
+  <data name="TriangulationErrorTooFew" xml:space="preserve">
+    <value>Enter at least two points, each with a bearing.</value>
+  </data>
+  <data name="TriangulationErrorCoincident" xml:space="preserve">
+    <value>All the bearings lie on one line, so every point on it fits. Use different directions.</value>
+  </data>
+  <data name="TriangulationErrorIdentical" xml:space="preserve">
+    <value>All the points are the same place. Use at least two different points.</value>
+  </data>
+  <data name="TriangulationWarnBehind" xml:space="preserve">
+    <value>The intersection is behind the bearing from {0} (in the opposite direction).</value>
+  </data>
+  <data name="TriangulationWarnIllConditioned" xml:space="preserve">
+    <value>The bearings are almost parallel, so a tiny error in any of them moves the result a long way.</value>
+  </data>
+  <data name="BearingFixMagneticToggle" xml:space="preserve">
+    <value>Bearings are magnetic (read from a compass)</value>
+  </data>
+  <data name="BearingFixDeclinationAuto" xml:space="preserve">
+    <value>Automatic (World Magnetic Model)</value>
+  </data>
+  <data name="BearingFixDeclinationManual" xml:space="preserve">
+    <value>Enter manually</value>
+  </data>
+  <data name="BearingFixDeclinationLabel" xml:space="preserve">
+    <value>Declination (°, East positive)</value>
+  </data>
+  <data name="BearingFixDeclinationPlaceholder" xml:space="preserve">
+    <value>e.g. 4.5 or 3W</value>
+  </data>
+  <data name="BearingFixDeclinationDate" xml:space="preserve">
+    <value>Date of the readings</value>
+  </data>
+  <data name="BearingFixDeclinationHint" xml:space="preserve">
+    <value>Computed offline for each point from NOAA's World Magnetic Model WMM2025 (valid 2025–2029).</value>
+  </data>
+  <data name="BearingFixDeclinationApplied" xml:space="preserve">
+    <value>Declination {0}, true bearing {1}</value>
+  </data>
+  <data name="BearingFixErrorDeclination" xml:space="preserve">
+    <value>Enter the declination in degrees, e.g. 4.5 or 3W.</value>
+  </data>
+  <data name="BearingFixWarnModelRange" xml:space="preserve">
+    <value>The date is outside the WMM2025 validity (2025–2029), so the computed declination may be off.</value>
+  </data>
+  <data name="BearingFixAccuracyLabel" xml:space="preserve">
+    <value>Accuracy</value>
+  </data>
+  <data name="BearingFixAccuracyFormat" xml:space="preserve">
+    <value>The lines miss the result by {0} RMS (worst {1}).</value>
+  </data>
+  <data name="BearingFixOffsetFormat" xml:space="preserve">
+    <value>{0} ({1:+0.0;-0.0;0.0}°)</value>
+  </data>
+  <data name="BearingFixPlotLabel" xml:space="preserve">
+    <value>Sketch</value>
+  </data>
+  <data name="BearingFixPlotDescription" xml:space="preserve">
+    <value>Sketch of the points, their bearing lines and the result</value>
+  </data>
+  <data name="BearingFixPlotNote" xml:space="preserve">
+    <value>Schematic only, North up. The circle shows the RMS miss distance.</value>
+  </data>
+  <data name="Caches" xml:space="preserve">
+    <value>Caches</value>
+  </data>
+  <data name="CachesAny" xml:space="preserve">
+    <value>Any</value>
+  </data>
+  <data name="CachesAllLists" xml:space="preserve">
+    <value>All caches</value>
+  </data>
+  <data name="CachesYes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="CachesNo" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="CachesCount" xml:space="preserve">
+    <value>{0} caches</value>
+  </data>
+  <data name="CachesSearchPlaceholder" xml:space="preserve">
+    <value>Search name, code or owner</value>
+  </data>
+  <data name="CachesImportGpx" xml:space="preserve">
+    <value>Import GPX</value>
+  </data>
+  <data name="CachesImportGpxTooltip" xml:space="preserve">
+    <value>Import caches from a GPX file or a pocket query ZIP</value>
+  </data>
+  <data name="CachesFilters" xml:space="preserve">
+    <value>Filters</value>
+  </data>
+  <data name="CachesClearFilters" xml:space="preserve">
+    <value>Clear filters</value>
+  </data>
+  <data name="CachesFilterType" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="CachesFilterSize" xml:space="preserve">
+    <value>Size</value>
+  </data>
+  <data name="CachesFilterStatus" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="CachesFilterList" xml:space="preserve">
+    <value>List</value>
+  </data>
+  <data name="CachesFilterDifficultyMin" xml:space="preserve">
+    <value>Difficulty from</value>
+  </data>
+  <data name="CachesFilterDifficultyMax" xml:space="preserve">
+    <value>Difficulty to</value>
+  </data>
+  <data name="CachesFilterTerrainMin" xml:space="preserve">
+    <value>Terrain from</value>
+  </data>
+  <data name="CachesFilterTerrainMax" xml:space="preserve">
+    <value>Terrain to</value>
+  </data>
+  <data name="CachesFilterSolved" xml:space="preserve">
+    <value>Solved</value>
+  </data>
+  <data name="CachesFilterFound" xml:space="preserve">
+    <value>Found</value>
+  </data>
+  <data name="CachesFilterCorrected" xml:space="preserve">
+    <value>Corrected coordinates</value>
+  </data>
+  <data name="CachesSortBy" xml:space="preserve">
+    <value>Sort by</value>
+  </data>
+  <data name="CachesSortDescending" xml:space="preserve">
+    <value>Descending</value>
+  </data>
+  <data name="CachesSort_Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="CachesSort_Code" xml:space="preserve">
+    <value>Code</value>
+  </data>
+  <data name="CachesSort_Difficulty" xml:space="preserve">
+    <value>Difficulty</value>
+  </data>
+  <data name="CachesSort_Terrain" xml:space="preserve">
+    <value>Terrain</value>
+  </data>
+  <data name="CachesSort_PlacedOn" xml:space="preserve">
+    <value>Placed date</value>
+  </data>
+  <data name="CachesSort_FavoritePoints" xml:space="preserve">
+    <value>Favorite points</value>
+  </data>
+  <data name="CachesLists" xml:space="preserve">
+    <value>Lists</value>
+  </data>
+  <data name="CachesNewList" xml:space="preserve">
+    <value>New list</value>
+  </data>
+  <data name="CachesRenameList" xml:space="preserve">
+    <value>Rename list</value>
+  </data>
+  <data name="CachesDeleteListCommand" xml:space="preserve">
+    <value>Delete list</value>
+  </data>
+  <data name="CachesMoveToList" xml:space="preserve">
+    <value>Move to list</value>
+  </data>
+  <data name="CachesNoListsYet" xml:space="preserve">
+    <value>No lists yet</value>
+  </data>
+  <data name="CachesDelete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="CachesSelectedCount" xml:space="preserve">
+    <value>{0} selected</value>
+  </data>
+  <data name="CachesDeleteTitle" xml:space="preserve">
+    <value>Delete caches?</value>
+  </data>
+  <data name="CachesDeleteText" xml:space="preserve">
+    <value>Delete {0} selected cache(s) from this device? This cannot be undone.</value>
+  </data>
+  <data name="CachesNewListTitle" xml:space="preserve">
+    <value>New list</value>
+  </data>
+  <data name="CachesRenameListTitle" xml:space="preserve">
+    <value>Rename list</value>
+  </data>
+  <data name="CachesListNameLabel" xml:space="preserve">
+    <value>List name</value>
+  </data>
+  <data name="CachesDeleteListTitle" xml:space="preserve">
+    <value>Delete list?</value>
+  </data>
+  <data name="CachesDeleteListText" xml:space="preserve">
+    <value>Delete the list "{0}"? The caches in it stay on this device.</value>
+  </data>
+  <data name="CachesListExists" xml:space="preserve">
+    <value>A list named "{0}" already exists.</value>
+  </data>
+  <data name="CachesImportAdded" xml:space="preserve">
+    <value>{0} new</value>
+  </data>
+  <data name="CachesImportUpdated" xml:space="preserve">
+    <value>{0} updated</value>
+  </data>
+  <data name="CachesImportWarnings" xml:space="preserve">
+    <value>{0} warnings</value>
+  </data>
+  <data name="CachesImportErrors" xml:space="preserve">
+    <value>{0} files with problems</value>
+  </data>
+  <data name="CachesImportWaypoints" xml:space="preserve">
+    <value>{0} plain waypoints were found but are not imported yet.</value>
+  </data>
+  <data name="CachesImportTitle" xml:space="preserve">
+    <value>GPX import finished</value>
+  </data>
+  <data name="CachesEmptyTitle" xml:space="preserve">
+    <value>No caches yet</value>
+  </data>
+  <data name="CachesEmptyHint" xml:space="preserve">
+    <value>Import a GPX file or a pocket query ZIP to fill this list. Everything stays on your device.</value>
+  </data>
+  <data name="CachesNoMatchesTitle" xml:space="preserve">
+    <value>No caches match</value>
+  </data>
+  <data name="CachesNoMatchesHint" xml:space="preserve">
+    <value>Try a different search or clear the filters.</value>
+  </data>
+  <data name="CachesOpen" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="CachesDetailEmpty" xml:space="preserve">
+    <value>Select a cache to see it here.</value>
+  </data>
+  <data name="CachesDetailMany" xml:space="preserve">
+    <value>{0} caches selected</value>
+  </data>
+  <data name="CachesRowSubtitle" xml:space="preserve">
+    <value>{0} · D{1} / T{2} · {3}</value>
+  </data>
+  <data name="CachesBadgeFound" xml:space="preserve">
+    <value>Found</value>
+  </data>
+  <data name="CachesBadgeSolved" xml:space="preserve">
+    <value>Solved</value>
+  </data>
+  <data name="CachesBadgeCorrected" xml:space="preserve">
+    <value>Corrected coordinates</value>
+  </data>
+  <data name="CachesListLabel" xml:space="preserve">
+    <value>Caches</value>
+  </data>
+  <data name="CachesDetailLabel" xml:space="preserve">
+    <value>Cache details</value>
+  </data>
+  <data name="CachesCancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="CachesOpenAutomation" xml:space="preserve">
+    <value>Open cache</value>
+  </data>
+  <data name="CachesFiltersFlyoutTitle" xml:space="preserve">
+    <value>Filter caches</value>
+  </data>
+  <data name="GpxImport_FileUnreadable" xml:space="preserve">
+    <value>{0} could not be read ({1}).</value>
+  </data>
+  <data name="Resection_Name" xml:space="preserve">
+    <value>Resection</value>
+  </data>
+  <data name="Resection_Tooltip" xml:space="preserve">
+    <value>Find your own position from bearings you sighted to two or more known landmarks.</value>
+  </data>
+  <data name="ResectionPointsHeader" xml:space="preserve">
+    <value>Known landmarks and the bearing you sighted to each</value>
+  </data>
+  <data name="ResectionPointHeader" xml:space="preserve">
+    <value>Landmark {0}</value>
+  </data>
+  <data name="ResectionBearingHeader" xml:space="preserve">
+    <value>Bearing to {0} (°)</value>
+  </data>
+  <data name="ResectionBearingHint" xml:space="preserve">
+    <value>Enter the bearing from where you stand to the landmark, clockwise from North. Each sight is turned into a back-bearing line through its landmark; with three or more the result is the least-squares best fit.</value>
+  </data>
+  <data name="ResectionAddPoint" xml:space="preserve">
+    <value>Add landmark</value>
+  </data>
+  <data name="ResectionResultLabel" xml:space="preserve">
+    <value>Your position</value>
+  </data>
+  <data name="ResectionErrorPoint" xml:space="preserve">
+    <value>Enter a valid coordinate for landmark {0}.</value>
+  </data>
+  <data name="ResectionErrorBearing" xml:space="preserve">
+    <value>Enter the bearing to {0} as a number in degrees.</value>
+  </data>
+  <data name="ResectionErrorTooFew" xml:space="preserve">
+    <value>Enter at least two landmarks, each with the bearing you sighted.</value>
+  </data>
+  <data name="ResectionErrorCoincident" xml:space="preserve">
+    <value>All the sight lines lie on one line, so every point on it fits. Sight landmarks in different directions.</value>
+  </data>
+  <data name="ResectionErrorIdentical" xml:space="preserve">
+    <value>All the landmarks are the same place. Use at least two different landmarks.</value>
+  </data>
+  <data name="ResectionWarnBehind" xml:space="preserve">
+    <value>The bearing to {0} points away from it. Did you enter the back bearing?</value>
+  </data>
+  <data name="ResectionWarnIllConditioned" xml:space="preserve">
+    <value>The sight lines are almost parallel, so a tiny error in any bearing moves your position a long way. Pick landmarks further apart in direction.</value>
   </data>
 </root>

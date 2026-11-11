@@ -44,6 +44,9 @@ internal sealed class GeocacheRow
 
     public string? Owner { get; set; }
 
+    /// <summary><see cref="Owner"/> folded by <see cref="SearchText.Fold"/>, for accent-insensitive search.</summary>
+    public string SearchOwner { get; set; } = "";
+
     /// <summary>UTC ticks.</summary>
     public long? PlacedOn { get; set; }
 
@@ -100,6 +103,7 @@ internal sealed class GeocacheRow
         CorrectedLatitude = cache.UserData.CorrectedCoordinate?.Latitude,
         CorrectedLongitude = cache.UserData.CorrectedCoordinate?.Longitude,
         Owner = cache.Owner,
+        SearchOwner = SearchText.Fold(cache.Owner ?? string.Empty),
         PlacedOn = cache.PlacedOn?.UtcTicks,
         IsPremiumOnly = cache.IsPremiumOnly,
         FavoritePoints = cache.FavoritePoints,

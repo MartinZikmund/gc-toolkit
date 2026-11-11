@@ -55,6 +55,7 @@
                                             </Grid.ColumnDefinitions>
 
                                             <Border
+                                                x:Name="HeaderIcon"
                                                 Grid.Column="0"
                                                 Width="48"
                                                 Height="48"
@@ -70,10 +71,12 @@
 
                                             <StackPanel Grid.Column="1" Spacing="2">
                                                 <TextBlock
+                                                    x:Name="HeaderTitle"
                                                     Style="{ThemeResource TitleLargeTextBlockStyle}"
                                                     Text="{Binding ToolName, Mode=OneWay}"
                                                     TextWrapping="Wrap" />
                                                 <TextBlock
+                                                    x:Name="HeaderTooltip"
                                                     Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                                                     Style="{ThemeResource BodyTextBlockStyle}"
                                                     Text="{Binding Tooltip, Mode=OneWay}"
@@ -183,19 +186,18 @@
 
                         <!--  Absorbs the padding VSM five views hand-roll today.  -->
                         <VisualStateManager.VisualStateGroups>
-                            <VisualStateGroup x:Name="WindowStates">
-                                <VisualState x:Name="WideWindow">
-                                    <VisualState.StateTriggers>
-                                        <AdaptiveTrigger MinWindowWidth="640" />
-                                    </VisualState.StateTriggers>
-                                </VisualState>
-                                <VisualState x:Name="NarrowWindow">
-                                    <VisualState.StateTriggers>
-                                        <AdaptiveTrigger MinWindowWidth="0" />
-                                    </VisualState.StateTriggers>
+                            <!--  Driven by the page's own width (ToolPage.cs), so a tool in the narrow workbench pane is compact too.  -->
+                            <VisualStateGroup x:Name="WidthStates">
+                                <VisualState x:Name="Regular" />
+                                <VisualState x:Name="Compact">
                                     <VisualState.Setters>
                                         <Setter Target="ContentScroller.Padding" Value="16" />
                                         <Setter Target="PART_ActionBar.Padding" Value="16,12" />
+                                        <Setter Target="HeaderIcon.Width" Value="32" />
+                                        <Setter Target="HeaderIcon.Height" Value="32" />
+                                        <Setter Target="HeaderIcon.CornerRadius" Value="8" />
+                                        <Setter Target="HeaderTitle.Style" Value="{ThemeResource SubtitleTextBlockStyle}" />
+                                        <Setter Target="HeaderTooltip.Style" Value="{ThemeResource CaptionTextBlockStyle}" />
                                     </VisualState.Setters>
                                 </VisualState>
                             </VisualStateGroup>
@@ -245,6 +247,7 @@
                                             </Grid.ColumnDefinitions>
 
                                             <Border
+                                                x:Name="HeaderIcon"
                                                 Grid.Column="0"
                                                 Width="48"
                                                 Height="48"
@@ -260,10 +263,12 @@
 
                                             <StackPanel Grid.Column="1" Spacing="2">
                                                 <TextBlock
+                                                    x:Name="HeaderTitle"
                                                     Style="{ThemeResource TitleLargeTextBlockStyle}"
                                                     Text="{Binding ToolName, Mode=OneWay}"
                                                     TextWrapping="Wrap" />
                                                 <TextBlock
+                                                    x:Name="HeaderTooltip"
                                                     Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                                                     Style="{ThemeResource BodyTextBlockStyle}"
                                                     Text="{Binding Tooltip, Mode=OneWay}"
@@ -363,19 +368,18 @@
                         </Border>
 
                         <VisualStateManager.VisualStateGroups>
-                            <VisualStateGroup x:Name="WindowStates">
-                                <VisualState x:Name="WideWindow">
-                                    <VisualState.StateTriggers>
-                                        <AdaptiveTrigger MinWindowWidth="640" />
-                                    </VisualState.StateTriggers>
-                                </VisualState>
-                                <VisualState x:Name="NarrowWindow">
-                                    <VisualState.StateTriggers>
-                                        <AdaptiveTrigger MinWindowWidth="0" />
-                                    </VisualState.StateTriggers>
+                            <!--  Driven by the page's own width (ToolPage.cs), so a tool in the narrow workbench pane is compact too.  -->
+                            <VisualStateGroup x:Name="WidthStates">
+                                <VisualState x:Name="Regular" />
+                                <VisualState x:Name="Compact">
                                     <VisualState.Setters>
                                         <Setter Target="ContentScroller.Padding" Value="16" />
                                         <Setter Target="PART_ActionBar.Padding" Value="16,12" />
+                                        <Setter Target="HeaderIcon.Width" Value="32" />
+                                        <Setter Target="HeaderIcon.Height" Value="32" />
+                                        <Setter Target="HeaderIcon.CornerRadius" Value="8" />
+                                        <Setter Target="HeaderTitle.Style" Value="{ThemeResource SubtitleTextBlockStyle}" />
+                                        <Setter Target="HeaderTooltip.Style" Value="{ThemeResource CaptionTextBlockStyle}" />
                                     </VisualState.Setters>
                                 </VisualState>
                             </VisualStateGroup>

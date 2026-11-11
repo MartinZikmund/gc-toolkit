@@ -22,4 +22,5 @@ public static class DistanceUnits
         DistanceUnit.NauticalMile => value * MetersPerNauticalMile,
         _ => value,
     };
+
 }

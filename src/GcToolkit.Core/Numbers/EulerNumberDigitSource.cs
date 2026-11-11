@@ -15,10 +15,10 @@ public static class EulerNumberDigitSource
     /// <summary>How many decimals the embedded expansion contains.</summary>
     public const int AvailableDecimals = 1_000_000;
 
-    private static Task<string>? _decimals;
+    private static readonly Lazy<Task<string>> _decimals = new(() => Task.Run(LoadDecimals));
 
     /// <summary>The decimals of e as a digit string ("718281828…"), loaded once and cached.</summary>
-    public static Task<string> GetDecimalsAsync() => _decimals ??= Task.Run(LoadDecimals);
+    public static Task<string> GetDecimalsAsync() => _decimals.Value;
 
     private static string LoadDecimals()
     {

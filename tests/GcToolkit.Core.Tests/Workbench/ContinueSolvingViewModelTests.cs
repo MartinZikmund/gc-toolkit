@@ -24,6 +24,7 @@ public class ContinueSolvingViewModelTests
         FakeStringLocalizer localizer = new(new Dictionary<string, string>
         {
             ["Workbench_VariablesProgress"] = "{0} of {1} variables",
+            ["Workbench_VariablesProgressOne"] = "{0} of {1} variable",
             ["Workbench_ScratchpadLinesOne"] = "{0} line",
             ["Workbench_ScratchpadLinesFew"] = "{0} lines (few)",
             ["Workbench_ScratchpadLinesMany"] = "{0} lines",
@@ -64,6 +65,17 @@ public class ContinueSolvingViewModelTests
         Assert.AreEqual("12 lines", item.ScratchpadText);
         Assert.AreEqual("2 h ago", item.EditedText);
         Assert.IsTrue(item.IsSolved);
+    }
+
+    [TestMethod]
+    public void Refresh_SingleVariableTotal_UsesSingular()
+    {
+        _progress.Items.Add(new CacheProgress(GeocacheCode.Parse("GC1AAA"), "One", 1, 1, 0, 0, Now, false, false, false));
+        var sut = Create();
+
+        sut.ViewCreated();
+
+        Assert.AreEqual("1 of 1 variable", sut.Items.Single().VariablesText);
     }
 
     [TestMethod]

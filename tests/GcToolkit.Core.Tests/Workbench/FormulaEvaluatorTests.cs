@@ -20,6 +20,21 @@ public class FormulaEvaluatorTests
     }
 
     [TestMethod]
+    [DataRow("(", ")")]
+    [DataRow("-", "")]
+    [DataRow("2^", "")]
+    public void Evaluate_ExtremelyDeepNesting_ReturnsErrorInsteadOfCrashing(string open, string close)
+    {
+        var expression = string.Concat(Enumerable.Repeat(open, 100_000)) + "1" + string.Concat(Enumerable.Repeat(close, 100_000));
+
+        Assert.AreEqual(FormulaErrorKind.Syntax, Fail(expression).Kind);
+    }
+
+    [TestMethod]
+    public void Evaluate_ReasonableNesting_StillWorks()
+        => Assert.AreEqual(1m, Eval(string.Concat(Enumerable.Repeat("(", 50)) + "1" + string.Concat(Enumerable.Repeat(")", 50))));
+
+    [TestMethod]
     [DataRow("1+2*3", 7)]
     [DataRow("(1+2)*3", 9)]
     [DataRow("10-4-3", 3)]

@@ -4898,6 +4898,84 @@
   <data name="Scratchpad_Unsaved" xml:space="preserve">
     <value>Neuložené změny</value>
   </data>
+  <data name="Workbench" xml:space="preserve">
+    <value>Pracovní stůl</value>
+  </data>
+  <data name="Workbench_CacheTabs" xml:space="preserve">
+    <value>Otevřené keše</value>
+  </data>
+  <data name="Workbench_OpenCache" xml:space="preserve">
+    <value>Otevřít keš</value>
+  </data>
+  <data name="Workbench_OpenCacheHint" xml:space="preserve">
+    <value>Než přibude offline úložiště keší, otevřete keš podle jejího kódu.</value>
+  </data>
+  <data name="Workbench_CacheCodePlaceholder" xml:space="preserve">
+    <value>Kód keše, např. GC8KX2Q</value>
+  </data>
+  <data name="Workbench_Open" xml:space="preserve">
+    <value>Otevřít</value>
+  </data>
+  <data name="Workbench_EmptyTitle" xml:space="preserve">
+    <value>Není otevřená žádná keš</value>
+  </data>
+  <data name="Workbench_EmptyBody" xml:space="preserve">
+    <value>Otevřete keš a luštěte ji s výpisem a nástroji vedle sebe.</value>
+  </data>
+  <data name="Workbench_ListingPlaceholder" xml:space="preserve">
+    <value>Výpis keše přibude v #411. Zatím pracovní stůl zná jen kód keše.</value>
+  </data>
+  <data name="Workbench_Listing" xml:space="preserve">
+    <value>Výpis</value>
+  </data>
+  <data name="Workbench_Tool" xml:space="preserve">
+    <value>Nástroj</value>
+  </data>
+  <data name="Workbench_Variables" xml:space="preserve">
+    <value>Proměnné</value>
+  </data>
+  <data name="Workbench_Scratchpad" xml:space="preserve">
+    <value>Zápisník</value>
+  </data>
+  <data name="Workbench_Sections" xml:space="preserve">
+    <value>Části pracovního stolu</value>
+  </data>
+  <data name="Workbench_DockSections" xml:space="preserve">
+    <value>Části panelu</value>
+  </data>
+  <data name="Workbench_VariablesPlaceholder" xml:space="preserve">
+    <value>Tabulka proměnných přibude v některé z dalších verzí.</value>
+  </data>
+  <data name="Workbench_ScratchpadPlaceholder" xml:space="preserve">
+    <value>Zapište si cokoli, na co při luštění přijdete. Ukládá se samo.</value>
+  </data>
+  <data name="Workbench_AddTool" xml:space="preserve">
+    <value>Přidat nástroj</value>
+  </data>
+  <data name="Workbench_SearchTools" xml:space="preserve">
+    <value>Hledat nástroje</value>
+  </data>
+  <data name="Workbench_ToolTabs" xml:space="preserve">
+    <value>Otevřené nástroje</value>
+  </data>
+  <data name="Workbench_NoToolsTitle" xml:space="preserve">
+    <value>Není otevřený žádný nástroj</value>
+  </data>
+  <data name="Workbench_NoToolsBody" xml:space="preserve">
+    <value>Přidejte nástroj a pracujte na keši vedle jejího výpisu.</value>
+  </data>
+  <data name="Workbench_ShowTools" xml:space="preserve">
+    <value>Nástroje</value>
+  </data>
+  <data name="Workbench_PinToolPane" xml:space="preserve">
+    <value>Připnout panel nástrojů</value>
+  </data>
+  <data name="Workbench_ResizeToolPane" xml:space="preserve">
+    <value>Změnit šířku panelu nástrojů</value>
+  </data>
+  <data name="Workbench_ResizeDock" xml:space="preserve">
+    <value>Změnit výšku panelu</value>
+  </data>
   <data name="GpxImport_MissingCoordinates" xml:space="preserve">
     <value>{0}: přeskočeno, souřadnice chybí nebo jsou neplatné.</value>
   </data>

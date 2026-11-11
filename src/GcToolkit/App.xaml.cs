@@ -183,16 +183,19 @@ public partial class App : Application, IApplication
         services.AddSingleton(TimeProvider.System);
         services.AddSingleton<IWorkbenchProgressProvider, EmptyWorkbenchProgressProvider>();
         services.AddSingleton<IWorkbenchSessionService, WorkbenchSessionService>();
+        services.AddSingleton<IScratchpadRepository, MemoryScratchpadRepository>();
 
         // Scoped ViewModels
         services.AddScoped<WindowShellViewModel>();
         services.AddScoped<SearchViewModel>();
+        // Per window, so open tool tabs survive navigating away from the workbench and back.
+        services.AddScoped<WorkbenchViewModel>();
 
         // Transient ViewModels (new instance per navigation). Discovered tool ViewModels are
         // registered by AddDiscoveredTools() above.
         services.AddTransient<HomeViewModel>();
         services.AddTransient<ContinueSolvingViewModel>();
-        services.AddTransient<WorkbenchViewModel>();
+        services.AddTransient<ScratchpadViewModel>();
         services.AddTransient<CatalogViewModel>();
         services.AddTransient<SettingsViewModel>();
         services.AddTransient<GeocacheDetailViewModel>();

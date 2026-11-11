@@ -4898,6 +4898,84 @@
   <data name="Scratchpad_Unsaved" xml:space="preserve">
     <value>Unsaved changes</value>
   </data>
+  <data name="Workbench" xml:space="preserve">
+    <value>Workbench</value>
+  </data>
+  <data name="Workbench_CacheTabs" xml:space="preserve">
+    <value>Open caches</value>
+  </data>
+  <data name="Workbench_OpenCache" xml:space="preserve">
+    <value>Open cache</value>
+  </data>
+  <data name="Workbench_OpenCacheHint" xml:space="preserve">
+    <value>Until the offline cache store arrives, open a cache by its code.</value>
+  </data>
+  <data name="Workbench_CacheCodePlaceholder" xml:space="preserve">
+    <value>Cache code, e.g. GC8KX2Q</value>
+  </data>
+  <data name="Workbench_Open" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="Workbench_EmptyTitle" xml:space="preserve">
+    <value>No cache open</value>
+  </data>
+  <data name="Workbench_EmptyBody" xml:space="preserve">
+    <value>Open a cache to solve it with the listing and your tools side by side.</value>
+  </data>
+  <data name="Workbench_ListingPlaceholder" xml:space="preserve">
+    <value>The cache listing comes in #411. For now the workbench only knows the cache code.</value>
+  </data>
+  <data name="Workbench_Listing" xml:space="preserve">
+    <value>Listing</value>
+  </data>
+  <data name="Workbench_Tool" xml:space="preserve">
+    <value>Tool</value>
+  </data>
+  <data name="Workbench_Variables" xml:space="preserve">
+    <value>Variables</value>
+  </data>
+  <data name="Workbench_Scratchpad" xml:space="preserve">
+    <value>Scratchpad</value>
+  </data>
+  <data name="Workbench_Sections" xml:space="preserve">
+    <value>Workbench sections</value>
+  </data>
+  <data name="Workbench_DockSections" xml:space="preserve">
+    <value>Panel sections</value>
+  </data>
+  <data name="Workbench_VariablesPlaceholder" xml:space="preserve">
+    <value>The variable sheet comes in a later update.</value>
+  </data>
+  <data name="Workbench_ScratchpadPlaceholder" xml:space="preserve">
+    <value>Jot down anything that comes up while solving. It saves itself.</value>
+  </data>
+  <data name="Workbench_AddTool" xml:space="preserve">
+    <value>Add tool</value>
+  </data>
+  <data name="Workbench_SearchTools" xml:space="preserve">
+    <value>Search tools</value>
+  </data>
+  <data name="Workbench_ToolTabs" xml:space="preserve">
+    <value>Open tools</value>
+  </data>
+  <data name="Workbench_NoToolsTitle" xml:space="preserve">
+    <value>No tool open</value>
+  </data>
+  <data name="Workbench_NoToolsBody" xml:space="preserve">
+    <value>Add a tool to work on this cache next to its listing.</value>
+  </data>
+  <data name="Workbench_ShowTools" xml:space="preserve">
+    <value>Tools</value>
+  </data>
+  <data name="Workbench_PinToolPane" xml:space="preserve">
+    <value>Pin the tool pane</value>
+  </data>
+  <data name="Workbench_ResizeToolPane" xml:space="preserve">
+    <value>Resize the tool pane</value>
+  </data>
+  <data name="Workbench_ResizeDock" xml:space="preserve">
+    <value>Resize the panel</value>
+  </data>
   <data name="GpxImport_MissingCoordinates" xml:space="preserve">
     <value>{0}: skipped, the coordinates are missing or invalid.</value>
   </data>

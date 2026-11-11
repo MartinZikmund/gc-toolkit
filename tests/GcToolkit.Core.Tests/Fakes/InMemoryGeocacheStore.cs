@@ -131,12 +131,20 @@ public sealed class InMemoryGeocacheStore : IGeocacheStore
     private bool Matches(Geocache c, GeocacheQuery q)
         => (string.IsNullOrWhiteSpace(q.Text)
                 || c.Name.Contains(q.Text.Trim(), StringComparison.OrdinalIgnoreCase)
-                || c.Code.Value.Contains(q.Text.Trim(), StringComparison.OrdinalIgnoreCase))
+                || c.Code.Value.Contains(q.Text.Trim(), StringComparison.OrdinalIgnoreCase)
+                || (c.Owner?.Contains(q.Text.Trim(), StringComparison.OrdinalIgnoreCase) ?? false))
             && (q.Types is not { Count: > 0 } || q.Types.Contains(c.Type))
+            && (q.Sizes is not { Count: > 0 } || q.Sizes.Contains(c.Size))
+            && InRange(c.Difficulty, q.MinDifficulty, q.MaxDifficulty)
+            && InRange(c.Terrain, q.MinTerrain, q.MaxTerrain)
+            && (q.HasCorrectedCoordinate is null || (c.UserData.CorrectedCoordinate is not null) == q.HasCorrectedCoordinate)
             && (q.Statuses is not { Count: > 0 } || q.Statuses.Contains(c.Status))
             && (q.IsFound is null || c.UserData.IsFound == q.IsFound)
             && (q.IsSolved is null || c.UserData.IsSolved == q.IsSolved)
             && (q.ListId is not { } id || (_lists.TryGetValue(id, out var list) && list.Members.Contains(c.Code)));
+
+    private static bool InRange(double? value, double? min, double? max)
+        => (min is null && max is null) || (value is { } v && v >= (min ?? double.MinValue) && v <= (max ?? double.MaxValue));
 
     private static GeocacheSummary ToSummary(Geocache c) => new()
     {

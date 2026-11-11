@@ -155,6 +155,61 @@ public abstract class GeocacheStoreContractTests
     }
 
     [TestMethod]
+    public async Task Query_Text_AlsoMatchesOwner()
+    {
+        var store = CreateStore();
+        await store.UpsertAsync([Cache("GC1AAA", "One") with { Owner = "Pražák" }, Cache("GC2BBB", "Two") with { Owner = "someone" }]);
+
+        var page = await store.QueryAsync(new() { Text = "praž" });
+
+        CollectionAssert.AreEqual(new[] { "GC1AAA" }, page.Items.Select(i => i.Code.Value).ToArray());
+    }
+
+    [TestMethod]
+    public async Task Query_SizeFilter_KeepsOnlyListedSizes()
+    {
+        var store = CreateStore();
+        await store.UpsertAsync([
+            Cache("GC1AAA") with { Size = GeocacheSize.Micro },
+            Cache("GC2BBB") with { Size = GeocacheSize.Regular },
+            Cache("GC3CCC") with { Size = GeocacheSize.Large }]);
+
+        var page = await store.QueryAsync(new() { Sizes = [GeocacheSize.Micro, GeocacheSize.Large] });
+
+        CollectionAssert.AreEquivalent(new[] { "GC1AAA", "GC3CCC" }, page.Items.Select(i => i.Code.Value).ToArray());
+    }
+
+    [TestMethod]
+    public async Task Query_DifficultyAndTerrainRanges_AreInclusiveAndSkipUnrated()
+    {
+        var store = CreateStore();
+        await store.UpsertAsync([
+            Cache("GC1AAA", difficulty: 1) with { Terrain = 1 },
+            Cache("GC2BBB", difficulty: 3) with { Terrain = 2.5 },
+            Cache("GC3CCC", difficulty: 5) with { Terrain = 5 },
+            Cache("GC4DDD", difficulty: null) with { Terrain = null }]);
+
+        var difficulty = await store.QueryAsync(new() { MinDifficulty = 3, MaxDifficulty = 5 });
+        var terrain = await store.QueryAsync(new() { MaxTerrain = 2.5 });
+
+        CollectionAssert.AreEquivalent(new[] { "GC2BBB", "GC3CCC" }, difficulty.Items.Select(i => i.Code.Value).ToArray());
+        CollectionAssert.AreEquivalent(new[] { "GC1AAA", "GC2BBB" }, terrain.Items.Select(i => i.Code.Value).ToArray());
+    }
+
+    [TestMethod]
+    public async Task Query_CorrectedCoordinateFilter_SeparatesCorrectedFromPosted()
+    {
+        var store = CreateStore();
+        await store.UpsertAsync([Cache("GC1AAA", userData: new() { CorrectedCoordinate = new(50.2, 14.3) }), Cache("GC2BBB")]);
+
+        var corrected = await store.QueryAsync(new() { HasCorrectedCoordinate = true });
+        var posted = await store.QueryAsync(new() { HasCorrectedCoordinate = false });
+
+        CollectionAssert.AreEqual(new[] { "GC1AAA" }, corrected.Items.Select(i => i.Code.Value).ToArray());
+        CollectionAssert.AreEqual(new[] { "GC2BBB" }, posted.Items.Select(i => i.Code.Value).ToArray());
+    }
+
+    [TestMethod]
     public async Task Query_TypeAndStatusFilters_AreCombined()
     {
         var store = CreateStore();

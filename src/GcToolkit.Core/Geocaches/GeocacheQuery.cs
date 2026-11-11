@@ -15,12 +15,25 @@ public enum GeocacheSort
 /// <summary>Filter, sort and page for <see cref="IGeocacheStore.QueryAsync"/>. Unset filters match everything.</summary>
 public sealed record GeocacheQuery
 {
-    /// <summary>Matches when the name or code contains this text, ignoring case.</summary>
+    /// <summary>Matches when the name, code or owner contains this text, ignoring case.</summary>
     public string? Text { get; init; }
 
     public IReadOnlyCollection<GeocacheType>? Types { get; init; }
 
+    public IReadOnlyCollection<GeocacheSize>? Sizes { get; init; }
+
     public IReadOnlyCollection<GeocacheStatus>? Statuses { get; init; }
+
+    /// <summary>Inclusive bounds. Caches without a rating never match a bound.</summary>
+    public double? MinDifficulty { get; init; }
+
+    public double? MaxDifficulty { get; init; }
+
+    public double? MinTerrain { get; init; }
+
+    public double? MaxTerrain { get; init; }
+
+    public bool? HasCorrectedCoordinate { get; init; }
 
     public int? ListId { get; init; }
 

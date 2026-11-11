@@ -40,7 +40,7 @@ Every tool is the same spine. Confirmed identical across Morse, Roman numerals, 
 | Unit tests for that logic | `tests/GcToolkit.Core.Tests/<Feature>/<Thing>Tests.cs` | Yes (TDD) |
 | `[Tool]` ViewModel deriving `ToolViewModelBase` | `src/GcToolkit.Core/ViewModels/Tools/<Tool>ViewModel.cs` | Yes |
 | `<Id>_Name` + `<Id>_Tooltip` strings, EN **and** CS | `src/GcToolkit/Strings/{en,cs}/Resources.resw` | Yes (build error if missing) |
-| Tool icon | `src/GcToolkit/Assets/Icons/Tools/<Id>.png` | Optional (degrades gracefully) |
+| Tool icon | `ToolIcon_<Id>` template in `src/GcToolkit/Resources/IconGeometries.xaml` | Optional (degrades gracefully) |
 | View pair (`<Tool>ViewBase` + `<Tool>View`) | `src/GcToolkit/Views/<Tool>View.xaml(.cs)` | Optional (omit = placeholder stub) |
 | New category | `Discovery/ToolCategory.cs` + `Category_<Member>` string + category icon | Only if no existing category fits |
 
@@ -136,11 +136,26 @@ runtime (not a build error), so keep EN and CS in lockstep.
 
 ### 5. Tool icon
 
-Drop `src/GcToolkit/Assets/Icons/Tools/<Id>.png`. Assets are auto-globbed (no csproj edit); a missing
-icon simply renders nothing. Use **Icons8**, **Fluency** style, **colorful** — pick a clear metaphor
-(Morse → "Radio Waves"; Roman → a numeral glyph). Use the **Icons8 MCP** (`mcp__icons8mcp__search_icons`
-→ `get_icon_png_url`) or the URL form `https://img.icons8.com/?id=<iconId>&format=png&size=200`
-(~200 px is plenty; rendered at 20–32 px).
+Icons are **vector path data**, not image assets: add a `DataTemplate` keyed `ToolIcon_<Id>` to
+`src/GcToolkit/Resources/IconGeometries.xaml` (keep the alphabetical order and bump the count in the
+`Tools (N)` comment). `ToolIcons.CreateIcon` resolves it by key; a missing key simply renders nothing.
+
+```xml
+<DataTemplate x:Key="ToolIcon_MyTool">
+    <PathIcon Data="M 6 3 L 6 6 ... z" />
+</DataTemplate>
+```
+
+- Style: one **Icons8 Material Outlined** family, every path on a **24×24** box. Pick a clear metaphor
+  (Morse → radio waves; Roman → a numeral glyph). Take the SVG's `d` attribute as the `Data`; if the SVG
+  has a `viewBox` other than `0 0 24 24`, rescale the path rather than adding a transform.
+- Single-colour only: no fills, no `Foreground`. `PathIcon` inherits the foreground, so the icon follows
+  light, dark and High Contrast themes. That's why PNG/SVG assets aren't used (Uno rasterises SVG at
+  build time, so it can't follow the theme).
+- A `DataTemplate`, never a shared `Geometry`: the same icon shows in the pane, on the card and on the
+  tool page at once, and one `Geometry` can't be owned by two `PathIcon`s.
+- **Check it renders**: run the app and look at the tool's card and page header. A malformed path
+  fails silently and shows a blank square.
 
 ### 6. The View (omit it to ship a stub)
 
@@ -216,7 +231,7 @@ Categories are a closed enum, metadata-by-convention. To add one:
 1. **Append** a member to `ToolCategory` (`src/GcToolkit.Core/Discovery/ToolCategory.cs`) — append so
    existing display order (declaration index) is preserved.
 2. Add a `Category_<Member>` string (EN + CS).
-3. Drop `src/GcToolkit/Assets/Icons/Categories/<Member>.png`.
+3. Add a `ToolIcon_<Member>` template under the `Categories (N)` comment in `IconGeometries.xaml` (same rules as tool icons).
 4. *(Optional)* map it to a `ToolGroup` in `ToolGrouping.CategoryGroups`
    (`Discovery/ToolGroup.cs`) to render it under a pane section header, adding a `Group_<Member>` string
    if you also add a new group. A category absent from the map renders with no heading.

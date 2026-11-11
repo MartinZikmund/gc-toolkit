@@ -163,7 +163,8 @@ public static class CoordinateMean
             return new CoordinateLineParseResult(points, errors);
         }
 
-        var lines = text.Split('\n');
+        // WinUI's TextBox hands back bare \r for Enter, so \n alone would see one giant line.
+        var lines = text.Replace("\r\n", "\n").Replace('\r', '\n').Split('\n');
         for (var i = 0; i < lines.Length; i++)
         {
             var line = lines[i].Trim();

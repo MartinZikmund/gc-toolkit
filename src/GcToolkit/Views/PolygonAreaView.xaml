@@ -1,0 +1,264 @@
+﻿<local:PolygonAreaViewBase
+    x:Class="GcToolkit.Views.PolygonAreaView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:GcToolkit.Controls"
+    xmlns:local="using:GcToolkit.Views"
+    xmlns:markup="using:GcToolkit.Markup"
+    xmlns:tools="using:GcToolkit.Core.ViewModels.Tools">
+
+    <controls:ToolPage
+        ContentWidth="Wide"
+        CopyCommand="{x:Bind ViewModel.CopyOutputCommand}"
+        ShareCommand="{x:Bind ViewModel.ShareOutputCommand}"
+        Tool="{x:Bind ViewModel}">
+
+        <controls:ToolPage.Actions>
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Command="{x:Bind ViewModel.LoadExampleCommand}" Content="{markup:Localize Key=PolygonAreaExample}" />
+                <Button Command="{x:Bind ViewModel.ClearCommand}" Content="{markup:Localize Key=PolygonAreaClear}" />
+            </StackPanel>
+        </controls:ToolPage.Actions>
+
+        <StackPanel Spacing="16">
+
+            <!--  One vertex per line, notations may be mixed  -->
+            <TextBox
+                MinHeight="160"
+                AcceptsReturn="True"
+                AutomationProperties.AutomationId="PolygonInput"
+                FontFamily="{ThemeResource AppMonoFontFamily}"
+                Header="{markup:Localize Key=PolygonAreaInputLabel}"
+                IsSpellCheckEnabled="False"
+                PlaceholderText="{markup:Localize Key=PolygonAreaInputPlaceholder}"
+                Text="{x:Bind ViewModel.InputText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                TextWrapping="NoWrap" />
+
+            <TextBlock
+                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                Style="{ThemeResource CaptionTextBlockStyle}"
+                Text="{markup:Localize Key=PolygonAreaInputHint}"
+                TextWrapping="Wrap" />
+
+            <Grid ColumnSpacing="16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <ComboBox
+                    Grid.Column="0"
+                    HorizontalAlignment="Stretch"
+                    AutomationProperties.AutomationId="PolygonAreaUnit"
+                    Header="{markup:Localize Key=PolygonAreaUnitLabel}"
+                    ItemsSource="{x:Bind ViewModel.AreaUnitNames}"
+                    SelectedIndex="{x:Bind ViewModel.AreaUnitIndex, Mode=TwoWay}" />
+                <ComboBox
+                    Grid.Column="1"
+                    HorizontalAlignment="Stretch"
+                    AutomationProperties.AutomationId="PolygonLengthUnit"
+                    Header="{markup:Localize Key=PolygonAreaLengthUnitLabel}"
+                    ItemsSource="{x:Bind ViewModel.LengthUnitNames}"
+                    SelectedIndex="{x:Bind ViewModel.LengthUnitIndex, Mode=TwoWay}" />
+            </Grid>
+
+            <!--  Unreadable lines are named, never silently dropped  -->
+            <InfoBar
+                IsClosable="False"
+                IsOpen="{x:Bind ViewModel.HasParseErrors, Mode=OneWay}"
+                Message="{x:Bind ViewModel.ParseErrorMessage, Mode=OneWay}"
+                Severity="Warning" />
+
+            <InfoBar
+                IsClosable="False"
+                IsOpen="{x:Bind ViewModel.NeedsMorePoints, Mode=OneWay}"
+                Message="{markup:Localize Key=PolygonAreaNeedPoints}"
+                Severity="Informational" />
+
+            <InfoBar
+                Title="{markup:Localize Key=PolygonAreaSelfIntersectTitle}"
+                IsClosable="False"
+                IsOpen="{x:Bind ViewModel.HasSelfIntersection, Mode=OneWay}"
+                Message="{markup:Localize Key=PolygonAreaSelfIntersectNote}"
+                Severity="Warning" />
+
+            <InfoBar
+                IsClosable="False"
+                IsOpen="{x:Bind ViewModel.WasClosed, Mode=OneWay}"
+                Message="{markup:Localize Key=PolygonAreaClosedNote}"
+                Severity="Informational" />
+
+            <!--  Headline numbers on the dark result surface  -->
+            <Border Style="{StaticResource ToolReadoutSurfaceStyle}" Visibility="{x:Bind ViewModel.HasResult, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                <StackPanel Spacing="16">
+                    <TextBlock
+                        Foreground="{ThemeResource ReadoutForegroundBrush}"
+                        Opacity="0.7"
+                        Style="{ThemeResource CaptionTextBlockStyle}"
+                        Text="{x:Bind ViewModel.VertexCountText, Mode=OneWay}" />
+
+                    <Grid ColumnSpacing="24">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" Spacing="4">
+                            <TextBlock
+                                Foreground="{ThemeResource ReadoutForegroundBrush}"
+                                Opacity="0.7"
+                                Style="{ThemeResource CaptionTextBlockStyle}"
+                                Text="{markup:Localize Key=PolygonAreaArea}" />
+                            <TextBlock
+                                AutomationProperties.Name="{markup:Localize Key=PolygonAreaArea}"
+                                FontSize="24"
+                                IsTextSelectionEnabled="True"
+                                Style="{StaticResource ToolReadoutTextStyle}"
+                                Text="{x:Bind ViewModel.AreaText, Mode=OneWay}"
+                                TextWrapping="Wrap" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Spacing="4">
+                            <TextBlock
+                                Foreground="{ThemeResource ReadoutForegroundBrush}"
+                                Opacity="0.7"
+                                Style="{ThemeResource CaptionTextBlockStyle}"
+                                Text="{markup:Localize Key=PolygonAreaPerimeter}" />
+                            <TextBlock
+                                AutomationProperties.Name="{markup:Localize Key=PolygonAreaPerimeter}"
+                                FontSize="24"
+                                IsTextSelectionEnabled="True"
+                                Style="{StaticResource ToolReadoutTextStyle}"
+                                Text="{x:Bind ViewModel.PerimeterText, Mode=OneWay}"
+                                TextWrapping="Wrap" />
+                        </StackPanel>
+                    </Grid>
+
+                    <Rectangle
+                        Height="1"
+                        Fill="{ThemeResource ReadoutForegroundBrush}"
+                        Opacity="0.2" />
+
+                    <StackPanel Spacing="4">
+                        <TextBlock
+                            Foreground="{ThemeResource ReadoutForegroundBrush}"
+                            Opacity="0.7"
+                            Style="{ThemeResource CaptionTextBlockStyle}"
+                            Text="{markup:Localize Key=PolygonAreaCentroid}" />
+                        <TextBlock
+                            AutomationProperties.Name="{markup:Localize Key=PolygonAreaCentroid}"
+                            FontSize="20"
+                            IsTextSelectionEnabled="True"
+                            Style="{StaticResource ToolReadoutTextStyle}"
+                            Text="{x:Bind ViewModel.CentroidText, Mode=OneWay}" />
+                        <TextBlock
+                            Foreground="{ThemeResource ReadoutForegroundBrush}"
+                            Opacity="0.6"
+                            Style="{StaticResource MonoTextBlockStyle}"
+                            Text="{x:Bind ViewModel.CentroidDecimalText, Mode=OneWay}" />
+                        <TextBlock
+                            Foreground="{ThemeResource ReadoutForegroundBrush}"
+                            Opacity="0.6"
+                            Style="{ThemeResource CaptionTextBlockStyle}"
+                            Text="{markup:Localize Key=PolygonAreaCentroidNote}"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+
+                    <Rectangle
+                        Height="1"
+                        Fill="{ThemeResource ReadoutForegroundBrush}"
+                        Opacity="0.2" />
+
+                    <StackPanel Spacing="4">
+                        <TextBlock
+                            Foreground="{ThemeResource ReadoutForegroundBrush}"
+                            Opacity="0.7"
+                            Style="{ThemeResource CaptionTextBlockStyle}"
+                            Text="{markup:Localize Key=PolygonAreaVertexMean}" />
+                        <TextBlock
+                            AutomationProperties.Name="{markup:Localize Key=PolygonAreaVertexMean}"
+                            FontSize="20"
+                            IsTextSelectionEnabled="True"
+                            Style="{StaticResource ToolReadoutTextStyle}"
+                            Text="{x:Bind ViewModel.VertexMeanText, Mode=OneWay}" />
+                        <TextBlock
+                            Foreground="{ThemeResource ReadoutForegroundBrush}"
+                            Opacity="0.6"
+                            Style="{StaticResource MonoTextBlockStyle}"
+                            Text="{x:Bind ViewModel.VertexMeanDecimalText, Mode=OneWay}" />
+                        <TextBlock
+                            Foreground="{ThemeResource ReadoutForegroundBrush}"
+                            Opacity="0.6"
+                            Style="{ThemeResource CaptionTextBlockStyle}"
+                            Text="{markup:Localize Key=PolygonAreaVertexMeanNote}"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!--  Every side, for checking by hand or walking it  -->
+            <StackPanel Spacing="8" Visibility="{x:Bind ViewModel.HasResult, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                <TextBlock Style="{ThemeResource BodyStrongTextBlockStyle}" Text="{markup:Localize Key=PolygonAreaEdgesHeader}" />
+
+                <Grid Padding="8,0" ColumnSpacing="12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="80" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="90" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                        Grid.Column="0"
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        Style="{ThemeResource CaptionTextBlockStyle}"
+                        Text="{markup:Localize Key=PolygonAreaColumnEdge}" />
+                    <TextBlock
+                        Grid.Column="1"
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        Style="{ThemeResource CaptionTextBlockStyle}"
+                        Text="{markup:Localize Key=PolygonAreaColumnLength}" />
+                    <TextBlock
+                        Grid.Column="2"
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        Style="{ThemeResource CaptionTextBlockStyle}"
+                        Text="{markup:Localize Key=PolygonAreaColumnBearing}" />
+                </Grid>
+
+                <ItemsControl ItemsSource="{x:Bind ViewModel.Edges, Mode=OneWay}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="tools:PolygonEdgeRow">
+                            <Grid
+                                Margin="0,2"
+                                Padding="8,6"
+                                Background="{ThemeResource AppSurfaceBrush}"
+                                ColumnSpacing="12"
+                                CornerRadius="6">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="80" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="90" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock
+                                    Grid.Column="0"
+                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                    Style="{StaticResource MonoTextBlockStyle}"
+                                    Text="{x:Bind Label}" />
+                                <TextBlock
+                                    Grid.Column="1"
+                                    Style="{StaticResource MonoTextBlockStyle}"
+                                    Text="{x:Bind Length}" />
+                                <TextBlock
+                                    Grid.Column="2"
+                                    Style="{StaticResource MonoTextBlockStyle}"
+                                    Text="{x:Bind Bearing}" />
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+
+            <TextBlock
+                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                Style="{ThemeResource CaptionTextBlockStyle}"
+                Text="{markup:Localize Key=PolygonAreaAccuracyNote}"
+                TextWrapping="Wrap" />
+
+        </StackPanel>
+    </controls:ToolPage>
+</local:PolygonAreaViewBase>

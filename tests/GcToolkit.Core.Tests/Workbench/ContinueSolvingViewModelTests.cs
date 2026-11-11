@@ -16,15 +16,18 @@ public class ContinueSolvingViewModelTests
     private readonly FakeWorkbenchSession _session = new();
     private readonly RecordingNavigation _navigation = new();
 
-    private static CacheProgress Progress(string code, DateTimeOffset edited, int vars = 1, bool solved = false, bool found = false)
-        => new(GeocacheCode.Parse(code), "Name " + code, vars, 4, 12, 0, edited, solved, found, false);
+    private static CacheProgress Progress(string code, DateTimeOffset edited, int vars = 1, bool solved = false, bool found = false, int lines = 12)
+        => new(GeocacheCode.Parse(code), "Name " + code, vars, 4, lines, 0, edited, solved, found, false);
 
     private ContinueSolvingViewModel Create()
     {
         FakeStringLocalizer localizer = new(new Dictionary<string, string>
         {
             ["Workbench_VariablesProgress"] = "{0} of {1} variables",
-            ["Workbench_ScratchpadLines"] = "{0} lines",
+            ["Workbench_VariablesProgressOne"] = "{0} of {1} variable",
+            ["Workbench_ScratchpadLinesOne"] = "{0} line",
+            ["Workbench_ScratchpadLinesFew"] = "{0} lines (few)",
+            ["Workbench_ScratchpadLinesMany"] = "{0} lines",
             ["Workbench_EditedJustNow"] = "just now",
             ["Workbench_EditedMinutesAgo"] = "{0} min ago",
             ["Workbench_EditedHoursAgo"] = "{0} h ago",
@@ -65,6 +68,33 @@ public class ContinueSolvingViewModelTests
     }
 
     [TestMethod]
+    public void Refresh_SingleVariableTotal_UsesSingular()
+    {
+        _progress.Items.Add(new CacheProgress(GeocacheCode.Parse("GC1AAA"), "One", 1, 1, 0, 0, Now, false, false, false));
+        var sut = Create();
+
+        sut.ViewCreated();
+
+        Assert.AreEqual("1 of 1 variable", sut.Items.Single().VariablesText);
+    }
+
+    [TestMethod]
+    [DataRow(0, "0 lines")]
+    [DataRow(1, "1 line")]
+    [DataRow(2, "2 lines (few)")]
+    [DataRow(4, "4 lines (few)")]
+    [DataRow(5, "5 lines")]
+    public void Refresh_ScratchpadLines_PicksPluralForm(int lines, string expected)
+    {
+        _progress.Items.Add(Progress("GC1AAA", Now, lines: lines));
+        var sut = Create();
+
+        sut.ViewCreated();
+
+        Assert.AreEqual(expected, sut.Items.Single().ScratchpadText);
+    }
+
+    [TestMethod]
     [DataRow(10, "just now")]
     [DataRow(300, "5 min ago")]
     [DataRow(86400 + 100, "yesterday")]
@@ -80,16 +110,70 @@ public class ContinueSolvingViewModelTests
     }
 
     [TestMethod]
-    public void ProgressChanged_RefreshesList()
+    public void ProgressChanged_WhileLoaded_RefreshesList()
     {
         var sut = Create();
         sut.ViewCreated();
+        sut.ViewLoaded();
         Assert.IsFalse(sut.HasItems);
 
         _progress.Items.Add(Progress("GC1AAA", Now));
         _progress.Raise();
 
         Assert.IsTrue(sut.HasItems);
+    }
+
+    [TestMethod]
+    public void ViewUnloaded_UnsubscribesFromProgress()
+    {
+        var sut = Create();
+        sut.ViewCreated();
+        sut.ViewLoaded();
+
+        sut.ViewUnloaded();
+
+        Assert.AreEqual(0, _progress.HandlerCount);
+    }
+
+    [TestMethod]
+    public void ViewLoaded_AgainAfterUnload_SubscribesOnce()
+    {
+        var sut = Create();
+        sut.ViewCreated();
+        sut.ViewLoaded();
+        sut.ViewUnloaded();
+
+        sut.ViewLoaded();
+        sut.ViewLoaded();
+
+        Assert.AreEqual(1, _progress.HandlerCount);
+    }
+
+    [TestMethod]
+    public void ProgressChanged_FromBackgroundThread_RefreshesOnUiContext()
+    {
+        RecordingSynchronizationContext ui = new();
+        var previous = SynchronizationContext.Current;
+        SynchronizationContext.SetSynchronizationContext(ui);
+        try
+        {
+            var sut = Create();
+            sut.ViewCreated();
+            sut.ViewLoaded();
+            _progress.Items.Add(Progress("GC1AAA", Now));
+
+            Thread worker = new(_progress.Raise);
+            worker.Start();
+            worker.Join();
+
+            Assert.IsFalse(sut.HasItems);
+            ui.RunPosted();
+            Assert.IsTrue(sut.HasItems);
+        }
+        finally
+        {
+            SynchronizationContext.SetSynchronizationContext(previous);
+        }
     }
 
     [TestMethod]

@@ -20,6 +20,7 @@ public class ScratchpadViewModelTests
             ["Scratchpad_Saved"] = "Saved",
             ["Scratchpad_SavedJustNow"] = "Saved just now",
             ["Scratchpad_SavedMinutesAgo"] = "Saved {0} min ago",
+            ["Scratchpad_SavedHoursAgo"] = "Saved {0} h ago",
             ["Scratchpad_Saving"] = "Saving",
             ["Scratchpad_Unsaved"] = "Unsaved",
         }),
@@ -303,5 +304,68 @@ public class ScratchpadViewModelTests
         Assert.AreEqual("Saving", viewModel.StatusText);
         _repository.SaveGate.SetResult();
         await flush;
+    }
+
+    [TestMethod]
+    public async Task Autosave_TimerFiresOffTheUiThread_RunsOnTheUiContext()
+    {
+        RecordingSynchronizationContext ui = new();
+        ScratchpadViewModel viewModel;
+        SynchronizationContext.SetSynchronizationContext(ui);
+        try
+        {
+            viewModel = CreateViewModel();
+        }
+        finally
+        {
+            SynchronizationContext.SetSynchronizationContext(null);
+        }
+
+        await viewModel.InitializeAsync(_code);
+        viewModel.Text = "a";
+
+        _time.Advance(TimeSpan.FromSeconds(2));
+        Assert.AreEqual(0, _repository.Saves.Count);
+
+        ui.RunPosted();
+        Assert.AreEqual("a", _repository.Get(_code));
+    }
+
+    [TestMethod]
+    [DataRow("first\r", "first\rsecond")]
+    [DataRow("first\r\n", "first\r\nsecond")]
+    [DataRow("first\rmiddle", "first\rmiddle\rsecond")]
+    [DataRow("first\r\nmiddle", "first\r\nmiddle\r\nsecond")]
+    public async Task Append_UsesTheTextsLineBreaks(string saved, string expected)
+    {
+        var viewModel = await CreateLoadedAsync(saved);
+
+        viewModel.Append("second");
+
+        Assert.AreEqual(expected, viewModel.Text);
+    }
+
+    [TestMethod]
+    public async Task Text_OnlyLineBreaksDiffer_StaysSaved()
+    {
+        var viewModel = await CreateLoadedAsync("a\nb");
+
+        viewModel.Text = "a\rb";
+        _time.Advance(TimeSpan.FromSeconds(5));
+
+        Assert.AreEqual(ScratchpadSaveState.Saved, viewModel.SaveState);
+        Assert.AreEqual(0, _repository.Saves.Count);
+    }
+
+    [TestMethod]
+    public async Task StatusText_AfterAnHour_ShowsHours()
+    {
+        var viewModel = await CreateLoadedAsync();
+        viewModel.Text = "x";
+        _time.Advance(TimeSpan.FromSeconds(1));
+
+        _time.Advance(TimeSpan.FromMinutes(90));
+
+        Assert.AreEqual("Saved 1 h ago", viewModel.StatusText);
     }
 }

@@ -3,6 +3,7 @@ using System.Text.Json;
 using GcToolkit.Core.Catalog;
 using GcToolkit.Core.FavoriteTools;
 using GcToolkit.Core.Geocaches;
+using GcToolkit.Core.Geocaches.Storage;
 using GcToolkit.Core.Infrastructure;
 using GcToolkit.Core.Localization;
 using GcToolkit.Core.Recents;
@@ -20,6 +21,7 @@ using GcToolkit.Services.Dialogs;
 using GcToolkit.Services.Navigation;
 using GcToolkit.Services.Rating;
 using GcToolkit.Services.Settings;
+using GcToolkit.Services.Storage;
 using GcToolkit.Services.Theming;
 using Uno.Resizetizer;
 using IPreferences = MZikmund.Toolkit.WinUI.Services.IPreferences;
@@ -119,6 +121,17 @@ public partial class App : Application, IApplication
         services.AddSingleton<IPreferences>(_ => new Preferences(
             new JsonSerializerOptions { TypeInfoResolver = PreferencesJsonContext.Default }));
         services.AddSingleton<IAppPreferences, AppPreferences>();
+
+        // Offline geocache store. Only WebAssembly needs the flusher: its file system is copied to
+        // IndexedDB asynchronously, so every committed write is flushed explicitly.
+#if __WASM__
+        services.AddSingleton<IStorageFlusher, WasmStorageFlusher>();
+#else
+        services.AddSingleton<IStorageFlusher, NoOpStorageFlusher>();
+#endif
+        services.AddSingleton<IGeocacheStore>(sp => new SqliteGeocacheStore(
+            GeocacheDatabaseLocation.GetPathAsync,
+            sp.GetRequiredService<IStorageFlusher>()));
         services.AddSingleton<IDisplayRequestManager, DisplayRequestManager>();
         services.AddSingleton<IAppUpdater, Infrastructure.AppUpdater>();
         services.AddScoped<IAppRatingService, AppRatingService>();
@@ -166,9 +179,8 @@ public partial class App : Application, IApplication
             sp.GetRequiredService<IPreferences>(),
             CultureInfo.CurrentUICulture.TwoLetterISOLanguageName));
 
-        // Workbench session is app-wide; the lookup/progress sources are placeholders until the store lands.
+        // Workbench session is app-wide; the progress source is a placeholder until the store lands.
         services.AddSingleton(TimeProvider.System);
-        services.AddSingleton<IGeocacheLookup, EmptyGeocacheLookup>();
         services.AddSingleton<IWorkbenchProgressProvider, EmptyWorkbenchProgressProvider>();
         services.AddSingleton<IWorkbenchSessionService, WorkbenchSessionService>();
         services.AddSingleton<IScratchpadRepository, MemoryScratchpadRepository>();

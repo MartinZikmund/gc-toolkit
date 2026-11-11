@@ -112,5 +112,43 @@ public class GeocacheTests
 
         Assert.ThrowsExactly<ArgumentException>(() => existing.MergeFrom(incoming));
     }
+
+    [TestMethod]
+    public void Equals_SameContentInDifferentListInstances_IsEqual()
+    {
+        Geocache Build() => CreateCache() with
+        {
+            Attributes = [new(1, true)],
+            Waypoints = [new Waypoint { Prefix = "P1", Name = "Parking" }],
+            Logs = [new GeocacheLog { Type = GeocacheLogType.Found, Text = "TFTC" }],
+            Images = [new GeocacheImage("https://example.com/a.jpg")],
+        };
+
+        var first = Build();
+        var second = Build();
+
+        Assert.AreEqual(first, second);
+        Assert.AreEqual(first.GetHashCode(), second.GetHashCode());
+    }
+
+    [TestMethod]
+    public void Equals_DifferentListContent_IsNotEqual()
+    {
+        var first = CreateCache() with { Attributes = [new(1, true)] };
+        var second = CreateCache() with { Attributes = [new(1, false)] };
+
+        Assert.AreNotEqual(first, second);
+    }
+
+    [TestMethod]
+    public void Lists_AssignedFromMutableList_AreNotAffectedByLaterChanges()
+    {
+        List<GeocacheAttribute> attributes = [new(1, true)];
+        var cache = CreateCache() with { Attributes = attributes };
+
+        attributes.Add(new(2, true));
+
+        Assert.AreEqual(1, cache.Attributes.Count);
+    }
 }
 

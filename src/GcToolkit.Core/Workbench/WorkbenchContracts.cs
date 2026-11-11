@@ -2,12 +2,6 @@ using GcToolkit.Core.Geocaches;
 
 namespace GcToolkit.Core.Workbench;
 
-/// <summary>Tells the session which caches still exist in the store, so restore can drop removed ones.</summary>
-public interface IGeocacheLookup
-{
-    bool Exists(GeocacheCode code);
-}
-
 /// <summary>Per-cache work state, implemented by the store, variables and scratchpad features.</summary>
 public interface IWorkbenchProgressProvider
 {

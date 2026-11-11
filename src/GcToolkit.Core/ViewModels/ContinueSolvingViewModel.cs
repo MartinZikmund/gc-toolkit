@@ -22,6 +22,7 @@ public partial class ContinueSolvingViewModel : ViewModelBase
     private readonly INavigationService _navigation;
     private readonly IStringLocalizer _localizer;
     private readonly TimeProvider _time;
+    private readonly SynchronizationContext? _uiContext = SynchronizationContext.Current;
     private bool _subscribed;
 
     public ContinueSolvingViewModel(
@@ -51,21 +52,27 @@ public partial class ContinueSolvingViewModel : ViewModelBase
 
     public override void ViewCreated()
     {
+        RestoredCount = _session.RestoredCount;
+        IsRestoredNoticeVisible = RestoredCount > 0;
+        Refresh();
+    }
+
+    // The provider is a singleton, so hold its event only while the view is on screen.
+    public override void ViewLoaded()
+    {
         if (!_subscribed)
         {
-            _progress.ProgressChanged += (_, _) => Refresh();
+            _progress.ProgressChanged += OnProgressChanged;
             _subscribed = true;
-            RestoredCount = _session.RestoredCount;
-            IsRestoredNoticeVisible = RestoredCount > 0;
         }
 
         Refresh();
     }
 
-    public override void OnNavigatedTo(object? parameter)
+    public override void ViewUnloaded()
     {
-        base.OnNavigatedTo(parameter);
-        Refresh();
+        _progress.ProgressChanged -= OnProgressChanged;
+        _subscribed = false;
     }
 
     [RelayCommand]
@@ -78,6 +85,17 @@ public partial class ContinueSolvingViewModel : ViewModelBase
     [RelayCommand]
     private void DismissRestoredNotice() => IsRestoredNoticeVisible = false;
 
+    private void OnProgressChanged(object? sender, EventArgs e)
+    {
+        if (_uiContext is null || SynchronizationContext.Current == _uiContext)
+        {
+            Refresh();
+            return;
+        }
+
+        _uiContext.Post(_ => Refresh(), null);
+    }
+
     private void Refresh()
     {
         var now = _time.GetUtcNow();
@@ -87,13 +105,34 @@ public partial class ContinueSolvingViewModel : ViewModelBase
             Items.Add(new ContinueSolvingItem(
                 p.Code,
                 p.Name,
-                string.Format(CultureInfo.CurrentCulture, _localizer["Workbench_VariablesProgress"].Value, p.VariablesFilled, p.VariablesTotal),
-                string.Format(CultureInfo.CurrentCulture, _localizer["Workbench_ScratchpadLines"].Value, p.ScratchpadLineCount),
+                FormatVariables(p.VariablesFilled, p.VariablesTotal),
+                FormatScratchpadLines(p.ScratchpadLineCount),
                 FormatEdited(now - p.LastEdited),
                 p.IsSolved));
         }
 
         HasItems = Items.Count > 0;
+    }
+
+    // "of 1 variable" / "z 1 proměnné" are the only singular forms in both languages.
+    private string FormatVariables(int filled, int total)
+        => string.Format(
+            CultureInfo.CurrentCulture,
+            _localizer[total == 1 ? "Workbench_VariablesProgressOne" : "Workbench_VariablesProgress"].Value,
+            filled,
+            total);
+
+    // 1 / 2–4 / 5+ covers both English and Czech.
+    private string FormatScratchpadLines(int count)
+    {
+        var key = count switch
+        {
+            1 => "Workbench_ScratchpadLinesOne",
+            >= 2 and <= 4 => "Workbench_ScratchpadLinesFew",
+            _ => "Workbench_ScratchpadLinesMany",
+        };
+
+        return Format(key, count);
     }
 
     private string FormatEdited(TimeSpan age)

@@ -7,7 +7,7 @@ namespace GcToolkit.Core.Workbench;
 
 /// <summary>
 /// Keeps the open caches in memory and saves every change to preferences. On construction it
-/// restores the previous run, silently dropping caches that no longer exist.
+/// restores the previous run; a cache missing from the store keeps its tab, so the workbench can show it as not found.
 /// </summary>
 public sealed class WorkbenchSessionService : IWorkbenchSessionService
 {
@@ -17,11 +17,11 @@ public sealed class WorkbenchSessionService : IWorkbenchSessionService
     private readonly IMessenger _messenger;
     private readonly List<GeocacheCode> _open = [];
 
-    public WorkbenchSessionService(IPreferences preferences, IGeocacheLookup lookup, IMessenger? messenger = null)
+    public WorkbenchSessionService(IPreferences preferences, IMessenger? messenger = null)
     {
         _preferences = preferences;
         _messenger = messenger ?? WeakReferenceMessenger.Default;
-        Restore(lookup);
+        Restore();
     }
 
     public IReadOnlyList<GeocacheCode> OpenCaches => _open;
@@ -82,7 +82,7 @@ public sealed class WorkbenchSessionService : IWorkbenchSessionService
         Commit();
     }
 
-    private void Restore(IGeocacheLookup lookup)
+    private void Restore()
     {
         WorkbenchSessionState? state;
         try
@@ -101,7 +101,7 @@ public sealed class WorkbenchSessionService : IWorkbenchSessionService
 
         foreach (var text in state.OpenCaches)
         {
-            if (GeocacheCode.TryParse(text, out var code) && !_open.Contains(code) && lookup.Exists(code))
+            if (GeocacheCode.TryParse(text, out var code) && !_open.Contains(code))
             {
                 _open.Add(code);
             }

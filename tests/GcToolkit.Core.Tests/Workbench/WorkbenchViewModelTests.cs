@@ -23,7 +23,6 @@ public class WorkbenchViewModelTests
     public void Setup()
         => _session = new WorkbenchSessionService(
             InMemoryPreferences.TrimmedHead(),
-            new FakeGeocacheLookup("GC1AAA", "GC2BBB"),
             _messenger);
 
     private WorkbenchViewModel Create(double width = 1200)

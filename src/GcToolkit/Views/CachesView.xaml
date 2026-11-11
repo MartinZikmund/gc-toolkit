@@ -158,9 +158,8 @@
                 AutomationProperties.AutomationId="CachesListCombo"
                 AutomationProperties.Name="{markup:Localize Key=CachesFilterList}"
                 DisplayMemberPath="Label"
-                ItemsSource="{x:Bind ViewModel.ListOptions}"
-                SelectedItem="{x:Bind ViewModel.SelectedListOption, Mode=OneWay}"
-                SelectionChanged="OnListSelectionChanged" />
+                ItemsSource="{x:Bind ViewModel.ListOptions, Mode=OneWay}"
+                SelectedItem="{x:Bind ViewModel.SelectedListOption, Mode=TwoWay}" />
 
             <ComboBox
                 x:Name="SortCombo"

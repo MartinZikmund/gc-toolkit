@@ -112,16 +112,6 @@ public sealed partial class CachesView : CachesViewBase
     private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         => ViewModel?.SetSelection([.. CacheList.SelectedItems.OfType<GeocacheSummary>()]);
 
-    // One-way binding plus this handler: the list combo is rebuilt whenever lists change, and the
-    // transient null selection that causes must not reach the view model.
-    private void OnListSelectionChanged(object sender, SelectionChangedEventArgs e)
-    {
-        if (ViewModel is not null && ListCombo.SelectedItem is FilterOption<GeocacheList?> option)
-        {
-            ViewModel.SelectedListOption = option;
-        }
-    }
-
     private void OnMoveFlyoutOpening(object? sender, object e)
     {
         MoveFlyout.Items.Clear();

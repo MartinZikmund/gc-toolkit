@@ -123,7 +123,8 @@ public partial class CachesViewModel : ViewModelBase
 
     public IReadOnlyList<FilterOption<GeocacheSort>> SortOptions { get; }
 
-    public ObservableCollection<FilterOption<GeocacheList?>> ListOptions { get; }
+    [ObservableProperty]
+    public partial IReadOnlyList<FilterOption<GeocacheList?>> ListOptions { get; set; }
 
     [ObservableProperty]
     public partial string SearchText { get; set; } = "";
@@ -190,7 +191,7 @@ public partial class CachesViewModel : ViewModelBase
 
     public bool HasSelection => SelectedItems.Count > 0;
 
-    public bool HasSelectedList => SelectedListOption.Value is not null;
+    public bool HasSelectedList => SelectedListOption?.Value is not null;
 
     /// <summary>True when nothing is stored at all, so the page should point at importing.</summary>
     public bool IsEmpty => _hasLoaded && TotalCount == 0 && !HasActiveFilters;
@@ -210,7 +211,7 @@ public partial class CachesViewModel : ViewModelBase
             || SolvedOption.Value is not null
             || FoundOption.Value is not null
             || CorrectedOption.Value is not null
-            || SelectedListOption.Value is not null;
+            || SelectedListOption?.Value is not null;
 
     public string CountText => string.Format(CultureInfo.CurrentCulture, _localizer["CachesCount"].Value, TotalCount);
 
@@ -320,7 +321,7 @@ public partial class CachesViewModel : ViewModelBase
         await _store.AddToListAsync(target.Id, codes);
 
         // Moving out of the list being viewed; from "All caches" it is just an add.
-        if (SelectedListOption.Value is { } current && current.Id != target.Id)
+        if (SelectedListOption?.Value is { } current && current.Id != target.Id)
         {
             await _store.RemoveFromListAsync(current.Id, codes);
         }
@@ -353,7 +354,7 @@ public partial class CachesViewModel : ViewModelBase
     [RelayCommand(CanExecute = nameof(HasSelectedList))]
     private async Task RenameListAsync()
     {
-        if (SelectedListOption.Value is not { } list)
+        if (SelectedListOption?.Value is not { } list)
         {
             return;
         }
@@ -379,7 +380,7 @@ public partial class CachesViewModel : ViewModelBase
     [RelayCommand(CanExecute = nameof(HasSelectedList))]
     private async Task DeleteListAsync()
     {
-        if (SelectedListOption.Value is not { } list)
+        if (SelectedListOption?.Value is not { } list)
         {
             return;
         }
@@ -522,7 +523,7 @@ public partial class CachesViewModel : ViewModelBase
     private async Task LoadListsAsync()
     {
         var lists = await _store.GetListsAsync();
-        var selectedId = SelectedListOption.Value?.Id;
+        var selectedId = SelectedListOption?.Value?.Id;
 
         Lists.Clear();
         foreach (var list in lists)
@@ -531,14 +532,13 @@ public partial class CachesViewModel : ViewModelBase
         }
 
         _suppressReload = true;
-        ListOptions.Clear();
-        ListOptions.Add(AllLists());
-        foreach (var list in lists)
-        {
-            ListOptions.Add(new($"{list.Name} ({list.Count})", list));
-        }
 
-        SelectedListOption = ListOptions.FirstOrDefault(o => o.Value?.Id == selectedId) ?? ListOptions[0];
+        // A fresh collection rather than editing in place: a ComboBox bound to an edited collection
+        // keeps its selection but renders an empty box.
+        List<FilterOption<GeocacheList?>> options = [AllLists()];
+        options.AddRange(lists.Select(l => new FilterOption<GeocacheList?>($"{l.Name} ({l.Count})", l)));
+        ListOptions = options;
+        SelectedListOption = options.FirstOrDefault(o => o.Value?.Id == selectedId) ?? options[0];
         _suppressReload = false;
     }
 
@@ -569,7 +569,7 @@ public partial class CachesViewModel : ViewModelBase
         IsSolved = SolvedOption.Value,
         IsFound = FoundOption.Value,
         HasCorrectedCoordinate = CorrectedOption.Value,
-        ListId = SelectedListOption.Value?.Id,
+        ListId = SelectedListOption?.Value?.Id,
         Sort = SelectedSortOption.Value,
         Descending = IsDescending,
         Skip = skip,
@@ -653,8 +653,14 @@ public partial class CachesViewModel : ViewModelBase
 
     partial void OnIsDescendingChanged(bool value) => QueueReload();
 
+    // A two-way bound ComboBox briefly writes null while its options are rebuilt; that is not a choice.
     partial void OnSelectedListOptionChanged(FilterOption<GeocacheList?> value)
     {
+        if (value is null)
+        {
+            return;
+        }
+
         OnPropertyChanged(nameof(HasSelectedList));
         RenameListCommand.NotifyCanExecuteChanged();
         DeleteListCommand.NotifyCanExecuteChanged();

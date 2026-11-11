@@ -21,7 +21,7 @@ namespace GcToolkit.Core.ViewModels.Tools;
 [Tool("CaesarCipher", ToolCategory.Ciphers,
       Introduced = "2026-06-01", Updated = "2026-06-01",
       Keywords = ["caesar", "rot13", "rot5", "rot47", "shift", "rotation", "cipher", "posun", "šifra", "rot"])]
-public sealed partial class CaesarCipherViewModel : ToolViewModelBase
+public sealed partial class CaesarCipherViewModel : ToolViewModelBase, IToolStateful
 {
     private readonly CaesarCipher _cipher = new();
     private readonly IClipboardService _clipboard;
@@ -209,4 +209,25 @@ public sealed partial class CaesarCipherViewModel : ToolViewModelBase
 
     [RelayCommand]
     private void Clear() => InputText = string.Empty;
+
+    public ToolInputState CaptureState()
+    {
+        ToolInputState state = new();
+        state.Set(nameof(ModeIndex), ModeIndex);
+        state.Set(nameof(DirectionIndex), DirectionIndex);
+        state.Set(nameof(Shift), Shift);
+        state.Set(nameof(ShowAllShifts), ShowAllShifts);
+        state.Set(nameof(InputText), InputText);
+        return state;
+    }
+
+    public void RestoreState(ToolInputState state)
+    {
+        // The alphabet first: switching it resets the shift to that alphabet's default.
+        ModeIndex = Math.Clamp(state.GetInt(nameof(ModeIndex), ModeIndex), 0, 2);
+        DirectionIndex = Math.Clamp(state.GetInt(nameof(DirectionIndex), DirectionIndex), 0, 1);
+        Shift = Math.Clamp(state.GetInt(nameof(Shift), Shift), 0, MaxShift);
+        ShowAllShifts = state.GetBool(nameof(ShowAllShifts), ShowAllShifts);
+        InputText = state.GetString(nameof(InputText), InputText);
+    }
 }

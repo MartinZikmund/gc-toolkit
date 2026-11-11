@@ -25,7 +25,7 @@ namespace GcToolkit.Core.ViewModels.Tools;
       Introduced = "2026-02-10", Updated = "2026-06-06",
       Keywords = ["vigenère", "vigenere", "key", "keyword", "polyalphabetic", "cipher", "solve", "break",
                   "klíč", "klic", "šifra", "sifra", "heslo"])]
-public sealed partial class VigenereCipherViewModel : ToolViewModelBase
+public sealed partial class VigenereCipherViewModel : ToolViewModelBase, IToolStateful
 {
     private const int DefaultMaxKeyLength = 12;
     private const int TopCandidateCount = 8;
@@ -378,5 +378,28 @@ public sealed partial class VigenereCipherViewModel : ToolViewModelBase
         KeyText = string.Empty;
         _suppressRecompute = false;
         _debouncer.RunNow(Recompute);
+    }
+
+    public ToolInputState CaptureState()
+    {
+        ToolInputState state = new();
+        state.Set(nameof(DirectionIndex), DirectionIndex);
+        state.Set(nameof(KeyText), KeyText);
+        state.Set(nameof(LanguageIndex), LanguageIndex);
+        state.Set(nameof(MinKeyLength), MinKeyLength);
+        state.Set(nameof(MaxKeyLength), MaxKeyLength);
+        state.Set(nameof(InputText), InputText);
+        return state;
+    }
+
+    // Direction first: switching between the keyed directions carries the current output into the input.
+    public void RestoreState(ToolInputState state)
+    {
+        DirectionIndex = Math.Clamp(state.GetInt(nameof(DirectionIndex), DirectionIndex), 0, 2);
+        KeyText = state.GetString(nameof(KeyText), KeyText);
+        LanguageIndex = Math.Clamp(state.GetInt(nameof(LanguageIndex), LanguageIndex), 0, Languages.Count - 1);
+        MinKeyLength = state.GetInt(nameof(MinKeyLength), MinKeyLength);
+        MaxKeyLength = state.GetInt(nameof(MaxKeyLength), MaxKeyLength);
+        InputText = state.GetString(nameof(InputText), InputText);
     }
 }

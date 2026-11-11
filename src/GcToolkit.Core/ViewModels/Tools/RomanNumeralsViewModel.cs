@@ -21,7 +21,7 @@ namespace GcToolkit.Core.ViewModels.Tools;
 [Tool("RomanNumerals", ToolCategory.Numbers,
       Introduced = "2026-06-01", Updated = "2026-06-01",
       Keywords = ["roman", "numeral", "číslice", "římské", "latin", "vinculum", "I", "V", "X"])]
-public sealed partial class RomanNumeralsViewModel : ToolViewModelBase
+public sealed partial class RomanNumeralsViewModel : ToolViewModelBase, IToolStateful
 {
     private const string InvalidToken = "?";
 
@@ -228,4 +228,19 @@ public sealed partial class RomanNumeralsViewModel : ToolViewModelBase
 
     [RelayCommand]
     private void Clear() => InputText = string.Empty;
+
+    public ToolInputState CaptureState()
+    {
+        ToolInputState state = new();
+        state.Set(nameof(DirectionIndex), DirectionIndex);
+        state.Set(nameof(InputText), InputText);
+        return state;
+    }
+
+    // Direction first: switching it carries the current output into the input.
+    public void RestoreState(ToolInputState state)
+    {
+        DirectionIndex = Math.Clamp(state.GetInt(nameof(DirectionIndex), DirectionIndex), 0, 1);
+        InputText = state.GetString(nameof(InputText), InputText);
+    }
 }

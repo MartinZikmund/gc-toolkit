@@ -27,7 +27,7 @@ namespace GcToolkit.Core.ViewModels.Tools;
       Keywords = ["word", "value", "digital", "root", "sum", "letters", "cross sum", "checksum",
                   "scrabble", "vanity", "keypad", "method",
                   "hodnota", "slova", "ciferný", "kořen", "součet", "písmena"])]
-public sealed partial class WordValueViewModel : ToolViewModelBase
+public sealed partial class WordValueViewModel : ToolViewModelBase, IToolStateful
 {
     private readonly WordValueCalculator _calculator = new();
     private readonly UiDebouncer _debouncer = new(TimeSpan.FromMilliseconds(200));
@@ -284,5 +284,29 @@ public sealed partial class WordValueViewModel : ToolViewModelBase
         CountSeparateWords = false;
         _suppressRecompute = false;
         _debouncer.RunNow(Recompute);
+    }
+
+    public ToolInputState CaptureState()
+    {
+        ToolInputState state = new();
+        state.Set(nameof(SelectedMethod), SelectedMethod);
+        state.Set(nameof(CountNumbers), CountNumbers);
+        state.Set(nameof(NumberModeIndex), NumberModeIndex);
+        state.Set(nameof(RemoveDiacritics), RemoveDiacritics);
+        state.Set(nameof(ShowCalculation), ShowCalculation);
+        state.Set(nameof(CountSeparateWords), CountSeparateWords);
+        state.Set(nameof(InputText), InputText);
+        return state;
+    }
+
+    public void RestoreState(ToolInputState state)
+    {
+        SelectedMethod = state.GetEnum(nameof(SelectedMethod), SelectedMethod);
+        CountNumbers = state.GetBool(nameof(CountNumbers), CountNumbers);
+        NumberModeIndex = Math.Clamp(state.GetInt(nameof(NumberModeIndex), NumberModeIndex), 0, 1);
+        RemoveDiacritics = state.GetBool(nameof(RemoveDiacritics), RemoveDiacritics);
+        ShowCalculation = state.GetBool(nameof(ShowCalculation), ShowCalculation);
+        CountSeparateWords = state.GetBool(nameof(CountSeparateWords), CountSeparateWords);
+        InputText = state.GetString(nameof(InputText), InputText);
     }
 }

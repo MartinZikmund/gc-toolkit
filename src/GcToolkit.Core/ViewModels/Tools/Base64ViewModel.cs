@@ -22,7 +22,7 @@ namespace GcToolkit.Core.ViewModels.Tools;
 [Tool("Base64", ToolCategory.Numbers,
       Introduced = "2026-09-03", Updated = "2026-09-03",
       Keywords = ["base64", "base 64", "encode", "decode", "encoder", "decoder", "encoding", "rfc 4648", "kódování", "zakódovat", "dekódovat", "dekodér", "převod textu"])]
-public sealed partial class Base64ViewModel : ToolViewModelBase
+public sealed partial class Base64ViewModel : ToolViewModelBase, IToolStateful
 {
     private const int AutoDirection = 0;
     private const int EncodeDirection = 1;
@@ -231,4 +231,20 @@ public sealed partial class Base64ViewModel : ToolViewModelBase
 
     [RelayCommand]
     private void Clear() => InputText = string.Empty;
+
+    public ToolInputState CaptureState()
+    {
+        ToolInputState state = new();
+        state.Set(nameof(DirectionIndex), DirectionIndex);
+        state.Set(nameof(IncludePadding), IncludePadding);
+        state.Set(nameof(InputText), InputText);
+        return state;
+    }
+
+    public void RestoreState(ToolInputState state)
+    {
+        DirectionIndex = Math.Clamp(state.GetInt(nameof(DirectionIndex), DirectionIndex), AutoDirection, DecodeDirection);
+        IncludePadding = state.GetBool(nameof(IncludePadding), IncludePadding);
+        InputText = state.GetString(nameof(InputText), InputText);
+    }
 }

@@ -58,6 +58,12 @@ public sealed partial class WindowShell : Page, IWindowShell
 
         BuildToolNavigation();
         UpdateWindowTitle();
+        // SPIKE #421: temporary - swap in the map page once the shell has settled
+        Loaded += async (_, _) =>
+        {
+            await Task.Delay(2000);
+            try { InnerFrame.Content = new Views.MapSpikeView(); } catch (Exception ex) { System.IO.File.WriteAllText(System.IO.Path.Combine(System.IO.Path.GetTempPath(), "mapspike-error.txt"), ex.ToString()); }
+        };
     }
 
     public IServiceProvider ServiceProvider => _windowScope.ServiceProvider;

@@ -17,6 +17,9 @@ public class WorkbenchViewModelTests
     private readonly WeakReferenceMessenger _messenger = new();
     private readonly InMemoryScratchpadRepository _scratchpads = new();
     private readonly FakeTimeProvider _time = new();
+    private readonly PreferencesWorkbenchToolStore _toolStore = new(InMemoryPreferences.TrimmedHead());
+    private readonly FakeFavoriteToolsService _favorites = new();
+    private readonly FakeRecentsService _recents = new();
     private WorkbenchSessionService _session = null!;
 
     [TestInitialize]
@@ -38,6 +41,9 @@ public class WorkbenchViewModelTests
             _session,
             new FilteringCatalog("Caesar", "Morse", "Roman"),
             localizer,
+            _toolStore,
+            _favorites,
+            _recents,
             new ScratchpadViewModel(_scratchpads, localizer, _time),
             _messenger);
         vm.ViewCreated();
@@ -549,6 +555,198 @@ public class WorkbenchViewModelTests
 
         Assert.AreEqual(A, vm.ActiveCache!.Code);
         Assert.IsFalse(vm.ActiveCache.HasTools);
+    }
+
+    // Picker
+
+    [TestMethod]
+    public void ToolPickerResults_NoQuery_FavouritesThenRecentsFirst()
+    {
+        _ = _favorites.ToggleAsync("Roman");
+        _ = _recents.RecordOpenedAsync("Morse");
+
+        var vm = Create();
+
+        CollectionAssert.AreEqual(
+            new[] { "Roman", "Morse", "Caesar" },
+            vm.ToolPickerResults.Select(t => t.ToolId).ToArray());
+    }
+
+    [TestMethod]
+    public void ToolPickerResults_Query_KeepsTheSearchOrder()
+    {
+        _ = _favorites.ToggleAsync("Roman");
+        var vm = Create();
+
+        vm.ToolSearchQuery = "r";
+
+        CollectionAssert.AreEqual(
+            new[] { "Caesar", "Morse", "Roman" },
+            vm.ToolPickerResults.Select(t => t.ToolId).ToArray());
+    }
+
+    // Per-cache tool state
+
+    [TestMethod]
+    public void AddTool_SavesTheCachesTools()
+    {
+        _session.Open(A);
+        var vm = Create();
+
+        vm.AddTool(Pick(vm, "Caesar"));
+        vm.AddTool(Pick(vm, "Morse"));
+
+        var saved = _toolStore.Load(A)!;
+        CollectionAssert.AreEqual(new[] { "Caesar", "Morse" }, saved.Tools.Select(t => t.ToolId).ToArray());
+        Assert.AreEqual(1, saved.SelectedIndex);
+    }
+
+    [TestMethod]
+    public void SelectedTool_Changed_SavesTheSelection()
+    {
+        _session.Open(A);
+        var vm = Create();
+        vm.AddTool(Pick(vm, "Caesar"));
+        vm.AddTool(Pick(vm, "Morse"));
+
+        vm.ActiveCache!.SelectedTool = vm.ActiveCache.Tools[0];
+
+        Assert.AreEqual(0, _toolStore.Load(A)!.SelectedIndex);
+    }
+
+    [TestMethod]
+    public void SelectedTool_ClearedWhileToolsRemain_KeepsTheSavedSelection()
+    {
+        _session.Open(A);
+        var vm = Create();
+        vm.AddTool(Pick(vm, "Caesar"));
+        vm.AddTool(Pick(vm, "Morse"));
+
+        // A tab strip rebuilding its items clears its selection for a moment.
+        vm.ActiveCache!.SelectedTool = null;
+
+        Assert.AreEqual(1, _toolStore.Load(A)!.SelectedIndex);
+    }
+
+    [TestMethod]
+    public void CloseTool_SavesTheRemainingTools()
+    {
+        _session.Open(A);
+        var vm = Create();
+        vm.AddTool(Pick(vm, "Caesar"));
+        vm.AddTool(Pick(vm, "Morse"));
+
+        vm.CloseTool(vm.ActiveCache!.Tools[0]);
+
+        CollectionAssert.AreEqual(new[] { "Morse" }, _toolStore.Load(A)!.Tools.Select(t => t.ToolId).ToArray());
+    }
+
+    [TestMethod]
+    public void CloseTool_LastOne_ForgetsTheCache()
+    {
+        _session.Open(A);
+        var vm = Create();
+        vm.AddTool(Pick(vm, "Caesar"));
+
+        vm.CloseTool(vm.ActiveCache!.Tools[0]);
+
+        Assert.IsNull(_toolStore.Load(A));
+    }
+
+    [TestMethod]
+    public void ToolInputEdited_SavesItsState()
+    {
+        _session.Open(A);
+        var vm = Create();
+        vm.AddTool(Pick(vm, "Caesar"));
+        FakeStatefulTool tool = new();
+        vm.ActiveCache!.SelectedTool!.Attach(tool);
+
+        tool.Text = "Uryyb";
+
+        Assert.AreEqual("Uryyb", _toolStore.Load(A)!.Tools[0].Inputs!["text"]);
+    }
+
+    [TestMethod]
+    public void ToolInputEdited_AfterTheToolWasClosed_IsNotSaved()
+    {
+        _session.Open(A);
+        var vm = Create();
+        vm.AddTool(Pick(vm, "Caesar"));
+        var tab = vm.ActiveCache!.SelectedTool!;
+        FakeStatefulTool tool = new();
+        tab.Attach(tool);
+        vm.CloseTool(tab);
+
+        tool.Text = "late";
+
+        Assert.IsNull(_toolStore.Load(A));
+    }
+
+    [TestMethod]
+    public void Relaunch_RestoresToolsSelectionAndInputs()
+    {
+        _session.Open(A);
+        var first = Create();
+        first.AddTool(Pick(first, "Caesar"));
+        first.AddTool(Pick(first, "Morse"));
+        FakeStatefulTool typed = new();
+        first.ActiveCache!.Tools[0].Attach(typed);
+        typed.Text = "Uryyb";
+        first.ActiveCache.SelectedTool = first.ActiveCache.Tools[0];
+
+        var second = Create();
+
+        var cache = second.ActiveCache!;
+        CollectionAssert.AreEqual(new[] { "Caesar", "Morse" }, cache.Tools.Select(t => t.ToolId).ToArray());
+        Assert.AreEqual("Caesar cipher", cache.Tools[0].Name);
+        Assert.AreSame(cache.Tools[0], cache.SelectedTool);
+        FakeStatefulTool restored = new();
+        cache.Tools[0].Attach(restored);
+        Assert.AreEqual("Uryyb", restored.Text);
+    }
+
+    [TestMethod]
+    public void Restore_ToolNoLongerInTheCatalog_IsSkipped()
+    {
+        _toolStore.Save(A, new WorkbenchToolsState(
+            [new WorkbenchToolState("Gone", null), new WorkbenchToolState("Morse", null)],
+            SelectedIndex: 0));
+        _session.Open(A);
+
+        var vm = Create();
+
+        CollectionAssert.AreEqual(new[] { "Morse" }, vm.ActiveCache!.Tools.Select(t => t.ToolId).ToArray());
+        Assert.AreEqual("Morse", vm.ActiveCache.SelectedTool!.ToolId);
+    }
+
+    [TestMethod]
+    public void Restore_IsPerCache()
+    {
+        _session.Open(A);
+        _session.Open(B);
+        var first = Create();
+        first.AddTool(Pick(first, "Morse"));
+        first.ActiveCache = first.OpenCaches[0];
+        first.AddTool(Pick(first, "Roman"));
+
+        var second = Create();
+
+        Assert.AreEqual("Roman", second.OpenCaches[0].Tools.Single().ToolId);
+        Assert.AreEqual("Morse", second.OpenCaches[1].Tools.Single().ToolId);
+    }
+
+    [TestMethod]
+    public void CacheClosedAndReopened_RestoresItsTools()
+    {
+        _session.Open(A);
+        var vm = Create();
+        vm.AddTool(Pick(vm, "Morse"));
+
+        vm.CloseCache(vm.ActiveCache!);
+        _session.Open(A);
+
+        Assert.AreEqual("Morse", vm.ActiveCache!.Tools.Single().ToolId);
     }
 
     // Scratchpad

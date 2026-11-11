@@ -2,8 +2,10 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using CommunityToolkit.Mvvm.Messaging;
 using GcToolkit.Core.Catalog;
+using GcToolkit.Core.FavoriteTools;
 using GcToolkit.Core.Geocaches;
 using GcToolkit.Core.Messages;
+using GcToolkit.Core.Recents;
 using GcToolkit.Core.Workbench;
 
 namespace GcToolkit.Core.ViewModels;
@@ -43,6 +45,9 @@ public partial class WorkbenchViewModel : ViewModelBase
     private readonly IWorkbenchSessionService _session;
     private readonly ICatalogService _catalog;
     private readonly IStringLocalizer _localizer;
+    private readonly IWorkbenchToolStore _toolStore;
+    private readonly IFavoriteToolsService _favorites;
+    private readonly IRecentsService _recents;
     private readonly Dictionary<GeocacheCode, WorkbenchCacheTab> _tabs = [];
     private double _availableWidth;
     private double _requestedToolPaneWidth = WorkbenchLayout.DefaultToolPaneWidth;
@@ -54,12 +59,18 @@ public partial class WorkbenchViewModel : ViewModelBase
         IWorkbenchSessionService session,
         ICatalogService catalog,
         IStringLocalizer localizer,
+        IWorkbenchToolStore toolStore,
+        IFavoriteToolsService favorites,
+        IRecentsService recents,
         ScratchpadViewModel scratchpad,
         IMessenger? messenger = null)
     {
         _session = session;
         _catalog = catalog;
         _localizer = localizer;
+        _toolStore = toolStore;
+        _favorites = favorites;
+        _recents = recents;
         Scratchpad = scratchpad;
 
         OpenCaches.CollectionChanged += OnOpenCachesChanged;
@@ -241,6 +252,7 @@ public partial class WorkbenchViewModel : ViewModelBase
 
         var index = cache.Tools.IndexOf(tool);
         var wasSelected = cache.SelectedTool == tool;
+        tool.Detach();
         cache.Tools.RemoveAt(index);
         if (wasSelected)
         {
@@ -326,14 +338,59 @@ public partial class WorkbenchViewModel : ViewModelBase
 
     partial void OnToolSearchQueryChanged(string value) => RefreshToolPicker();
 
-    private void RefreshToolPicker()
+    /// <summary>Called by the view as the picker opens, so favourites and recents are current.</summary>
+    public void RefreshToolPicker()
     {
+        IEnumerable<ToolDescriptor> tools = _catalog.Search(ToolSearchQuery);
+        if (string.IsNullOrWhiteSpace(ToolSearchQuery))
+        {
+            // Favourites, then recents, then everything else in catalog order.
+            var pinned = _favorites.GetFavoriteToolIds().Concat(_recents.GetRecentToolIds()).Distinct().ToList();
+            tools = tools.OrderBy(t => pinned.IndexOf(t.Id) is var rank and >= 0 ? rank : int.MaxValue);
+        }
+
         ToolPickerResults.Clear();
-        foreach (var tool in _catalog.Search(ToolSearchQuery))
+        foreach (var tool in tools)
         {
             ToolPickerResults.Add(new ToolPickerItem(tool.Id, _localizer[tool.NameKey].Value, tool.IconKey, tool.ViewModelType));
         }
     }
+
+    private WorkbenchCacheTab CreateCacheTab(GeocacheCode code)
+    {
+        WorkbenchCacheTab cache = new(code);
+        if (_toolStore.Load(code) is { } saved)
+        {
+            for (var i = 0; i < saved.Tools.Count; i++)
+            {
+                var tool = saved.Tools[i];
+                if (_catalog.FindTool(tool.ToolId) is not { } descriptor)
+                {
+                    continue;
+                }
+
+                WorkbenchToolTab tab = new(
+                    descriptor.Id,
+                    _localizer[descriptor.NameKey].Value,
+                    descriptor.IconKey,
+                    descriptor.ViewModelType,
+                    tool.Inputs is null ? null : new ToolInputState(tool.Inputs));
+                cache.Tools.Add(tab);
+                if (i <= saved.SelectedIndex || cache.SelectedTool is null)
+                {
+                    cache.SelectedTool = tab;
+                }
+            }
+        }
+
+        cache.ToolsChanged += (_, _) => SaveTools(cache);
+        return cache;
+    }
+
+    private void SaveTools(WorkbenchCacheTab cache)
+        => _toolStore.Save(cache.Code, new WorkbenchToolsState(
+            [.. cache.Tools.Select(t => new WorkbenchToolState(t.ToolId, t.State is { } state ? new(state.Values) : null))],
+            cache.SelectedTool is { } selected ? cache.Tools.IndexOf(selected) : -1));
 
     private void SyncFromSession()
     {
@@ -354,7 +411,7 @@ public partial class WorkbenchViewModel : ViewModelBase
             {
                 if (!_tabs.TryGetValue(open[i], out var tab))
                 {
-                    tab = new WorkbenchCacheTab(open[i]);
+                    tab = CreateCacheTab(open[i]);
                     _tabs[open[i]] = tab;
                 }
 

@@ -80,6 +80,8 @@ public sealed partial class WorkbenchView : WorkbenchViewBase
         }
     }
 
+    private void OnToolPickerOpening(object? sender, object e) => ViewModel?.RefreshToolPicker();
+
     private void OnToolPicked(object sender, ItemClickEventArgs e)
     {
         if (e.ClickedItem is ToolPickerItem item)

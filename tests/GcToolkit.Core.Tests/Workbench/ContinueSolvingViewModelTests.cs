@@ -16,15 +16,17 @@ public class ContinueSolvingViewModelTests
     private readonly FakeWorkbenchSession _session = new();
     private readonly RecordingNavigation _navigation = new();
 
-    private static CacheProgress Progress(string code, DateTimeOffset edited, int vars = 1, bool solved = false, bool found = false)
-        => new(GeocacheCode.Parse(code), "Name " + code, vars, 4, 12, 0, edited, solved, found, false);
+    private static CacheProgress Progress(string code, DateTimeOffset edited, int vars = 1, bool solved = false, bool found = false, int lines = 12)
+        => new(GeocacheCode.Parse(code), "Name " + code, vars, 4, lines, 0, edited, solved, found, false);
 
     private ContinueSolvingViewModel Create()
     {
         FakeStringLocalizer localizer = new(new Dictionary<string, string>
         {
             ["Workbench_VariablesProgress"] = "{0} of {1} variables",
-            ["Workbench_ScratchpadLines"] = "{0} lines",
+            ["Workbench_ScratchpadLinesOne"] = "{0} line",
+            ["Workbench_ScratchpadLinesFew"] = "{0} lines (few)",
+            ["Workbench_ScratchpadLinesMany"] = "{0} lines",
             ["Workbench_EditedJustNow"] = "just now",
             ["Workbench_EditedMinutesAgo"] = "{0} min ago",
             ["Workbench_EditedHoursAgo"] = "{0} h ago",
@@ -62,6 +64,22 @@ public class ContinueSolvingViewModelTests
         Assert.AreEqual("12 lines", item.ScratchpadText);
         Assert.AreEqual("2 h ago", item.EditedText);
         Assert.IsTrue(item.IsSolved);
+    }
+
+    [TestMethod]
+    [DataRow(0, "0 lines")]
+    [DataRow(1, "1 line")]
+    [DataRow(2, "2 lines (few)")]
+    [DataRow(4, "4 lines (few)")]
+    [DataRow(5, "5 lines")]
+    public void Refresh_ScratchpadLines_PicksPluralForm(int lines, string expected)
+    {
+        _progress.Items.Add(Progress("GC1AAA", Now, lines: lines));
+        var sut = Create();
+
+        sut.ViewCreated();
+
+        Assert.AreEqual(expected, sut.Items.Single().ScratchpadText);
     }
 
     [TestMethod]

@@ -48,13 +48,13 @@ public sealed record Geocache
     /// <summary>The hint as published (usually plain text; encoding for display is a UI concern).</summary>
     public string? Hint { get; init; }
 
-    public IReadOnlyList<GeocacheAttribute> Attributes { get; init; } = [];
+    public IReadOnlyList<GeocacheAttribute> Attributes { get; init => field = EquatableList<GeocacheAttribute>.From(value); } = EquatableList<GeocacheAttribute>.Empty;
 
-    public IReadOnlyList<Waypoint> Waypoints { get; init; } = [];
+    public IReadOnlyList<Waypoint> Waypoints { get; init => field = EquatableList<Waypoint>.From(value); } = EquatableList<Waypoint>.Empty;
 
-    public IReadOnlyList<GeocacheLog> Logs { get; init; } = [];
+    public IReadOnlyList<GeocacheLog> Logs { get; init => field = EquatableList<GeocacheLog>.From(value); } = EquatableList<GeocacheLog>.Empty;
 
-    public IReadOnlyList<GeocacheImage> Images { get; init; } = [];
+    public IReadOnlyList<GeocacheImage> Images { get; init => field = EquatableList<GeocacheImage>.From(value); } = EquatableList<GeocacheImage>.Empty;
 
     /// <summary>Id of the <see cref="ICacheSource"/> that last provided this cache.</summary>
     public string? SourceId { get; init; }
@@ -119,9 +119,6 @@ public sealed record Waypoint
     public GeoCoordinate? Coordinate { get; init; }
 
     public string? Note { get; init; }
-
-    /// <summary>Private working notes; unlike <see cref="Note"/> this never syncs to geocaching.com.</summary>
-    public string? Scratchpad { get; init; }
 }
 
 public sealed partial record GeocacheLog

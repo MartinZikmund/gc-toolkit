@@ -33,7 +33,7 @@ public sealed partial class CompassViewModel : ToolViewModelBase
     private const double MinimumVectorLength = 1e-6;
 
     /// <summary>16 points, N first, one every 22.5°. Index order is what <see cref="ResolveCardinalKey"/> relies on.</summary>
-    private static readonly string[] _cardinalKeys =
+    internal static readonly string[] _cardinalKeys =
     [
         "Compass_North", "Compass_NorthNorthEast", "Compass_NorthEast", "Compass_EastNorthEast",
         "Compass_East", "Compass_EastSouthEast", "Compass_SouthEast", "Compass_SouthSouthEast",

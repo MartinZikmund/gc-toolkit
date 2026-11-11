@@ -1,6 +1,5 @@
 using System.Globalization;
 using GcToolkit.Core.Geocaches;
-using GcToolkit.Core.Infrastructure;
 
 namespace GcToolkit.Core.ViewModels;
 
@@ -18,6 +17,7 @@ public partial class ScratchpadViewModel : ViewModelBase
     private readonly ITimer _debounceTimer;
     private readonly ITimer _statusTimer;
     private readonly SemaphoreSlim _saveLock = new(1, 1);
+    private readonly SynchronizationContext? _uiContext = SynchronizationContext.Current;
     private GeocacheCode? _code;
     private string _savedText = string.Empty;
     private DateTimeOffset? _savedAt;
@@ -79,7 +79,7 @@ public partial class ScratchpadViewModel : ViewModelBase
             return;
         }
 
-        Text = Text.Length == 0 || Text.EndsWith('\n') ? Text + line : Text + "\n" + line;
+        Text = Text.Length == 0 || Text.EndsWith('\n') || Text.EndsWith('\r') ? Text + line : Text + LineBreakOf(Text) + line;
     }
 
     /// <summary>Saves any unsaved text now. Never throws; a failed save leaves the text <see cref="ScratchpadSaveState.Unsaved"/>.</summary>
@@ -90,7 +90,7 @@ public partial class ScratchpadViewModel : ViewModelBase
         await _saveLock.WaitAsync();
         try
         {
-            if (_code is not { } code || Text == _savedText)
+            if (_code is not { } code || SameIgnoringLineBreaks(Text, _savedText))
             {
                 return;
             }
@@ -112,7 +112,7 @@ public partial class ScratchpadViewModel : ViewModelBase
 
             _savedText = snapshot;
             _savedAt = _time.GetUtcNow();
-            SaveState = Text == snapshot ? ScratchpadSaveState.Saved : ScratchpadSaveState.Unsaved;
+            SaveState = SameIgnoringLineBreaks(Text, snapshot) ?ScratchpadSaveState.Saved : ScratchpadSaveState.Unsaved;
             _statusTimer.Change(_statusRefreshInterval, _statusRefreshInterval);
             UpdateStatus();
         }
@@ -154,7 +154,7 @@ public partial class ScratchpadViewModel : ViewModelBase
             return;
         }
 
-        if (value == _savedText)
+        if (SameIgnoringLineBreaks(value, _savedText))
         {
             _debounceTimer.Change(Timeout.InfiniteTimeSpan, Timeout.InfiniteTimeSpan);
             SaveState = ScratchpadSaveState.Saved;
@@ -182,21 +182,41 @@ public partial class ScratchpadViewModel : ViewModelBase
             return _localizer["Scratchpad_Saved"];
         }
 
-        var minutes = (int)(_time.GetUtcNow() - savedAt).TotalMinutes;
-        return minutes < 1
-            ? _localizer["Scratchpad_SavedJustNow"]
-            : string.Format(CultureInfo.CurrentCulture, _localizer["Scratchpad_SavedMinutesAgo"].Value, minutes);
+        var age = _time.GetUtcNow() - savedAt;
+        return age switch
+        {
+            { TotalMinutes: < 1 } => _localizer["Scratchpad_SavedJustNow"],
+            { TotalHours: < 1 } => string.Format(CultureInfo.CurrentCulture, _localizer["Scratchpad_SavedMinutesAgo"].Value, (int)age.TotalMinutes),
+            _ => string.Format(CultureInfo.CurrentCulture, _localizer["Scratchpad_SavedHoursAgo"].Value, (int)age.TotalHours),
+        };
     }
 
-    private static void RunOnUi(Action action)
+    // WinUI's TextBox turns every line break into '\r', so stored and typed text can differ only in those.
+    private static bool SameIgnoringLineBreaks(string a, string b) =>
+        a == b || NormalizeLineBreaks(a) == NormalizeLineBreaks(b);
+
+    private static string NormalizeLineBreaks(string text) => text.Replace("\r\n", "\n").Replace('\r', '\n');
+
+    private static string LineBreakOf(string text)
     {
-        var dispatcher = UiDispatcher.TryGetForCurrentThread();
-        if (dispatcher is null || dispatcher.HasThreadAccess)
+        var index = text.IndexOfAny(['\r', '\n']);
+        if (index < 0 || text[index] == '\n')
+        {
+            return "\n";
+        }
+
+        return index + 1 < text.Length && text[index + 1] == '\n' ? "\r\n" : "\r";
+    }
+
+    // Timers fire on the thread pool; bound properties must change on the thread that created the VM.
+    private void RunOnUi(Action action)
+    {
+        if (_uiContext is null || SynchronizationContext.Current == _uiContext)
         {
             action();
             return;
         }
 
-        dispatcher.TryEnqueue(() => action());
+        _uiContext.Post(_ => action(), null);
     }
 }

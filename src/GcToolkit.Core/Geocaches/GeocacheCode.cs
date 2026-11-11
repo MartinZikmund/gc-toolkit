@@ -8,9 +8,12 @@ namespace GcToolkit.Core.Geocaches;
 /// </summary>
 public readonly record struct GeocacheCode
 {
-    private GeocacheCode(string value) => Value = value;
+    private readonly string? _value;
 
-    public string Value { get; }
+    private GeocacheCode(string value) => _value = value;
+
+    /// <summary>The normalized code; empty for <c>default</c>.</summary>
+    public string Value => _value ?? string.Empty;
 
     public bool IsGeocachingCom => Value.StartsWith("GC", StringComparison.Ordinal);
 

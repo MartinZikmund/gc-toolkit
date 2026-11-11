@@ -39,4 +39,14 @@ public class GeocacheCodeTests
     [DataRow("OC1A2B", false)]
     public void IsGeocachingCom_ByPrefix(string input, bool expected)
         => Assert.AreEqual(expected, GeocacheCode.Parse(input).IsGeocachingCom);
+
+    [TestMethod]
+    public void Default_IsEmptyAndNotGeocachingCom()
+    {
+        GeocacheCode code = default;
+
+        Assert.AreEqual(string.Empty, code.Value);
+        Assert.AreEqual(string.Empty, code.ToString());
+        Assert.IsFalse(code.IsGeocachingCom);
+    }
 }

@@ -18,6 +18,9 @@ public sealed record GpxWaypoint(string Name, GeoCoordinate Coordinate)
     public string? Type { get; init; }
 
     public DateTimeOffset? Time { get; init; }
+
+    /// <summary>Set on the waypoint GC Toolkit adds for corrected coordinates, so re-importing restores the correction instead of a waypoint.</summary>
+    internal bool IsCorrectedCoordinateMarker { get; init; }
 }
 
 public sealed record GpxImportResult

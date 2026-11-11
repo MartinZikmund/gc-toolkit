@@ -1,0 +1,295 @@
+﻿<local:TriangulationViewBase
+    x:Class="GcToolkit.Views.TriangulationView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:GcToolkit.Controls"
+    xmlns:local="using:GcToolkit.Views"
+    xmlns:markup="using:GcToolkit.Markup">
+
+    <controls:ToolPage Tool="{x:Bind ViewModel}">
+        <StackPanel Spacing="16">
+
+            <!--  Point A + bearing  -->
+            <Grid ColumnSpacing="12">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*" />
+                    <ColumnDefinition Width="*" MinWidth="120" />
+                </Grid.ColumnDefinitions>
+                <TextBox
+                    Grid.Column="0"
+                    Header="{markup:Localize Key=TriangulationPointALabel}"
+                    PlaceholderText="{markup:Localize Key=TriangulationPointPlaceholder}"
+                    Text="{x:Bind ViewModel.CoordinateA, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBox
+                    Grid.Column="1"
+                    Header="{markup:Localize Key=TriangulationBearingALabel}"
+                    InputScope="Number"
+                    PlaceholderText="{markup:Localize Key=TriangulationBearingPlaceholder}"
+                    Text="{x:Bind ViewModel.BearingA, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            </Grid>
+
+            <!--  Point B + bearing  -->
+            <Grid ColumnSpacing="12">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*" />
+                    <ColumnDefinition Width="*" MinWidth="120" />
+                </Grid.ColumnDefinitions>
+                <TextBox
+                    Grid.Column="0"
+                    Header="{markup:Localize Key=TriangulationPointBLabel}"
+                    PlaceholderText="{markup:Localize Key=TriangulationPointPlaceholder}"
+                    Text="{x:Bind ViewModel.CoordinateB, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBox
+                    Grid.Column="1"
+                    Header="{markup:Localize Key=TriangulationBearingBLabel}"
+                    InputScope="Number"
+                    PlaceholderText="{markup:Localize Key=TriangulationBearingPlaceholder}"
+                    Text="{x:Bind ViewModel.BearingB, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            </Grid>
+
+            <TextBlock
+                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                Style="{ThemeResource CaptionTextBlockStyle}"
+                Text="{markup:Localize Key=TriangulationBearingHint}"
+                TextWrapping="Wrap" />
+
+            <!--  Actions  -->
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Command="{x:Bind ViewModel.LoadExampleCommand}" Content="{markup:Localize Key=TriangulationExample}" />
+                <Button Command="{x:Bind ViewModel.ClearCommand}" Content="{markup:Localize Key=TriangulationClear}" />
+            </StackPanel>
+
+            <InfoBar
+                IsClosable="False"
+                IsOpen="{x:Bind ViewModel.HasError, Mode=OneWay}"
+                Message="{x:Bind ViewModel.ErrorMessage, Mode=OneWay}"
+                Severity="Error" />
+
+            <InfoBar
+                IsClosable="False"
+                IsOpen="{x:Bind ViewModel.HasWarning, Mode=OneWay}"
+                Message="{x:Bind ViewModel.WarningMessage, Mode=OneWay}"
+                Severity="Warning" />
+
+            <!--  Result  -->
+            <Border
+                Padding="16"
+                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                BorderThickness="1"
+                CornerRadius="8"
+                Visibility="{x:Bind ViewModel.HasResult, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                <StackPanel Spacing="12">
+                    <TextBlock Style="{ThemeResource BodyStrongTextBlockStyle}" Text="{markup:Localize Key=TriangulationResultLabel}" />
+
+                    <StackPanel Spacing="2">
+                        <TextBlock
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Style="{ThemeResource CaptionTextBlockStyle}"
+                            Text="{markup:Localize Key=TriangulationFormatDdm}" />
+                        <Grid ColumnSpacing="8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBox
+                                VerticalAlignment="Center"
+                                AutomationProperties.Name="{markup:Localize Key=TriangulationFormatDdm}"
+                                FontFamily="{ThemeResource AppMonoFontFamily}"
+                                FontSize="16"
+                                IsReadOnly="True"
+                                IsSpellCheckEnabled="False"
+                                Text="{x:Bind ViewModel.DegreesDecimalMinutes, Mode=OneWay}" />
+                            <Button
+                                Grid.Column="1"
+                                Width="36"
+                                Height="36"
+                                Padding="0"
+                                AutomationProperties.Name="{markup:Localize Key=TriangulationCopy}"
+                                Command="{x:Bind ViewModel.CopyTextCommand}"
+                                CommandParameter="{x:Bind ViewModel.DegreesDecimalMinutes, Mode=OneWay}"
+                                ToolTipService.ToolTip="{markup:Localize Key=TriangulationCopy}">
+                                <FontIcon FontSize="14" Glyph="&#xE8C8;" />
+                            </Button>
+                        </Grid>
+                    </StackPanel>
+
+                    <StackPanel Spacing="2">
+                        <TextBlock
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Style="{ThemeResource CaptionTextBlockStyle}"
+                            Text="{markup:Localize Key=TriangulationFormatDd}" />
+                        <Grid ColumnSpacing="8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBox
+                                VerticalAlignment="Center"
+                                AutomationProperties.Name="{markup:Localize Key=TriangulationFormatDd}"
+                                FontFamily="{ThemeResource AppMonoFontFamily}"
+                                FontSize="16"
+                                IsReadOnly="True"
+                                IsSpellCheckEnabled="False"
+                                Text="{x:Bind ViewModel.DecimalDegrees, Mode=OneWay}" />
+                            <Button
+                                Grid.Column="1"
+                                Width="36"
+                                Height="36"
+                                Padding="0"
+                                AutomationProperties.Name="{markup:Localize Key=TriangulationCopy}"
+                                Command="{x:Bind ViewModel.CopyTextCommand}"
+                                CommandParameter="{x:Bind ViewModel.DecimalDegrees, Mode=OneWay}"
+                                ToolTipService.ToolTip="{markup:Localize Key=TriangulationCopy}">
+                                <FontIcon FontSize="14" Glyph="&#xE8C8;" />
+                            </Button>
+                        </Grid>
+                    </StackPanel>
+
+                    <StackPanel Spacing="2">
+                        <TextBlock
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Style="{ThemeResource CaptionTextBlockStyle}"
+                            Text="{markup:Localize Key=TriangulationFormatDms}" />
+                        <Grid ColumnSpacing="8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBox
+                                VerticalAlignment="Center"
+                                AutomationProperties.Name="{markup:Localize Key=TriangulationFormatDms}"
+                                FontFamily="{ThemeResource AppMonoFontFamily}"
+                                FontSize="16"
+                                IsReadOnly="True"
+                                IsSpellCheckEnabled="False"
+                                Text="{x:Bind ViewModel.DegreesMinutesSeconds, Mode=OneWay}" />
+                            <Button
+                                Grid.Column="1"
+                                Width="36"
+                                Height="36"
+                                Padding="0"
+                                AutomationProperties.Name="{markup:Localize Key=TriangulationCopy}"
+                                Command="{x:Bind ViewModel.CopyTextCommand}"
+                                CommandParameter="{x:Bind ViewModel.DegreesMinutesSeconds, Mode=OneWay}"
+                                ToolTipService.ToolTip="{markup:Localize Key=TriangulationCopy}">
+                                <FontIcon FontSize="14" Glyph="&#xE8C8;" />
+                            </Button>
+                        </Grid>
+                    </StackPanel>
+
+                    <!--  Sanity readouts  -->
+                    <TextBlock
+                        Margin="0,4,0,0"
+                        Style="{ThemeResource BodyStrongTextBlockStyle}"
+                        Text="{markup:Localize Key=TriangulationReadoutsLabel}" />
+                    <Grid ColumnSpacing="16" RowSpacing="4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <TextBlock
+                            Grid.Column="1"
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Style="{ThemeResource CaptionTextBlockStyle}"
+                            Text="{markup:Localize Key=TriangulationReadoutDistance}" />
+                        <TextBlock
+                            Grid.Column="2"
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Style="{ThemeResource CaptionTextBlockStyle}"
+                            Text="{markup:Localize Key=TriangulationReadoutBearing}" />
+
+                        <TextBlock Grid.Row="1" Text="{markup:Localize Key=TriangulationReadoutPointA}" />
+                        <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            FontFamily="{ThemeResource AppMonoFontFamily}"
+                            Text="{x:Bind ViewModel.DistanceFromA, Mode=OneWay}" />
+                        <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="2"
+                            FontFamily="{ThemeResource AppMonoFontFamily}"
+                            Text="{x:Bind ViewModel.BearingToResultFromA, Mode=OneWay}" />
+
+                        <TextBlock Grid.Row="2" Text="{markup:Localize Key=TriangulationReadoutPointB}" />
+                        <TextBlock
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            FontFamily="{ThemeResource AppMonoFontFamily}"
+                            Text="{x:Bind ViewModel.DistanceFromB, Mode=OneWay}" />
+                        <TextBlock
+                            Grid.Row="2"
+                            Grid.Column="2"
+                            FontFamily="{ThemeResource AppMonoFontFamily}"
+                            Text="{x:Bind ViewModel.BearingToResultFromB, Mode=OneWay}" />
+                    </Grid>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Style="{ThemeResource CaptionTextBlockStyle}"
+                            Text="{markup:Localize Key=TriangulationReadoutBaseline}" />
+                        <TextBlock
+                            FontFamily="{ThemeResource AppMonoFontFamily}"
+                            Style="{ThemeResource CaptionTextBlockStyle}"
+                            Text="{x:Bind ViewModel.BaselineDistance, Mode=OneWay}" />
+                    </StackPanel>
+
+                    <!--  Antipodal alternate  -->
+                    <StackPanel Spacing="2" Visibility="{x:Bind ViewModel.HasAlternate, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                        <TextBlock
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Style="{ThemeResource CaptionTextBlockStyle}"
+                            Text="{markup:Localize Key=TriangulationAlternateLabel}" />
+                        <Grid ColumnSpacing="8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBox
+                                VerticalAlignment="Center"
+                                AutomationProperties.Name="{markup:Localize Key=TriangulationAlternateLabel}"
+                                FontFamily="{ThemeResource AppMonoFontFamily}"
+                                IsReadOnly="True"
+                                IsSpellCheckEnabled="False"
+                                Text="{x:Bind ViewModel.AlternateDegreesDecimalMinutes, Mode=OneWay}" />
+                            <Button
+                                Grid.Column="1"
+                                Width="36"
+                                Height="36"
+                                Padding="0"
+                                AutomationProperties.Name="{markup:Localize Key=TriangulationCopy}"
+                                Command="{x:Bind ViewModel.CopyTextCommand}"
+                                CommandParameter="{x:Bind ViewModel.AlternateDegreesDecimalMinutes, Mode=OneWay}"
+                                ToolTipService.ToolTip="{markup:Localize Key=TriangulationCopy}">
+                                <FontIcon FontSize="14" Glyph="&#xE8C8;" />
+                            </Button>
+                        </Grid>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Button Command="{x:Bind ViewModel.CopyOutputCommand}">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <FontIcon FontSize="16" Glyph="&#xE8C8;" />
+                                <TextBlock Text="{markup:Localize Key=TriangulationCopy}" />
+                            </StackPanel>
+                        </Button>
+                        <Button Command="{x:Bind ViewModel.ShareOutputCommand}">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <FontIcon FontSize="16" Glyph="&#xE72D;" />
+                                <TextBlock Text="{markup:Localize Key=TriangulationShare}" />
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
+    </controls:ToolPage>
+</local:TriangulationViewBase>

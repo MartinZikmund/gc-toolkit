@@ -4041,4 +4041,103 @@
   <data name="Base64_Tooltip" xml:space="preserve">
     <value>Zakódujte text do Base64 a zase zpět – se zalomenými řádky i chybějící výplní si poradí.</value>
   </data>
+  <data name="Triangulation_Name" xml:space="preserve">
+    <value>Triangulace</value>
+  </data>
+  <data name="Triangulation_Tooltip" xml:space="preserve">
+    <value>Najděte bod, kde se protínají dva směry ze dvou známých bodů.</value>
+  </data>
+  <data name="TriangulationPointALabel" xml:space="preserve">
+    <value>Bod A</value>
+  </data>
+  <data name="TriangulationPointBLabel" xml:space="preserve">
+    <value>Bod B</value>
+  </data>
+  <data name="TriangulationPointPlaceholder" xml:space="preserve">
+    <value>N 49 12.345 E 016 34.567</value>
+  </data>
+  <data name="TriangulationBearingALabel" xml:space="preserve">
+    <value>Azimut z A (°)</value>
+  </data>
+  <data name="TriangulationBearingBLabel" xml:space="preserve">
+    <value>Azimut z B (°)</value>
+  </data>
+  <data name="TriangulationBearingPlaceholder" xml:space="preserve">
+    <value>0–360, k severu zeměpisnému</value>
+  </data>
+  <data name="TriangulationBearingHint" xml:space="preserve">
+    <value>Azimut se měří po směru hodinových ručiček od zeměpisného severu. Kompas ukazuje magnetický sever: nejdřív opravte deklinaci.</value>
+  </data>
+  <data name="TriangulationResultLabel" xml:space="preserve">
+    <value>Průsečík</value>
+  </data>
+  <data name="TriangulationFormatDdm" xml:space="preserve">
+    <value>Stupně a desetinné minuty</value>
+  </data>
+  <data name="TriangulationFormatDd" xml:space="preserve">
+    <value>Desetinné stupně</value>
+  </data>
+  <data name="TriangulationFormatDms" xml:space="preserve">
+    <value>Stupně, minuty, vteřiny</value>
+  </data>
+  <data name="TriangulationAlternateLabel" xml:space="preserve">
+    <value>Druhé řešení (na opačné straně Země)</value>
+  </data>
+  <data name="TriangulationReadoutsLabel" xml:space="preserve">
+    <value>Kontrola</value>
+  </data>
+  <data name="TriangulationReadoutPointA" xml:space="preserve">
+    <value>Z bodu A</value>
+  </data>
+  <data name="TriangulationReadoutPointB" xml:space="preserve">
+    <value>Z bodu B</value>
+  </data>
+  <data name="TriangulationReadoutDistance" xml:space="preserve">
+    <value>Vzdálenost</value>
+  </data>
+  <data name="TriangulationReadoutBearing" xml:space="preserve">
+    <value>Azimut</value>
+  </data>
+  <data name="TriangulationReadoutBaseline" xml:space="preserve">
+    <value>Vzdálenost mezi A a B</value>
+  </data>
+  <data name="TriangulationCopy" xml:space="preserve">
+    <value>Kopírovat</value>
+  </data>
+  <data name="TriangulationShare" xml:space="preserve">
+    <value>Sdílet</value>
+  </data>
+  <data name="TriangulationExample" xml:space="preserve">
+    <value>Příklad</value>
+  </data>
+  <data name="TriangulationClear" xml:space="preserve">
+    <value>Vymazat</value>
+  </data>
+  <data name="TriangulationErrorPointA" xml:space="preserve">
+    <value>Zadejte platnou souřadnici bodu A.</value>
+  </data>
+  <data name="TriangulationErrorPointB" xml:space="preserve">
+    <value>Zadejte platnou souřadnici bodu B.</value>
+  </data>
+  <data name="TriangulationErrorBearingA" xml:space="preserve">
+    <value>Zadejte azimut z A jako číslo ve stupních.</value>
+  </data>
+  <data name="TriangulationErrorBearingB" xml:space="preserve">
+    <value>Zadejte azimut z B jako číslo ve stupních.</value>
+  </data>
+  <data name="TriangulationErrorCoincident" xml:space="preserve">
+    <value>Oba směry leží na jedné přímce, takže vyhovuje každý její bod. Použijte dva různé směry.</value>
+  </data>
+  <data name="TriangulationErrorIdentical" xml:space="preserve">
+    <value>Body A a B jsou na stejném místě. Použijte dva různé body.</value>
+  </data>
+  <data name="TriangulationWarnBehindA" xml:space="preserve">
+    <value>Průsečík leží za azimutem z A (v opačném směru).</value>
+  </data>
+  <data name="TriangulationWarnBehindB" xml:space="preserve">
+    <value>Průsečík leží za azimutem z B (v opačném směru).</value>
+  </data>
+  <data name="TriangulationWarnIllConditioned" xml:space="preserve">
+    <value>Azimuty jsou téměř rovnoběžné, takže drobná chyba v kterémkoli posune výsledek hodně daleko.</value>
+  </data>
 </root>

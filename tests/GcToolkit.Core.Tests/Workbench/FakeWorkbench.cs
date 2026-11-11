@@ -7,11 +7,28 @@ internal sealed class FakeProgressProvider : IWorkbenchProgressProvider
 {
     public List<CacheProgress> Items { get; } = [];
 
-    public event EventHandler? ProgressChanged;
+    private EventHandler? _progressChanged;
+
+    public event EventHandler? ProgressChanged
+    {
+        add
+        {
+            _progressChanged += value;
+            HandlerCount++;
+        }
+
+        remove
+        {
+            _progressChanged -= value;
+            HandlerCount--;
+        }
+    }
+
+    public int HandlerCount { get; private set; }
 
     public IReadOnlyList<CacheProgress> GetProgress() => Items;
 
-    public void Raise() => ProgressChanged?.Invoke(this, EventArgs.Empty);
+    public void Raise() => _progressChanged?.Invoke(this, EventArgs.Empty);
 }
 
 internal sealed class FakeWorkbenchSession : IWorkbenchSessionService

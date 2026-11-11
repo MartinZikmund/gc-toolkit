@@ -80,16 +80,70 @@ public class ContinueSolvingViewModelTests
     }
 
     [TestMethod]
-    public void ProgressChanged_RefreshesList()
+    public void ProgressChanged_WhileLoaded_RefreshesList()
     {
         var sut = Create();
         sut.ViewCreated();
+        sut.ViewLoaded();
         Assert.IsFalse(sut.HasItems);
 
         _progress.Items.Add(Progress("GC1AAA", Now));
         _progress.Raise();
 
         Assert.IsTrue(sut.HasItems);
+    }
+
+    [TestMethod]
+    public void ViewUnloaded_UnsubscribesFromProgress()
+    {
+        var sut = Create();
+        sut.ViewCreated();
+        sut.ViewLoaded();
+
+        sut.ViewUnloaded();
+
+        Assert.AreEqual(0, _progress.HandlerCount);
+    }
+
+    [TestMethod]
+    public void ViewLoaded_AgainAfterUnload_SubscribesOnce()
+    {
+        var sut = Create();
+        sut.ViewCreated();
+        sut.ViewLoaded();
+        sut.ViewUnloaded();
+
+        sut.ViewLoaded();
+        sut.ViewLoaded();
+
+        Assert.AreEqual(1, _progress.HandlerCount);
+    }
+
+    [TestMethod]
+    public void ProgressChanged_FromBackgroundThread_RefreshesOnUiContext()
+    {
+        RecordingSynchronizationContext ui = new();
+        var previous = SynchronizationContext.Current;
+        SynchronizationContext.SetSynchronizationContext(ui);
+        try
+        {
+            var sut = Create();
+            sut.ViewCreated();
+            sut.ViewLoaded();
+            _progress.Items.Add(Progress("GC1AAA", Now));
+
+            Thread worker = new(_progress.Raise);
+            worker.Start();
+            worker.Join();
+
+            Assert.IsFalse(sut.HasItems);
+            ui.RunPosted();
+            Assert.IsTrue(sut.HasItems);
+        }
+        finally
+        {
+            SynchronizationContext.SetSynchronizationContext(previous);
+        }
     }
 
     [TestMethod]

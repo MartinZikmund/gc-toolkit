@@ -268,6 +268,21 @@ public class GpxImporterTests
     }
 
     [TestMethod]
+    public async Task Import_Gpx11MetadataTime_SetsUpdatedAt()
+    {
+        const string xml = """
+            <gpx version="1.1" xmlns="http://www.topografix.com/GPX/1/1" xmlns:groundspeak="http://www.groundspeak.com/cache/1/0/1">
+              <metadata><name>Export</name><time>2025-05-05T05:05:05Z</time></metadata>
+              <wpt lat="50.0" lon="14.0"><name>GC1AAAA</name><groundspeak:cache><groundspeak:name>Test</groundspeak:name></groundspeak:cache></wpt>
+            </gpx>
+            """;
+
+        var result = await _importer.ImportAsync(Utf8(xml), "app.gpx");
+
+        Assert.AreEqual(new DateTimeOffset(2025, 5, 5, 5, 5, 5, TimeSpan.Zero), Cache(result, "GC1AAAA").UpdatedAt);
+    }
+
+    [TestMethod]
     public async Task Import_RootIsNotGpx_ReportsNotGpx()
     {
         var result = await _importer.ImportAsync(Utf8("<kml />"), "map.kml");

@@ -4041,4 +4041,91 @@
   <data name="Base64_Tooltip" xml:space="preserve">
     <value>Zakódujte text do Base64 a zase zpět – se zalomenými řádky i chybějící výplní si poradí.</value>
   </data>
+  <data name="Workbench_VariablesProgress" xml:space="preserve">
+    <value>{0} z {1} proměnných</value>
+  </data>
+  <data name="Workbench_VariablesProgressOne" xml:space="preserve">
+    <value>{0} z {1} proměnné</value>
+  </data>
+  <data name="Workbench_ScratchpadLinesOne" xml:space="preserve">
+    <value>{0} řádek poznámek</value>
+  </data>
+  <data name="Workbench_ScratchpadLinesFew" xml:space="preserve">
+    <value>{0} řádky poznámek</value>
+  </data>
+  <data name="Workbench_ScratchpadLinesMany" xml:space="preserve">
+    <value>{0} řádků poznámek</value>
+  </data>
+  <data name="Workbench_EditedJustNow" xml:space="preserve">
+    <value>Upraveno právě teď</value>
+  </data>
+  <data name="Workbench_EditedMinutesAgo" xml:space="preserve">
+    <value>Upraveno před {0} min</value>
+  </data>
+  <data name="Workbench_EditedHoursAgo" xml:space="preserve">
+    <value>Upraveno před {0} h</value>
+  </data>
+  <data name="Workbench_EditedYesterday" xml:space="preserve">
+    <value>Upraveno včera</value>
+  </data>
+  <data name="Workbench_EditedDaysAgo" xml:space="preserve">
+    <value>Upraveno před {0} dny</value>
+  </data>
+  <data name="Workbench_ContinueSolving" xml:space="preserve">
+    <value>Pokračovat v luštění</value>
+  </data>
+  <data name="Workbench_Resume" xml:space="preserve">
+    <value>Pokračovat</value>
+  </data>
+  <data name="Workbench_SessionRestored" xml:space="preserve">
+    <value>Znovu otevřeny keše z minulé relace.</value>
+  </data>
+  <data name="Scratchpad_Saved" xml:space="preserve">
+    <value>Uloženo</value>
+  </data>
+  <data name="Scratchpad_SavedJustNow" xml:space="preserve">
+    <value>Uloženo právě teď</value>
+  </data>
+  <data name="Scratchpad_SavedMinutesAgo" xml:space="preserve">
+    <value>Uloženo před {0} min</value>
+  </data>
+  <data name="Scratchpad_SavedHoursAgo" xml:space="preserve">
+    <value>Uloženo před {0} h</value>
+  </data>
+  <data name="Scratchpad_Saving" xml:space="preserve">
+    <value>Ukládání…</value>
+  </data>
+  <data name="Scratchpad_Unsaved" xml:space="preserve">
+    <value>Neuložené změny</value>
+  </data>
+  <data name="GpxImport_MissingCoordinates" xml:space="preserve">
+    <value>{0}: přeskočeno, souřadnice chybí nebo jsou neplatné.</value>
+  </data>
+  <data name="GpxImport_InvalidCacheCode" xml:space="preserve">
+    <value>{0}: přeskočeno, keš nemá platný kód.</value>
+  </data>
+  <data name="GpxImport_UnknownCacheType" xml:space="preserve">
+    <value>{0}: neznámý typ keše „{1}“.</value>
+  </data>
+  <data name="GpxImport_UnknownContainerSize" xml:space="preserve">
+    <value>{0}: neznámá velikost schránky „{1}“.</value>
+  </data>
+  <data name="GpxImport_UnknownLogType" xml:space="preserve">
+    <value>{0}: neznámý typ logu „{1}“.</value>
+  </data>
+  <data name="GpxImport_DuplicateCache" xml:space="preserve">
+    <value>{0} je v importu vícekrát; použila se poslední kopie.</value>
+  </data>
+  <data name="GpxImport_NotGpx" xml:space="preserve">
+    <value>{0} není soubor GPX.</value>
+  </data>
+  <data name="GpxImport_InvalidXml" xml:space="preserve">
+    <value>{0} je poškozený ({1}). Vše před chybou se naimportovalo.</value>
+  </data>
+  <data name="GpxImport_DamagedZip" xml:space="preserve">
+    <value>Archiv ZIP {0} je poškozený ({1}).</value>
+  </data>
+  <data name="GpxImport_NoGpxInZip" xml:space="preserve">
+    <value>Archiv ZIP {0} neobsahuje žádné soubory GPX.</value>
+  </data>
 </root>

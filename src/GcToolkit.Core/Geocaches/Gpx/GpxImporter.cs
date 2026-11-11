@@ -68,7 +68,7 @@ public sealed class GpxImporter : ICacheSource
         {
             if (indexByCode.TryGetValue(cache.Code, out var index))
             {
-                warnings.Add(new(cache.Code.Value, "Appears more than once in this import; the last copy was used."));
+                warnings.Add(new(cache.Code.Value, GpxImportIssueKind.DuplicateCache));
                 caches[index] = cache;
             }
             else
@@ -212,13 +212,13 @@ public sealed class GpxImporter : ICacheSource
         }
         catch (InvalidDataException ex)
         {
-            errors.Add(new(label, $"The ZIP archive is damaged ({ex.Message})."));
+            errors.Add(new(label, GpxImportIssueKind.DamagedZip, ex.Message));
             yield break;
         }
 
         if (entries.Count == 0)
         {
-            errors.Add(new(label, "The ZIP archive contains no GPX files."));
+            errors.Add(new(label, GpxImportIssueKind.NoGpxInZip));
         }
 
         foreach (var entry in entries)

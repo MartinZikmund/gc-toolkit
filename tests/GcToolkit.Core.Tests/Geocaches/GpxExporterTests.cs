@@ -87,7 +87,7 @@ public class GpxExporterTests
         stream.Position = 0;
         var result = await _importer.ImportAsync(stream, "roundtrip.gpx");
         Assert.AreEqual(0, result.Errors.Count);
-        Assert.AreEqual(0, result.Warnings.Count, string.Join("; ", result.Warnings.Select(w => w.Message)));
+        Assert.AreEqual(0, result.Warnings.Count, string.Join("; ", result.Warnings.Select(w => $"{w.Subject}: {w.Kind} {w.Detail}")));
         Assert.AreEqual(0, result.PlainWaypoints.Count);
         return result.Caches;
     }

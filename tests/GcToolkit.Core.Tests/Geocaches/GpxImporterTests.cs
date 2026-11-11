@@ -127,7 +127,7 @@ public class GpxImporterTests
 
         Assert.AreEqual(3, result.Caches.Count);
         Assert.AreEqual(0, result.PlainWaypoints.Count);
-        Assert.IsTrue(result.Warnings.Any(w => w.Subject == "GCBADBAD"));
+        Assert.IsTrue(result.Warnings.Any(w => w.Subject == "GCBADBAD" && w.Kind == GpxImportIssueKind.MissingCoordinates));
     }
 
     [TestMethod]
@@ -261,7 +261,33 @@ public class GpxImporterTests
         var cache = Cache(result, "GC4NEW1");
         Assert.AreEqual(GeocacheType.Unknown, cache.Type);
         Assert.AreEqual(GeocacheSize.Unknown, cache.Size);
-        Assert.AreEqual(2, result.Warnings.Count(w => w.Subject == "GC4NEW1"));
+        var warnings = result.Warnings.Where(w => w.Subject == "GC4NEW1").ToList();
+        Assert.AreEqual(2, warnings.Count);
+        Assert.IsTrue(warnings.Any(w => w.Kind == GpxImportIssueKind.UnknownCacheType && !string.IsNullOrEmpty(w.Detail)));
+        Assert.IsTrue(warnings.Any(w => w.Kind == GpxImportIssueKind.UnknownContainerSize && !string.IsNullOrEmpty(w.Detail)));
+    }
+
+    [TestMethod]
+    public async Task Import_Gpx11MetadataTime_SetsUpdatedAt()
+    {
+        const string xml = """
+            <gpx version="1.1" xmlns="http://www.topografix.com/GPX/1/1" xmlns:groundspeak="http://www.groundspeak.com/cache/1/0/1">
+              <metadata><name>Export</name><time>2025-05-05T05:05:05Z</time></metadata>
+              <wpt lat="50.0" lon="14.0"><name>GC1AAAA</name><groundspeak:cache><groundspeak:name>Test</groundspeak:name></groundspeak:cache></wpt>
+            </gpx>
+            """;
+
+        var result = await _importer.ImportAsync(Utf8(xml), "app.gpx");
+
+        Assert.AreEqual(new DateTimeOffset(2025, 5, 5, 5, 5, 5, TimeSpan.Zero), Cache(result, "GC1AAAA").UpdatedAt);
+    }
+
+    [TestMethod]
+    public async Task Import_RootIsNotGpx_ReportsNotGpx()
+    {
+        var result = await _importer.ImportAsync(Utf8("<kml />"), "map.kml");
+
+        Assert.AreEqual(GpxImportIssueKind.NotGpx, result.Errors.Single().Kind);
     }
 
     [TestMethod]
@@ -292,7 +318,7 @@ public class GpxImporterTests
 
         Assert.AreEqual(3, result.Caches.Count);
         Assert.IsNotNull(Cache(result, "GC8KX2Q").UserData.CorrectedCoordinate);
-        Assert.IsTrue(result.Warnings.Any(w => w.Subject == "GC8KX2Q"));
+        Assert.IsTrue(result.Warnings.Any(w => w.Subject == "GC8KX2Q" && w.Kind == GpxImportIssueKind.DuplicateCache));
     }
 
     [TestMethod]
@@ -305,6 +331,7 @@ public class GpxImporterTests
 
         Assert.IsNotNull(Cache(result, "GC8KX2Q"));
         Assert.AreEqual("broken.gpx", result.Errors.Single().Subject);
+        Assert.AreEqual(GpxImportIssueKind.InvalidXml, result.Errors.Single().Kind);
     }
 
     [TestMethod]
@@ -314,6 +341,7 @@ public class GpxImporterTests
 
         Assert.AreEqual(0, result.Caches.Count);
         Assert.AreEqual("notes.txt", result.Errors.Single().Subject);
+        Assert.AreEqual(GpxImportIssueKind.InvalidXml, result.Errors.Single().Kind);
     }
 
     [TestMethod]
@@ -324,7 +352,7 @@ public class GpxImporterTests
         var result = await _importer.ImportAsync(Utf8(xml), "evil.gpx");
 
         Assert.AreEqual(0, result.PlainWaypoints.Count);
-        Assert.AreEqual(1, result.Errors.Count);
+        Assert.AreEqual(GpxImportIssueKind.InvalidXml, result.Errors.Single().Kind);
     }
 
     [TestMethod]
@@ -339,7 +367,7 @@ public class GpxImporterTests
         zip.Position = 0;
         var result = await _importer.ImportAsync(zip, "x.zip");
 
-        Assert.AreEqual(1, result.Errors.Count);
+        Assert.AreEqual(GpxImportIssueKind.NoGpxInZip, result.Errors.Single().Kind);
     }
 
     [TestMethod]

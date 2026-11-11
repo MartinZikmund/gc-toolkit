@@ -11,6 +11,21 @@ public class HiddenContentInspectorTests
     // ---- Comments ----
 
     [TestMethod]
+    [DataRow("span")]
+    [DataRow("div")]
+    [DataRow("table")]
+    [DataRow("font")]
+    public void Analyze_ExtremelyDeepNesting_DoesNotCrash(string tag)
+    {
+        const int depth = 50_000;
+        var html = string.Concat(Enumerable.Repeat($"<{tag}>", depth)) + "deep secret" + string.Concat(Enumerable.Repeat($"</{tag}>", depth));
+
+        var report = HiddenContentInspector.Analyze(html);
+
+        StringAssert.Contains(report.VisibleText, "deep secret");
+    }
+
+    [TestMethod]
     public void Analyze_HtmlComment_IsReported()
     {
         var found = Find("<p>Hi</p><!-- N 50 05.123 --><p>Bye</p>", HiddenContentKind.HtmlComment);

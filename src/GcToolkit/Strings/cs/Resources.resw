@@ -4098,4 +4098,34 @@
   <data name="Scratchpad_Unsaved" xml:space="preserve">
     <value>Neuložené změny</value>
   </data>
+  <data name="GpxImport_MissingCoordinates" xml:space="preserve">
+    <value>{0}: přeskočeno, souřadnice chybí nebo jsou neplatné.</value>
+  </data>
+  <data name="GpxImport_InvalidCacheCode" xml:space="preserve">
+    <value>{0}: přeskočeno, keš nemá platný kód.</value>
+  </data>
+  <data name="GpxImport_UnknownCacheType" xml:space="preserve">
+    <value>{0}: neznámý typ keše „{1}“.</value>
+  </data>
+  <data name="GpxImport_UnknownContainerSize" xml:space="preserve">
+    <value>{0}: neznámá velikost schránky „{1}“.</value>
+  </data>
+  <data name="GpxImport_UnknownLogType" xml:space="preserve">
+    <value>{0}: neznámý typ logu „{1}“.</value>
+  </data>
+  <data name="GpxImport_DuplicateCache" xml:space="preserve">
+    <value>{0} je v importu vícekrát; použila se poslední kopie.</value>
+  </data>
+  <data name="GpxImport_NotGpx" xml:space="preserve">
+    <value>{0} není soubor GPX.</value>
+  </data>
+  <data name="GpxImport_InvalidXml" xml:space="preserve">
+    <value>{0} je poškozený ({1}). Vše před chybou se naimportovalo.</value>
+  </data>
+  <data name="GpxImport_DamagedZip" xml:space="preserve">
+    <value>Archiv ZIP {0} je poškozený ({1}).</value>
+  </data>
+  <data name="GpxImport_NoGpxInZip" xml:space="preserve">
+    <value>Archiv ZIP {0} neobsahuje žádné soubory GPX.</value>
+  </data>
 </root>

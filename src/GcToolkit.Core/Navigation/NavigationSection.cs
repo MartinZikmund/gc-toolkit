@@ -7,4 +7,5 @@ public enum NavigationSection
     Catalog,
     Tool,
     Settings,
+    Workbench,
 }

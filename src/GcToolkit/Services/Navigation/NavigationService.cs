@@ -39,7 +39,10 @@ public sealed class NavigationService : INavigationService
     public void RegisterView(Type viewType, Type viewModelType)
         => _viewModelToViewMap[viewModelType] = viewType;
 
-    public void Navigate<TViewModel>() => Navigate(typeof(TViewModel), null);
+    /// <summary>The view registered for <paramref name="viewModelType"/>, for hosting it outside the root frame.</summary>
+    public Type? GetViewType(Type viewModelType) => _viewModelToViewMap.GetValueOrDefault(viewModelType);
+
+    public void Navigate<TViewModel>() =>Navigate(typeof(TViewModel), null);
 
     public void Navigate<TViewModel>(object? parameter) => Navigate(typeof(TViewModel), parameter);
 

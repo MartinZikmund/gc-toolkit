@@ -4041,6 +4041,117 @@
   <data name="Base64_Tooltip" xml:space="preserve">
     <value>Encode text to Base64 and decode it back — line breaks and missing padding are no problem.</value>
   </data>
+  <data name="VariableCoordinateCalculator_Name" xml:space="preserve">
+    <value>Variable coordinate calculator</value>
+  </data>
+  <data name="VariableCoordinateCalculator_Tooltip" xml:space="preserve">
+    <value>Type a coordinate with letters or formulas, fill in the variables and get the final coordinates live.</value>
+  </data>
+  <data name="VariableCoordinateTemplateHint" xml:space="preserve">
+    <value>Use letters for digits (N 50° 0A.BCD) and brackets for maths (N 49° 1(A+B).(C*2)). N, S, E and W stay hemispheres.</value>
+  </data>
+  <data name="VariableCoordinateTemplatePlaceholder" xml:space="preserve">
+    <value>N 50° 0A.BCD E 014° 2E.FGH</value>
+  </data>
+  <data name="VariableCoordinateTemplateLabel" xml:space="preserve">
+    <value>Coordinate template</value>
+  </data>
+  <data name="VariableCoordinateStageName" xml:space="preserve">
+    <value>Stage {0}</value>
+  </data>
+  <data name="VariableCoordinateStageNameLabel" xml:space="preserve">
+    <value>Stage name</value>
+  </data>
+  <data name="VariableCoordinateVariablesHeader" xml:space="preserve">
+    <value>Variables</value>
+  </data>
+  <data name="VariableCoordinateVariablesEmpty" xml:space="preserve">
+    <value>Variables show up here as soon as the template uses a letter.</value>
+  </data>
+  <data name="VariableCoordinateVariableValue" xml:space="preserve">
+    <value>Value of</value>
+  </data>
+  <data name="VariableCoordinateValuePlaceholder" xml:space="preserve">
+    <value>?</value>
+  </data>
+  <data name="VariableCoordinatePostedLabel" xml:space="preserve">
+    <value>Posted coordinates (optional)</value>
+  </data>
+  <data name="VariableCoordinatePostedPlaceholder" xml:space="preserve">
+    <value>N 50° 01.000 E 014° 25.000</value>
+  </data>
+  <data name="VariableCoordinatePostedError" xml:space="preserve">
+    <value>These posted coordinates cannot be read.</value>
+  </data>
+  <data name="VariableCoordinateFormatLabel" xml:space="preserve">
+    <value>Result format</value>
+  </data>
+  <data name="VariableCoordinateResultLabel" xml:space="preserve">
+    <value>Result</value>
+  </data>
+  <data name="VariableCoordinateResultNone" xml:space="preserve">
+    <value>Fill in all variables to see the coordinates.</value>
+  </data>
+  <data name="VariableCoordinateWaitingFor" xml:space="preserve">
+    <value>Waiting for {0}</value>
+  </data>
+  <data name="VariableCoordinateErrorAt" xml:space="preserve">
+    <value>Character {0}: {1}</value>
+  </data>
+  <data name="VariableCoordinateDistance" xml:space="preserve">
+    <value>from the posted coordinates</value>
+  </data>
+  <data name="VariableCoordinateWithinTwoMiles" xml:space="preserve">
+    <value>Within 2 miles</value>
+  </data>
+  <data name="VariableCoordinateBeyondTwoMiles" xml:space="preserve">
+    <value>More than 2 miles away</value>
+  </data>
+  <data name="VariableCoordinateAddStage" xml:space="preserve">
+    <value>Add stage</value>
+  </data>
+  <data name="VariableCoordinateRemoveStage" xml:space="preserve">
+    <value>Remove stage</value>
+  </data>
+  <data name="VariableCoordinateCopy" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="VariableCoordinateCopyAll" xml:space="preserve">
+    <value>Copy all</value>
+  </data>
+  <data name="VariableCoordinateShare" xml:space="preserve">
+    <value>Share</value>
+  </data>
+  <data name="VariableCoordinateExample" xml:space="preserve">
+    <value>Example</value>
+  </data>
+  <data name="VariableCoordinateClear" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="FormulaError_Syntax" xml:space="preserve">
+    <value>Not a valid formula (check the brackets and operators).</value>
+  </data>
+  <data name="FormulaError_UnknownVariable" xml:space="preserve">
+    <value>A variable has no value yet.</value>
+  </data>
+  <data name="FormulaError_UnknownFunction" xml:space="preserve">
+    <value>Unknown function.</value>
+  </data>
+  <data name="FormulaError_WrongArgumentCount" xml:space="preserve">
+    <value>Wrong number of function arguments.</value>
+  </data>
+  <data name="FormulaError_DivisionByZero" xml:space="preserve">
+    <value>Division by zero.</value>
+  </data>
+  <data name="FormulaError_InvalidValue" xml:space="preserve">
+    <value>A value is not a number or is out of range.</value>
+  </data>
+  <data name="FormulaError_NotWholeNumber" xml:space="preserve">
+    <value>A bracket gives a negative or fractional number, which cannot be written as digits.</value>
+  </data>
+  <data name="FormulaError_InvalidCoordinate" xml:space="preserve">
+    <value>The result is not a valid coordinate.</value>
+  </data>
   <data name="GeocacheType_Unknown" xml:space="preserve">
     <value>Unknown</value>
   </data>
@@ -4787,6 +4898,84 @@
   <data name="Scratchpad_Unsaved" xml:space="preserve">
     <value>Unsaved changes</value>
   </data>
+  <data name="Workbench" xml:space="preserve">
+    <value>Workbench</value>
+  </data>
+  <data name="Workbench_CacheTabs" xml:space="preserve">
+    <value>Open caches</value>
+  </data>
+  <data name="Workbench_OpenCache" xml:space="preserve">
+    <value>Open cache</value>
+  </data>
+  <data name="Workbench_OpenCacheHint" xml:space="preserve">
+    <value>Until the offline cache store arrives, open a cache by its code.</value>
+  </data>
+  <data name="Workbench_CacheCodePlaceholder" xml:space="preserve">
+    <value>Cache code, e.g. GC8KX2Q</value>
+  </data>
+  <data name="Workbench_Open" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="Workbench_EmptyTitle" xml:space="preserve">
+    <value>No cache open</value>
+  </data>
+  <data name="Workbench_EmptyBody" xml:space="preserve">
+    <value>Open a cache to solve it with the listing and your tools side by side.</value>
+  </data>
+  <data name="Workbench_ListingPlaceholder" xml:space="preserve">
+    <value>The cache listing comes in #411. For now the workbench only knows the cache code.</value>
+  </data>
+  <data name="Workbench_Listing" xml:space="preserve">
+    <value>Listing</value>
+  </data>
+  <data name="Workbench_Tool" xml:space="preserve">
+    <value>Tool</value>
+  </data>
+  <data name="Workbench_Variables" xml:space="preserve">
+    <value>Variables</value>
+  </data>
+  <data name="Workbench_Scratchpad" xml:space="preserve">
+    <value>Scratchpad</value>
+  </data>
+  <data name="Workbench_Sections" xml:space="preserve">
+    <value>Workbench sections</value>
+  </data>
+  <data name="Workbench_DockSections" xml:space="preserve">
+    <value>Panel sections</value>
+  </data>
+  <data name="Workbench_VariablesPlaceholder" xml:space="preserve">
+    <value>The variable sheet comes in a later update.</value>
+  </data>
+  <data name="Workbench_ScratchpadPlaceholder" xml:space="preserve">
+    <value>Jot down anything that comes up while solving. It saves itself.</value>
+  </data>
+  <data name="Workbench_AddTool" xml:space="preserve">
+    <value>Add tool</value>
+  </data>
+  <data name="Workbench_SearchTools" xml:space="preserve">
+    <value>Search tools</value>
+  </data>
+  <data name="Workbench_ToolTabs" xml:space="preserve">
+    <value>Open tools</value>
+  </data>
+  <data name="Workbench_NoToolsTitle" xml:space="preserve">
+    <value>No tool open</value>
+  </data>
+  <data name="Workbench_NoToolsBody" xml:space="preserve">
+    <value>Add a tool to work on this cache next to its listing.</value>
+  </data>
+  <data name="Workbench_ShowTools" xml:space="preserve">
+    <value>Tools</value>
+  </data>
+  <data name="Workbench_PinToolPane" xml:space="preserve">
+    <value>Pin the tool pane</value>
+  </data>
+  <data name="Workbench_ResizeToolPane" xml:space="preserve">
+    <value>Resize the tool pane</value>
+  </data>
+  <data name="Workbench_ResizeDock" xml:space="preserve">
+    <value>Resize the panel</value>
+  </data>
   <data name="GpxImport_MissingCoordinates" xml:space="preserve">
     <value>{0}: skipped, the coordinates are missing or invalid.</value>
   </data>
@@ -4816,6 +5005,225 @@
   </data>
   <data name="GpxImport_NoGpxInZip" xml:space="preserve">
     <value>The ZIP archive {0} contains no GPX files.</value>
+  </data>
+  <data name="ChecksumCoordinateHeader" xml:space="preserve">
+    <value>Coordinate checksum</value>
+  </data>
+  <data name="ChecksumCoordinateLabel" xml:space="preserve">
+    <value>One coordinate per line</value>
+  </data>
+  <data name="ChecksumCoordinateHint" xml:space="preserve">
+    <value>Add = 62 to a line to verify it against a published checksum.</value>
+  </data>
+  <data name="ChecksumCoordinatePlaceholder" xml:space="preserve">
+    <value>e.g. N 49° 12.345' E 016° 30.678' = 59</value>
+  </data>
+  <data name="ChecksumModeDdm" xml:space="preserve">
+    <value>Degrees decimal minutes (standard)</value>
+  </data>
+  <data name="ChecksumModeAsEntered" xml:space="preserve">
+    <value>As entered</value>
+  </data>
+  <data name="ChecksumLatLabel" xml:space="preserve">
+    <value>Lat</value>
+  </data>
+  <data name="ChecksumLonLabel" xml:space="preserve">
+    <value>Lon</value>
+  </data>
+  <data name="ChecksumMatch" xml:space="preserve">
+    <value>Matches the expected checksum ({0})</value>
+  </data>
+  <data name="ChecksumMismatch" xml:space="preserve">
+    <value>Expected {0}, calculated {1}</value>
+  </data>
+  <data name="ChecksumErrorCoordinate" xml:space="preserve">
+    <value>Not a recognised coordinate.</value>
+  </data>
+  <data name="ChecksumErrorNoDigits" xml:space="preserve">
+    <value>No digits to add up.</value>
+  </data>
+  <data name="ChecksumVariantsHeader" xml:space="preserve">
+    <value>More cross sums</value>
+  </data>
+  <data name="ChecksumVariantsHint" xml:space="preserve">
+    <value>Alternating sum is always shown. Pick a number base or a modulus for more.</value>
+  </data>
+  <data name="ChecksumInputBaseLabel" xml:space="preserve">
+    <value>Number is in base</value>
+  </data>
+  <data name="ChecksumDigitBaseLabel" xml:space="preserve">
+    <value>Sum digits in base</value>
+  </data>
+  <data name="ChecksumModulusLabel" xml:space="preserve">
+    <value>Cross sum mod n</value>
+  </data>
+  <data name="ChecksumModulusPlaceholder" xml:space="preserve">
+    <value>off</value>
+  </data>
+  <data name="ChecksumAlternatingLabel" xml:space="preserve">
+    <value>Alternating cross sum</value>
+  </data>
+  <data name="ChecksumBaseSumLabel" xml:space="preserve">
+    <value>Cross sum (base {0})</value>
+  </data>
+  <data name="ChecksumModuloLabel" xml:space="preserve">
+    <value>Cross sum mod {0}</value>
+  </data>
+  <data name="ChecksumErrorDigit" xml:space="preserve">
+    <value>'{0}' is not a digit in base {1}.</value>
+  </data>
+  <data name="ChecksumErrorBase" xml:space="preserve">
+    <value>Bases run from 2 to 36.</value>
+  </data>
+  <data name="ChecksumErrorModulus" xml:space="preserve">
+    <value>The modulus must be a whole number above 0.</value>
+  </data>
+  <data name="ChecksumErrorTooLong" xml:space="preserve">
+    <value>Too long to convert between bases (over {0} digits).</value>
+  </data>
+  <data name="Triangulation_Name" xml:space="preserve">
+    <value>Triangulation</value>
+  </data>
+  <data name="Triangulation_Tooltip" xml:space="preserve">
+    <value>Find the point where bearings sighted from two or more known points cross.</value>
+  </data>
+  <data name="TriangulationPointsHeader" xml:space="preserve">
+    <value>Known points and the bearing sighted from each</value>
+  </data>
+  <data name="TriangulationPointHeader" xml:space="preserve">
+    <value>Point {0}</value>
+  </data>
+  <data name="TriangulationBearingHeader" xml:space="preserve">
+    <value>Bearing from {0} (°)</value>
+  </data>
+  <data name="BearingFixPointPlaceholder" xml:space="preserve">
+    <value>N 49 12.345 E 016 34.567</value>
+  </data>
+  <data name="BearingFixBearingPlaceholder" xml:space="preserve">
+    <value>0–360</value>
+  </data>
+  <data name="TriangulationBearingHint" xml:space="preserve">
+    <value>Bearings are measured clockwise from North. With three or more points the result is the least-squares best fit.</value>
+  </data>
+  <data name="TriangulationAddPoint" xml:space="preserve">
+    <value>Add point</value>
+  </data>
+  <data name="BearingFixRemovePoint" xml:space="preserve">
+    <value>Remove row</value>
+  </data>
+  <data name="TriangulationResultLabel" xml:space="preserve">
+    <value>Intersection</value>
+  </data>
+  <data name="BearingFixFormatDdm" xml:space="preserve">
+    <value>Degrees decimal minutes</value>
+  </data>
+  <data name="BearingFixFormatDd" xml:space="preserve">
+    <value>Decimal degrees</value>
+  </data>
+  <data name="BearingFixFormatDms" xml:space="preserve">
+    <value>Degrees minutes seconds</value>
+  </data>
+  <data name="BearingFixAlternateLabel" xml:space="preserve">
+    <value>Other solution (opposite side of the Earth)</value>
+  </data>
+  <data name="BearingFixReadoutsLabel" xml:space="preserve">
+    <value>Sanity check</value>
+  </data>
+  <data name="BearingFixReadoutPoint" xml:space="preserve">
+    <value>Point</value>
+  </data>
+  <data name="BearingFixReadoutDistance" xml:space="preserve">
+    <value>Distance</value>
+  </data>
+  <data name="BearingFixReadoutBearing" xml:space="preserve">
+    <value>Bearing</value>
+  </data>
+  <data name="BearingFixReadoutOffset" xml:space="preserve">
+    <value>Line misses by</value>
+  </data>
+  <data name="BearingFixReadoutBaseline" xml:space="preserve">
+    <value>Distance between A and B</value>
+  </data>
+  <data name="BearingFixCopy" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="BearingFixShare" xml:space="preserve">
+    <value>Share</value>
+  </data>
+  <data name="BearingFixExample" xml:space="preserve">
+    <value>Example</value>
+  </data>
+  <data name="BearingFixClear" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="TriangulationErrorPoint" xml:space="preserve">
+    <value>Enter a valid coordinate for point {0}.</value>
+  </data>
+  <data name="TriangulationErrorBearing" xml:space="preserve">
+    <value>Enter the bearing from {0} as a number in degrees.</value>
+  </data>
+  <data name="TriangulationErrorTooFew" xml:space="preserve">
+    <value>Enter at least two points, each with a bearing.</value>
+  </data>
+  <data name="TriangulationErrorCoincident" xml:space="preserve">
+    <value>All the bearings lie on one line, so every point on it fits. Use different directions.</value>
+  </data>
+  <data name="TriangulationErrorIdentical" xml:space="preserve">
+    <value>All the points are the same place. Use at least two different points.</value>
+  </data>
+  <data name="TriangulationWarnBehind" xml:space="preserve">
+    <value>The intersection is behind the bearing from {0} (in the opposite direction).</value>
+  </data>
+  <data name="TriangulationWarnIllConditioned" xml:space="preserve">
+    <value>The bearings are almost parallel, so a tiny error in any of them moves the result a long way.</value>
+  </data>
+  <data name="BearingFixMagneticToggle" xml:space="preserve">
+    <value>Bearings are magnetic (read from a compass)</value>
+  </data>
+  <data name="BearingFixDeclinationAuto" xml:space="preserve">
+    <value>Automatic (World Magnetic Model)</value>
+  </data>
+  <data name="BearingFixDeclinationManual" xml:space="preserve">
+    <value>Enter manually</value>
+  </data>
+  <data name="BearingFixDeclinationLabel" xml:space="preserve">
+    <value>Declination (°, East positive)</value>
+  </data>
+  <data name="BearingFixDeclinationPlaceholder" xml:space="preserve">
+    <value>e.g. 4.5 or 3W</value>
+  </data>
+  <data name="BearingFixDeclinationDate" xml:space="preserve">
+    <value>Date of the readings</value>
+  </data>
+  <data name="BearingFixDeclinationHint" xml:space="preserve">
+    <value>Computed offline for each point from NOAA's World Magnetic Model WMM2025 (valid 2025–2029).</value>
+  </data>
+  <data name="BearingFixDeclinationApplied" xml:space="preserve">
+    <value>Declination {0}, true bearing {1}</value>
+  </data>
+  <data name="BearingFixErrorDeclination" xml:space="preserve">
+    <value>Enter the declination in degrees, e.g. 4.5 or 3W.</value>
+  </data>
+  <data name="BearingFixWarnModelRange" xml:space="preserve">
+    <value>The date is outside the WMM2025 validity (2025–2029), so the computed declination may be off.</value>
+  </data>
+  <data name="BearingFixAccuracyLabel" xml:space="preserve">
+    <value>Accuracy</value>
+  </data>
+  <data name="BearingFixAccuracyFormat" xml:space="preserve">
+    <value>The lines miss the result by {0} RMS (worst {1}).</value>
+  </data>
+  <data name="BearingFixOffsetFormat" xml:space="preserve">
+    <value>{0} ({1:+0.0;-0.0;0.0}°)</value>
+  </data>
+  <data name="BearingFixPlotLabel" xml:space="preserve">
+    <value>Sketch</value>
+  </data>
+  <data name="BearingFixPlotDescription" xml:space="preserve">
+    <value>Sketch of the points, their bearing lines and the result</value>
+  </data>
+  <data name="BearingFixPlotNote" xml:space="preserve">
+    <value>Schematic only, North up. The circle shows the RMS miss distance.</value>
   </data>
   <data name="Caches" xml:space="preserve">
     <value>Caches</value>

@@ -1,0 +1,36 @@
+﻿<UserControl
+    x:Class="GcToolkit.Controls.BearingPlotCanvas"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!--  Geometry is built in code-behind from the Core layout; brushes stay theme-bound here.  -->
+    <Grid x:Name="Root" SizeChanged="OnRootSizeChanged">
+        <Path
+            x:Name="ErrorPath"
+            Fill="{ThemeResource AccentFoundSoftBrush}"
+            Stroke="{ThemeResource AccentFoundBrush}"
+            StrokeThickness="1" />
+        <Path
+            x:Name="RaysPath"
+            Stroke="{ThemeResource BrandPrimaryBrush}"
+            StrokeThickness="2" />
+        <Path x:Name="MarkersPath" Fill="{ThemeResource TextFillColorPrimaryBrush}" />
+        <Path
+            x:Name="FixPath"
+            Fill="{ThemeResource AccentFoundBrush}"
+            Stroke="{ThemeResource TextFillColorPrimaryBrush}"
+            StrokeThickness="1.5" />
+        <Path
+            x:Name="ScalePath"
+            Stroke="{ThemeResource TextFillColorSecondaryBrush}"
+            StrokeThickness="2" />
+        <Canvas x:Name="LabelCanvas" />
+        <TextBlock
+            Margin="0,4,8,0"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top"
+            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+            Style="{StaticResource CaptionTextBlockStyle}"
+            Text="N ↑" />
+    </Grid>
+</UserControl>

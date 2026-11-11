@@ -334,7 +334,8 @@ public abstract partial class BearingFixViewModelBase : ToolViewModelBase
         {
             var row = used[i];
             var residual = fix.Residuals[i];
-            DescribeResidual(row, residual);
+            row.DistanceText = FormatDistance(residual.DistanceMeters);
+            row.MeasuredBearingText = FormatBearing(residual.MeasuredBearingDegrees);
             row.OffsetText = overdetermined
                 ? string.Format(
                     CultureInfo.CurrentCulture,
@@ -372,13 +373,6 @@ public abstract partial class BearingFixViewModelBase : ToolViewModelBase
         WarningMessage = string.Join(Environment.NewLine, warnings);
         HasWarning = warnings.Count > 0;
         HasResult = true;
-    }
-
-    /// <summary>Fills a row's distance / bearing readouts; Resection reports them from the fix instead.</summary>
-    protected virtual void DescribeResidual(BearingObservationRow row, ObservationResidual residual)
-    {
-        row.DistanceText = FormatDistance(residual.DistanceMeters);
-        row.MeasuredBearingText = FormatBearing(residual.MeasuredBearingDegrees);
     }
 
     private void UpdatePlot(IReadOnlyList<BearingObservation> observations, GeoCoordinate? fix, double radiusMeters)

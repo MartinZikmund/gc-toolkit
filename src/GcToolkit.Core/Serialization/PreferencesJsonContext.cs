@@ -1,6 +1,7 @@
 using System.Text.Json.Serialization;
 using GcToolkit.Core.FavoriteTools;
 using GcToolkit.Core.Recents;
+using GcToolkit.Core.ViewModels.Tools;
 using GcToolkit.Core.Workbench;
 
 namespace GcToolkit.Core.Serialization;
@@ -15,6 +16,7 @@ namespace GcToolkit.Core.Serialization;
 [JsonSerializable(typeof(List<FavoriteToolEntry>))]
 [JsonSerializable(typeof(ElementTheme))]
 [JsonSerializable(typeof(SavedVariableSheet))]
+[JsonSerializable(typeof(RhumbLineState))]
 [JsonSerializable(typeof(WorkbenchSessionState))]
 public sealed partial class PreferencesJsonContext : JsonSerializerContext
 {

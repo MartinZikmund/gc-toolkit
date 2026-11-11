@@ -110,6 +110,17 @@ public class CoordinateChecksumCalculatorTests
     }
 
     [TestMethod]
+    public void Calculate_BareCarriageReturns_SplitLikeNewlines()
+    {
+        // A WinUI TextBox gives back a bare '\r' for Enter.
+        var rows = CoordinateChecksumCalculator.Calculate($"{Ddm}\r{Ddm} = 59", CoordinateChecksumMode.DegreesDecimalMinutes);
+
+        Assert.AreEqual(2, rows.Count);
+        Assert.IsTrue(rows[0].IsValid);
+        Assert.AreEqual(true, rows[1].Matches);
+    }
+
+    [TestMethod]
     [DataRow(null)]
     [DataRow("")]
     [DataRow("  \n ")]

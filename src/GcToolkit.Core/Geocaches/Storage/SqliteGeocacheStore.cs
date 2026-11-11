@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using GcToolkit.Core.Infrastructure;
 using SQLite;
@@ -13,6 +14,8 @@ namespace GcToolkit.Core.Geocaches.Storage;
 /// system is ready before SQLite opens the file.
 /// </param>
 /// <param name="flusher">Called after every committed write.</param>
+[UnconditionalSuppressMessage("Trimming", "IL2026",
+    Justification = "sqlite-net's Insert/Update(object) only ever see the row types, which keep all their members (DynamicallyAccessedMembers and LinkerConfig.xml).")]
 public sealed class SqliteGeocacheStore(Func<Task<string>> databasePathProvider, IStorageFlusher flusher) : IGeocacheStore, IAsyncDisposable
 {
     /// <summary>The schema version this build writes. Stored in <c>PRAGMA user_version</c>.</summary>

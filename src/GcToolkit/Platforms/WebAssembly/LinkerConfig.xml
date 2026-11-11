@@ -1,6 +1,11 @@
 <linker>
   <assembly fullname="GcToolkit" />
 
+  <!-- sqlite-net reads the store's row types by reflection; the trimmer cannot see that. -->
+  <assembly fullname="GcToolkit.Core">
+    <type fullname="GcToolkit.Core.Geocaches.Storage.*" preserve="all" />
+  </assembly>
+
   <!--
   Uncomment this section when using JSON.NET
   <assembly fullname="System.Core">

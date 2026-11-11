@@ -27,4 +27,8 @@
     <ProjectReference Include="..\..\src\GcToolkit.Core\GcToolkit.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="Geocaches\Fixtures\**" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
 </Project>

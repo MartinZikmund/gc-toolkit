@@ -17,6 +17,16 @@
         <Description>GcToolkit by Martin Zikmund</Description>
     </PropertyGroup>
 
+    <!-- [JSImport] (the WASM storage flusher) needs unsafe code for its generated stubs. -->
+    <PropertyGroup Condition="$(TargetFramework.EndsWith('browserwasm'))">
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+
+    <!-- The Uno SDK embeds only WasmScripts/AppManifest.js on its own. -->
+    <ItemGroup Condition="$(TargetFramework.EndsWith('browserwasm'))">
+        <EmbeddedResource Include="Platforms\WebAssembly\WasmScripts\StorageFlusher.js" />
+    </ItemGroup>
+
     <!-- Channel-specific identity. See docs/versioning.md. -->
     <PropertyGroup Condition="'$(AppChannel)' == 'Prod'">
         <ApplicationTitle>GC Toolkit</ApplicationTitle>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gpx xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0" creator="GSAK - Geocaching Swiss Army Knife" xmlns="http://www.topografix.com/GPX/1/0">
+  <name>GSAK export</name>
+  <time>2024-07-07T07:07:07Z</time>
+  <wpt lat="50.061930" lon="14.424700">
+    <time>2013-08-24T07:00:00Z</time>
+    <name>GC8KX2Q</name>
+    <desc>The Lost Legion by Martin &amp; Co, Unknown Cache (3/2.5)</desc>
+    <sym>Geocache Found</sym>
+    <type>Geocache|Unknown Cache</type>
+    <groundspeak:cache id="7654321" available="True" archived="False" xmlns:groundspeak="http://www.groundspeak.com/cache/1/0/1">
+      <groundspeak:name>The Lost Legion</groundspeak:name>
+      <groundspeak:placed_by>Martin &amp; Co</groundspeak:placed_by>
+      <groundspeak:owner id="1001">Martin &amp; Co</groundspeak:owner>
+      <groundspeak:type>Unknown Cache</groundspeak:type>
+      <groundspeak:container>Regular</groundspeak:container>
+      <groundspeak:difficulty>3</groundspeak:difficulty>
+      <groundspeak:terrain>2.5</groundspeak:terrain>
+      <groundspeak:country>Czech Republic</groundspeak:country>
+      <groundspeak:state>Praha</groundspeak:state>
+    </groundspeak:cache>
+    <gsak:wptExtension xmlns:gsak="http://www.gsak.net/xmlv1/6">
+      <gsak:FavPoints>12</gsak:FavPoints>
+      <gsak:GcNote>Look near the old oak</gsak:GcNote>
+      <gsak:FoundByMeDate>2024-06-30</gsak:FoundByMeDate>
+      <gsak:UserFlag>true</gsak:UserFlag>
+      <gsak:LatBeforeCorrect>50.06666</gsak:LatBeforeCorrect>
+      <gsak:LonBeforeCorrect>14.41666</gsak:LonBeforeCorrect>
+    </gsak:wptExtension>
+  </wpt>
+  <wpt lat="50.0600" lon="14.4200">
+    <name>PK8KX2Q</name>
+    <desc>Parking</desc>
+    <sym>Parking Area</sym>
+    <type>Waypoint|Parking Area</type>
+    <gsak:wptExtension xmlns:gsak="http://www.gsak.net/xmlv1/6">
+      <gsak:Parent>GC8KX2Q</gsak:Parent>
+    </gsak:wptExtension>
+  </wpt>
+  <wpt lat="50.0" lon="14.0">
+    <name>MYCAR1</name>
+    <desc>Car</desc>
+    <gsak:wptExtension xmlns:gsak="http://www.gsak.net/xmlv1/6">
+      <gsak:Parent>GC8KX2Q</gsak:Parent>
+    </gsak:wptExtension>
+  </wpt>
+</gpx>

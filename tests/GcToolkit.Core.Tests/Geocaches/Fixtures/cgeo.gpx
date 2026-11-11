@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<gpx xmlns="http://www.topografix.com/GPX/1/0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gpx="http://www.topografix.com/GPX/1/0" xmlns:groundspeak="http://www.groundspeak.com/cache/1/0/1" version="1.0" creator="c:geo - http://www.cgeo.org/">
+  <time>2024-03-03T03:03:03.000Z</time>
+  <wpt lat="49.7500000" lon="13.3800000">
+    <time>2012-04-04T00:00:00Z</time>
+    <name>GC3CGEO</name>
+    <desc>Letterbox Pilsen</desc>
+    <url>https://coord.info/GC3CGEO</url>
+    <urlname>Letterbox Pilsen</urlname>
+    <sym>Geocache Found</sym>
+    <type>Geocache|Letterbox Hybrid</type>
+    <groundspeak:cache available="true" archived="false" id="3333">
+      <groundspeak:name>Letterbox Pilsen</groundspeak:name>
+      <groundspeak:placed_by>Hans</groundspeak:placed_by>
+      <groundspeak:owner>Hans</groundspeak:owner>
+      <groundspeak:type>Letterbox Hybrid</groundspeak:type>
+      <groundspeak:container>Other</groundspeak:container>
+      <groundspeak:difficulty>2.0</groundspeak:difficulty>
+      <groundspeak:terrain>2.0</groundspeak:terrain>
+      <groundspeak:short_description html="false">Stamp it.</groundspeak:short_description>
+      <groundspeak:long_description html="true">&lt;p&gt;Bring a stamp.&lt;/p&gt;</groundspeak:long_description>
+      <groundspeak:encoded_hints>In the wall</groundspeak:encoded_hints>
+    </groundspeak:cache>
+  </wpt>
+  <wpt lat="49.7600000" lon="13.3900000">
+    <time>2012-04-04T00:00:00Z</time>
+    <name>GC4NEW1</name>
+    <sym>Geocache</sym>
+    <type>Geocache|Shiny New Cache Type</type>
+    <groundspeak:cache available="true" archived="false" id="4444">
+      <groundspeak:name>Future Cache</groundspeak:name>
+      <groundspeak:type>Shiny New Cache Type</groundspeak:type>
+      <groundspeak:container>Gigantic</groundspeak:container>
+      <groundspeak:difficulty>9</groundspeak:difficulty>
+      <groundspeak:terrain>3</groundspeak:terrain>
+    </groundspeak:cache>
+  </wpt>
+  <wpt lat="49.7510000" lon="13.3810000">
+    <name>PK3CGEO</name>
+    <cmt>Behind the pub</cmt>
+    <desc>Parking</desc>
+    <sym>Parking Area</sym>
+    <type>Waypoint|Parking Area</type>
+  </wpt>
+</gpx>

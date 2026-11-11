@@ -13,8 +13,8 @@ public class WorkbenchSessionServiceTests
     private static readonly GeocacheCode B = GeocacheCode.Parse("GC2BBB");
     private static readonly GeocacheCode C = GeocacheCode.Parse("GC3CCC");
 
-    private static WorkbenchSessionService Create(InMemoryPreferences? prefs = null, IGeocacheLookup? lookup = null)
-        => new(prefs ?? InMemoryPreferences.TrimmedHead(), lookup ?? new FakeGeocacheLookup("GC1AAA", "GC2BBB", "GC3CCC"));
+    private static WorkbenchSessionService Create(InMemoryPreferences? prefs = null)
+        => new(prefs ?? InMemoryPreferences.TrimmedHead());
 
     [TestMethod]
     public void Open_NewCache_AddsItAndMakesItActive()
@@ -146,22 +146,6 @@ public class WorkbenchSessionServiceTests
     }
 
     [TestMethod]
-    public void Restore_UnknownCaches_AreDroppedSilently()
-    {
-        var prefs = InMemoryPreferences.TrimmedHead();
-        var first = Create(prefs);
-        first.Open(A);
-        first.Open(B);
-        first.Open(C);
-        first.Activate(B);
-
-        var second = Create(prefs, new FakeGeocacheLookup("GC1AAA", "GC3CCC"));
-
-        CollectionAssert.AreEqual(new[] { A, C }, second.OpenCaches.ToArray());
-        Assert.AreEqual(A, second.ActiveCache);
-    }
-
-    [TestMethod]
     public void Restore_CorruptStoredValue_StartsEmpty()
     {
         var prefs = InMemoryPreferences.TrimmedHead();
@@ -189,7 +173,7 @@ public class WorkbenchSessionServiceTests
     public void Changes_SendMessage()
     {
         WeakReferenceMessenger messenger = new();
-        var sut = new WorkbenchSessionService(InMemoryPreferences.TrimmedHead(), new FakeGeocacheLookup("GC1AAA", "GC2BBB"), messenger);
+        var sut = new WorkbenchSessionService(InMemoryPreferences.TrimmedHead(), messenger);
         List<WorkbenchSessionChangedMessage> received = [];
         object recipient = new();
         messenger.Register<WorkbenchSessionChangedMessage>(recipient, (_, m) => received.Add(m));

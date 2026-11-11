@@ -165,9 +165,8 @@ public partial class App : Application, IApplication
             sp.GetRequiredService<IPreferences>(),
             CultureInfo.CurrentUICulture.TwoLetterISOLanguageName));
 
-        // Workbench session is app-wide; the lookup/progress sources are placeholders until the store lands.
+        // Workbench session is app-wide; the progress source is a placeholder until the store lands.
         services.AddSingleton(TimeProvider.System);
-        services.AddSingleton<IGeocacheLookup, EmptyGeocacheLookup>();
         services.AddSingleton<IWorkbenchProgressProvider, EmptyWorkbenchProgressProvider>();
         services.AddSingleton<IWorkbenchSessionService, WorkbenchSessionService>();
 

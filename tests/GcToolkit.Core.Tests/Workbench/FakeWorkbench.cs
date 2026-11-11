@@ -3,13 +3,6 @@ using GcToolkit.Core.Workbench;
 
 namespace GcToolkit.Core.Tests.Workbench;
 
-internal sealed class FakeGeocacheLookup(params string[] known) : IGeocacheLookup
-{
-    private readonly HashSet<string> _known = new(known, StringComparer.Ordinal);
-
-    public bool Exists(GeocacheCode code) => _known.Contains(code.Value);
-}
-
 internal sealed class FakeProgressProvider : IWorkbenchProgressProvider
 {
     public List<CacheProgress> Items { get; } = [];

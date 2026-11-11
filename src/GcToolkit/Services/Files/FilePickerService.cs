@@ -7,15 +7,6 @@ public sealed class FilePickerService(IWindowShellProvider windowShellProvider) 
 {
     public async Task<IReadOnlyList<PickedFile>> PickFilesAsync(IReadOnlyList<string> extensions, CancellationToken cancellationToken = default)
     {
-#if DEBUG
-        // Lets UI automation import without driving the system file dialog.
-        if (Environment.GetEnvironmentVariable("GCTOOLKIT_PICK_FILES") is { Length: > 0 } scripted)
-        {
-            return [.. scripted.Split(';', StringSplitOptions.RemoveEmptyEntries).Select(path =>
-                new PickedFile(Path.GetFileName(path), _ => Task.FromResult<Stream>(File.OpenRead(path))))];
-        }
-#endif
-
         FileOpenPicker picker = new() { SuggestedStartLocation = PickerLocationId.Downloads };
         foreach (var extension in extensions)
         {

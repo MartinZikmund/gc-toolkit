@@ -119,9 +119,6 @@ public sealed record Waypoint
     public GeoCoordinate? Coordinate { get; init; }
 
     public string? Note { get; init; }
-
-    /// <summary>Private working notes; unlike <see cref="Note"/> this never syncs to geocaching.com.</summary>
-    public string? Scratchpad { get; init; }
 }
 
 public sealed partial record GeocacheLog

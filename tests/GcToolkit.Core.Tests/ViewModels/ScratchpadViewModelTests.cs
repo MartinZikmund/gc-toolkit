@@ -368,19 +368,4 @@ public class ScratchpadViewModelTests
 
         Assert.AreEqual("Saved 1 h ago", viewModel.StatusText);
     }
-
-    private sealed class RecordingSynchronizationContext : SynchronizationContext
-    {
-        private readonly Queue<(SendOrPostCallback Callback, object? State)> _posted = new();
-
-        public override void Post(SendOrPostCallback d, object? state) => _posted.Enqueue((d, state));
-
-        public void RunPosted()
-        {
-            while (_posted.TryDequeue(out var item))
-            {
-                item.Callback(item.State);
-            }
-        }
-    }
 }

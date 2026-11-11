@@ -155,6 +155,32 @@ public abstract class GeocacheStoreContractTests
     }
 
     [TestMethod]
+    [DataRow("certova", "GC1AAA")]
+    [DataRow("ČERT", "GC1AAA")]
+    [DataRow("zlute", "GC2BBB")]
+    [DataRow("lázně", "GC2BBB")]
+    public async Task Query_Text_IgnoresAccentsAndNonAsciiCase(string text, string expectedCode)
+    {
+        var store = CreateStore();
+        await store.UpsertAsync([Cache("GC1AAA", "Čertova skála"), Cache("GC2BBB", "Žluté lázně"), Cache("GC3CCC", "Dub")]);
+
+        var page = await store.QueryAsync(new() { Text = text });
+
+        CollectionAssert.AreEqual(new[] { expectedCode }, page.Items.Select(i => i.Code.Value).ToArray());
+    }
+
+    [TestMethod]
+    public async Task Query_SortByName_PutsAccentedNamesWithTheirBaseLetter()
+    {
+        var store = CreateStore();
+        await store.UpsertAsync([Cache("GC1", "Zámek"), Cache("GC2", "Dub"), Cache("GC3", "Čertova skála"), Cache("GC4", "Cesta")]);
+
+        var page = await store.QueryAsync(new());
+
+        CollectionAssert.AreEqual(new[] { "Čertova skála", "Cesta", "Dub", "Zámek" }, page.Items.Select(i => i.Name).ToArray());
+    }
+
+    [TestMethod]
     public async Task Query_TypeAndStatusFilters_AreCombined()
     {
         var store = CreateStore();

@@ -4041,6 +4041,471 @@
   <data name="Base64_Tooltip" xml:space="preserve">
     <value>Encode text to Base64 and decode it back — line breaks and missing padding are no problem.</value>
   </data>
+  <data name="GeocacheType_Unknown" xml:space="preserve">
+    <value>Unknown</value>
+  </data>
+  <data name="GeocacheType_Traditional" xml:space="preserve">
+    <value>Traditional</value>
+  </data>
+  <data name="GeocacheType_Multi" xml:space="preserve">
+    <value>Multi-cache</value>
+  </data>
+  <data name="GeocacheType_Mystery" xml:space="preserve">
+    <value>Mystery</value>
+  </data>
+  <data name="GeocacheType_Letterbox" xml:space="preserve">
+    <value>Letterbox</value>
+  </data>
+  <data name="GeocacheType_Wherigo" xml:space="preserve">
+    <value>Wherigo</value>
+  </data>
+  <data name="GeocacheType_Earth" xml:space="preserve">
+    <value>EarthCache</value>
+  </data>
+  <data name="GeocacheType_Virtual" xml:space="preserve">
+    <value>Virtual</value>
+  </data>
+  <data name="GeocacheType_Webcam" xml:space="preserve">
+    <value>Webcam</value>
+  </data>
+  <data name="GeocacheType_Event" xml:space="preserve">
+    <value>Event</value>
+  </data>
+  <data name="GeocacheType_MegaEvent" xml:space="preserve">
+    <value>Mega event</value>
+  </data>
+  <data name="GeocacheType_GigaEvent" xml:space="preserve">
+    <value>Giga event</value>
+  </data>
+  <data name="GeocacheType_CacheInTrashOutEvent" xml:space="preserve">
+    <value>Cache In Trash Out</value>
+  </data>
+  <data name="GeocacheType_CommunityCelebrationEvent" xml:space="preserve">
+    <value>Community Celebration</value>
+  </data>
+  <data name="GeocacheType_GeocachingHqEvent" xml:space="preserve">
+    <value>Geocaching HQ event</value>
+  </data>
+  <data name="GeocacheType_AdventureLab" xml:space="preserve">
+    <value>Adventure Lab</value>
+  </data>
+  <data name="GeocacheType_Locationless" xml:space="preserve">
+    <value>Locationless</value>
+  </data>
+  <data name="GeocacheSize_Unknown" xml:space="preserve">
+    <value>Unknown</value>
+  </data>
+  <data name="GeocacheSize_NotChosen" xml:space="preserve">
+    <value>Not chosen</value>
+  </data>
+  <data name="GeocacheSize_Micro" xml:space="preserve">
+    <value>Micro</value>
+  </data>
+  <data name="GeocacheSize_Small" xml:space="preserve">
+    <value>Small</value>
+  </data>
+  <data name="GeocacheSize_Regular" xml:space="preserve">
+    <value>Regular</value>
+  </data>
+  <data name="GeocacheSize_Large" xml:space="preserve">
+    <value>Large</value>
+  </data>
+  <data name="GeocacheSize_Other" xml:space="preserve">
+    <value>Other</value>
+  </data>
+  <data name="GeocacheSize_Virtual" xml:space="preserve">
+    <value>Virtual</value>
+  </data>
+  <data name="GeocacheStatus_Available" xml:space="preserve">
+    <value>Available</value>
+  </data>
+  <data name="GeocacheStatus_Disabled" xml:space="preserve">
+    <value>Temporarily disabled</value>
+  </data>
+  <data name="GeocacheStatus_Archived" xml:space="preserve">
+    <value>Archived</value>
+  </data>
+  <data name="GeocacheLogType_Unknown" xml:space="preserve">
+    <value>Unknown</value>
+  </data>
+  <data name="GeocacheLogType_Found" xml:space="preserve">
+    <value>Found it</value>
+  </data>
+  <data name="GeocacheLogType_DidNotFind" xml:space="preserve">
+    <value>Didn't find it</value>
+  </data>
+  <data name="GeocacheLogType_WriteNote" xml:space="preserve">
+    <value>Note</value>
+  </data>
+  <data name="GeocacheLogType_Attended" xml:space="preserve">
+    <value>Attended</value>
+  </data>
+  <data name="GeocacheLogType_WillAttend" xml:space="preserve">
+    <value>Will attend</value>
+  </data>
+  <data name="GeocacheLogType_WebcamPhotoTaken" xml:space="preserve">
+    <value>Webcam photo taken</value>
+  </data>
+  <data name="GeocacheLogType_NeedsMaintenance" xml:space="preserve">
+    <value>Needs maintenance</value>
+  </data>
+  <data name="GeocacheLogType_OwnerMaintenance" xml:space="preserve">
+    <value>Owner maintenance</value>
+  </data>
+  <data name="GeocacheLogType_NeedsArchived" xml:space="preserve">
+    <value>Needs archived</value>
+  </data>
+  <data name="GeocacheLogType_TemporarilyDisableListing" xml:space="preserve">
+    <value>Temporarily disabled</value>
+  </data>
+  <data name="GeocacheLogType_EnableListing" xml:space="preserve">
+    <value>Enabled</value>
+  </data>
+  <data name="GeocacheLogType_UpdateCoordinates" xml:space="preserve">
+    <value>Coordinates updated</value>
+  </data>
+  <data name="GeocacheLogType_Publish" xml:space="preserve">
+    <value>Published</value>
+  </data>
+  <data name="GeocacheLogType_Archive" xml:space="preserve">
+    <value>Archived</value>
+  </data>
+  <data name="GeocacheLogType_Unarchive" xml:space="preserve">
+    <value>Unarchived</value>
+  </data>
+  <data name="GeocacheLogType_ReviewerNote" xml:space="preserve">
+    <value>Reviewer note</value>
+  </data>
+  <data name="GeocacheLogType_Announcement" xml:space="preserve">
+    <value>Announcement</value>
+  </data>
+  <data name="WaypointType_Unknown" xml:space="preserve">
+    <value>Unknown</value>
+  </data>
+  <data name="WaypointType_Parking" xml:space="preserve">
+    <value>Parking</value>
+  </data>
+  <data name="WaypointType_Stage" xml:space="preserve">
+    <value>Stage</value>
+  </data>
+  <data name="WaypointType_Question" xml:space="preserve">
+    <value>Question</value>
+  </data>
+  <data name="WaypointType_Final" xml:space="preserve">
+    <value>Final location</value>
+  </data>
+  <data name="WaypointType_Trailhead" xml:space="preserve">
+    <value>Trailhead</value>
+  </data>
+  <data name="WaypointType_ReferencePoint" xml:space="preserve">
+    <value>Reference point</value>
+  </data>
+  <data name="WaypointType_User" xml:space="preserve">
+    <value>Custom</value>
+  </data>
+  <data name="GeocacheAttribute_1" xml:space="preserve">
+    <value>Dogs allowed</value>
+  </data>
+  <data name="GeocacheAttribute_2" xml:space="preserve">
+    <value>Access or parking fee</value>
+  </data>
+  <data name="GeocacheAttribute_3" xml:space="preserve">
+    <value>Climbing gear required</value>
+  </data>
+  <data name="GeocacheAttribute_4" xml:space="preserve">
+    <value>Boat required</value>
+  </data>
+  <data name="GeocacheAttribute_5" xml:space="preserve">
+    <value>Scuba gear required</value>
+  </data>
+  <data name="GeocacheAttribute_6" xml:space="preserve">
+    <value>Recommended for kids</value>
+  </data>
+  <data name="GeocacheAttribute_7" xml:space="preserve">
+    <value>Takes less than an hour</value>
+  </data>
+  <data name="GeocacheAttribute_8" xml:space="preserve">
+    <value>Scenic view</value>
+  </data>
+  <data name="GeocacheAttribute_9" xml:space="preserve">
+    <value>Significant hike</value>
+  </data>
+  <data name="GeocacheAttribute_10" xml:space="preserve">
+    <value>Difficult climbing</value>
+  </data>
+  <data name="GeocacheAttribute_11" xml:space="preserve">
+    <value>May require wading</value>
+  </data>
+  <data name="GeocacheAttribute_12" xml:space="preserve">
+    <value>May require swimming</value>
+  </data>
+  <data name="GeocacheAttribute_13" xml:space="preserve">
+    <value>Available at all times</value>
+  </data>
+  <data name="GeocacheAttribute_14" xml:space="preserve">
+    <value>Recommended at night</value>
+  </data>
+  <data name="GeocacheAttribute_15" xml:space="preserve">
+    <value>Available during winter</value>
+  </data>
+  <data name="GeocacheAttribute_17" xml:space="preserve">
+    <value>Poison plants</value>
+  </data>
+  <data name="GeocacheAttribute_18" xml:space="preserve">
+    <value>Dangerous animals</value>
+  </data>
+  <data name="GeocacheAttribute_19" xml:space="preserve">
+    <value>Ticks</value>
+  </data>
+  <data name="GeocacheAttribute_20" xml:space="preserve">
+    <value>Abandoned mines</value>
+  </data>
+  <data name="GeocacheAttribute_21" xml:space="preserve">
+    <value>Cliff / falling rocks</value>
+  </data>
+  <data name="GeocacheAttribute_22" xml:space="preserve">
+    <value>Hunting</value>
+  </data>
+  <data name="GeocacheAttribute_23" xml:space="preserve">
+    <value>Dangerous area</value>
+  </data>
+  <data name="GeocacheAttribute_24" xml:space="preserve">
+    <value>Wheelchair accessible</value>
+  </data>
+  <data name="GeocacheAttribute_25" xml:space="preserve">
+    <value>Parking available</value>
+  </data>
+  <data name="GeocacheAttribute_26" xml:space="preserve">
+    <value>Public transportation</value>
+  </data>
+  <data name="GeocacheAttribute_27" xml:space="preserve">
+    <value>Drinking water nearby</value>
+  </data>
+  <data name="GeocacheAttribute_28" xml:space="preserve">
+    <value>Public restrooms nearby</value>
+  </data>
+  <data name="GeocacheAttribute_29" xml:space="preserve">
+    <value>Telephone nearby</value>
+  </data>
+  <data name="GeocacheAttribute_30" xml:space="preserve">
+    <value>Picnic tables nearby</value>
+  </data>
+  <data name="GeocacheAttribute_31" xml:space="preserve">
+    <value>Camping available</value>
+  </data>
+  <data name="GeocacheAttribute_32" xml:space="preserve">
+    <value>Bicycles</value>
+  </data>
+  <data name="GeocacheAttribute_33" xml:space="preserve">
+    <value>Motorcycles</value>
+  </data>
+  <data name="GeocacheAttribute_34" xml:space="preserve">
+    <value>Quads</value>
+  </data>
+  <data name="GeocacheAttribute_35" xml:space="preserve">
+    <value>Off-road vehicles</value>
+  </data>
+  <data name="GeocacheAttribute_36" xml:space="preserve">
+    <value>Snowmobiles</value>
+  </data>
+  <data name="GeocacheAttribute_37" xml:space="preserve">
+    <value>Horses</value>
+  </data>
+  <data name="GeocacheAttribute_38" xml:space="preserve">
+    <value>Campfires</value>
+  </data>
+  <data name="GeocacheAttribute_39" xml:space="preserve">
+    <value>Thorns</value>
+  </data>
+  <data name="GeocacheAttribute_40" xml:space="preserve">
+    <value>Stealth required</value>
+  </data>
+  <data name="GeocacheAttribute_41" xml:space="preserve">
+    <value>Stroller accessible</value>
+  </data>
+  <data name="GeocacheAttribute_42" xml:space="preserve">
+    <value>Needs maintenance</value>
+  </data>
+  <data name="GeocacheAttribute_43" xml:space="preserve">
+    <value>Watch for livestock</value>
+  </data>
+  <data name="GeocacheAttribute_44" xml:space="preserve">
+    <value>Flashlight required</value>
+  </data>
+  <data name="GeocacheAttribute_45" xml:space="preserve">
+    <value>Lost and Found tour</value>
+  </data>
+  <data name="GeocacheAttribute_46" xml:space="preserve">
+    <value>Truck driver / RV</value>
+  </data>
+  <data name="GeocacheAttribute_47" xml:space="preserve">
+    <value>Field puzzle</value>
+  </data>
+  <data name="GeocacheAttribute_48" xml:space="preserve">
+    <value>UV light required</value>
+  </data>
+  <data name="GeocacheAttribute_49" xml:space="preserve">
+    <value>Snowshoes</value>
+  </data>
+  <data name="GeocacheAttribute_50" xml:space="preserve">
+    <value>Cross country skis</value>
+  </data>
+  <data name="GeocacheAttribute_51" xml:space="preserve">
+    <value>Special tool required</value>
+  </data>
+  <data name="GeocacheAttribute_52" xml:space="preserve">
+    <value>Night cache</value>
+  </data>
+  <data name="GeocacheAttribute_53" xml:space="preserve">
+    <value>Park and grab</value>
+  </data>
+  <data name="GeocacheAttribute_54" xml:space="preserve">
+    <value>Abandoned structure</value>
+  </data>
+  <data name="GeocacheAttribute_55" xml:space="preserve">
+    <value>Short hike (under 1 km)</value>
+  </data>
+  <data name="GeocacheAttribute_56" xml:space="preserve">
+    <value>Medium hike (1–10 km)</value>
+  </data>
+  <data name="GeocacheAttribute_57" xml:space="preserve">
+    <value>Long hike (over 10 km)</value>
+  </data>
+  <data name="GeocacheAttribute_58" xml:space="preserve">
+    <value>Fuel nearby</value>
+  </data>
+  <data name="GeocacheAttribute_59" xml:space="preserve">
+    <value>Food nearby</value>
+  </data>
+  <data name="GeocacheAttribute_60" xml:space="preserve">
+    <value>Wireless beacon</value>
+  </data>
+  <data name="GeocacheAttribute_61" xml:space="preserve">
+    <value>Partnership cache</value>
+  </data>
+  <data name="GeocacheAttribute_62" xml:space="preserve">
+    <value>Seasonal access</value>
+  </data>
+  <data name="GeocacheAttribute_63" xml:space="preserve">
+    <value>Tourist friendly</value>
+  </data>
+  <data name="GeocacheAttribute_64" xml:space="preserve">
+    <value>Tree climbing</value>
+  </data>
+  <data name="GeocacheAttribute_65" xml:space="preserve">
+    <value>Front yard (private residence)</value>
+  </data>
+  <data name="GeocacheAttribute_66" xml:space="preserve">
+    <value>Teamwork required</value>
+  </data>
+  <data name="GeocacheAttribute_67" xml:space="preserve">
+    <value>GeoTour</value>
+  </data>
+  <data name="GeocacheAttribute_68" xml:space="preserve">
+    <value>Bonus cache</value>
+  </data>
+  <data name="GeocacheAttribute_69" xml:space="preserve">
+    <value>Power trail</value>
+  </data>
+  <data name="GeocacheAttribute_70" xml:space="preserve">
+    <value>Challenge cache</value>
+  </data>
+  <data name="GeocacheAttribute_71" xml:space="preserve">
+    <value>Solution checker</value>
+  </data>
+  <data name="GeocacheSectionListing" xml:space="preserve">
+    <value>Listing</value>
+  </data>
+  <data name="GeocacheSectionHint" xml:space="preserve">
+    <value>Hint</value>
+  </data>
+  <data name="GeocacheSectionWaypoints" xml:space="preserve">
+    <value>Waypoints</value>
+  </data>
+  <data name="GeocacheSectionLogs" xml:space="preserve">
+    <value>Logs</value>
+  </data>
+  <data name="GeocacheAttributes" xml:space="preserve">
+    <value>Attributes</value>
+  </data>
+  <data name="GeocacheYourNote" xml:space="preserve">
+    <value>Your note</value>
+  </data>
+  <data name="GeocacheImages" xml:space="preserve">
+    <value>Images</value>
+  </data>
+  <data name="GeocacheHintReveal" xml:space="preserve">
+    <value>Decode hint</value>
+  </data>
+  <data name="GeocacheHintHide" xml:space="preserve">
+    <value>Encode hint</value>
+  </data>
+  <data name="GeocacheHintEncodedInfo" xml:space="preserve">
+    <value>The hint is shown encoded (ROT13) so it does not spoil the hunt.</value>
+  </data>
+  <data name="GeocacheNoHint" xml:space="preserve">
+    <value>This cache has no hint.</value>
+  </data>
+  <data name="GeocacheNoWaypoints" xml:space="preserve">
+    <value>No additional waypoints.</value>
+  </data>
+  <data name="GeocacheNoLogs" xml:space="preserve">
+    <value>No logs yet.</value>
+  </data>
+  <data name="GeocacheLogsAll" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="GeocacheLogsFilter" xml:space="preserve">
+    <value>Log type</value>
+  </data>
+  <data name="GeocacheAttributeUnknownFormat" xml:space="preserve">
+    <value>Attribute {0}</value>
+  </data>
+  <data name="GeocacheOwnerFormat" xml:space="preserve">
+    <value>by {0}</value>
+  </data>
+  <data name="GeocachePlacedFormat" xml:space="preserve">
+    <value>placed {0}</value>
+  </data>
+  <data name="GeocachePostedCoordinates" xml:space="preserve">
+    <value>Posted coordinates</value>
+  </data>
+  <data name="GeocacheCorrectedCoordinates" xml:space="preserve">
+    <value>Corrected coordinates</value>
+  </data>
+  <data name="GeocacheCopyCoordinates" xml:space="preserve">
+    <value>Copy coordinates</value>
+  </data>
+  <data name="GeocacheConvertCoordinates" xml:space="preserve">
+    <value>Open in coordinate converter</value>
+  </data>
+  <data name="GeocacheSolve" xml:space="preserve">
+    <value>Solve</value>
+  </data>
+  <data name="GeocacheSolveUnavailable" xml:space="preserve">
+    <value>The solving workbench is coming soon.</value>
+  </data>
+  <data name="GeocacheWaypointHidden" xml:space="preserve">
+    <value>Coordinates hidden</value>
+  </data>
+  <data name="GeocacheCopyWaypoint" xml:space="preserve">
+    <value>Copy waypoint coordinates</value>
+  </data>
+  <data name="GeocacheNotFound" xml:space="preserve">
+    <value>This cache is not in your offline collection.</value>
+  </data>
+  <data name="GeocacheFound" xml:space="preserve">
+    <value>Found</value>
+  </data>
+  <data name="GeocacheSolved" xml:space="preserve">
+    <value>Solved</value>
+  </data>
+  <data name="GeocachePremium" xml:space="preserve">
+    <value>Premium</value>
+  </data>
+  <data name="GeocacheDetailSections" xml:space="preserve">
+    <value>Cache sections</value>
+  </data>
   <data name="PolygonArea_Name" xml:space="preserve">
     <value>Polygon Area &amp; Centroid</value>
   </data>

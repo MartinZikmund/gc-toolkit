@@ -1,0 +1,155 @@
+<local:Utf8ViewBase
+    x:Class="GcToolkit.Views.Utf8View"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:GcToolkit.Controls"
+    xmlns:local="using:GcToolkit.Views"
+    xmlns:markup="using:GcToolkit.Markup"
+    xmlns:numbers="using:GcToolkit.Core.Numbers">
+
+    <controls:ToolPage ContentWidth="Wide" Tool="{x:Bind ViewModel}">
+        <StackPanel Spacing="16">
+
+            <!--  Direction  -->
+            <RadioButtons MaxColumns="2" SelectedIndex="{x:Bind ViewModel.DirectionIndex, Mode=TwoWay}">
+                <RadioButton Content="{markup:Localize Key=Utf8Encode}" />
+                <RadioButton Content="{markup:Localize Key=Utf8Decode}" />
+            </RadioButtons>
+
+            <!--  Input  -->
+            <TextBox
+                AcceptsReturn="True"
+                Header="{markup:Localize Key=Utf8InputLabel}"
+                IsSpellCheckEnabled="False"
+                MinHeight="96"
+                PlaceholderText="{markup:Localize Key=Utf8InputPlaceholder}"
+                Text="{x:Bind ViewModel.InputText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                TextWrapping="Wrap" />
+
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Command="{x:Bind ViewModel.ExampleCommand}" Content="{markup:Localize Key=Utf8Example}" />
+                <Button Command="{x:Bind ViewModel.ClearCommand}" Content="{markup:Localize Key=Utf8Clear}" />
+            </StackPanel>
+
+            <!--  Output format (text → bytes only)  -->
+            <Expander
+                HorizontalAlignment="Stretch"
+                HorizontalContentAlignment="Stretch"
+                Header="{markup:Localize Key=Utf8OptionsLabel}"
+                IsExpanded="True"
+                Visibility="{x:Bind ViewModel.IsEncoding, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                <StackPanel Spacing="12">
+                    <ComboBox
+                        HorizontalAlignment="Stretch"
+                        Header="{markup:Localize Key=Utf8RepresentationLabel}"
+                        SelectedIndex="{x:Bind ViewModel.RepresentationIndex, Mode=TwoWay}">
+                        <ComboBoxItem Content="{markup:Localize Key=Utf8RepHex}" />
+                        <ComboBoxItem Content="{markup:Localize Key=Utf8RepDecimal}" />
+                        <ComboBoxItem Content="{markup:Localize Key=Utf8RepBinary}" />
+                        <ComboBoxItem Content="{markup:Localize Key=Utf8RepOctal}" />
+                        <ComboBoxItem Content="{markup:Localize Key=Utf8RepPercent}" />
+                        <ComboBoxItem Content="{markup:Localize Key=Utf8RepCodePoints}" />
+                        <ComboBoxItem Content="UTF-16 BE" />
+                        <ComboBoxItem Content="UTF-16 LE" />
+                        <ComboBoxItem Content="UTF-32 BE" />
+                        <ComboBoxItem Content="UTF-32 LE" />
+                    </ComboBox>
+                    <ComboBox
+                        HorizontalAlignment="Stretch"
+                        Header="{markup:Localize Key=Utf8SeparatorLabel}"
+                        SelectedIndex="{x:Bind ViewModel.SeparatorIndex, Mode=TwoWay}">
+                        <ComboBoxItem Content="{markup:Localize Key=Utf8SepSpace}" />
+                        <ComboBoxItem Content="{markup:Localize Key=Utf8SepNone}" />
+                        <ComboBoxItem Content="{markup:Localize Key=Utf8SepComma}" />
+                        <ComboBoxItem Content="0x" />
+                        <ComboBoxItem Content="\x" />
+                    </ComboBox>
+                    <ToggleSwitch Header="{markup:Localize Key=Utf8Uppercase}" IsOn="{x:Bind ViewModel.Uppercase, Mode=TwoWay}" />
+                    <ToggleSwitch Header="{markup:Localize Key=Utf8EmitBom}" IsOn="{x:Bind ViewModel.EmitBom, Mode=TwoWay}" />
+                </StackPanel>
+            </Expander>
+
+            <!--  Result  -->
+            <TextBlock Style="{ThemeResource BodyStrongTextBlockStyle}" Text="{markup:Localize Key=Utf8OutputLabel}" />
+            <TextBox
+                FontFamily="{ThemeResource AppMonoFontFamily}"
+                FontSize="18"
+                IsReadOnly="True"
+                IsSpellCheckEnabled="False"
+                Text="{x:Bind ViewModel.OutputText, Mode=OneWay}"
+                TextWrapping="Wrap" />
+
+            <InfoBar
+                IsClosable="False"
+                IsOpen="{x:Bind ViewModel.HasError, Mode=OneWay}"
+                Message="{x:Bind ViewModel.ErrorMessage, Mode=OneWay}"
+                Severity="Error" />
+
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Command="{x:Bind ViewModel.CopyOutputCommand}">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <FontIcon FontSize="16" Glyph="&#xE8C8;" />
+                        <TextBlock Text="{markup:Localize Key=Utf8Copy}" />
+                    </StackPanel>
+                </Button>
+                <Button Command="{x:Bind ViewModel.ShareOutputCommand}">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <FontIcon FontSize="16" Glyph="&#xE72D;" />
+                        <TextBlock Text="{markup:Localize Key=Utf8Share}" />
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+
+            <!--  Per-character breakdown  -->
+            <Expander
+                HorizontalAlignment="Stretch"
+                HorizontalContentAlignment="Stretch"
+                Header="{markup:Localize Key=Utf8BreakdownLabel}"
+                IsExpanded="True"
+                Visibility="{x:Bind ViewModel.ShowBreakdown, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                <ScrollViewer HorizontalScrollBarVisibility="Auto" HorizontalScrollMode="Auto">
+                    <ItemsControl ItemsSource="{x:Bind ViewModel.BreakdownRows}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="numbers:Utf8CharInfo">
+                                <StackPanel
+                                    Margin="0,2"
+                                    Orientation="Horizontal"
+                                    Spacing="16">
+                                    <TextBlock
+                                        Width="32"
+                                        FontSize="18"
+                                        Text="{x:Bind Glyph}" />
+                                    <TextBlock
+                                        Width="80"
+                                        FontFamily="{ThemeResource AppMonoFontFamily}"
+                                        Text="{x:Bind CodePoint}" />
+                                    <TextBlock
+                                        Width="24"
+                                        FontFamily="{ThemeResource AppMonoFontFamily}"
+                                        Text="{x:Bind ByteCount}" />
+                                    <TextBlock
+                                        Width="120"
+                                        FontFamily="{ThemeResource AppMonoFontFamily}"
+                                        Text="{x:Bind Hex}" />
+                                    <TextBlock
+                                        Width="120"
+                                        FontFamily="{ThemeResource AppMonoFontFamily}"
+                                        Text="{x:Bind Decimal}" />
+                                    <TextBlock
+                                        Width="280"
+                                        FontFamily="{ThemeResource AppMonoFontFamily}"
+                                        Text="{x:Bind Binary}" />
+                                    <TextBlock
+                                        Width="120"
+                                        FontFamily="{ThemeResource AppMonoFontFamily}"
+                                        Text="{x:Bind Octal}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Expander>
+
+        </StackPanel>
+    </controls:ToolPage>
+</local:Utf8ViewBase>

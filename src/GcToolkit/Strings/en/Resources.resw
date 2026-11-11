@@ -4041,4 +4041,97 @@
   <data name="Base64_Tooltip" xml:space="preserve">
     <value>Encode text to Base64 and decode it back — line breaks and missing padding are no problem.</value>
   </data>
+  <data name="Utf8_Name" xml:space="preserve">
+    <value>UTF-8</value>
+  </data>
+  <data name="Utf8_Tooltip" xml:space="preserve">
+    <value>Convert text to its UTF-8 bytes (hex, decimal, binary, code points, UTF-16/32) and decode bytes back to text.</value>
+  </data>
+  <data name="Utf8Encode" xml:space="preserve">
+    <value>Text → Bytes</value>
+  </data>
+  <data name="Utf8Decode" xml:space="preserve">
+    <value>Bytes → Text</value>
+  </data>
+  <data name="Utf8InputLabel" xml:space="preserve">
+    <value>Input</value>
+  </data>
+  <data name="Utf8InputPlaceholder" xml:space="preserve">
+    <value>Type text, or paste hex bytes (48 65, 0x48, \x48, %48) or code points (U+0048)…</value>
+  </data>
+  <data name="Utf8OutputLabel" xml:space="preserve">
+    <value>Result</value>
+  </data>
+  <data name="Utf8Example" xml:space="preserve">
+    <value>Example</value>
+  </data>
+  <data name="Utf8Clear" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="Utf8Copy" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="Utf8Share" xml:space="preserve">
+    <value>Share</value>
+  </data>
+  <data name="Utf8OptionsLabel" xml:space="preserve">
+    <value>Output format</value>
+  </data>
+  <data name="Utf8RepresentationLabel" xml:space="preserve">
+    <value>Representation</value>
+  </data>
+  <data name="Utf8RepHex" xml:space="preserve">
+    <value>UTF-8 hex</value>
+  </data>
+  <data name="Utf8RepDecimal" xml:space="preserve">
+    <value>UTF-8 decimal</value>
+  </data>
+  <data name="Utf8RepBinary" xml:space="preserve">
+    <value>UTF-8 binary</value>
+  </data>
+  <data name="Utf8RepOctal" xml:space="preserve">
+    <value>UTF-8 octal</value>
+  </data>
+  <data name="Utf8RepPercent" xml:space="preserve">
+    <value>URL percent-encoding</value>
+  </data>
+  <data name="Utf8RepCodePoints" xml:space="preserve">
+    <value>Unicode code points</value>
+  </data>
+  <data name="Utf8SeparatorLabel" xml:space="preserve">
+    <value>Byte separator</value>
+  </data>
+  <data name="Utf8SepSpace" xml:space="preserve">
+    <value>Space</value>
+  </data>
+  <data name="Utf8SepNone" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="Utf8SepComma" xml:space="preserve">
+    <value>Comma</value>
+  </data>
+  <data name="Utf8Uppercase" xml:space="preserve">
+    <value>Uppercase hex</value>
+  </data>
+  <data name="Utf8EmitBom" xml:space="preserve">
+    <value>Prepend byte order mark (BOM)</value>
+  </data>
+  <data name="Utf8BreakdownLabel" xml:space="preserve">
+    <value>Per-character breakdown (character, code point, bytes, hex, decimal, binary, octal)</value>
+  </data>
+  <data name="Utf8ErrorOddLength" xml:space="preserve">
+    <value>Odd number of hex digits — a byte needs two.</value>
+  </data>
+  <data name="Utf8ErrorInvalidHex" xml:space="preserve">
+    <value>The input contains characters that are not hexadecimal digits.</value>
+  </data>
+  <data name="Utf8ErrorInvalidSequence" xml:space="preserve">
+    <value>Not valid UTF-8 (invalid, truncated or overlong byte sequence).</value>
+  </data>
+  <data name="Utf8ErrorInvalidCodePoint" xml:space="preserve">
+    <value>Code point is outside the Unicode range or is a surrogate.</value>
+  </data>
+  <data name="Utf8ErrorLoneSurrogate" xml:space="preserve">
+    <value>The text contains a lone surrogate that has no UTF-8 encoding.</value>
+  </data>
 </root>

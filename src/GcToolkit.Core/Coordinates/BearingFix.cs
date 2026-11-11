@@ -5,15 +5,16 @@ public readonly record struct BearingObservation(GeoCoordinate Point, double Bea
 
 /// <summary>How one observation agrees with the fix.</summary>
 /// <param name="Point">The observation's known point.</param>
-/// <param name="DistanceMeters">Geodesic distance from the point to the fix.</param>
-/// <param name="BearingToFixDegrees">Geodesic bearing from the point to the fix.</param>
+/// <param name="DistanceMeters">Geodesic distance between the point and the fix.</param>
+/// <param name="MeasuredBearingDegrees">The bearing the observation should have read, recomputed from the fix:
+/// point to fix for triangulation, fix to landmark for resection.</param>
 /// <param name="OffsetMeters">How far the observation's line passes from the fix.</param>
 /// <param name="BearingErrorDegrees">How far the line would have to turn to hit the fix, in <c>(-90, 90]</c>.</param>
 /// <param name="IsAhead">Whether the fix lies in the sighted direction rather than behind it.</param>
 public sealed record ObservationResidual(
     GeoCoordinate Point,
     double DistanceMeters,
-    double BearingToFixDegrees,
+    double MeasuredBearingDegrees,
     double OffsetMeters,
     double BearingErrorDegrees,
     bool IsAhead);

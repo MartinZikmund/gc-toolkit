@@ -38,7 +38,7 @@ public sealed partial class BearingObservationRow : ObservableObject
     public partial string DistanceText { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial string BearingToFixText { get; set; } = string.Empty;
+    public partial string MeasuredBearingText { get; set; } = string.Empty;
 
     /// <summary>How far this row's line misses the fix (3+ rows), and by how many degrees.</summary>
     [ObservableProperty]
@@ -52,7 +52,7 @@ public sealed partial class BearingObservationRow : ObservableObject
     internal void ClearReadouts()
     {
         DistanceText = string.Empty;
-        BearingToFixText = string.Empty;
+        MeasuredBearingText = string.Empty;
         OffsetText = string.Empty;
     }
 }

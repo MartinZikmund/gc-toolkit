@@ -378,7 +378,7 @@ public abstract partial class BearingFixViewModelBase : ToolViewModelBase
     protected virtual void DescribeResidual(BearingObservationRow row, ObservationResidual residual)
     {
         row.DistanceText = FormatDistance(residual.DistanceMeters);
-        row.BearingToFixText = FormatBearing(residual.BearingToFixDegrees);
+        row.MeasuredBearingText = FormatBearing(residual.MeasuredBearingDegrees);
     }
 
     private void UpdatePlot(IReadOnlyList<BearingObservation> observations, GeoCoordinate? fix, double radiusMeters)

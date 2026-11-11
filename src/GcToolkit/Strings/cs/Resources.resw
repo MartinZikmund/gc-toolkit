@@ -4041,6 +4041,117 @@
   <data name="Base64_Tooltip" xml:space="preserve">
     <value>Zakódujte text do Base64 a zase zpět – se zalomenými řádky i chybějící výplní si poradí.</value>
   </data>
+  <data name="VariableCoordinateCalculator_Name" xml:space="preserve">
+    <value>Kalkulačka proměnných souřadnic</value>
+  </data>
+  <data name="VariableCoordinateCalculator_Tooltip" xml:space="preserve">
+    <value>Napište souřadnice s písmeny nebo vzorci, doplňte proměnné a hned uvidíte výsledné souřadnice.</value>
+  </data>
+  <data name="VariableCoordinateTemplateHint" xml:space="preserve">
+    <value>Písmena zastupují číslice (N 50° 0A.BCD), závorky počítají (N 49° 1(A+B).(C*2)). N, S, E a W zůstávají světovými stranami.</value>
+  </data>
+  <data name="VariableCoordinateTemplatePlaceholder" xml:space="preserve">
+    <value>N 50° 0A.BCD E 014° 2E.FGH</value>
+  </data>
+  <data name="VariableCoordinateTemplateLabel" xml:space="preserve">
+    <value>Šablona souřadnic</value>
+  </data>
+  <data name="VariableCoordinateStageName" xml:space="preserve">
+    <value>Etapa {0}</value>
+  </data>
+  <data name="VariableCoordinateStageNameLabel" xml:space="preserve">
+    <value>Název etapy</value>
+  </data>
+  <data name="VariableCoordinateVariablesHeader" xml:space="preserve">
+    <value>Proměnné</value>
+  </data>
+  <data name="VariableCoordinateVariablesEmpty" xml:space="preserve">
+    <value>Proměnné se tu objeví, jakmile šablona použije písmeno.</value>
+  </data>
+  <data name="VariableCoordinateVariableValue" xml:space="preserve">
+    <value>Hodnota proměnné</value>
+  </data>
+  <data name="VariableCoordinateValuePlaceholder" xml:space="preserve">
+    <value>?</value>
+  </data>
+  <data name="VariableCoordinatePostedLabel" xml:space="preserve">
+    <value>Zveřejněné souřadnice (nepovinné)</value>
+  </data>
+  <data name="VariableCoordinatePostedPlaceholder" xml:space="preserve">
+    <value>N 50° 01.000 E 014° 25.000</value>
+  </data>
+  <data name="VariableCoordinatePostedError" xml:space="preserve">
+    <value>Zveřejněné souřadnice se nepodařilo přečíst.</value>
+  </data>
+  <data name="VariableCoordinateFormatLabel" xml:space="preserve">
+    <value>Formát výsledku</value>
+  </data>
+  <data name="VariableCoordinateResultLabel" xml:space="preserve">
+    <value>Výsledek</value>
+  </data>
+  <data name="VariableCoordinateResultNone" xml:space="preserve">
+    <value>Doplňte všechny proměnné a uvidíte souřadnice.</value>
+  </data>
+  <data name="VariableCoordinateWaitingFor" xml:space="preserve">
+    <value>Chybí {0}</value>
+  </data>
+  <data name="VariableCoordinateErrorAt" xml:space="preserve">
+    <value>Znak {0}: {1}</value>
+  </data>
+  <data name="VariableCoordinateDistance" xml:space="preserve">
+    <value>od zveřejněných souřadnic</value>
+  </data>
+  <data name="VariableCoordinateWithinTwoMiles" xml:space="preserve">
+    <value>Do 2 mil</value>
+  </data>
+  <data name="VariableCoordinateBeyondTwoMiles" xml:space="preserve">
+    <value>Dál než 2 míle</value>
+  </data>
+  <data name="VariableCoordinateAddStage" xml:space="preserve">
+    <value>Přidat etapu</value>
+  </data>
+  <data name="VariableCoordinateRemoveStage" xml:space="preserve">
+    <value>Odebrat etapu</value>
+  </data>
+  <data name="VariableCoordinateCopy" xml:space="preserve">
+    <value>Kopírovat</value>
+  </data>
+  <data name="VariableCoordinateCopyAll" xml:space="preserve">
+    <value>Kopírovat vše</value>
+  </data>
+  <data name="VariableCoordinateShare" xml:space="preserve">
+    <value>Sdílet</value>
+  </data>
+  <data name="VariableCoordinateExample" xml:space="preserve">
+    <value>Příklad</value>
+  </data>
+  <data name="VariableCoordinateClear" xml:space="preserve">
+    <value>Vymazat</value>
+  </data>
+  <data name="FormulaError_Syntax" xml:space="preserve">
+    <value>Neplatný vzorec (zkontrolujte závorky a operátory).</value>
+  </data>
+  <data name="FormulaError_UnknownVariable" xml:space="preserve">
+    <value>Proměnná zatím nemá hodnotu.</value>
+  </data>
+  <data name="FormulaError_UnknownFunction" xml:space="preserve">
+    <value>Neznámá funkce.</value>
+  </data>
+  <data name="FormulaError_WrongArgumentCount" xml:space="preserve">
+    <value>Nesprávný počet argumentů funkce.</value>
+  </data>
+  <data name="FormulaError_DivisionByZero" xml:space="preserve">
+    <value>Dělení nulou.</value>
+  </data>
+  <data name="FormulaError_InvalidValue" xml:space="preserve">
+    <value>Hodnota není číslo nebo je mimo rozsah.</value>
+  </data>
+  <data name="FormulaError_NotWholeNumber" xml:space="preserve">
+    <value>Závorka dává záporné nebo desetinné číslo, které nejde zapsat jako číslice.</value>
+  </data>
+  <data name="FormulaError_InvalidCoordinate" xml:space="preserve">
+    <value>Výsledek není platná souřadnice.</value>
+  </data>
   <data name="GeocacheType_Unknown" xml:space="preserve">
     <value>Neznámý</value>
   </data>

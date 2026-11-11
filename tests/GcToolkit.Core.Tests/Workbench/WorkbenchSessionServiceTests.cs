@@ -146,6 +146,19 @@ public class WorkbenchSessionServiceTests
     }
 
     [TestMethod]
+    public void Restore_StoredCodes_AreAllReopenedWithoutCheckingTheStore()
+    {
+        var prefs = InMemoryPreferences.TrimmedHead();
+        prefs.SetRawComplex("workbench.session", "{\"OpenCaches\":[\"GC1AAA\",\"GC2BBB\",\"GC3CCC\"],\"ActiveCache\":\"GC2BBB\"}");
+
+        var sut = Create(prefs);
+
+        CollectionAssert.AreEqual(new[] { A, B, C }, sut.OpenCaches.ToArray());
+        Assert.AreEqual(B, sut.ActiveCache);
+        Assert.AreEqual(3, sut.RestoredCount);
+    }
+
+    [TestMethod]
     public void Restore_CorruptStoredValue_StartsEmpty()
     {
         var prefs = InMemoryPreferences.TrimmedHead();

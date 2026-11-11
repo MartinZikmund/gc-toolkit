@@ -4041,6 +4041,45 @@
   <data name="Base64_Tooltip" xml:space="preserve">
     <value>Encode text to Base64 and decode it back — line breaks and missing padding are no problem.</value>
   </data>
+  <data name="Workbench_VariablesProgress" xml:space="preserve">
+    <value>{0} of {1} variables</value>
+  </data>
+  <data name="Workbench_VariablesProgressOne" xml:space="preserve">
+    <value>{0} of {1} variable</value>
+  </data>
+  <data name="Workbench_ScratchpadLinesOne" xml:space="preserve">
+    <value>{0} line of notes</value>
+  </data>
+  <data name="Workbench_ScratchpadLinesFew" xml:space="preserve">
+    <value>{0} lines of notes</value>
+  </data>
+  <data name="Workbench_ScratchpadLinesMany" xml:space="preserve">
+    <value>{0} lines of notes</value>
+  </data>
+  <data name="Workbench_EditedJustNow" xml:space="preserve">
+    <value>Edited just now</value>
+  </data>
+  <data name="Workbench_EditedMinutesAgo" xml:space="preserve">
+    <value>Edited {0} min ago</value>
+  </data>
+  <data name="Workbench_EditedHoursAgo" xml:space="preserve">
+    <value>Edited {0} h ago</value>
+  </data>
+  <data name="Workbench_EditedYesterday" xml:space="preserve">
+    <value>Edited yesterday</value>
+  </data>
+  <data name="Workbench_EditedDaysAgo" xml:space="preserve">
+    <value>Edited {0} days ago</value>
+  </data>
+  <data name="Workbench_ContinueSolving" xml:space="preserve">
+    <value>Continue solving</value>
+  </data>
+  <data name="Workbench_Resume" xml:space="preserve">
+    <value>Resume</value>
+  </data>
+  <data name="Workbench_SessionRestored" xml:space="preserve">
+    <value>Reopened the caches from your last session.</value>
+  </data>
   <data name="Scratchpad_Saved" xml:space="preserve">
     <value>Saved</value>
   </data>

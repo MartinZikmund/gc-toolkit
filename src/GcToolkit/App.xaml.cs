@@ -2,6 +2,9 @@
 using System.Text.Json;
 using GcToolkit.Core.Catalog;
 using GcToolkit.Core.FavoriteTools;
+using GcToolkit.Core.Geocaches;
+using GcToolkit.Core.Geocaches.Gpx;
+using GcToolkit.Core.Geocaches.Storage;
 using GcToolkit.Core.Infrastructure;
 using GcToolkit.Core.Localization;
 using GcToolkit.Core.Recents;
@@ -9,15 +12,19 @@ using GcToolkit.Core.Search;
 using GcToolkit.Core.Serialization;
 using GcToolkit.Core.Services;
 using GcToolkit.Core.Services.Devices;
+using GcToolkit.Core.Services.Files;
 using GcToolkit.Core.Services.Dialogs;
 using GcToolkit.Core.Services.Settings;
 using GcToolkit.Core.Services.Theming;
 using GcToolkit.Core.ViewModels;
+using GcToolkit.Core.Workbench;
 using GcToolkit.Services.Devices;
 using GcToolkit.Services.Dialogs;
+using GcToolkit.Services.Files;
 using GcToolkit.Services.Navigation;
 using GcToolkit.Services.Rating;
 using GcToolkit.Services.Settings;
+using GcToolkit.Services.Storage;
 using GcToolkit.Services.Theming;
 using Uno.Resizetizer;
 using IPreferences = MZikmund.Toolkit.WinUI.Services.IPreferences;
@@ -117,6 +124,18 @@ public partial class App : Application, IApplication
         services.AddSingleton<IPreferences>(_ => new Preferences(
             new JsonSerializerOptions { TypeInfoResolver = PreferencesJsonContext.Default }));
         services.AddSingleton<IAppPreferences, AppPreferences>();
+
+        // Offline geocache store. Only WebAssembly needs the flusher: its file system is copied to
+        // IndexedDB asynchronously, so every committed write is flushed explicitly.
+#if __WASM__
+        services.AddSingleton<IStorageFlusher, WasmStorageFlusher>();
+#else
+        services.AddSingleton<IStorageFlusher, NoOpStorageFlusher>();
+#endif
+        services.AddSingleton<IGeocacheStore>(sp => new SqliteGeocacheStore(
+            GeocacheDatabaseLocation.GetPathAsync,
+            sp.GetRequiredService<IStorageFlusher>()));
+        services.AddSingleton<GpxImporter>();
         services.AddSingleton<IDisplayRequestManager, DisplayRequestManager>();
         services.AddSingleton<IAppUpdater, Infrastructure.AppUpdater>();
         services.AddScoped<IAppRatingService, AppRatingService>();
@@ -128,6 +147,8 @@ public partial class App : Application, IApplication
         services.AddScoped<IXamlRootProvider>(sp => sp.GetRequiredService<WindowShellProvider>());
         services.AddScoped<IDialogCoordinator, DialogCoordinator>();
         services.AddScoped<IDialogService, DialogService>();
+        services.AddScoped<ITextPromptService, TextPromptService>();
+        services.AddScoped<IFilePickerService, FilePickerService>();
         services.AddScoped<IConfirmationDialogService, ConfirmationDialogService>();
         services.AddScoped<ILauncherService, LauncherService>();
         services.AddScoped<IShareService, ShareService>();
@@ -164,15 +185,27 @@ public partial class App : Application, IApplication
             sp.GetRequiredService<IPreferences>(),
             CultureInfo.CurrentUICulture.TwoLetterISOLanguageName));
 
+        // Workbench session is app-wide; the progress source is a placeholder until the store lands.
+        services.AddSingleton(TimeProvider.System);
+        services.AddSingleton<IWorkbenchProgressProvider, EmptyWorkbenchProgressProvider>();
+        services.AddSingleton<IWorkbenchSessionService, WorkbenchSessionService>();
+        services.AddSingleton<IScratchpadRepository, MemoryScratchpadRepository>();
+
         // Scoped ViewModels
         services.AddScoped<WindowShellViewModel>();
         services.AddScoped<SearchViewModel>();
+        // Per window, so open tool tabs survive navigating away from the workbench and back.
+        services.AddScoped<WorkbenchViewModel>();
 
         // Transient ViewModels (new instance per navigation). Discovered tool ViewModels are
         // registered by AddDiscoveredTools() above.
         services.AddTransient<HomeViewModel>();
+        services.AddTransient<ContinueSolvingViewModel>();
+        services.AddTransient<ScratchpadViewModel>();
         services.AddTransient<CatalogViewModel>();
+        services.AddTransient<CachesViewModel>();
         services.AddTransient<SettingsViewModel>();
+        services.AddTransient<GeocacheDetailViewModel>();
     }
 
     /// <summary>

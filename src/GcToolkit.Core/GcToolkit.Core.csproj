@@ -36,6 +36,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="AngleSharp" />
         <PackageReference Include="MZikmund.Toolkit.WinUI" />
         <PackageReference Include="sqlite-net-e" />
         <PackageReference Include="SourceGear.sqlite3" />

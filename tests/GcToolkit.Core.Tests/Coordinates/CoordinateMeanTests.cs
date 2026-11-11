@@ -236,6 +236,15 @@ public class CoordinateMeanTests
     }
 
     [TestMethod]
+    public void ParseLines_BareCarriageReturns_SeparateLines()
+    {
+        var result = CoordinateMean.ParseLines("49.2 16.6\r50.0 15.0\rnope");
+
+        Assert.AreEqual(2, result.Points.Count);
+        Assert.AreEqual(3, result.Errors.Single().LineNumber);
+    }
+
+    [TestMethod]
     public void ParseLines_UnreadableLine_IsReportedWithItsLineNumber()
     {
         var result = CoordinateMean.ParseLines("49.2 16.6\n\nnot a coordinate\n50.0 15.0");

@@ -17,6 +17,16 @@
         <Description>GcToolkit by Martin Zikmund</Description>
     </PropertyGroup>
 
+    <!-- [JSImport] (the WASM storage flusher) needs unsafe code for its generated stubs. -->
+    <PropertyGroup Condition="$(TargetFramework.EndsWith('browserwasm'))">
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+
+    <!-- The Uno SDK embeds only WasmScripts/AppManifest.js on its own. -->
+    <ItemGroup Condition="$(TargetFramework.EndsWith('browserwasm'))">
+        <EmbeddedResource Include="Platforms\WebAssembly\WasmScripts\StorageFlusher.js" />
+    </ItemGroup>
+
     <!-- Channel-specific identity. See docs/versioning.md. -->
     <PropertyGroup Condition="'$(AppChannel)' == 'Prod'">
         <ApplicationTitle>GC Toolkit</ApplicationTitle>
@@ -53,6 +63,11 @@
         <None Remove="Assets\Fonts\**" />
         <Content Include="Assets\Fonts\**" CopyToOutputDirectory="PreserveNewest" />
     </ItemGroup>
+
+    <!-- WebView2 renders the cache listing; the Skia desktop head needs the feature. -->
+    <PropertyGroup>
+        <UnoFeatures>$(UnoFeatures);WebView;</UnoFeatures>
+    </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="MZikmund.Toolkit.WinUI" />

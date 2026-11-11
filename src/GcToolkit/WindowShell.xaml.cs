@@ -298,6 +298,9 @@ public sealed partial class WindowShell : Page, IWindowShell
             case NavigationSection.Settings:
                 nav.Navigate<SettingsViewModel>();
                 break;
+            case NavigationSection.Workbench:
+                nav.Navigate<WorkbenchViewModel>();
+                break;
             default:
                 throw new NotSupportedException($"Navigation section not supported: {section}");
         }
@@ -331,6 +334,7 @@ public sealed partial class WindowShell : Page, IWindowShell
                     ? NavView.SelectedItem
                     : ToolsNavItem,
                 NavigationSection.Settings => SettingsNavItem,
+                NavigationSection.Workbench => WorkbenchNavItem,
                 // Tool host has no menu item — keep the current selection.
                 _ => NavView.SelectedItem,
             };

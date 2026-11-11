@@ -1,0 +1,538 @@
+﻿<local:WorkbenchViewBase
+    x:Class="GcToolkit.Views.WorkbenchView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:GcToolkit.Controls"
+    xmlns:local="using:GcToolkit.Views"
+    xmlns:markup="using:GcToolkit.Markup"
+    xmlns:workbench="using:GcToolkit.Core.Workbench"
+    SizeChanged="OnSizeChanged">
+
+    <local:WorkbenchViewBase.Resources>
+        <!--  Resize handles: a transparent hit area with a short grip line.  -->
+        <Style x:Key="PaneResizerStyle" TargetType="controls:PaneResizer">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="controls:PaneResizer">
+                        <Grid Background="{TemplateBinding Background}">
+                            <Rectangle
+                                Width="4"
+                                Height="32"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Fill="{ThemeResource ControlStrongStrokeColorDefaultBrush}"
+                                RadiusX="2"
+                                RadiusY="2" />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="DockResizerStyle" TargetType="controls:PaneResizer">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="controls:PaneResizer">
+                        <Grid Background="{TemplateBinding Background}">
+                            <Rectangle
+                                Width="32"
+                                Height="4"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Fill="{ThemeResource ControlStrongStrokeColorDefaultBrush}"
+                                RadiusX="2"
+                                RadiusY="2" />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </local:WorkbenchViewBase.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!--  Caches in progress, like documents in Notepad. Phones switch caches from the title instead.  -->
+        <TabView
+            x:Name="CacheTabs"
+            AutomationProperties.AutomationId="WorkbenchCacheTabs"
+            AutomationProperties.Name="{markup:Localize Key=Workbench_CacheTabs}"
+            CanReorderTabs="True"
+            IsAddTabButtonVisible="False"
+            SelectedItem="{x:Bind ViewModel.ActiveCache, Mode=TwoWay}"
+            TabCloseRequested="OnCacheTabCloseRequested"
+            TabItemsSource="{x:Bind ViewModel.OpenCaches}"
+            TabWidthMode="SizeToContent">
+            <TabView.TabItemTemplate>
+                <DataTemplate x:DataType="workbench:WorkbenchCacheTab">
+                    <TabViewItem AutomationProperties.Name="{x:Bind Title}" Header="{x:Bind Title}">
+                        <TabViewItem.IconSource>
+                            <FontIconSource Glyph="&#xE707;" />
+                        </TabViewItem.IconSource>
+                    </TabViewItem>
+                </DataTemplate>
+            </TabView.TabItemTemplate>
+            <TabView.TabStripFooter>
+                <Button
+                    x:Name="OpenCacheButton"
+                    Margin="4,0,0,0"
+                    VerticalAlignment="Center"
+                    AutomationProperties.AutomationId="WorkbenchOpenCacheButton"
+                    AutomationProperties.Name="{markup:Localize Key=Workbench_OpenCache}"
+                    Style="{StaticResource SubtleButtonStyle}"
+                    ToolTipService.ToolTip="{markup:Localize Key=Workbench_OpenCache}">
+                    <FontIcon FontSize="12" Glyph="&#xE710;" />
+                    <Button.Flyout>
+                        <Flyout x:Name="OpenCacheFlyout" Placement="BottomEdgeAlignedLeft">
+                            <StackPanel Width="280" Spacing="8">
+                                <TextBlock Style="{StaticResource BodyStrongTextBlockStyle}" Text="{markup:Localize Key=Workbench_OpenCache}" />
+                                <TextBlock
+                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                    Style="{StaticResource CaptionTextBlockStyle}"
+                                    Text="{markup:Localize Key=Workbench_OpenCacheHint}"
+                                    TextWrapping="Wrap" />
+                                <TextBox
+                                    AutomationProperties.AutomationId="WorkbenchOpenCacheCode"
+                                    AutomationProperties.Name="{markup:Localize Key=Workbench_CacheCodePlaceholder}"
+                                    PlaceholderText="{markup:Localize Key=Workbench_CacheCodePlaceholder}"
+                                    Text="{x:Bind ViewModel.NewCacheCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                <Button
+                                    HorizontalAlignment="Right"
+                                    AutomationProperties.AutomationId="WorkbenchOpenCacheConfirm"
+                                    Click="OnOpenCacheClick"
+                                    Command="{x:Bind ViewModel.OpenCacheCommand}"
+                                    Content="{markup:Localize Key=Workbench_Open}"
+                                    Style="{StaticResource AccentButtonStyle}" />
+                            </StackPanel>
+                        </Flyout>
+                    </Button.Flyout>
+                </Button>
+            </TabView.TabStripFooter>
+        </TabView>
+
+        <!--  Cache header: the title, or on phones a cache switcher and the section selector.  -->
+        <Grid
+            x:Name="CacheHeader"
+            Grid.Row="1"
+            Padding="24,12,16,8"
+            ColumnSpacing="8"
+            RowSpacing="4"
+            Visibility="{x:Bind ViewModel.HasOpenCaches, Mode=OneWay}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <TextBlock
+                x:Name="CacheTitle"
+                VerticalAlignment="Center"
+                Style="{StaticResource SubtitleTextBlockStyle}"
+                Text="{x:Bind ViewModel.ActiveCache.Title, Mode=OneWay, FallbackValue=''}"
+                TextTrimming="CharacterEllipsis" />
+
+            <DropDownButton
+                x:Name="CacheSwitcher"
+                AutomationProperties.AutomationId="WorkbenchCacheSwitcher"
+                AutomationProperties.Name="{markup:Localize Key=Workbench_CacheTabs}"
+                Visibility="Collapsed">
+                <TextBlock
+                    Style="{StaticResource BodyStrongTextBlockStyle}"
+                    Text="{x:Bind ViewModel.ActiveCache.Title, Mode=OneWay, FallbackValue=''}"
+                    TextTrimming="CharacterEllipsis" />
+                <DropDownButton.Flyout>
+                    <Flyout x:Name="CacheSwitcherFlyout" Placement="BottomEdgeAlignedLeft">
+                        <StackPanel Width="280" Spacing="8">
+                            <ListView
+                                MaxHeight="240"
+                                AutomationProperties.Name="{markup:Localize Key=Workbench_CacheTabs}"
+                                IsItemClickEnabled="True"
+                                ItemClick="OnCacheSwitcherItemClick"
+                                ItemsSource="{x:Bind ViewModel.OpenCaches}"
+                                SelectedItem="{x:Bind ViewModel.ActiveCache, Mode=OneWay}">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate x:DataType="workbench:WorkbenchCacheTab">
+                                        <TextBlock Text="{x:Bind Title}" />
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                            <MenuFlyoutSeparator />
+                            <TextBox
+                                AutomationProperties.Name="{markup:Localize Key=Workbench_CacheCodePlaceholder}"
+                                PlaceholderText="{markup:Localize Key=Workbench_CacheCodePlaceholder}"
+                                Text="{x:Bind ViewModel.NewCacheCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <Button
+                                HorizontalAlignment="Right"
+                                Click="OnOpenCacheClick"
+                                Command="{x:Bind ViewModel.OpenCacheCommand}"
+                                Content="{markup:Localize Key=Workbench_OpenCache}"
+                                Style="{StaticResource AccentButtonStyle}" />
+                        </StackPanel>
+                    </Flyout>
+                </DropDownButton.Flyout>
+            </DropDownButton>
+
+            <!--  Medium windows: the tool pane slides in over the listing.  -->
+            <ToggleButton
+                x:Name="ShowToolsButton"
+                Grid.Column="1"
+                AutomationProperties.AutomationId="WorkbenchShowToolsButton"
+                IsChecked="{x:Bind ViewModel.IsToolPaneOpen, Mode=TwoWay}"
+                Visibility="Collapsed">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <FontIcon FontSize="16" Glyph="&#xE90F;" />
+                    <TextBlock Text="{markup:Localize Key=Workbench_ShowTools}" />
+                </StackPanel>
+            </ToggleButton>
+
+            <SelectorBar
+                x:Name="PhoneSelector"
+                Grid.Row="1"
+                Grid.ColumnSpan="2"
+                AutomationProperties.AutomationId="WorkbenchPhoneSelector"
+                AutomationProperties.Name="{markup:Localize Key=Workbench_Sections}"
+                SelectionChanged="OnPhoneSelectorChanged"
+                Visibility="Collapsed">
+                <SelectorBarItem IsSelected="{x:Bind ViewModel.IsPhoneListingSelected, Mode=OneWay}" Text="{markup:Localize Key=Workbench_Listing}" />
+                <SelectorBarItem IsSelected="{x:Bind ViewModel.IsPhoneToolSelected, Mode=OneWay}" Text="{markup:Localize Key=Workbench_Tool}" />
+                <SelectorBarItem IsSelected="{x:Bind ViewModel.IsPhoneScratchpadSelected, Mode=OneWay}" Text="{markup:Localize Key=Workbench_Scratchpad}" />
+            </SelectorBar>
+        </Grid>
+
+        <!--
+            One SplitView for every size: wide = inline pane at the dragged width, medium = overlay
+            (inline when pinned), phone = inline pane at full width while Tool or Scratchpad is selected.
+        -->
+        <SplitView
+            x:Name="Split"
+            Grid.Row="2"
+            DisplayMode="{x:Bind local:WorkbenchView.PaneMode(ViewModel.IsToolPaneInline), Mode=OneWay}"
+            IsPaneOpen="{x:Bind ViewModel.IsToolPaneOpen, Mode=TwoWay}"
+            OpenPaneLength="{x:Bind ViewModel.PaneLength, Mode=OneWay}"
+            PaneBackground="{ThemeResource AppSurfaceBrush}"
+            PanePlacement="Right"
+            Visibility="{x:Bind ViewModel.HasOpenCaches, Mode=OneWay}">
+
+            <!--  Placeholder until the listing page (#411) lands.  -->
+            <ScrollViewer
+                x:Name="ListingPanel"
+                Padding="24,8,24,24"
+                AutomationProperties.AutomationId="WorkbenchListing"
+                Visibility="{x:Bind ViewModel.IsListingVisible, Mode=OneWay}">
+                <Grid>
+                    <StackPanel
+                        MaxWidth="760"
+                        HorizontalAlignment="Stretch"
+                        Spacing="12">
+                        <TextBlock
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Style="{StaticResource CaptionTextBlockStyle}"
+                            Text="{markup:Localize Key=Workbench_Listing}" />
+                        <Border
+                            Padding="16"
+                            Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                            BorderThickness="1"
+                            CornerRadius="{StaticResource OverlayCornerRadius}">
+                            <StackPanel Spacing="8">
+                                <TextBlock
+                                    FontFamily="{StaticResource MonospaceFontFamily}"
+                                    Style="{StaticResource SubtitleTextBlockStyle}"
+                                    Text="{x:Bind ViewModel.ActiveCache.Title, Mode=OneWay, FallbackValue=''}" />
+                                <TextBlock
+                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                    Text="{markup:Localize Key=Workbench_ListingPlaceholder}"
+                                    TextWrapping="Wrap" />
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </Grid>
+            </ScrollViewer>
+
+            <SplitView.Pane>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <controls:PaneResizer
+                        x:Name="PaneSizer"
+                        Width="12"
+                        AutomationProperties.AutomationId="WorkbenchPaneSizer"
+                        AutomationProperties.Name="{markup:Localize Key=Workbench_ResizeToolPane}"
+                        Orientation="Vertical"
+                        Resized="OnPaneResized"
+                        Style="{StaticResource PaneResizerStyle}" />
+
+                    <Grid
+                        x:Name="ToolPaneContent"
+                        Grid.Column="1"
+                        BorderBrush="{ThemeResource AppStrokeBrush}"
+                        BorderThickness="1,0,0,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="{x:Bind local:WorkbenchView.ToolRowHeight(ViewModel.IsToolTabsVisible), Mode=OneWay}" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="{x:Bind local:WorkbenchView.DockRowHeight(ViewModel.IsDockVisible, ViewModel.IsCompact, ViewModel.DockHeight), Mode=OneWay}" />
+                        </Grid.RowDefinitions>
+
+                        <TabView
+                            x:Name="ToolTabs"
+                            AutomationProperties.AutomationId="WorkbenchToolTabs"
+                            AutomationProperties.Name="{markup:Localize Key=Workbench_ToolTabs}"
+                            IsAddTabButtonVisible="False"
+                            SelectedItem="{x:Bind ViewModel.ActiveCache.SelectedTool, Mode=TwoWay}"
+                            TabCloseRequested="OnToolTabCloseRequested"
+                            TabItemsSource="{x:Bind ViewModel.ActiveCache.Tools, Mode=OneWay}"
+                            TabWidthMode="SizeToContent"
+                            Visibility="{x:Bind ViewModel.IsToolTabsVisible, Mode=OneWay}">
+                            <TabView.TabItemTemplate>
+                                <DataTemplate x:DataType="workbench:WorkbenchToolTab">
+                                    <TabViewItem AutomationProperties.Name="{x:Bind Name}" Header="{x:Bind Name}">
+                                        <local:WorkbenchToolHost Tool="{x:Bind}" />
+                                    </TabViewItem>
+                                </DataTemplate>
+                            </TabView.TabItemTemplate>
+                            <TabView.TabStripFooter>
+                                <StackPanel Orientation="Horizontal" Spacing="4">
+                                    <Button
+                                        x:Name="AddToolButton"
+                                        VerticalAlignment="Center"
+                                        AutomationProperties.AutomationId="WorkbenchAddToolButton"
+                                        AutomationProperties.Name="{markup:Localize Key=Workbench_AddTool}"
+                                        Style="{StaticResource SubtleButtonStyle}"
+                                        ToolTipService.ToolTip="{markup:Localize Key=Workbench_AddTool}">
+                                        <FontIcon FontSize="12" Glyph="&#xE710;" />
+                                        <Button.Flyout>
+                                            <Flyout x:Name="ToolPickerFlyout" Placement="BottomEdgeAlignedRight">
+                                                <StackPanel Width="300" Spacing="8">
+                                                    <TextBox
+                                                        AutomationProperties.AutomationId="WorkbenchToolSearch"
+                                                        AutomationProperties.Name="{markup:Localize Key=Workbench_SearchTools}"
+                                                        PlaceholderText="{markup:Localize Key=Workbench_SearchTools}"
+                                                        Text="{x:Bind ViewModel.ToolSearchQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                    <ListView
+                                                        MaxHeight="360"
+                                                        AutomationProperties.AutomationId="WorkbenchToolPickerList"
+                                                        AutomationProperties.Name="{markup:Localize Key=Workbench_AddTool}"
+                                                        IsItemClickEnabled="True"
+                                                        ItemClick="OnToolPicked"
+                                                        ItemsSource="{x:Bind ViewModel.ToolPickerResults}"
+                                                        SelectionMode="None">
+                                                        <ListView.ItemTemplate>
+                                                            <DataTemplate x:DataType="workbench:ToolPickerItem">
+                                                                <StackPanel Orientation="Horizontal" Spacing="12">
+                                                                    <ContentPresenter
+                                                                        Width="20"
+                                                                        Height="20"
+                                                                        VerticalAlignment="Center"
+                                                                        Content="{x:Bind IconKey, Converter={StaticResource IconKeyToIconConverter}}"
+                                                                        Foreground="{ThemeResource BrandPrimaryBrush}" />
+                                                                    <TextBlock VerticalAlignment="Center" Text="{x:Bind Name}" />
+                                                                </StackPanel>
+                                                            </DataTemplate>
+                                                        </ListView.ItemTemplate>
+                                                    </ListView>
+                                                </StackPanel>
+                                            </Flyout>
+                                        </Button.Flyout>
+                                    </Button>
+                                    <ToggleButton
+                                        x:Name="PinButton"
+                                        VerticalAlignment="Center"
+                                        AutomationProperties.AutomationId="WorkbenchPinButton"
+                                        AutomationProperties.Name="{markup:Localize Key=Workbench_PinToolPane}"
+                                        Command="{x:Bind ViewModel.TogglePinCommand}"
+                                        IsChecked="{x:Bind ViewModel.IsToolPanePinned, Mode=OneWay}"
+                                        ToolTipService.ToolTip="{markup:Localize Key=Workbench_PinToolPane}"
+                                        Visibility="Collapsed">
+                                        <FontIcon FontSize="12" Glyph="&#xE718;" />
+                                    </ToggleButton>
+                                </StackPanel>
+                            </TabView.TabStripFooter>
+                        </TabView>
+
+                        <!--  Empty tool pane: points at the ＋ in the tab strip.  -->
+                        <StackPanel
+                            MaxWidth="280"
+                            Margin="24"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Spacing="8"
+                            Visibility="{x:Bind local:WorkbenchView.ShowEmptyTools(ViewModel.IsToolTabsVisible, ViewModel.ActiveCache.HasTools), Mode=OneWay, FallbackValue=Collapsed}">
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                Style="{StaticResource BodyStrongTextBlockStyle}"
+                                Text="{markup:Localize Key=Workbench_NoToolsTitle}" />
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                Text="{markup:Localize Key=Workbench_NoToolsBody}"
+                                TextAlignment="Center"
+                                TextWrapping="Wrap" />
+                        </StackPanel>
+
+                        <controls:PaneResizer
+                            x:Name="DockSplitter"
+                            Grid.Row="1"
+                            Height="12"
+                            AutomationProperties.AutomationId="WorkbenchDockSplitter"
+                            AutomationProperties.Name="{markup:Localize Key=Workbench_ResizeDock}"
+                            Orientation="Horizontal"
+                            Resized="OnDockResized"
+                            Style="{StaticResource DockResizerStyle}"
+                            Visibility="{x:Bind ViewModel.IsDockSelectorVisible, Mode=OneWay}" />
+
+                        <!--  Docked panel: Variables · Scratchpad. On phones only the scratchpad, as its own section.  -->
+                        <Grid
+                            Grid.Row="2"
+                            Padding="16,0,16,12"
+                            RowSpacing="8"
+                            Visibility="{x:Bind ViewModel.IsDockVisible, Mode=OneWay}">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+
+                            <SelectorBar
+                                x:Name="DockSelector"
+                                AutomationProperties.AutomationId="WorkbenchDockSelector"
+                                AutomationProperties.Name="{markup:Localize Key=Workbench_DockSections}"
+                                SelectionChanged="OnDockSelectorChanged"
+                                Visibility="{x:Bind ViewModel.IsDockSelectorVisible, Mode=OneWay}">
+                                <SelectorBarItem IsSelected="{x:Bind ViewModel.IsDockVariablesSelected, Mode=OneWay}" Text="{markup:Localize Key=Workbench_Variables}" />
+                                <SelectorBarItem IsSelected="{x:Bind ViewModel.IsDockScratchpadSelected, Mode=OneWay}" Text="{markup:Localize Key=Workbench_Scratchpad}" />
+                            </SelectorBar>
+
+                            <TextBlock
+                                Grid.Row="1"
+                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                Text="{markup:Localize Key=Workbench_VariablesPlaceholder}"
+                                TextWrapping="Wrap"
+                                Visibility="{x:Bind ViewModel.IsVariablesVisible, Mode=OneWay}" />
+
+                            <Grid
+                                Grid.Row="1"
+                                RowSpacing="4"
+                                Visibility="{x:Bind ViewModel.IsScratchpadVisible, Mode=OneWay}">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <TextBox
+                                    VerticalAlignment="Stretch"
+                                    AcceptsReturn="True"
+                                    AutomationProperties.AutomationId="WorkbenchScratchpad"
+                                    AutomationProperties.Name="{markup:Localize Key=Workbench_Scratchpad}"
+                                    FontFamily="{StaticResource MonospaceFontFamily}"
+                                    IsSpellCheckEnabled="False"
+                                    PlaceholderText="{markup:Localize Key=Workbench_ScratchpadPlaceholder}"
+                                    ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                    Text="{x:Bind ViewModel.Scratchpad.Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    TextWrapping="Wrap" />
+                                <TextBlock
+                                    Grid.Row="1"
+                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                    Style="{StaticResource CaptionTextBlockStyle}"
+                                    Text="{x:Bind ViewModel.Scratchpad.StatusText, Mode=OneWay}" />
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </SplitView.Pane>
+        </SplitView>
+
+        <!--  No cache open yet.  -->
+        <StackPanel
+            Grid.Row="1"
+            Grid.RowSpan="2"
+            MaxWidth="360"
+            Margin="24"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            AutomationProperties.AutomationId="WorkbenchEmpty"
+            Spacing="12"
+            Visibility="{x:Bind local:WorkbenchView.Not(ViewModel.HasOpenCaches), Mode=OneWay}">
+            <FontIcon
+                HorizontalAlignment="Center"
+                FontSize="32"
+                Foreground="{ThemeResource BrandPrimaryBrush}"
+                Glyph="&#xE707;" />
+            <TextBlock
+                HorizontalAlignment="Center"
+                Style="{StaticResource SubtitleTextBlockStyle}"
+                Text="{markup:Localize Key=Workbench_EmptyTitle}" />
+            <TextBlock
+                HorizontalAlignment="Center"
+                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                Text="{markup:Localize Key=Workbench_EmptyBody}"
+                TextAlignment="Center"
+                TextWrapping="Wrap" />
+            <Grid ColumnSpacing="8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBox
+                    AutomationProperties.AutomationId="WorkbenchEmptyCacheCode"
+                    AutomationProperties.Name="{markup:Localize Key=Workbench_CacheCodePlaceholder}"
+                    PlaceholderText="{markup:Localize Key=Workbench_CacheCodePlaceholder}"
+                    Text="{x:Bind ViewModel.NewCacheCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <Button
+                    Grid.Column="1"
+                    AutomationProperties.AutomationId="WorkbenchEmptyOpenCache"
+                    Command="{x:Bind ViewModel.OpenCacheCommand}"
+                    Content="{markup:Localize Key=Workbench_Open}"
+                    Style="{StaticResource AccentButtonStyle}" />
+            </Grid>
+        </StackPanel>
+
+        <VisualStateManager.VisualStateGroups>
+            <!--  The view model picks the mode from the workbench width; the states only map it onto chrome.  -->
+            <VisualStateGroup x:Name="LayoutStates">
+                <VisualState x:Name="WideState">
+                    <VisualState.StateTriggers>
+                        <StateTrigger IsActive="{x:Bind ViewModel.IsWide, Mode=OneWay}" />
+                    </VisualState.StateTriggers>
+                </VisualState>
+                <VisualState x:Name="MediumState">
+                    <VisualState.StateTriggers>
+                        <StateTrigger IsActive="{x:Bind ViewModel.IsMedium, Mode=OneWay}" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="PaneSizer.Visibility" Value="Collapsed" />
+                        <Setter Target="ShowToolsButton.Visibility" Value="Visible" />
+                        <Setter Target="PinButton.Visibility" Value="Visible" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="CompactState">
+                    <VisualState.StateTriggers>
+                        <StateTrigger IsActive="{x:Bind ViewModel.IsCompact, Mode=OneWay}" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="CacheTabs.Visibility" Value="Collapsed" />
+                        <Setter Target="CacheTitle.Visibility" Value="Collapsed" />
+                        <Setter Target="CacheSwitcher.Visibility" Value="Visible" />
+                        <!--  Clears the pane toggle button the minimal NavigationView floats over the content.  -->
+                        <Setter Target="CacheSwitcher.Margin" Value="40,0,0,0" />
+                        <Setter Target="PhoneSelector.Visibility" Value="Visible" />
+                        <Setter Target="PaneSizer.Visibility" Value="Collapsed" />
+                        <Setter Target="DockSplitter.Visibility" Value="Collapsed" />
+                        <Setter Target="CacheHeader.Padding" Value="16,8,16,0" />
+                        <Setter Target="ListingPanel.Padding" Value="16" />
+                        <Setter Target="ToolPaneContent.BorderThickness" Value="0" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+    </Grid>
+</local:WorkbenchViewBase>

@@ -80,6 +80,12 @@ internal sealed class GpxReader(string label, IProgress<int>? progress, Func<int
             {
                 fileTime = ParseDate(await reader.ReadElementContentAsStringAsync());
             }
+            else if (reader.LocalName == "metadata")
+            {
+                // GPX 1.1 keeps the file time here instead of directly under <gpx>.
+                var metadata = (XElement)await XNode.ReadFromAsync(reader, cancellationToken);
+                fileTime = ParseDate(Text(metadata, "time")) ?? fileTime;
+            }
             else
             {
                 await reader.SkipAsync();

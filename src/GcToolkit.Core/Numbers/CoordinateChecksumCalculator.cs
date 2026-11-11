@@ -14,6 +14,16 @@ public enum CoordinateChecksumMode
     AsEntered,
 }
 
+/// <summary>How a scored line turned out.</summary>
+public enum CoordinateChecksumStatus
+{
+    /// <summary>Valid, with nothing to verify against.</summary>
+    Calculated,
+    Match,
+    Mismatch,
+    Invalid,
+}
+
 /// <summary>One scored line. <see cref="Latitude"/>/<see cref="Longitude"/> are only known in DDM mode.</summary>
 public sealed record CoordinateChecksumRow(
     string Input,
@@ -26,6 +36,15 @@ public sealed record CoordinateChecksumRow(
     long? Expected)
 {
     /// <summary><see langword="null"/> when no expected checksum was given or the line is invalid.</summary>
+    public CoordinateChecksumStatus Status => !IsValid
+        ? CoordinateChecksumStatus.Invalid
+        : Matches switch
+        {
+            true => CoordinateChecksumStatus.Match,
+            false => CoordinateChecksumStatus.Mismatch,
+            _ => CoordinateChecksumStatus.Calculated,
+        };
+
     public bool? Matches => IsValid && Expected is { } expected ? expected == Total : null;
 }
 

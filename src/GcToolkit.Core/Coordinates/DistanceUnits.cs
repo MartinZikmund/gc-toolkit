@@ -17,4 +17,14 @@ public static class DistanceUnits
         DistanceUnit.Mile => value * MetersPerMile,
         _ => value,
     };
+
+    /// <summary>Converts <paramref name="meters"/> to <paramref name="unit"/>.</summary>
+    public static double FromMeters(double meters, DistanceUnit unit) => unit switch
+    {
+        DistanceUnit.Kilometer => meters / 1000.0,
+        DistanceUnit.Feet => meters / MetersPerFoot,
+        DistanceUnit.Yard => meters / MetersPerYard,
+        DistanceUnit.Mile => meters / MetersPerMile,
+        _ => meters,
+    };
 }

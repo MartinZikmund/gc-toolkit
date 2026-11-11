@@ -181,6 +181,8 @@ public class PolygonAreaViewModelTests
 
         vm.LoadExampleCommand.Execute(null);
 
+        Assert.IsFalse(vm.HasParseErrors);
+        Assert.AreEqual(4, vm.Edges.Count);
         Assert.IsTrue(vm.HasResult);
     }
 

@@ -7,7 +7,7 @@ using Microsoft.Web.WebView2.Core;
 
 namespace GcToolkit.Views;
 
-[NavigationInfo(NavigationSection.Catalog)]
+[NavigationInfo(NavigationSection.Caches)]
 public partial class GeocacheDetailViewBase : ViewBase<GeocacheDetailViewModel> { }
 
 public sealed partial class GeocacheDetailView : GeocacheDetailViewBase

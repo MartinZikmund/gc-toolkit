@@ -13,11 +13,11 @@ public class VariableCoordinateCalculatorViewModelTests
     private readonly FakeClipboardService _clipboard = new();
     private readonly FakeShareService _share = new();
 
-    private VariableCoordinateCalculatorViewModel Create(IPreferences? preferences = null) => new(
+    private VariableCoordinateCalculatorViewModel Create(IPreferences? preferences = null, FakeStringLocalizer? localizer = null) => new(
         new StubCatalogService("VariableCoordinateCalculator"),
         new FakeRecentsService(),
         new FakeFavoriteToolsService(),
-        new FakeStringLocalizer(),
+        localizer ?? new FakeStringLocalizer(),
         _clipboard,
         _share,
         preferences ?? new InMemoryPreferences());
@@ -84,6 +84,24 @@ public class VariableCoordinateCalculatorViewModelTests
         vm.FormatIndex = (int)CoordinateFormat.DecimalDegrees;
 
         StringAssert.StartsWith(vm.Stages[0].ResultText, "N 50.0205");
+    }
+
+    [TestMethod]
+    [DataRow("N 50° 0(1/0).123 E 014° 25.678", "FormulaError_DivisionByZero", "Division by zero")]
+    [DataRow("N 50° 0(1+).123 E 014° 25.678", "FormulaError_Syntax", "Not a valid formula")]
+    [DataRow("N 99° 01.123 E 014° 25.678", "FormulaError_InvalidCoordinate", "Not a valid coordinate")]
+    public void Template_Error_IsShownInTheUserLanguage(string template, string key, string message)
+    {
+        var vm = Create(localizer: new FakeStringLocalizer(new Dictionary<string, string>
+        {
+            ["VariableCoordinateErrorAt"] = "At {0}: {1}",
+            [key] = message,
+        }));
+
+        vm.Stages[0].Template = template;
+
+        StringAssert.StartsWith(vm.Stages[0].ErrorText, "At ");
+        StringAssert.EndsWith(vm.Stages[0].ErrorText, ": " + message);
     }
 
     [TestMethod]

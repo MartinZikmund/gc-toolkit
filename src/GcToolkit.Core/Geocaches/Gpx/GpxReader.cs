@@ -42,7 +42,7 @@ internal sealed class GpxReader(string label, IProgress<int>? progress, Func<int
             await reader.MoveToContentAsync();
             if (reader.NodeType != XmlNodeType.Element || reader.LocalName != "gpx")
             {
-                Errors.Add(new(label, "Not a GPX file."));
+                Errors.Add(new(label, GpxImportIssueKind.NotGpx));
                 return;
             }
 
@@ -50,7 +50,7 @@ internal sealed class GpxReader(string label, IProgress<int>? progress, Func<int
         }
         catch (XmlException ex)
         {
-            Errors.Add(new(label, $"The file is not valid XML ({ex.Message}). Everything before the problem was imported."));
+            Errors.Add(new(label, GpxImportIssueKind.InvalidXml, ex.Message));
         }
     }
 
@@ -92,7 +92,7 @@ internal sealed class GpxReader(string label, IProgress<int>? progress, Func<int
         var name = Text(wpt, "name") ?? string.Empty;
         if (!TryReadCoordinate(wpt, out var coordinate))
         {
-            Warnings.Add(new(name.Length > 0 ? name : label, "Skipped: the coordinates are missing or invalid."));
+            Warnings.Add(new(name.Length > 0 ? name : label, GpxImportIssueKind.MissingCoordinates));
             return;
         }
 
@@ -107,7 +107,7 @@ internal sealed class GpxReader(string label, IProgress<int>? progress, Func<int
 
         if (!GeocacheCode.TryParse(name, out var code))
         {
-            Warnings.Add(new(name.Length > 0 ? name : label, "Skipped: the cache has no valid code."));
+            Warnings.Add(new(name.Length > 0 ? name : label, GpxImportIssueKind.InvalidCacheCode));
             return;
         }
 
@@ -138,13 +138,13 @@ internal sealed class GpxReader(string label, IProgress<int>? progress, Func<int
         var type = GeocacheType.Unknown;
         if (typeText is not null && !GpxVocabulary.TryParseType(typeText, out type))
         {
-            Warnings.Add(new(subject, $"Unknown cache type '{typeText}'."));
+            Warnings.Add(new(subject, GpxImportIssueKind.UnknownCacheType, typeText));
         }
 
         var size = GeocacheSize.Unknown;
         if (sizeText is not null && !GpxVocabulary.TryParseSize(sizeText, out size))
         {
-            Warnings.Add(new(subject, $"Unknown container size '{sizeText}'."));
+            Warnings.Add(new(subject, GpxImportIssueKind.UnknownContainerSize, sizeText));
         }
 
         var isArchived = IsTrue(cache.Attribute("archived")?.Value);
@@ -234,7 +234,7 @@ internal sealed class GpxReader(string label, IProgress<int>? progress, Func<int
             var type = GeocacheLogType.Unknown;
             if (typeText is not null && !GpxVocabulary.TryParseLogType(typeText, out type))
             {
-                Warnings.Add(new(subject, $"Unknown log type '{typeText}'."));
+                Warnings.Add(new(subject, GpxImportIssueKind.UnknownLogType, typeText));
             }
 
             logs.Add(new GeocacheLog

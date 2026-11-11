@@ -3,8 +3,27 @@ using GcToolkit.Core.Coordinates;
 namespace GcToolkit.Core.Geocaches.Gpx;
 
 /// <summary>A note about one item (or one file) that did not import cleanly.</summary>
-/// <param name="Subject">The cache code, waypoint name or file name the message is about.</param>
-public sealed record GpxImportIssue(string Subject, string Message);
+/// <param name="Subject">The cache code, waypoint name or file name the issue is about.</param>
+/// <param name="Detail">The offending value or parser message, shown next to the localized text.</param>
+public sealed record GpxImportIssue(string Subject, GpxImportIssueKind Kind, string? Detail = null)
+{
+    /// <summary>Resource key of the localized message; format arguments are {0} = subject, {1} = detail.</summary>
+    public string ResourceKey => $"GpxImport_{Kind}";
+}
+
+public enum GpxImportIssueKind
+{
+    MissingCoordinates,
+    InvalidCacheCode,
+    UnknownCacheType,
+    UnknownContainerSize,
+    UnknownLogType,
+    DuplicateCache,
+    NotGpx,
+    InvalidXml,
+    DamagedZip,
+    NoGpxInZip,
+}
 
 /// <summary>A GPX waypoint that is not a geocache and was not attached to one.</summary>
 public sealed record GpxWaypoint(string Name, GeoCoordinate Coordinate)

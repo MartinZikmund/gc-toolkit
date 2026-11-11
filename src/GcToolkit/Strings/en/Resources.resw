@@ -4059,4 +4059,34 @@
   <data name="Scratchpad_Unsaved" xml:space="preserve">
     <value>Unsaved changes</value>
   </data>
+  <data name="GpxImport_MissingCoordinates" xml:space="preserve">
+    <value>{0}: skipped, the coordinates are missing or invalid.</value>
+  </data>
+  <data name="GpxImport_InvalidCacheCode" xml:space="preserve">
+    <value>{0}: skipped, the cache has no valid code.</value>
+  </data>
+  <data name="GpxImport_UnknownCacheType" xml:space="preserve">
+    <value>{0}: unknown cache type '{1}'.</value>
+  </data>
+  <data name="GpxImport_UnknownContainerSize" xml:space="preserve">
+    <value>{0}: unknown container size '{1}'.</value>
+  </data>
+  <data name="GpxImport_UnknownLogType" xml:space="preserve">
+    <value>{0}: unknown log type '{1}'.</value>
+  </data>
+  <data name="GpxImport_DuplicateCache" xml:space="preserve">
+    <value>{0} appears more than once; the last copy was used.</value>
+  </data>
+  <data name="GpxImport_NotGpx" xml:space="preserve">
+    <value>{0} is not a GPX file.</value>
+  </data>
+  <data name="GpxImport_InvalidXml" xml:space="preserve">
+    <value>{0} is damaged ({1}). Everything before the problem was imported.</value>
+  </data>
+  <data name="GpxImport_DamagedZip" xml:space="preserve">
+    <value>The ZIP archive {0} is damaged ({1}).</value>
+  </data>
+  <data name="GpxImport_NoGpxInZip" xml:space="preserve">
+    <value>The ZIP archive {0} contains no GPX files.</value>
+  </data>
 </root>

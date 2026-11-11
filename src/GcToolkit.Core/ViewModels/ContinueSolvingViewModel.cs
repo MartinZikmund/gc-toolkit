@@ -106,12 +106,25 @@ public partial class ContinueSolvingViewModel : ViewModelBase
                 p.Code,
                 p.Name,
                 string.Format(CultureInfo.CurrentCulture, _localizer["Workbench_VariablesProgress"].Value, p.VariablesFilled, p.VariablesTotal),
-                string.Format(CultureInfo.CurrentCulture, _localizer["Workbench_ScratchpadLines"].Value, p.ScratchpadLineCount),
+                FormatScratchpadLines(p.ScratchpadLineCount),
                 FormatEdited(now - p.LastEdited),
                 p.IsSolved));
         }
 
         HasItems = Items.Count > 0;
+    }
+
+    // 1 / 2–4 / 5+ covers both English and Czech.
+    private string FormatScratchpadLines(int count)
+    {
+        var key = count switch
+        {
+            1 => "Workbench_ScratchpadLinesOne",
+            >= 2 and <= 4 => "Workbench_ScratchpadLinesFew",
+            _ => "Workbench_ScratchpadLinesMany",
+        };
+
+        return Format(key, count);
     }
 
     private string FormatEdited(TimeSpan age)

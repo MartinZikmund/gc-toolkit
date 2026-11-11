@@ -1453,7 +1453,7 @@
     <value>Checksum</value>
   </data>
   <data name="Checksum_Tooltip" xml:space="preserve">
-    <value>Compute checksums and hashes for text.</value>
+    <value>Cross sums, digital roots and coordinate checksums.</value>
   </data>
   <data name="Flashlight_Name" xml:space="preserve">
     <value>Flashlight</value>
@@ -3815,6 +3815,42 @@
   </data>
   <data name="ChecksumClear" xml:space="preserve">
     <value>Clear</value>
+  </data>
+  <data name="ChecksumCoordinateHeader" xml:space="preserve">
+    <value>Coordinate checksum</value>
+  </data>
+  <data name="ChecksumCoordinateLabel" xml:space="preserve">
+    <value>One coordinate per line</value>
+  </data>
+  <data name="ChecksumCoordinateHint" xml:space="preserve">
+    <value>Add = 62 to a line to verify it against a published checksum.</value>
+  </data>
+  <data name="ChecksumCoordinatePlaceholder" xml:space="preserve">
+    <value>e.g. N 49° 12.345' E 016° 30.678' = 59</value>
+  </data>
+  <data name="ChecksumModeDdm" xml:space="preserve">
+    <value>Degrees decimal minutes (standard)</value>
+  </data>
+  <data name="ChecksumModeAsEntered" xml:space="preserve">
+    <value>As entered</value>
+  </data>
+  <data name="ChecksumLatLabel" xml:space="preserve">
+    <value>Lat</value>
+  </data>
+  <data name="ChecksumLonLabel" xml:space="preserve">
+    <value>Lon</value>
+  </data>
+  <data name="ChecksumMatch" xml:space="preserve">
+    <value>Matches the expected checksum ({0})</value>
+  </data>
+  <data name="ChecksumMismatch" xml:space="preserve">
+    <value>Expected {0}, calculated {1}</value>
+  </data>
+  <data name="ChecksumErrorCoordinate" xml:space="preserve">
+    <value>Not a recognised coordinate.</value>
+  </data>
+  <data name="ChecksumErrorNoDigits" xml:space="preserve">
+    <value>No digits to add up.</value>
   </data>
   <data name="ChecksumDigitsHeader" xml:space="preserve">
     <value>Digits</value>

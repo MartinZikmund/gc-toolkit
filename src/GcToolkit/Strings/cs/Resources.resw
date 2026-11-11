@@ -1453,7 +1453,7 @@
     <value>Kontrolní součet</value>
   </data>
   <data name="Checksum_Tooltip" xml:space="preserve">
-    <value>Spočítejte kontrolní součty a haše textu.</value>
+    <value>Ciferné součty, ciferné kořeny a kontrolní součty souřadnic.</value>
   </data>
   <data name="Flashlight_Name" xml:space="preserve">
     <value>Svítilna</value>
@@ -3815,6 +3815,42 @@
   </data>
   <data name="ChecksumClear" xml:space="preserve">
     <value>Vymazat</value>
+  </data>
+  <data name="ChecksumCoordinateHeader" xml:space="preserve">
+    <value>Kontrolní součet souřadnic</value>
+  </data>
+  <data name="ChecksumCoordinateLabel" xml:space="preserve">
+    <value>Jedna souřadnice na řádek</value>
+  </data>
+  <data name="ChecksumCoordinateHint" xml:space="preserve">
+    <value>Přidejte = 62 na řádek pro ověření proti zveřejněnému součtu.</value>
+  </data>
+  <data name="ChecksumCoordinatePlaceholder" xml:space="preserve">
+    <value>např. N 49° 12.345' E 016° 30.678' = 59</value>
+  </data>
+  <data name="ChecksumModeDdm" xml:space="preserve">
+    <value>Stupně a desetinné minuty (standard)</value>
+  </data>
+  <data name="ChecksumModeAsEntered" xml:space="preserve">
+    <value>Jak zadáno</value>
+  </data>
+  <data name="ChecksumLatLabel" xml:space="preserve">
+    <value>Šířka</value>
+  </data>
+  <data name="ChecksumLonLabel" xml:space="preserve">
+    <value>Délka</value>
+  </data>
+  <data name="ChecksumMatch" xml:space="preserve">
+    <value>Odpovídá očekávanému součtu ({0})</value>
+  </data>
+  <data name="ChecksumMismatch" xml:space="preserve">
+    <value>Očekáváno {0}, vypočteno {1}</value>
+  </data>
+  <data name="ChecksumErrorCoordinate" xml:space="preserve">
+    <value>Nerozpoznaná souřadnice.</value>
+  </data>
+  <data name="ChecksumErrorNoDigits" xml:space="preserve">
+    <value>Žádné číslice k sečtení.</value>
   </data>
   <data name="ChecksumDigitsHeader" xml:space="preserve">
     <value>Číslice</value>

@@ -5,7 +5,8 @@
     xmlns:controls="using:GcToolkit.Controls"
     xmlns:local="using:GcToolkit.Views"
     xmlns:markup="using:GcToolkit.Markup"
-    xmlns:numbers="using:GcToolkit.Core.Numbers">
+    xmlns:numbers="using:GcToolkit.Core.Numbers"
+    xmlns:vm="using:GcToolkit.Core.ViewModels.Tools">
 
     <local:ChecksumViewBase.Resources>
         <Style x:Key="ChecksumCardStyle" TargetType="Border">
@@ -228,6 +229,107 @@
                 IsOpen="{x:Bind ViewModel.HasTruncationNote, Mode=OneWay}"
                 Message="{x:Bind ViewModel.TruncationNote, Mode=OneWay}"
                 Severity="Informational" />
+
+            <!--  Coordinate checksum: the figure a cache page publishes  -->
+            <Border Style="{StaticResource ChecksumCardStyle}">
+                <StackPanel Spacing="12">
+                    <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" Text="{markup:Localize Key=ChecksumCoordinateHeader}" />
+
+                    <TextBox
+                        MinHeight="96"
+                        AcceptsReturn="True"
+                        FontFamily="{StaticResource MonospaceFontFamily}"
+                        Header="{markup:Localize Key=ChecksumCoordinateLabel}"
+                        IsSpellCheckEnabled="False"
+                        PlaceholderText="{markup:Localize Key=ChecksumCoordinatePlaceholder}"
+                        Text="{x:Bind ViewModel.CoordinateText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        TextWrapping="NoWrap" />
+
+                    <TextBlock
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        Style="{ThemeResource CaptionTextBlockStyle}"
+                        Text="{markup:Localize Key=ChecksumCoordinateHint}"
+                        TextWrapping="Wrap" />
+
+                    <ToggleSwitch
+                        IsOn="{x:Bind ViewModel.UseDdmMode, Mode=TwoWay}"
+                        OffContent="{markup:Localize Key=ChecksumModeAsEntered}"
+                        OnContent="{markup:Localize Key=ChecksumModeDdm}" />
+
+                    <StackPanel
+                        HorizontalAlignment="Left"
+                        Orientation="Horizontal"
+                        Spacing="8">
+                        <Button Command="{x:Bind ViewModel.UseCoordinateExampleCommand}" Content="{markup:Localize Key=ChecksumExample}" />
+                        <Button Command="{x:Bind ViewModel.ClearCoordinatesCommand}" Content="{markup:Localize Key=ChecksumClear}" />
+                    </StackPanel>
+
+                    <ItemsControl ItemsSource="{x:Bind ViewModel.CoordinateRows, Mode=OneWay}" Visibility="{x:Bind ViewModel.HasCoordinateRows, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="vm:ChecksumCoordinateLine">
+                                <Grid
+                                    Margin="0,2"
+                                    Padding="12,8"
+                                    Background="{ThemeResource SubtleFillColorSecondaryBrush}"
+                                    ColumnSpacing="12"
+                                    CornerRadius="6">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <StackPanel Grid.Column="0" Spacing="2">
+                                        <TextBlock
+                                            Style="{StaticResource MonoTextBlockStyle}"
+                                            Text="{x:Bind Input}"
+                                            TextWrapping="Wrap" />
+                                        <TextBlock
+                                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                            Style="{StaticResource MonoTextBlockStyle}"
+                                            Text="{x:Bind Normalized}"
+                                            TextWrapping="Wrap"
+                                            Visibility="{x:Bind HasNormalized, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                        <TextBlock
+                                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                            Style="{ThemeResource CaptionTextBlockStyle}"
+                                            Text="{x:Bind Detail}"
+                                            Visibility="{x:Bind HasDetail, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                        <TextBlock
+                                            Foreground="{ThemeResource SystemFillColorSuccessBrush}"
+                                            Style="{ThemeResource CaptionTextBlockStyle}"
+                                            Text="{x:Bind StatusText}"
+                                            TextWrapping="Wrap"
+                                            Visibility="{x:Bind IsMatch, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                        <TextBlock
+                                            Foreground="{ThemeResource SystemFillColorCriticalBrush}"
+                                            Style="{ThemeResource CaptionTextBlockStyle}"
+                                            Text="{x:Bind StatusText}"
+                                            TextWrapping="Wrap"
+                                            Visibility="{x:Bind IsProblem, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                    </StackPanel>
+
+                                    <StackPanel
+                                        Grid.Column="1"
+                                        VerticalAlignment="Center"
+                                        Orientation="Horizontal"
+                                        Spacing="8"
+                                        Visibility="{x:Bind IsValid, Converter={StaticResource BoolToVisibilityConverter}}">
+                                        <TextBlock
+                                            FontSize="20"
+                                            Style="{StaticResource MonoTextBlockStyle}"
+                                            Text="{x:Bind TotalText}" />
+                                        <TextBlock
+                                            VerticalAlignment="Bottom"
+                                            Foreground="{ThemeResource BrandPrimaryBrush}"
+                                            Style="{StaticResource MonoTextBlockStyle}"
+                                            Text="{x:Bind RootText}" />
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
 
             <TextBlock
                 Foreground="{ThemeResource TextFillColorSecondaryBrush}"

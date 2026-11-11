@@ -20,6 +20,7 @@ public class ScratchpadViewModelTests
             ["Scratchpad_Saved"] = "Saved",
             ["Scratchpad_SavedJustNow"] = "Saved just now",
             ["Scratchpad_SavedMinutesAgo"] = "Saved {0} min ago",
+            ["Scratchpad_SavedHoursAgo"] = "Saved {0} h ago",
             ["Scratchpad_Saving"] = "Saving",
             ["Scratchpad_Unsaved"] = "Unsaved",
         }),
@@ -354,6 +355,18 @@ public class ScratchpadViewModelTests
 
         Assert.AreEqual(ScratchpadSaveState.Saved, viewModel.SaveState);
         Assert.AreEqual(0, _repository.Saves.Count);
+    }
+
+    [TestMethod]
+    public async Task StatusText_AfterAnHour_ShowsHours()
+    {
+        var viewModel = await CreateLoadedAsync();
+        viewModel.Text = "x";
+        _time.Advance(TimeSpan.FromSeconds(1));
+
+        _time.Advance(TimeSpan.FromMinutes(90));
+
+        Assert.AreEqual("Saved 1 h ago", viewModel.StatusText);
     }
 
     private sealed class RecordingSynchronizationContext : SynchronizationContext

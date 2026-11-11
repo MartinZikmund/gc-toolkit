@@ -4185,4 +4185,49 @@
   <data name="BearingFixPlotNote" xml:space="preserve">
     <value>Pouze schéma, sever nahoře. Kružnice ukazuje střední (RMS) odchylku přímek.</value>
   </data>
+  <data name="Resection_Name" xml:space="preserve">
+    <value>Protínání zpět</value>
+  </data>
+  <data name="Resection_Tooltip" xml:space="preserve">
+    <value>Určete svou polohu z azimutů zaměřených na dva nebo více známých orientačních bodů.</value>
+  </data>
+  <data name="ResectionPointsHeader" xml:space="preserve">
+    <value>Známé orientační body a azimut, pod kterým jste je zaměřili</value>
+  </data>
+  <data name="ResectionPointHeader" xml:space="preserve">
+    <value>Orientační bod {0}</value>
+  </data>
+  <data name="ResectionBearingHeader" xml:space="preserve">
+    <value>Azimut na {0} (°)</value>
+  </data>
+  <data name="ResectionBearingHint" xml:space="preserve">
+    <value>Zadejte azimut z místa, kde stojíte, na orientační bod, po směru hodinových ručiček od severu. Každé zaměření se převede na zpětnou přímku procházející bodem; při třech a více je výsledek nejlepší shoda metodou nejmenších čtverců.</value>
+  </data>
+  <data name="ResectionAddPoint" xml:space="preserve">
+    <value>Přidat orientační bod</value>
+  </data>
+  <data name="ResectionResultLabel" xml:space="preserve">
+    <value>Vaše poloha</value>
+  </data>
+  <data name="ResectionErrorPoint" xml:space="preserve">
+    <value>Zadejte platnou souřadnici orientačního bodu {0}.</value>
+  </data>
+  <data name="ResectionErrorBearing" xml:space="preserve">
+    <value>Zadejte azimut na {0} jako číslo ve stupních.</value>
+  </data>
+  <data name="ResectionErrorTooFew" xml:space="preserve">
+    <value>Zadejte alespoň dva orientační body, každý se zaměřeným azimutem.</value>
+  </data>
+  <data name="ResectionErrorCoincident" xml:space="preserve">
+    <value>Všechna zaměření leží na jedné přímce, takže vyhovuje každý její bod. Zaměřte body v různých směrech.</value>
+  </data>
+  <data name="ResectionErrorIdentical" xml:space="preserve">
+    <value>Všechny orientační body jsou na stejném místě. Použijte alespoň dva různé body.</value>
+  </data>
+  <data name="ResectionWarnBehind" xml:space="preserve">
+    <value>Azimut na {0} od něj míří pryč. Nezadali jste zpětný azimut?</value>
+  </data>
+  <data name="ResectionWarnIllConditioned" xml:space="preserve">
+    <value>Zaměření jsou téměř rovnoběžná, takže drobná chyba v kterémkoli azimutu posune vaši polohu hodně daleko. Vyberte body v různějších směrech.</value>
+  </data>
 </root>

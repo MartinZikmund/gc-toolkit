@@ -87,6 +87,9 @@ public sealed record GeocacheUserData
 
     public string? Note { get; init; }
 
+    /// <summary>Private working notes; unlike <see cref="Note"/> this never syncs to geocaching.com.</summary>
+    public string? Scratchpad { get; init; }
+
     public bool IsSolved { get; init; }
 
     public bool IsFound { get; init; }
@@ -95,6 +98,7 @@ public sealed record GeocacheUserData
     {
         CorrectedCoordinate = CorrectedCoordinate ?? other.CorrectedCoordinate,
         Note = string.IsNullOrEmpty(Note) ? other.Note : Note,
+        Scratchpad = string.IsNullOrEmpty(Scratchpad) ? other.Scratchpad : Scratchpad,
         IsSolved = IsSolved || other.IsSolved,
         IsFound = IsFound || other.IsFound,
     };

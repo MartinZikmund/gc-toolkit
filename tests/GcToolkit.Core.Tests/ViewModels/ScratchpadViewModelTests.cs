@@ -330,6 +330,32 @@ public class ScratchpadViewModelTests
         Assert.AreEqual("a", _repository.Get(_code));
     }
 
+    [TestMethod]
+    [DataRow("first\r", "first\rsecond")]
+    [DataRow("first\r\n", "first\r\nsecond")]
+    [DataRow("first\rmiddle", "first\rmiddle\rsecond")]
+    [DataRow("first\r\nmiddle", "first\r\nmiddle\r\nsecond")]
+    public async Task Append_UsesTheTextsLineBreaks(string saved, string expected)
+    {
+        var viewModel = await CreateLoadedAsync(saved);
+
+        viewModel.Append("second");
+
+        Assert.AreEqual(expected, viewModel.Text);
+    }
+
+    [TestMethod]
+    public async Task Text_OnlyLineBreaksDiffer_StaysSaved()
+    {
+        var viewModel = await CreateLoadedAsync("a\nb");
+
+        viewModel.Text = "a\rb";
+        _time.Advance(TimeSpan.FromSeconds(5));
+
+        Assert.AreEqual(ScratchpadSaveState.Saved, viewModel.SaveState);
+        Assert.AreEqual(0, _repository.Saves.Count);
+    }
+
     private sealed class RecordingSynchronizationContext : SynchronizationContext
     {
         private readonly Queue<(SendOrPostCallback Callback, object? State)> _posted = new();

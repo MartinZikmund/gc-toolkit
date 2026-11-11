@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using System.Text;
 using System.Threading.Tasks;
 using GcToolkit.Core.Catalog;
@@ -172,6 +172,12 @@ public sealed partial class ChecksumViewModel : ToolViewModelBase
 
     partial void OnShowPartsChanged(bool value) => _debouncer.RunNow(Recompute);
 
+    partial void OnInputBaseChanged(int value) => _debouncer.RunNow(Recompute);
+
+    partial void OnDigitBaseChanged(int value) => _debouncer.RunNow(Recompute);
+
+    partial void OnModulusChanged(double value) => _debouncer.RunNow(Recompute);
+
     partial void OnUseDdmModeChanged(bool value) => RecomputeCoordinates();
 
     partial void OnCoordinateTextChanged(string value) => RecomputeCoordinates();
@@ -194,7 +200,9 @@ public sealed partial class ChecksumViewModel : ToolViewModelBase
 
     partial void OnHasCoordinateRowsChanged(bool value) => NotifyOutputChanged();
 
-    private bool CanCopy => HasOutput || HasCoordinateRows;
+    partial void OnHasVariantsChanged(bool value) => NotifyOutputChanged();
+
+    private bool CanCopy => HasOutput || HasCoordinateRows || HasVariants;
 
     private void NotifyOutputChanged()
     {
@@ -263,7 +271,99 @@ public sealed partial class ChecksumViewModel : ToolViewModelBase
 
         TruncationNote = BuildTruncationNote(analysis);
         HasTruncationNote = TruncationNote.Length > 0;
+
+        RecomputeVariants();
     }
+
+    private bool HasCustomVariantOptions => InputBase != 10 || DigitBase != 10 || !double.IsNaN(Modulus);
+
+    private void RecomputeVariants()
+    {
+        var result = CrossSumCalculator.Calculate(InputText, InputBase, DigitBase, ToModulus(Modulus));
+
+        // Free text ("N 49 12.345") is not a number; stay quiet unless the user asked for something specific.
+        var error = result.Error switch
+        {
+            CrossSumError.None or CrossSumError.NoDigits => string.Empty,
+            CrossSumError.InvalidDigit when !HasCustomVariantOptions => string.Empty,
+            CrossSumError.InvalidDigit => Localize("ChecksumErrorDigit", result.InvalidCharacter, InputBase),
+            CrossSumError.InvalidBase => Localize("ChecksumErrorBase"),
+            CrossSumError.InvalidModulus => Localize("ChecksumErrorModulus"),
+            _ => Localize("ChecksumErrorTooLong", CrossSumCalculator.MaxConversionDigits),
+        };
+
+        VariantError = error;
+        HasVariantError = error.Length > 0;
+        VariantRows = result.IsValid ? BuildVariantRows(result) : [];
+        HasVariants = result.IsValid;
+    }
+
+    /// <summary>NaN (empty box) means off; anything that is not a whole number maps to 0 so the calculator rejects it.</summary>
+    private static long? ToModulus(double value)
+        => double.IsNaN(value)
+            ? null
+            : value is >= 1 and <= 1e15 && value == Math.Floor(value) ? (long)value : 0;
+
+    private List<ChecksumVariantLine> BuildVariantRows(CrossSumResult result)
+    {
+        List<ChecksumVariantLine> rows = [];
+
+        if (InputBase != 10 || DigitBase != 10)
+        {
+            rows.Add(new ChecksumVariantLine(
+                Localize("ChecksumBaseSumLabel", result.DigitBase),
+                Format(result.CrossSum),
+                ShowWorking ? FormatDigitWorking(result, alternating: false) : string.Empty));
+        }
+
+        rows.Add(new ChecksumVariantLine(
+            Localize("ChecksumAlternatingLabel"),
+            Format(result.AlternatingSum),
+            ShowWorking ? FormatDigitWorking(result, alternating: true) : string.Empty));
+
+        if (result is { Modulus: { } n, CrossSumModulo: { } remainder })
+        {
+            rows.Add(new ChecksumVariantLine(
+                Localize("ChecksumModuloLabel", Format(n)),
+                Format(remainder),
+                ShowWorking ? $"{Format(result.CrossSum)} mod {Format(n)} = {Format(remainder)}" : string.Empty));
+        }
+
+        return rows;
+    }
+
+    /// <summary>"1 - 2 + 3 = 2"; signs run from the rightmost digit (+). Digits above 9 read "F(15)".</summary>
+    private static string FormatDigitWorking(CrossSumResult result, bool alternating)
+    {
+        var digits = result.Digits;
+        var shown = Math.Min(digits.Count, ChecksumCalculator.MaxDetailTerms);
+        StringBuilder builder = new();
+
+        for (var i = 0; i < shown; i++)
+        {
+            var negative = alternating && (digits.Count - 1 - i) % 2 == 1;
+            var digit = digits[i];
+            var term = result.DigitBase > 10 ? $"{DigitSymbol(digit)}({digit})" : digit.ToString(CultureInfo.InvariantCulture);
+
+            if (i == 0)
+            {
+                builder.Append(negative ? "-" : string.Empty).Append(term);
+            }
+            else
+            {
+                builder.Append(negative ? " - " : " + ").Append(term);
+            }
+        }
+
+        if (shown < digits.Count)
+        {
+            builder.Append(" + …");
+        }
+
+        return builder.Append(" = ").Append(Format(alternating ? result.AlternatingSum : result.CrossSum)).ToString();
+    }
+
+    private static char DigitSymbol(int digit) => (char)(digit < 10 ? '0' + digit : 'A' + digit - 10);
 
     private string BuildTruncationNote(ChecksumAnalysis analysis)
     {
@@ -312,6 +412,7 @@ public sealed partial class ChecksumViewModel : ToolViewModelBase
     {
         StringBuilder builder = new();
         AppendNumberResult(builder);
+        AppendVariantResult(builder);
         AppendCoordinateResult(builder);
         return builder.ToString().TrimEnd();
     }
@@ -334,6 +435,24 @@ public sealed partial class ChecksumViewModel : ToolViewModelBase
             builder.AppendLine(row.Status == CoordinateChecksumStatus.Invalid
                 ? row.StatusText
                 : $"{row.TotalText} = {row.RootText}" + (row.HasStatus ? $" ({row.StatusText})" : string.Empty));
+        }
+    }
+
+    private void AppendVariantResult(StringBuilder builder)
+    {
+        if (!HasVariants)
+        {
+            return;
+        }
+
+        if (builder.Length > 0)
+        {
+            builder.AppendLine();
+        }
+
+        foreach (var row in VariantRows)
+        {
+            builder.Append(row.Label).Append(": ").AppendLine(row.Value);
         }
     }
 

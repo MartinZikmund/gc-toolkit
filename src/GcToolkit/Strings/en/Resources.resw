@@ -4044,6 +4044,9 @@
   <data name="Workbench_VariablesProgress" xml:space="preserve">
     <value>{0} of {1} variables</value>
   </data>
+  <data name="Workbench_VariablesProgressOne" xml:space="preserve">
+    <value>{0} of {1} variable</value>
+  </data>
   <data name="Workbench_ScratchpadLinesOne" xml:space="preserve">
     <value>{0} line of notes</value>
   </data>

@@ -105,7 +105,7 @@ public partial class ContinueSolvingViewModel : ViewModelBase
             Items.Add(new ContinueSolvingItem(
                 p.Code,
                 p.Name,
-                string.Format(CultureInfo.CurrentCulture, _localizer["Workbench_VariablesProgress"].Value, p.VariablesFilled, p.VariablesTotal),
+                FormatVariables(p.VariablesFilled, p.VariablesTotal),
                 FormatScratchpadLines(p.ScratchpadLineCount),
                 FormatEdited(now - p.LastEdited),
                 p.IsSolved));
@@ -113,6 +113,14 @@ public partial class ContinueSolvingViewModel : ViewModelBase
 
         HasItems = Items.Count > 0;
     }
+
+    // "of 1 variable" / "z 1 proměnné" are the only singular forms in both languages.
+    private string FormatVariables(int filled, int total)
+        => string.Format(
+            CultureInfo.CurrentCulture,
+            _localizer[total == 1 ? "Workbench_VariablesProgressOne" : "Workbench_VariablesProgress"].Value,
+            filled,
+            total);
 
     // 1 / 2–4 / 5+ covers both English and Czech.
     private string FormatScratchpadLines(int count)

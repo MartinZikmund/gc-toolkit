@@ -4044,6 +4044,9 @@
   <data name="Workbench_VariablesProgress" xml:space="preserve">
     <value>{0} z {1} proměnných</value>
   </data>
+  <data name="Workbench_VariablesProgressOne" xml:space="preserve">
+    <value>{0} z {1} proměnné</value>
+  </data>
   <data name="Workbench_ScratchpadLinesOne" xml:space="preserve">
     <value>{0} řádek poznámek</value>
   </data>

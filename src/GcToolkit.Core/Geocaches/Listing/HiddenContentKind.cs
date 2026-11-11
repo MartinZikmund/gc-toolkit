@@ -1,4 +1,4 @@
-namespace GcToolkit.Core.Listings;
+namespace GcToolkit.Core.Geocaches.Listing;
 
 /// <summary>What sort of hidden or easily-missed content a finding is.</summary>
 public enum HiddenContentKind

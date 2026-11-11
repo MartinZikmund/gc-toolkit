@@ -1,6 +1,6 @@
 using System.Globalization;
 
-namespace GcToolkit.Core.Listings;
+namespace GcToolkit.Core.Geocaches.Listing;
 
 /// <summary>A parsed CSS colour; just enough of CSS to compare text and background colours.</summary>
 internal readonly record struct CssColor(int R, int G, int B, double Alpha)

@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 using AngleSharp.Dom;
 using AngleSharp.Html.Parser;
 
-namespace GcToolkit.Core.Listings;
+namespace GcToolkit.Core.Geocaches.Listing;
 
 /// <summary>
 /// Looks through a listing's description HTML for things the rendered page does not show:

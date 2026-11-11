@@ -1,6 +1,6 @@
-using GcToolkit.Core.Listings;
+using GcToolkit.Core.Geocaches.Listing;
 
-namespace GcToolkit.Core.Tests.Listings;
+namespace GcToolkit.Core.Tests.Geocaches.Listing;
 
 [TestClass]
 public class HiddenContentInspectorTests

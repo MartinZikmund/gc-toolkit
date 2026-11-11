@@ -1,4 +1,4 @@
-namespace GcToolkit.Core.Listings;
+namespace GcToolkit.Core.Geocaches.Listing;
 
 /// <summary>One thing the inspector found in a listing.</summary>
 /// <param name="Kind">What sort of finding it is.</param>

@@ -1,7 +1,7 @@
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace GcToolkit.Core.Listings;
+namespace GcToolkit.Core.Geocaches.Listing;
 
 /// <summary>Finds invisible characters, odd whitespace and Base64/hex blobs in plain strings.</summary>
 internal static partial class TextAnomalyScanner

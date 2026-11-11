@@ -1,4 +1,4 @@
-namespace GcToolkit.Core.Listings;
+namespace GcToolkit.Core.Geocaches.Listing;
 
 /// <summary>The result of inspecting a listing.</summary>
 /// <param name="Findings">Everything suspicious, in document order.</param>

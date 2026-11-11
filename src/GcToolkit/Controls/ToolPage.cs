@@ -23,6 +23,9 @@ public sealed partial class ToolPage : ContentControl
     private const double StandardWidth = 760;
     private const double WideWidth = 1024;
 
+    // Below this the page drops to compact padding and a smaller header (a phone, or the workbench tool pane).
+    private const double CompactWidth = 640;
+
     private FrameworkElement? _header;
 
     public ToolPage()
@@ -31,6 +34,7 @@ public sealed partial class ToolPage : ContentControl
         HorizontalContentAlignment = HorizontalAlignment.Stretch;
         VerticalContentAlignment = VerticalAlignment.Stretch;
         Loaded += OnLoaded;
+        SizeChanged += (_, e) => UpdateWidthState(e.NewSize.Width);
     }
 
     // ---- Tool -----------------------------------------------------------------
@@ -205,7 +209,11 @@ public sealed partial class ToolPage : ContentControl
         PushToolToHeader();
         UpdateFavoriteLabel();
         UpdateActionBarVisibility();
+        UpdateWidthState(ActualWidth);
     }
+
+    private void UpdateWidthState(double width)
+        => VisualStateManager.GoToState(this, width > 0 && width < CompactWidth ? "Compact" : "Regular", false);
 
     // ToolHostView resolves its view model from the navigation parameter, which can land either
     // side of OnApplyTemplate — so push from both ends and keep the push idempotent.

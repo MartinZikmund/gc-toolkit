@@ -18,6 +18,7 @@ namespace GcToolkit.Core.Serialization;
 [JsonSerializable(typeof(SavedVariableSheet))]
 [JsonSerializable(typeof(RhumbLineState))]
 [JsonSerializable(typeof(WorkbenchSessionState))]
+[JsonSerializable(typeof(WorkbenchToolsState))]
 public sealed partial class PreferencesJsonContext : JsonSerializerContext
 {
 }

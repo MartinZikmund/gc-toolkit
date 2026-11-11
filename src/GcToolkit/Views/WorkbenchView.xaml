@@ -313,7 +313,10 @@
                                         ToolTipService.ToolTip="{markup:Localize Key=Workbench_AddTool}">
                                         <FontIcon FontSize="12" Glyph="&#xE710;" />
                                         <Button.Flyout>
-                                            <Flyout x:Name="ToolPickerFlyout" Placement="BottomEdgeAlignedRight">
+                                            <Flyout
+                                                x:Name="ToolPickerFlyout"
+                                                Opening="OnToolPickerOpening"
+                                                Placement="BottomEdgeAlignedRight">
                                                 <StackPanel Width="300" Spacing="8">
                                                     <TextBox
                                                         AutomationProperties.AutomationId="WorkbenchToolSearch"

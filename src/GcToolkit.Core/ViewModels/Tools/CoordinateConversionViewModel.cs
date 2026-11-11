@@ -24,7 +24,7 @@ namespace GcToolkit.Core.ViewModels.Tools;
 [Tool("CoordinateConversion", ToolCategory.Coordinates,
       Introduced = "2026-05-20", Updated = "2026-06-06",
       Keywords = ["wgs84", "utm", "mgrs", "convert", "notation", "dd", "ddm", "dms", "souřadnice", "převod", "gps", "formát"])]
-public sealed partial class CoordinateConversionViewModel : ToolViewModelBase
+public sealed partial class CoordinateConversionViewModel : ToolViewModelBase, IToolStateful
 {
     private readonly IStringLocalizer _localizer;
     private readonly IClipboardService _clipboard;
@@ -218,4 +218,20 @@ public sealed partial class CoordinateConversionViewModel : ToolViewModelBase
         CoordinateFormat.DecimalDegrees or
         CoordinateFormat.DegreesDecimalMinutes or
         CoordinateFormat.DegreesMinutesSeconds;
+
+    public ToolInputState CaptureState()
+    {
+        ToolInputState state = new();
+        state.Set(nameof(InputDatum), InputDatum.Code);
+        state.Set(nameof(OutputDatum), OutputDatum.Code);
+        state.Set(nameof(InputText), InputText);
+        return state;
+    }
+
+    public void RestoreState(ToolInputState state)
+    {
+        InputDatum = DatumRegistry.Find(state.GetString(nameof(InputDatum))) ?? InputDatum;
+        OutputDatum = DatumRegistry.Find(state.GetString(nameof(OutputDatum))) ?? OutputDatum;
+        InputText = state.GetString(nameof(InputText), InputText);
+    }
 }

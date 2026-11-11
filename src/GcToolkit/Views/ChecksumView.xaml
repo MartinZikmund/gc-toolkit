@@ -76,6 +76,47 @@
                 <CheckBox Content="{markup:Localize Key=ChecksumShowParts}" IsChecked="{x:Bind ViewModel.ShowParts, Mode=TwoWay}" />
             </StackPanel>
 
+            <!--  Other cross sums: alternating is always on, base and modulo are opt-in  -->
+            <Expander HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                <Expander.Header>
+                    <StackPanel Spacing="2">
+                        <TextBlock Style="{ThemeResource BodyStrongTextBlockStyle}" Text="{markup:Localize Key=ChecksumVariantsHeader}" />
+                        <TextBlock
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Style="{ThemeResource CaptionTextBlockStyle}"
+                            Text="{markup:Localize Key=ChecksumVariantsHint}"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                </Expander.Header>
+                <Grid ColumnSpacing="12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <ComboBox
+                        Grid.Column="0"
+                        HorizontalAlignment="Stretch"
+                        Header="{markup:Localize Key=ChecksumInputBaseLabel}"
+                        ItemsSource="{x:Bind vm:ChecksumViewModel.BaseOptions}"
+                        SelectedItem="{x:Bind ViewModel.InputBase, Mode=TwoWay}" />
+                    <ComboBox
+                        Grid.Column="1"
+                        HorizontalAlignment="Stretch"
+                        Header="{markup:Localize Key=ChecksumDigitBaseLabel}"
+                        ItemsSource="{x:Bind vm:ChecksumViewModel.BaseOptions}"
+                        SelectedItem="{x:Bind ViewModel.DigitBase, Mode=TwoWay}" />
+                    <NumberBox
+                        Grid.Column="2"
+                        Header="{markup:Localize Key=ChecksumModulusLabel}"
+                        Minimum="1"
+                        PlaceholderText="{markup:Localize Key=ChecksumModulusPlaceholder}"
+                        SmallChange="1"
+                        SpinButtonPlacementMode="Compact"
+                        Value="{x:Bind ViewModel.Modulus, Mode=TwoWay}" />
+                </Grid>
+            </Expander>
+
             <!--  Empty state  -->
             <TextBlock
                 Foreground="{ThemeResource TextFillColorSecondaryBrush}"
@@ -224,6 +265,46 @@
                 </StackPanel>
             </Border>
 
+            <!--  Alternating / modulo / base cross sums  -->
+            <Border Style="{StaticResource ChecksumCardStyle}" Visibility="{x:Bind ViewModel.HasVariants, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                <ItemsControl ItemsSource="{x:Bind ViewModel.VariantRows, Mode=OneWay}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="vm:ChecksumVariantLine">
+                            <StackPanel Margin="0,0,0,12" Spacing="4">
+                                <Grid ColumnSpacing="12">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock
+                                        Grid.Column="0"
+                                        VerticalAlignment="Center"
+                                        Style="{ThemeResource BodyStrongTextBlockStyle}"
+                                        Text="{x:Bind Label}"
+                                        TextWrapping="Wrap" />
+                                    <TextBlock
+                                        Grid.Column="1"
+                                        Foreground="{ThemeResource BrandPrimaryBrush}"
+                                        IsTextSelectionEnabled="True"
+                                        Style="{StaticResource MonoTextBlockStyle}"
+                                        Text="{x:Bind Value}" />
+                                </Grid>
+                                <TextBlock
+                                    Style="{StaticResource ChecksumWorkingTextStyle}"
+                                    Text="{x:Bind Working}"
+                                    Visibility="{x:Bind HasWorking, Converter={StaticResource BoolToVisibilityConverter}}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Border>
+
+            <InfoBar
+                IsClosable="False"
+                IsOpen="{x:Bind ViewModel.HasVariantError, Mode=OneWay}"
+                Message="{x:Bind ViewModel.VariantError, Mode=OneWay}"
+                Severity="Warning" />
+
             <InfoBar
                 IsClosable="False"
                 IsOpen="{x:Bind ViewModel.HasTruncationNote, Mode=OneWay}"
@@ -235,15 +316,18 @@
                 <StackPanel Spacing="12">
                     <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" Text="{markup:Localize Key=ChecksumCoordinateHeader}" />
 
-                    <TextBox
-                        MinHeight="96"
-                        AcceptsReturn="True"
-                        FontFamily="{StaticResource MonospaceFontFamily}"
-                        Header="{markup:Localize Key=ChecksumCoordinateLabel}"
-                        IsSpellCheckEnabled="False"
-                        PlaceholderText="{markup:Localize Key=ChecksumCoordinatePlaceholder}"
-                        Text="{x:Bind ViewModel.CoordinateText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                        TextWrapping="NoWrap" />
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="{markup:Localize Key=ChecksumCoordinateLabel}" />
+                        <TextBox
+                            MinHeight="96"
+                            AcceptsReturn="True"
+                            AutomationProperties.Name="{markup:Localize Key=ChecksumCoordinateLabel}"
+                            FontFamily="{StaticResource MonospaceFontFamily}"
+                            IsSpellCheckEnabled="False"
+                            PlaceholderText="{markup:Localize Key=ChecksumCoordinatePlaceholder}"
+                            Text="{x:Bind ViewModel.CoordinateText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            TextWrapping="NoWrap" />
+                    </StackPanel>
 
                     <TextBlock
                         Foreground="{ThemeResource TextFillColorSecondaryBrush}"

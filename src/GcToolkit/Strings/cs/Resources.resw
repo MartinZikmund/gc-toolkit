@@ -4077,4 +4077,43 @@
   <data name="Base64_Tooltip" xml:space="preserve">
     <value>Zakódujte text do Base64 a zase zpět – se zalomenými řádky i chybějící výplní si poradí.</value>
   </data>
+  <data name="ChecksumVariantsHeader" xml:space="preserve">
+    <value>Další ciferné součty</value>
+  </data>
+  <data name="ChecksumVariantsHint" xml:space="preserve">
+    <value>Střídavý součet se zobrazuje vždy. Pro další zvolte číselnou soustavu nebo modulo.</value>
+  </data>
+  <data name="ChecksumInputBaseLabel" xml:space="preserve">
+    <value>Číslo je v soustavě</value>
+  </data>
+  <data name="ChecksumDigitBaseLabel" xml:space="preserve">
+    <value>Sčítat číslice v soustavě</value>
+  </data>
+  <data name="ChecksumModulusLabel" xml:space="preserve">
+    <value>Ciferný součet mod n</value>
+  </data>
+  <data name="ChecksumModulusPlaceholder" xml:space="preserve">
+    <value>vypnuto</value>
+  </data>
+  <data name="ChecksumAlternatingLabel" xml:space="preserve">
+    <value>Střídavý ciferný součet</value>
+  </data>
+  <data name="ChecksumBaseSumLabel" xml:space="preserve">
+    <value>Ciferný součet (soustava {0})</value>
+  </data>
+  <data name="ChecksumModuloLabel" xml:space="preserve">
+    <value>Ciferný součet mod {0}</value>
+  </data>
+  <data name="ChecksumErrorDigit" xml:space="preserve">
+    <value>'{0}' není číslice v soustavě {1}.</value>
+  </data>
+  <data name="ChecksumErrorBase" xml:space="preserve">
+    <value>Soustavy jsou od 2 do 36.</value>
+  </data>
+  <data name="ChecksumErrorModulus" xml:space="preserve">
+    <value>Modulo musí být celé číslo větší než 0.</value>
+  </data>
+  <data name="ChecksumErrorTooLong" xml:space="preserve">
+    <value>Příliš dlouhé pro převod mezi soustavami (přes {0} číslic).</value>
+  </data>
 </root>

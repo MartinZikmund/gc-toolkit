@@ -4077,4 +4077,43 @@
   <data name="Base64_Tooltip" xml:space="preserve">
     <value>Encode text to Base64 and decode it back — line breaks and missing padding are no problem.</value>
   </data>
+  <data name="ChecksumVariantsHeader" xml:space="preserve">
+    <value>More cross sums</value>
+  </data>
+  <data name="ChecksumVariantsHint" xml:space="preserve">
+    <value>Alternating sum is always shown. Pick a number base or a modulus for more.</value>
+  </data>
+  <data name="ChecksumInputBaseLabel" xml:space="preserve">
+    <value>Number is in base</value>
+  </data>
+  <data name="ChecksumDigitBaseLabel" xml:space="preserve">
+    <value>Sum digits in base</value>
+  </data>
+  <data name="ChecksumModulusLabel" xml:space="preserve">
+    <value>Cross sum mod n</value>
+  </data>
+  <data name="ChecksumModulusPlaceholder" xml:space="preserve">
+    <value>off</value>
+  </data>
+  <data name="ChecksumAlternatingLabel" xml:space="preserve">
+    <value>Alternating cross sum</value>
+  </data>
+  <data name="ChecksumBaseSumLabel" xml:space="preserve">
+    <value>Cross sum (base {0})</value>
+  </data>
+  <data name="ChecksumModuloLabel" xml:space="preserve">
+    <value>Cross sum mod {0}</value>
+  </data>
+  <data name="ChecksumErrorDigit" xml:space="preserve">
+    <value>'{0}' is not a digit in base {1}.</value>
+  </data>
+  <data name="ChecksumErrorBase" xml:space="preserve">
+    <value>Bases run from 2 to 36.</value>
+  </data>
+  <data name="ChecksumErrorModulus" xml:space="preserve">
+    <value>The modulus must be a whole number above 0.</value>
+  </data>
+  <data name="ChecksumErrorTooLong" xml:space="preserve">
+    <value>Too long to convert between bases (over {0} digits).</value>
+  </data>
 </root>

@@ -51,7 +51,7 @@ public sealed class SqliteGeocacheStore(Func<Task<string>> databasePathProvider,
             GeocacheSort.Terrain => "Terrain",
             GeocacheSort.PlacedOn => "PlacedOn",
             GeocacheSort.FavoritePoints => "FavoritePoints",
-            _ => "Name COLLATE NOCASE",
+            _ => "SearchName",
         };
         var direction = query.Descending ? "DESC" : "ASC";
 
@@ -332,8 +332,8 @@ public sealed class SqliteGeocacheStore(Func<Task<string>> databasePathProvider,
 
         if (!string.IsNullOrWhiteSpace(query.Text))
         {
-            var pattern = $"%{query.Text.Trim().Replace("\\", "\\\\").Replace("%", "\\%").Replace("_", "\\_")}%";
-            clauses.Add("(Name LIKE ? ESCAPE '\\' OR Code LIKE ? ESCAPE '\\')");
+            var pattern = $"%{SearchText.Fold(query.Text.Trim()).Replace("\\", "\\\\").Replace("%", "\\%").Replace("_", "\\_")}%";
+            clauses.Add("(SearchName LIKE ? ESCAPE '\\' OR Code LIKE ? ESCAPE '\\')");
             args.Add(pattern);
             args.Add(pattern);
         }

@@ -19,6 +19,10 @@ internal sealed class GeocacheRow
     [Indexed]
     public string Name { get; set; } = "";
 
+    /// <summary><see cref="Name"/> folded by <see cref="SearchText.Fold"/>, for accent-insensitive search and sorting.</summary>
+    [Indexed]
+    public string SearchName { get; set; } = "";
+
     [Indexed]
     public int Type { get; set; }
 
@@ -85,6 +89,7 @@ internal sealed class GeocacheRow
     {
         Code = cache.Code.Value,
         Name = cache.Name,
+        SearchName = SearchText.Fold(cache.Name),
         Type = (int)cache.Type,
         Size = (int)cache.Size,
         Status = (int)cache.Status,

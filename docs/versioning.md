@@ -76,7 +76,7 @@ Set `version.json` on main to `1.0` manually instead of running `prepare-release
 |---|---|---|
 | `BASE64_ENCODED_WINDOWS_PFX` | Prod Windows signing cert (Store-trusted) | `package-windows.yml` on release/v* |
 | `BASE64_ENCODED_WINDOWS_PFX_DEV` | Dev Windows signing cert (self-signed; install as trusted root on test machines) | `package-windows.yml` on main |
-| `ANDROID_KEYSTORE_BASE64`, `ANDROID_KEY_ALIAS`, `ANDROID_KEY_PASSWORD`, `ANDROID_STORE_PASSWORD` | Android signing | All `package-android.yml` runs |
+| `ANDROID_KEYSTORE_BASE64`, `ANDROID_KEY_ALIAS`, `ANDROID_KEY_PASSWORD`, `ANDROID_STORE_PASSWORD` | Android signing | `package-android.yml`: required on release/v*, optional on main (falls back to the debug key) |
 | `GOOGLE_PLAY_SERVICE_ACCOUNT_JSON` | Play Console API auth | `package-android.yml` on release/v* (Play Production upload) |
 | `APPLE_DISTRIBUTION_P12_BASE64`, `APPLE_P12_PASSWORD`, `APPLE_PROVISIONING_PROFILE_BASE64`, `APPLE_PROVISIONING_PROFILE_UUID`, `APPLE_CODESIGN_KEY`, `APPLE_TEAM_ID` | iOS distribution signing | `package-ios.yml` on release/v* |
 | `APPSTORE_ISSUER_ID`, `APPSTORE_API_KEY_ID`, `APPSTORE_API_PRIVATE_KEY` | App Store Connect API auth | `package-ios.yml` on release/v* (TestFlight upload) |

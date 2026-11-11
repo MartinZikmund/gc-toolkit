@@ -1,3 +1,4 @@
+using GcToolkit.Core.Coordinates;
 using GcToolkit.Core.Infrastructure;
 using GcToolkit.Core.Localization;
 using GcToolkit.Core.Recents;
@@ -121,6 +122,7 @@ public sealed class SettingsViewModelTests
         public int LaunchCount { get; set; }
         public bool OfferUserRating { get; set; }
         public ElementTheme Theme { get; set; } = ElementTheme.Default;
+        public CoordinateFormat CoordinateFormat { get; set; } = CoordinateFormat.DegreesDecimalMinutes;
         public int ClearCallCount { get; private set; }
 
         public void Clear() => ClearCallCount++;

@@ -14,16 +14,18 @@ public sealed class FakeNavigationService : INavigationService
     {
     }
 
-    public void Navigate<TViewModel>()
-    {
-    }
+    public Type? LastViewModelType { get; private set; }
 
-    public void Navigate<TViewModel>(object? parameter)
-    {
-    }
+    public object? LastParameter { get; private set; }
+
+    public void Navigate<TViewModel>() => Navigate(typeof(TViewModel));
+
+    public void Navigate<TViewModel>(object? parameter) => Navigate(typeof(TViewModel), parameter);
 
     public void Navigate(Type viewModelType, object? parameter = null)
     {
+        LastViewModelType = viewModelType;
+        LastParameter = parameter;
     }
 
     public bool GoBack() => false;

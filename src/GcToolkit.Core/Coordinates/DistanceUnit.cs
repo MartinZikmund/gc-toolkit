@@ -17,4 +17,7 @@ public enum DistanceUnit
 
     /// <summary>International miles (1 mi = 1609.344 m).</summary>
     Mile,
+
+    /// <summary>International nautical miles (1 nmi = 1852 m).</summary>
+    NauticalMile,
 }

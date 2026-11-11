@@ -91,7 +91,15 @@ public sealed partial class GeocacheDetailView : GeocacheDetailViewBase
         args.Cancel = true;
         if (action == ListingLinkAction.OpenExternally)
         {
-            _ = Windows.System.Launcher.LaunchUriAsync(new Uri(args.Uri));
+            OpenExternally(args.Uri);
+        }
+    }
+
+    private static void OpenExternally(string? uri)
+    {
+        if (Uri.TryCreate(uri, UriKind.Absolute, out var target))
+        {
+            _ = Windows.System.Launcher.LaunchUriAsync(target);
         }
     }
 
@@ -100,7 +108,7 @@ public sealed partial class GeocacheDetailView : GeocacheDetailViewBase
         args.Handled = true;
         if (ListingLinkPolicy.Decide(args.Uri) == ListingLinkAction.OpenExternally)
         {
-            _ = Windows.System.Launcher.LaunchUriAsync(new Uri(args.Uri));
+            OpenExternally(args.Uri);
         }
     }
 

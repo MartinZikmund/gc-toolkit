@@ -5225,4 +5225,211 @@
   <data name="BearingFixPlotNote" xml:space="preserve">
     <value>Pouze schéma, sever nahoře. Kružnice ukazuje střední (RMS) odchylku přímek.</value>
   </data>
+  <data name="Caches" xml:space="preserve">
+    <value>Keše</value>
+  </data>
+  <data name="CachesAny" xml:space="preserve">
+    <value>Libovolné</value>
+  </data>
+  <data name="CachesAllLists" xml:space="preserve">
+    <value>Všechny keše</value>
+  </data>
+  <data name="CachesYes" xml:space="preserve">
+    <value>Ano</value>
+  </data>
+  <data name="CachesNo" xml:space="preserve">
+    <value>Ne</value>
+  </data>
+  <data name="CachesCount" xml:space="preserve">
+    <value>Keší: {0}</value>
+  </data>
+  <data name="CachesSearchPlaceholder" xml:space="preserve">
+    <value>Hledat podle názvu, kódu nebo majitele</value>
+  </data>
+  <data name="CachesImportGpx" xml:space="preserve">
+    <value>Importovat GPX</value>
+  </data>
+  <data name="CachesImportGpxTooltip" xml:space="preserve">
+    <value>Importovat keše z GPX souboru nebo ZIPu s pocket query</value>
+  </data>
+  <data name="CachesFilters" xml:space="preserve">
+    <value>Filtry</value>
+  </data>
+  <data name="CachesClearFilters" xml:space="preserve">
+    <value>Zrušit filtry</value>
+  </data>
+  <data name="CachesFilterType" xml:space="preserve">
+    <value>Typ</value>
+  </data>
+  <data name="CachesFilterSize" xml:space="preserve">
+    <value>Velikost</value>
+  </data>
+  <data name="CachesFilterStatus" xml:space="preserve">
+    <value>Stav</value>
+  </data>
+  <data name="CachesFilterList" xml:space="preserve">
+    <value>Seznam</value>
+  </data>
+  <data name="CachesFilterDifficultyMin" xml:space="preserve">
+    <value>Obtížnost od</value>
+  </data>
+  <data name="CachesFilterDifficultyMax" xml:space="preserve">
+    <value>Obtížnost do</value>
+  </data>
+  <data name="CachesFilterTerrainMin" xml:space="preserve">
+    <value>Terén od</value>
+  </data>
+  <data name="CachesFilterTerrainMax" xml:space="preserve">
+    <value>Terén do</value>
+  </data>
+  <data name="CachesFilterSolved" xml:space="preserve">
+    <value>Vyluštěno</value>
+  </data>
+  <data name="CachesFilterFound" xml:space="preserve">
+    <value>Nalezeno</value>
+  </data>
+  <data name="CachesFilterCorrected" xml:space="preserve">
+    <value>Opravené souřadnice</value>
+  </data>
+  <data name="CachesSortBy" xml:space="preserve">
+    <value>Řadit podle</value>
+  </data>
+  <data name="CachesSortDescending" xml:space="preserve">
+    <value>Sestupně</value>
+  </data>
+  <data name="CachesSort_Name" xml:space="preserve">
+    <value>Název</value>
+  </data>
+  <data name="CachesSort_Code" xml:space="preserve">
+    <value>Kód</value>
+  </data>
+  <data name="CachesSort_Difficulty" xml:space="preserve">
+    <value>Obtížnost</value>
+  </data>
+  <data name="CachesSort_Terrain" xml:space="preserve">
+    <value>Terén</value>
+  </data>
+  <data name="CachesSort_PlacedOn" xml:space="preserve">
+    <value>Datum založení</value>
+  </data>
+  <data name="CachesSort_FavoritePoints" xml:space="preserve">
+    <value>Body oblíbenosti</value>
+  </data>
+  <data name="CachesLists" xml:space="preserve">
+    <value>Seznamy</value>
+  </data>
+  <data name="CachesNewList" xml:space="preserve">
+    <value>Nový seznam</value>
+  </data>
+  <data name="CachesRenameList" xml:space="preserve">
+    <value>Přejmenovat seznam</value>
+  </data>
+  <data name="CachesDeleteListCommand" xml:space="preserve">
+    <value>Smazat seznam</value>
+  </data>
+  <data name="CachesMoveToList" xml:space="preserve">
+    <value>Přesunout do seznamu</value>
+  </data>
+  <data name="CachesNoListsYet" xml:space="preserve">
+    <value>Zatím žádné seznamy</value>
+  </data>
+  <data name="CachesDelete" xml:space="preserve">
+    <value>Smazat</value>
+  </data>
+  <data name="CachesSelectedCount" xml:space="preserve">
+    <value>Vybráno: {0}</value>
+  </data>
+  <data name="CachesDeleteTitle" xml:space="preserve">
+    <value>Smazat keše?</value>
+  </data>
+  <data name="CachesDeleteText" xml:space="preserve">
+    <value>Smazat vybrané keše ({0}) z tohoto zařízení? Nelze vrátit zpět.</value>
+  </data>
+  <data name="CachesNewListTitle" xml:space="preserve">
+    <value>Nový seznam</value>
+  </data>
+  <data name="CachesRenameListTitle" xml:space="preserve">
+    <value>Přejmenovat seznam</value>
+  </data>
+  <data name="CachesListNameLabel" xml:space="preserve">
+    <value>Název seznamu</value>
+  </data>
+  <data name="CachesDeleteListTitle" xml:space="preserve">
+    <value>Smazat seznam?</value>
+  </data>
+  <data name="CachesDeleteListText" xml:space="preserve">
+    <value>Smazat seznam „{0}“? Keše v něm zůstanou v zařízení.</value>
+  </data>
+  <data name="CachesListExists" xml:space="preserve">
+    <value>Seznam s názvem „{0}“ už existuje.</value>
+  </data>
+  <data name="CachesImportAdded" xml:space="preserve">
+    <value>{0} nových</value>
+  </data>
+  <data name="CachesImportUpdated" xml:space="preserve">
+    <value>{0} aktualizovaných</value>
+  </data>
+  <data name="CachesImportWarnings" xml:space="preserve">
+    <value>varování: {0}</value>
+  </data>
+  <data name="CachesImportErrors" xml:space="preserve">
+    <value>souborů s potížemi: {0}</value>
+  </data>
+  <data name="CachesImportWaypoints" xml:space="preserve">
+    <value>Našli jsme {0} obyčejných waypointů, které se zatím neimportují.</value>
+  </data>
+  <data name="CachesImportTitle" xml:space="preserve">
+    <value>Import GPX dokončen</value>
+  </data>
+  <data name="CachesEmptyTitle" xml:space="preserve">
+    <value>Zatím žádné keše</value>
+  </data>
+  <data name="CachesEmptyHint" xml:space="preserve">
+    <value>Importujte GPX soubor nebo ZIP s pocket query a seznam se naplní. Vše zůstane ve vašem zařízení.</value>
+  </data>
+  <data name="CachesNoMatchesTitle" xml:space="preserve">
+    <value>Nic nevyhovuje</value>
+  </data>
+  <data name="CachesNoMatchesHint" xml:space="preserve">
+    <value>Zkuste jiné hledání nebo zrušte filtry.</value>
+  </data>
+  <data name="CachesOpen" xml:space="preserve">
+    <value>Otevřít</value>
+  </data>
+  <data name="CachesDetailEmpty" xml:space="preserve">
+    <value>Vyberte keš a zobrazí se tady.</value>
+  </data>
+  <data name="CachesDetailMany" xml:space="preserve">
+    <value>Vybrané keše: {0}</value>
+  </data>
+  <data name="CachesRowSubtitle" xml:space="preserve">
+    <value>{0} · O{1} / T{2} · {3}</value>
+  </data>
+  <data name="CachesBadgeFound" xml:space="preserve">
+    <value>Nalezeno</value>
+  </data>
+  <data name="CachesBadgeSolved" xml:space="preserve">
+    <value>Vyluštěno</value>
+  </data>
+  <data name="CachesBadgeCorrected" xml:space="preserve">
+    <value>Opravené souřadnice</value>
+  </data>
+  <data name="CachesListLabel" xml:space="preserve">
+    <value>Seznam keší</value>
+  </data>
+  <data name="CachesDetailLabel" xml:space="preserve">
+    <value>Detail keše</value>
+  </data>
+  <data name="CachesCancel" xml:space="preserve">
+    <value>Zrušit</value>
+  </data>
+  <data name="CachesOpenAutomation" xml:space="preserve">
+    <value>Otevřít keš</value>
+  </data>
+  <data name="CachesFiltersFlyoutTitle" xml:space="preserve">
+    <value>Filtrovat keše</value>
+  </data>
+  <data name="GpxImport_FileUnreadable" xml:space="preserve">
+    <value>Soubor {0} nejde přečíst ({1}).</value>
+  </data>
 </root>

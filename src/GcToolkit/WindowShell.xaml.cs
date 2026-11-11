@@ -187,9 +187,6 @@ public sealed partial class WindowShell : Page, IWindowShell
     private void NavView_Loaded(object sender, RoutedEventArgs e)
     {
         NavigateToSection(NavigationSection.Home);
-#if DEBUG
-        _ = Infrastructure.DebugSampleCache.OpenIfRequestedAsync(ServiceProvider);
-#endif
     }
 
     private void NavView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
@@ -297,6 +294,9 @@ public sealed partial class WindowShell : Page, IWindowShell
             case NavigationSection.Home:
                 nav.Navigate<HomeViewModel>();
                 break;
+            case NavigationSection.Caches:
+                nav.Navigate<CachesViewModel>();
+                break;
             case NavigationSection.Catalog:
                 nav.Navigate<CatalogViewModel>();
                 break;
@@ -332,6 +332,7 @@ public sealed partial class WindowShell : Page, IWindowShell
             NavView.SelectedItem = section switch
             {
                 NavigationSection.Home => HomeNavItem,
+                NavigationSection.Caches => CachesNavItem,
                 // Keep a clicked category node highlighted for its scoped catalog — nested under Tools or
                 // promoted to top level, the container itself is the selection either way. Otherwise fall
                 // back to Tools, which owns the unscoped catalog.

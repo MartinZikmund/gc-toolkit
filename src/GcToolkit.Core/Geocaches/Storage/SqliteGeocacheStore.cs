@@ -333,7 +333,8 @@ public sealed class SqliteGeocacheStore(Func<Task<string>> databasePathProvider,
         if (!string.IsNullOrWhiteSpace(query.Text))
         {
             var pattern = $"%{SearchText.Fold(query.Text.Trim()).Replace("\\", "\\\\").Replace("%", "\\%").Replace("_", "\\_")}%";
-            clauses.Add("(SearchName LIKE ? ESCAPE '\\' OR Code LIKE ? ESCAPE '\\')");
+            clauses.Add("(SearchName LIKE ? ESCAPE '\\' OR Code LIKE ? ESCAPE '\\' OR SearchOwner LIKE ? ESCAPE '\\')");
+            args.Add(pattern);
             args.Add(pattern);
             args.Add(pattern);
         }
@@ -344,9 +345,22 @@ public sealed class SqliteGeocacheStore(Func<Task<string>> databasePathProvider,
             clauses.Add($"Type IN ({string.Join(',', query.Types.Select(t => (int)t))})");
         }
 
+        if (query.Sizes is { Count: > 0 })
+        {
+            clauses.Add($"Size IN ({string.Join(',', query.Sizes.Select(s => (int)s))})");
+        }
+
         if (query.Statuses is { Count: > 0 })
         {
             clauses.Add($"Status IN ({string.Join(',', query.Statuses.Select(s => (int)s))})");
+        }
+
+        AddRange("Difficulty", query.MinDifficulty, query.MaxDifficulty);
+        AddRange("Terrain", query.MinTerrain, query.MaxTerrain);
+
+        if (query.HasCorrectedCoordinate is { } corrected)
+        {
+            clauses.Add(corrected ? "CorrectedLatitude IS NOT NULL" : "CorrectedLatitude IS NULL");
         }
 
         if (query.IsFound is { } found)
@@ -365,6 +379,21 @@ public sealed class SqliteGeocacheStore(Func<Task<string>> databasePathProvider,
         {
             clauses.Add("Code IN (SELECT Code FROM GeocacheListMembers WHERE ListId = ?)");
             args.Add(listId);
+        }
+
+        void AddRange(string column, double? min, double? max)
+        {
+            if (min is { } lo)
+            {
+                clauses.Add($"{column} >= ?");
+                args.Add(lo);
+            }
+
+            if (max is { } hi)
+            {
+                clauses.Add($"{column} <= ?");
+                args.Add(hi);
+            }
         }
 
         StringBuilder where = new();

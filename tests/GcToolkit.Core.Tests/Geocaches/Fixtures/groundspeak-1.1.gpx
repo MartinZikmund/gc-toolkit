@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<gpx xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0" creator="Groundspeak, Inc." xmlns="http://www.topografix.com/GPX/1/0">
+  <name>Geocaching 1.1</name>
+  <time>2025-01-02T03:04:05Z</time>
+  <wpt lat="48.8584" lon="2.2945">
+    <time>2020-02-02T12:00:00Z</time>
+    <name>GC9EART</name>
+    <desc>Tower Earth by Gustave, Earthcache (4/1.5)</desc>
+    <sym>Geocache</sym>
+    <type>Geocache|Earthcache</type>
+    <groundspeak:cache id="9999" available="True" archived="False" xmlns:groundspeak="http://www.groundspeak.com/cache/1/1">
+      <groundspeak:name>Tower Earth</groundspeak:name>
+      <groundspeak:placed_by>Gustave</groundspeak:placed_by>
+      <groundspeak:owner id="3">Gustave</groundspeak:owner>
+      <groundspeak:type>Earthcache</groundspeak:type>
+      <groundspeak:container>Virtual</groundspeak:container>
+      <groundspeak:difficulty>4</groundspeak:difficulty>
+      <groundspeak:terrain>1.5</groundspeak:terrain>
+      <groundspeak:country>France</groundspeak:country>
+      <groundspeak:state>Ile-de-France</groundspeak:state>
+      <groundspeak:short_description html="False"></groundspeak:short_description>
+      <groundspeak:long_description html="False">Answer the questions.</groundspeak:long_description>
+      <groundspeak:encoded_hints></groundspeak:encoded_hints>
+      <groundspeak:attributes>
+        <groundspeak:attribute id="24" inc="1">Wheelchair accessible</groundspeak:attribute>
+      </groundspeak:attributes>
+      <groundspeak:logs>
+        <groundspeak:log id="1">
+          <groundspeak:date>2021-05-05T08:00:00.000Z</groundspeak:date>
+          <groundspeak:type>Attended</groundspeak:type>
+          <groundspeak:finder id="9">Someone</groundspeak:finder>
+          <groundspeak:text encoded="False">Nice.</groundspeak:text>
+        </groundspeak:log>
+      </groundspeak:logs>
+    </groundspeak:cache>
+  </wpt>
+</gpx>

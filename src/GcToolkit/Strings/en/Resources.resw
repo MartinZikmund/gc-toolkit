@@ -4041,4 +4041,91 @@
   <data name="Base64_Tooltip" xml:space="preserve">
     <value>Encode text to Base64 and decode it back — line breaks and missing padding are no problem.</value>
   </data>
+  <data name="VariableCoordinateCalculator_Name" xml:space="preserve">
+    <value>Variable coordinate calculator</value>
+  </data>
+  <data name="VariableCoordinateCalculator_Tooltip" xml:space="preserve">
+    <value>Type a coordinate with letters or formulas, fill in the variables and get the final coordinates live.</value>
+  </data>
+  <data name="VariableCoordinateTemplateHint" xml:space="preserve">
+    <value>Use letters for digits (N 50° 0A.BCD) and brackets for maths (N 49° 1(A+B).(C*2)). N, S, E and W stay hemispheres.</value>
+  </data>
+  <data name="VariableCoordinateTemplatePlaceholder" xml:space="preserve">
+    <value>N 50° 0A.BCD E 014° 2E.FGH</value>
+  </data>
+  <data name="VariableCoordinateTemplateLabel" xml:space="preserve">
+    <value>Coordinate template</value>
+  </data>
+  <data name="VariableCoordinateStageName" xml:space="preserve">
+    <value>Stage {0}</value>
+  </data>
+  <data name="VariableCoordinateStageNameLabel" xml:space="preserve">
+    <value>Stage name</value>
+  </data>
+  <data name="VariableCoordinateVariablesHeader" xml:space="preserve">
+    <value>Variables</value>
+  </data>
+  <data name="VariableCoordinateVariablesEmpty" xml:space="preserve">
+    <value>Variables show up here as soon as the template uses a letter.</value>
+  </data>
+  <data name="VariableCoordinateVariableValue" xml:space="preserve">
+    <value>Value of</value>
+  </data>
+  <data name="VariableCoordinateValuePlaceholder" xml:space="preserve">
+    <value>?</value>
+  </data>
+  <data name="VariableCoordinatePostedLabel" xml:space="preserve">
+    <value>Posted coordinates (optional)</value>
+  </data>
+  <data name="VariableCoordinatePostedPlaceholder" xml:space="preserve">
+    <value>N 50° 01.000 E 014° 25.000</value>
+  </data>
+  <data name="VariableCoordinatePostedError" xml:space="preserve">
+    <value>These posted coordinates cannot be read.</value>
+  </data>
+  <data name="VariableCoordinateFormatLabel" xml:space="preserve">
+    <value>Result format</value>
+  </data>
+  <data name="VariableCoordinateResultLabel" xml:space="preserve">
+    <value>Result</value>
+  </data>
+  <data name="VariableCoordinateResultNone" xml:space="preserve">
+    <value>Fill in all variables to see the coordinates.</value>
+  </data>
+  <data name="VariableCoordinateWaitingFor" xml:space="preserve">
+    <value>Waiting for {0}</value>
+  </data>
+  <data name="VariableCoordinateErrorAt" xml:space="preserve">
+    <value>Character {0}: {1}</value>
+  </data>
+  <data name="VariableCoordinateDistance" xml:space="preserve">
+    <value>from the posted coordinates</value>
+  </data>
+  <data name="VariableCoordinateWithinTwoMiles" xml:space="preserve">
+    <value>Within 2 miles</value>
+  </data>
+  <data name="VariableCoordinateBeyondTwoMiles" xml:space="preserve">
+    <value>More than 2 miles away</value>
+  </data>
+  <data name="VariableCoordinateAddStage" xml:space="preserve">
+    <value>Add stage</value>
+  </data>
+  <data name="VariableCoordinateRemoveStage" xml:space="preserve">
+    <value>Remove stage</value>
+  </data>
+  <data name="VariableCoordinateCopy" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="VariableCoordinateCopyAll" xml:space="preserve">
+    <value>Copy all</value>
+  </data>
+  <data name="VariableCoordinateShare" xml:space="preserve">
+    <value>Share</value>
+  </data>
+  <data name="VariableCoordinateExample" xml:space="preserve">
+    <value>Example</value>
+  </data>
+  <data name="VariableCoordinateClear" xml:space="preserve">
+    <value>Clear</value>
+  </data>
 </root>

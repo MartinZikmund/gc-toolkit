@@ -1,0 +1,229 @@
+﻿<local:VariableCoordinateCalculatorViewBase
+    x:Class="GcToolkit.Views.VariableCoordinateCalculatorView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:GcToolkit.Controls"
+    xmlns:local="using:GcToolkit.Views"
+    xmlns:markup="using:GcToolkit.Markup"
+    xmlns:tools="using:GcToolkit.Core.ViewModels.Tools">
+
+    <controls:ToolPage Tool="{x:Bind ViewModel}">
+        <StackPanel Spacing="16">
+
+            <!--  Output format + posted coordinates  -->
+            <Grid ColumnSpacing="12">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <ComboBox
+                    Grid.Column="0"
+                    MinWidth="200"
+                    AutomationProperties.Name="{markup:Localize Key=VariableCoordinateFormatLabel}"
+                    Header="{markup:Localize Key=VariableCoordinateFormatLabel}"
+                    SelectedIndex="{x:Bind ViewModel.FormatIndex, Mode=TwoWay}">
+                    <ComboBoxItem Content="{markup:Localize Key=CoordConvFormatDecimalDegrees}" />
+                    <ComboBoxItem Content="{markup:Localize Key=CoordConvFormatDegreesDecimalMinutes}" />
+                    <ComboBoxItem Content="{markup:Localize Key=CoordConvFormatDegreesMinutesSeconds}" />
+                    <ComboBoxItem Content="{markup:Localize Key=CoordConvFormatUtm}" />
+                    <ComboBoxItem Content="{markup:Localize Key=CoordConvFormatMgrs}" />
+                    <ComboBoxItem Content="{markup:Localize Key=CoordConvFormatUsng}" />
+                    <ComboBoxItem Content="{markup:Localize Key=CoordConvFormatDutchRd}" />
+                    <ComboBoxItem Content="{markup:Localize Key=CoordConvFormatBritishGrid}" />
+                </ComboBox>
+
+                <StackPanel Grid.Column="1" Spacing="4">
+                    <TextBlock Text="{markup:Localize Key=VariableCoordinatePostedLabel}" />
+                    <TextBox
+                        AutomationProperties.Name="{markup:Localize Key=VariableCoordinatePostedLabel}"
+                        FontFamily="{ThemeResource AppMonoFontFamily}"
+                        IsSpellCheckEnabled="False"
+                        PlaceholderText="{markup:Localize Key=VariableCoordinatePostedPlaceholder}"
+                        Text="{x:Bind ViewModel.PostedCoordinate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+            </Grid>
+
+            <InfoBar
+                IsClosable="False"
+                IsOpen="{x:Bind ViewModel.HasPostedError, Mode=OneWay}"
+                Message="{markup:Localize Key=VariableCoordinatePostedError}"
+                Severity="Warning" />
+
+            <!--  Stages: one template each, with its live result  -->
+            <ItemsControl ItemsSource="{x:Bind ViewModel.Stages}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Spacing="12" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="tools:CoordinateStageItem">
+                        <Border
+                            Padding="16"
+                            Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                            BorderThickness="1"
+                            CornerRadius="8">
+                            <StackPanel Spacing="8">
+                                <Grid ColumnSpacing="8">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox
+                                        Grid.Column="0"
+                                        AutomationProperties.Name="{markup:Localize Key=VariableCoordinateStageNameLabel}"
+                                        Text="{x:Bind Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    <Button
+                                        Grid.Column="1"
+                                        Width="36"
+                                        Height="36"
+                                        Padding="0"
+                                        AutomationProperties.Name="{markup:Localize Key=VariableCoordinateRemoveStage}"
+                                        Command="{x:Bind RemoveCommand}"
+                                        ToolTipService.ToolTip="{markup:Localize Key=VariableCoordinateRemoveStage}"
+                                        Visibility="{x:Bind CanRemove, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                                        <FontIcon FontSize="14" Glyph="&#xE74D;" />
+                                    </Button>
+                                </Grid>
+
+                                <TextBlock Text="{markup:Localize Key=VariableCoordinateTemplateLabel}" />
+                                <TextBox
+                                    AutomationProperties.Name="{markup:Localize Key=VariableCoordinateTemplateLabel}"
+                                    FontFamily="{ThemeResource AppMonoFontFamily}"
+                                    FontSize="16"
+                                    IsSpellCheckEnabled="False"
+                                    PlaceholderText="{markup:Localize Key=VariableCoordinateTemplatePlaceholder}"
+                                    Text="{x:Bind Template, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                                <InfoBar
+                                    IsClosable="False"
+                                    IsOpen="{x:Bind HasError, Mode=OneWay}"
+                                    Message="{x:Bind ErrorText, Mode=OneWay}"
+                                    Severity="Error" />
+
+                                <TextBlock
+                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                    Style="{ThemeResource CaptionTextBlockStyle}"
+                                    Text="{x:Bind MissingText, Mode=OneWay}"
+                                    Visibility="{x:Bind HasMissing, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+
+                                <Grid ColumnSpacing="8" Visibility="{x:Bind IsComplete, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox
+                                        Grid.Column="0"
+                                        VerticalAlignment="Center"
+                                        AutomationProperties.Name="{markup:Localize Key=VariableCoordinateResultLabel}"
+                                        FontFamily="{ThemeResource AppMonoFontFamily}"
+                                        FontSize="18"
+                                        IsReadOnly="True"
+                                        IsSpellCheckEnabled="False"
+                                        Text="{x:Bind ResultText, Mode=OneWay}" />
+                                    <Button
+                                        Grid.Column="1"
+                                        Width="36"
+                                        Height="36"
+                                        Padding="0"
+                                        VerticalAlignment="Center"
+                                        AutomationProperties.Name="{markup:Localize Key=VariableCoordinateCopy}"
+                                        Command="{x:Bind CopyCommand}"
+                                        ToolTipService.ToolTip="{markup:Localize Key=VariableCoordinateCopy}">
+                                        <FontIcon FontSize="14" Glyph="&#xE8C8;" />
+                                    </Button>
+                                </Grid>
+
+                                <StackPanel
+                                    Orientation="Horizontal"
+                                    Spacing="8"
+                                    Visibility="{x:Bind HasDistance, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                                    <TextBlock VerticalAlignment="Center" Text="{x:Bind DistanceText, Mode=OneWay}" />
+                                    <TextBlock
+                                        VerticalAlignment="Center"
+                                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                        Text="{markup:Localize Key=VariableCoordinateDistance}" />
+                                    <TextBlock
+                                        VerticalAlignment="Center"
+                                        Foreground="{ThemeResource SystemFillColorSuccessBrush}"
+                                        Style="{ThemeResource BodyStrongTextBlockStyle}"
+                                        Text="{markup:Localize Key=VariableCoordinateWithinTwoMiles}"
+                                        Visibility="{x:Bind IsWithinTwoMiles, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                    <TextBlock
+                                        VerticalAlignment="Center"
+                                        Foreground="{ThemeResource SystemFillColorCriticalBrush}"
+                                        Style="{ThemeResource BodyStrongTextBlockStyle}"
+                                        Text="{markup:Localize Key=VariableCoordinateBeyondTwoMiles}"
+                                        Visibility="{x:Bind local:VariableCoordinateCalculatorView.ShowWhenFalse(IsWithinTwoMiles), Mode=OneWay}" />
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <TextBlock
+                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                Style="{ThemeResource CaptionTextBlockStyle}"
+                Text="{markup:Localize Key=VariableCoordinateTemplateHint}"
+                TextWrapping="Wrap" />
+
+            <!--  Variables appear as the templates use them; empty ones are dimmed  -->
+            <TextBlock Style="{ThemeResource BodyStrongTextBlockStyle}" Text="{markup:Localize Key=VariableCoordinateVariablesHeader}" />
+            <ItemsRepeater ItemsSource="{x:Bind ViewModel.Variables}">
+                <ItemsRepeater.Layout>
+                    <UniformGridLayout
+                        ItemsStretch="None"
+                        MinColumnSpacing="12"
+                        MinItemWidth="88"
+                        MinRowSpacing="12" />
+                </ItemsRepeater.Layout>
+                <ItemsRepeater.ItemTemplate>
+                    <DataTemplate x:DataType="tools:VariableItem">
+                        <StackPanel Opacity="{x:Bind local:VariableCoordinateCalculatorView.DimIfMissing(IsMissing), Mode=OneWay}" Spacing="4">
+                            <TextBlock Style="{ThemeResource BodyStrongTextBlockStyle}" Text="{x:Bind Name}" />
+                            <TextBox
+                                Width="88"
+                                AutomationProperties.Name="{x:Bind Name}"
+                                FontFamily="{ThemeResource AppMonoFontFamily}"
+                                IsSpellCheckEnabled="False"
+                                PlaceholderText="{markup:Localize Key=VariableCoordinateValuePlaceholder}"
+                                Text="{x:Bind Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsRepeater.ItemTemplate>
+            </ItemsRepeater>
+            <TextBlock
+                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                Text="{markup:Localize Key=VariableCoordinateVariablesEmpty}"
+                Visibility="{x:Bind local:VariableCoordinateCalculatorView.ShowWhenEmpty(ViewModel.Variables.Count), Mode=OneWay}" />
+
+            <!--  Actions  -->
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Command="{x:Bind ViewModel.AddStageCommand}">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <FontIcon FontSize="16" Glyph="&#xE710;" />
+                        <TextBlock Text="{markup:Localize Key=VariableCoordinateAddStage}" />
+                    </StackPanel>
+                </Button>
+                <Button Command="{x:Bind ViewModel.CopyAllCommand}">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <FontIcon FontSize="16" Glyph="&#xE8C8;" />
+                        <TextBlock Text="{markup:Localize Key=VariableCoordinateCopyAll}" />
+                    </StackPanel>
+                </Button>
+                <Button Command="{x:Bind ViewModel.ShareAllCommand}">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <FontIcon FontSize="16" Glyph="&#xE72D;" />
+                        <TextBlock Text="{markup:Localize Key=VariableCoordinateShare}" />
+                    </StackPanel>
+                </Button>
+                <Button Command="{x:Bind ViewModel.LoadExampleCommand}" Content="{markup:Localize Key=VariableCoordinateExample}" />
+                <Button Command="{x:Bind ViewModel.ClearCommand}" Content="{markup:Localize Key=VariableCoordinateClear}" />
+            </StackPanel>
+
+        </StackPanel>
+    </controls:ToolPage>
+</local:VariableCoordinateCalculatorViewBase>

@@ -34,6 +34,8 @@ public class ListingScannerTests
     [DataRow("N 49° 12' 20.70\" E 016° 34' 34.02\"", CoordinateFormat.DegreesMinutesSeconds, 49.205750, 16.576117)]
     [DataRow("49.205750, 16.576117", CoordinateFormat.DecimalDegrees, 49.20575, 16.576117)]
     [DataRow("-33.8568 151.2153", CoordinateFormat.DecimalDegrees, -33.8568, 151.2153)]
+    [DataRow("49.205750,16.576117", CoordinateFormat.DecimalDegrees, 49.20575, 16.576117)]
+    [DataRow("N 49.205750,E 016.576117", CoordinateFormat.DecimalDegrees, 49.20575, 16.576117)]
     public void Scan_AngularCoordinate_DetectedWithParsedValue(string text, CoordinateFormat format, double lat, double lon)
     {
         var span = SingleCoordinate($"See {text}.");

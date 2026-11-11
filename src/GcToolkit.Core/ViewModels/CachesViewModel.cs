@@ -477,6 +477,11 @@ public partial class CachesViewModel : ViewModelBase
             {
                 errors.Add(new(group.First().Name, GpxImportIssueKind.FileUnreadable, ex.Message));
             }
+            catch (Exception ex) when (ex is not OperationCanceledException)
+            {
+                // A command that throws takes the whole app down, so a failed save is reported like a bad file.
+                errors.Add(new(group.First().Name, GpxImportIssueKind.SaveFailed, ex.Message));
+            }
             finally
             {
                 foreach (var stream in streams)

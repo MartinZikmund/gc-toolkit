@@ -5432,6 +5432,9 @@
   <data name="GpxImport_FileUnreadable" xml:space="preserve">
     <value>Soubor {0} nejde přečíst ({1}).</value>
   </data>
+  <data name="GpxImport_SaveFailed" xml:space="preserve">
+    <value>Kešky ze souboru {0} nejde uložit ({1}).</value>
+  </data>
   <data name="Resection_Name" xml:space="preserve">
     <value>Protínání zpět</value>
   </data>

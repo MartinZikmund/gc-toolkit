@@ -67,4 +67,12 @@ public class EulerNumberDigitSourceTests
 
         Assert.AreSame(first, second);
     }
+
+    [TestMethod]
+    public async Task GetDecimalsAsync_ManyConcurrentCallers_ShareOneLoad()
+    {
+        var tasks = await Task.WhenAll(Enumerable.Range(0, 32).Select(_ => Task.Run(EulerNumberDigitSource.GetDecimalsAsync)));
+
+        Assert.IsTrue(tasks.All(t => ReferenceEquals(t, tasks[0])));
+    }
 }

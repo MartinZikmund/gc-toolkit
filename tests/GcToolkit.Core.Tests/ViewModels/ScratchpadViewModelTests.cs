@@ -304,4 +304,44 @@ public class ScratchpadViewModelTests
         _repository.SaveGate.SetResult();
         await flush;
     }
+
+    [TestMethod]
+    public async Task Autosave_TimerFiresOffTheUiThread_RunsOnTheUiContext()
+    {
+        RecordingSynchronizationContext ui = new();
+        ScratchpadViewModel viewModel;
+        SynchronizationContext.SetSynchronizationContext(ui);
+        try
+        {
+            viewModel = CreateViewModel();
+        }
+        finally
+        {
+            SynchronizationContext.SetSynchronizationContext(null);
+        }
+
+        await viewModel.InitializeAsync(_code);
+        viewModel.Text = "a";
+
+        _time.Advance(TimeSpan.FromSeconds(2));
+        Assert.AreEqual(0, _repository.Saves.Count);
+
+        ui.RunPosted();
+        Assert.AreEqual("a", _repository.Get(_code));
+    }
+
+    private sealed class RecordingSynchronizationContext : SynchronizationContext
+    {
+        private readonly Queue<(SendOrPostCallback Callback, object? State)> _posted = new();
+
+        public override void Post(SendOrPostCallback d, object? state) => _posted.Enqueue((d, state));
+
+        public void RunPosted()
+        {
+            while (_posted.TryDequeue(out var item))
+            {
+                item.Callback(item.State);
+            }
+        }
+    }
 }

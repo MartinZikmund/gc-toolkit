@@ -1,0 +1,340 @@
+﻿<local:RhumbLineViewBase
+    x:Class="GcToolkit.Views.RhumbLineView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:GcToolkit.Controls"
+    xmlns:local="using:GcToolkit.Views"
+    xmlns:markup="using:GcToolkit.Markup">
+
+    <controls:ToolPage Tool="{x:Bind ViewModel}">
+        <StackPanel Spacing="16">
+
+            <!--  Mode  -->
+            <RadioButtons MaxColumns="2" SelectedIndex="{x:Bind ViewModel.ModeIndex, Mode=TwoWay}">
+                <RadioButton Content="{markup:Localize Key=RhumbLineModeInverse}" />
+                <RadioButton Content="{markup:Localize Key=RhumbLineModeDirect}" />
+            </RadioButtons>
+
+            <TextBlock
+                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                Style="{ThemeResource CaptionTextBlockStyle}"
+                Text="{markup:Localize Key=RhumbLineHint}"
+                TextWrapping="Wrap" />
+
+            <!--  Start (both modes) and End (inverse)  -->
+            <Grid ColumnSpacing="12" RowSpacing="12">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition x:Name="EndColumn" Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <TextBox
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    AutomationProperties.AutomationId="RhumbLineStartBox"
+                    Header="{markup:Localize Key=RhumbLineStart}"
+                    IsSpellCheckEnabled="False"
+                    PlaceholderText="{markup:Localize Key=RhumbLineCoordinatePlaceholder}"
+                    Text="{x:Bind ViewModel.StartText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                <TextBox
+                    x:Name="EndBox"
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    AutomationProperties.AutomationId="RhumbLineEndBox"
+                    Header="{markup:Localize Key=RhumbLineEnd}"
+                    IsSpellCheckEnabled="False"
+                    PlaceholderText="{markup:Localize Key=RhumbLineCoordinatePlaceholder}"
+                    Text="{x:Bind ViewModel.EndText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    Visibility="{x:Bind ViewModel.IsInverse, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+            </Grid>
+
+            <!--  Direct mode: bearing + distance  -->
+            <Grid ColumnSpacing="12" Visibility="{x:Bind ViewModel.IsDirect, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TextBox
+                    Grid.Column="0"
+                    AutomationProperties.AutomationId="RhumbLineBearingBox"
+                    Header="{markup:Localize Key=RhumbLineBearing}"
+                    InputScope="Number"
+                    PlaceholderText="{markup:Localize Key=RhumbLineBearingPlaceholder}"
+                    Text="{x:Bind ViewModel.BearingText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBox
+                    Grid.Column="1"
+                    AutomationProperties.AutomationId="RhumbLineDistanceBox"
+                    Header="{markup:Localize Key=RhumbLineDistance}"
+                    InputScope="Number"
+                    PlaceholderText="{markup:Localize Key=RhumbLineDistancePlaceholder}"
+                    Text="{x:Bind ViewModel.DistanceText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            </Grid>
+
+            <!--  Unit + output format  -->
+            <Grid ColumnSpacing="12">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <ComboBox
+                    Grid.Column="0"
+                    HorizontalAlignment="Stretch"
+                    AutomationProperties.AutomationId="RhumbLineUnitBox"
+                    Header="{markup:Localize Key=RhumbLineUnit}"
+                    SelectedIndex="{x:Bind ViewModel.UnitIndex, Mode=TwoWay}">
+                    <ComboBoxItem Content="{markup:Localize Key=RhumbLineUnitMeter}" />
+                    <ComboBoxItem Content="{markup:Localize Key=RhumbLineUnitKilometer}" />
+                    <ComboBoxItem Content="{markup:Localize Key=RhumbLineUnitFeet}" />
+                    <ComboBoxItem Content="{markup:Localize Key=RhumbLineUnitYard}" />
+                    <ComboBoxItem Content="{markup:Localize Key=RhumbLineUnitMile}" />
+                    <ComboBoxItem Content="{markup:Localize Key=RhumbLineUnitNauticalMile}" />
+                </ComboBox>
+                <ComboBox
+                    Grid.Column="1"
+                    HorizontalAlignment="Stretch"
+                    AutomationProperties.AutomationId="RhumbLineFormatBox"
+                    Header="{markup:Localize Key=RhumbLineFormat}"
+                    SelectedIndex="{x:Bind ViewModel.FormatIndex, Mode=TwoWay}"
+                    Visibility="{x:Bind ViewModel.IsDirect, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <ComboBoxItem Content="{markup:Localize Key=RhumbLineFormatDdm}" />
+                    <ComboBoxItem Content="{markup:Localize Key=RhumbLineFormatDd}" />
+                    <ComboBoxItem Content="{markup:Localize Key=RhumbLineFormatDms}" />
+                    <ComboBoxItem Content="{markup:Localize Key=RhumbLineFormatUtm}" />
+                    <ComboBoxItem Content="{markup:Localize Key=RhumbLineFormatMgrs}" />
+                </ComboBox>
+            </Grid>
+
+            <InfoBar
+                IsClosable="False"
+                IsOpen="{x:Bind ViewModel.HasError, Mode=OneWay}"
+                Message="{x:Bind ViewModel.ErrorMessage, Mode=OneWay}"
+                Severity="Error" />
+
+            <InfoBar
+                IsClosable="False"
+                IsOpen="{x:Bind ViewModel.HasNote, Mode=OneWay}"
+                Message="{x:Bind ViewModel.NoteMessage, Mode=OneWay}"
+                Severity="Informational" />
+
+            <!--  Inverse results: rhumb next to great circle  -->
+            <Border
+                Padding="20"
+                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                BorderThickness="1"
+                CornerRadius="8"
+                Visibility="{x:Bind local:RhumbLineView.BothTrue(ViewModel.HasResult, ViewModel.IsInverse), Mode=OneWay}">
+                <StackPanel Spacing="16">
+                    <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" Text="{markup:Localize Key=RhumbLineResults}" />
+
+                    <TextBlock
+                        Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"
+                        Style="{ThemeResource BodyStrongTextBlockStyle}"
+                        Text="{markup:Localize Key=RhumbLineResultRhumb}" />
+                    <Grid ColumnSpacing="12" RowSpacing="12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" Spacing="2">
+                            <TextBlock
+                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                Style="{ThemeResource CaptionTextBlockStyle}"
+                                Text="{markup:Localize Key=RhumbLineRhumbDistance}" />
+                            <TextBlock
+                                FontFamily="{ThemeResource AppMonoFontFamily}"
+                                FontSize="18"
+                                IsTextSelectionEnabled="True"
+                                Text="{x:Bind ViewModel.RhumbDistanceResult, Mode=OneWay}"
+                                TextWrapping="Wrap" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Spacing="2">
+                            <TextBlock
+                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                Style="{ThemeResource CaptionTextBlockStyle}"
+                                Text="{markup:Localize Key=RhumbLineRhumbBearing}" />
+                            <TextBlock
+                                FontFamily="{ThemeResource AppMonoFontFamily}"
+                                FontSize="18"
+                                IsTextSelectionEnabled="True"
+                                Text="{x:Bind ViewModel.RhumbBearingResult, Mode=OneWay}"
+                                TextWrapping="Wrap" />
+                        </StackPanel>
+                    </Grid>
+
+                    <Rectangle Height="1" Fill="{ThemeResource DividerStrokeColorDefaultBrush}" />
+
+                    <TextBlock
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        Style="{ThemeResource BodyStrongTextBlockStyle}"
+                        Text="{markup:Localize Key=RhumbLineResultGreatCircle}" />
+                    <Grid ColumnSpacing="12" RowSpacing="12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <StackPanel
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Spacing="2">
+                            <TextBlock
+                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                Style="{ThemeResource CaptionTextBlockStyle}"
+                                Text="{markup:Localize Key=RhumbLineGreatCircleDistance}" />
+                            <TextBlock
+                                FontFamily="{ThemeResource AppMonoFontFamily}"
+                                FontSize="16"
+                                IsTextSelectionEnabled="True"
+                                Text="{x:Bind ViewModel.GreatCircleDistanceResult, Mode=OneWay}"
+                                TextWrapping="Wrap" />
+                        </StackPanel>
+                        <StackPanel
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Spacing="2">
+                            <TextBlock
+                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                Style="{ThemeResource CaptionTextBlockStyle}"
+                                Text="{markup:Localize Key=RhumbLineExtraDistance}" />
+                            <TextBlock
+                                FontFamily="{ThemeResource AppMonoFontFamily}"
+                                FontSize="16"
+                                IsTextSelectionEnabled="True"
+                                Text="{x:Bind ViewModel.ExtraDistanceResult, Mode=OneWay}"
+                                TextWrapping="Wrap" />
+                        </StackPanel>
+                        <StackPanel
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Spacing="2">
+                            <TextBlock
+                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                Style="{ThemeResource CaptionTextBlockStyle}"
+                                Text="{markup:Localize Key=RhumbLineGreatCircleInitialBearing}" />
+                            <TextBlock
+                                FontFamily="{ThemeResource AppMonoFontFamily}"
+                                FontSize="16"
+                                IsTextSelectionEnabled="True"
+                                Text="{x:Bind ViewModel.GreatCircleInitialBearingResult, Mode=OneWay}"
+                                TextWrapping="Wrap" />
+                        </StackPanel>
+                        <StackPanel
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Spacing="2">
+                            <TextBlock
+                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                Style="{ThemeResource CaptionTextBlockStyle}"
+                                Text="{markup:Localize Key=RhumbLineGreatCircleFinalBearing}" />
+                            <TextBlock
+                                FontFamily="{ThemeResource AppMonoFontFamily}"
+                                FontSize="16"
+                                IsTextSelectionEnabled="True"
+                                Text="{x:Bind ViewModel.GreatCircleFinalBearingResult, Mode=OneWay}"
+                                TextWrapping="Wrap" />
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!--  Direct result: the destination  -->
+            <Border
+                Padding="20"
+                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                BorderThickness="1"
+                CornerRadius="8"
+                Visibility="{x:Bind local:RhumbLineView.BothTrue(ViewModel.HasResult, ViewModel.IsDirect), Mode=OneWay}">
+                <StackPanel Spacing="8">
+                    <TextBlock Style="{ThemeResource BodyStrongTextBlockStyle}" Text="{markup:Localize Key=RhumbLineDestination}" />
+                    <Grid ColumnSpacing="8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBox
+                            Grid.Column="0"
+                            VerticalAlignment="Center"
+                            AutomationProperties.Name="{markup:Localize Key=RhumbLineDestination}"
+                            FontFamily="{ThemeResource AppMonoFontFamily}"
+                            FontSize="16"
+                            IsReadOnly="True"
+                            IsSpellCheckEnabled="False"
+                            Text="{x:Bind ViewModel.DestinationResult, Mode=OneWay}" />
+                        <Button
+                            Grid.Column="1"
+                            Width="36"
+                            Height="36"
+                            Padding="0"
+                            VerticalAlignment="Center"
+                            AutomationProperties.Name="{markup:Localize Key=RhumbLineCopyValue}"
+                            Command="{x:Bind ViewModel.CopyTextCommand}"
+                            CommandParameter="{x:Bind ViewModel.DestinationResult, Mode=OneWay}"
+                            ToolTipService.ToolTip="{markup:Localize Key=RhumbLineCopyValue}">
+                            <FontIcon FontSize="14" Glyph="&#xE8C8;" />
+                        </Button>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!--  Actions  -->
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Command="{x:Bind ViewModel.CopyReportCommand}">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <FontIcon FontSize="16" Glyph="&#xE8C8;" />
+                        <TextBlock Text="{markup:Localize Key=RhumbLineCopy}" />
+                    </StackPanel>
+                </Button>
+                <Button Command="{x:Bind ViewModel.ShareReportCommand}">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <FontIcon FontSize="16" Glyph="&#xE72D;" />
+                        <TextBlock Text="{markup:Localize Key=RhumbLineShare}" />
+                    </StackPanel>
+                </Button>
+                <Button Command="{x:Bind ViewModel.SwapCommand}" Visibility="{x:Bind ViewModel.IsInverse, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <FontIcon FontSize="16" Glyph="&#xE8AB;" />
+                        <TextBlock Text="{markup:Localize Key=RhumbLineSwap}" />
+                    </StackPanel>
+                </Button>
+                <Button Command="{x:Bind ViewModel.LoadExampleCommand}" Content="{markup:Localize Key=RhumbLineExample}" />
+                <Button Command="{x:Bind ViewModel.ClearCommand}" Content="{markup:Localize Key=RhumbLineClear}" />
+            </StackPanel>
+
+        </StackPanel>
+
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState x:Name="Narrow">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="EndColumn.Width" Value="0" />
+                        <Setter Target="EndBox.(Grid.Row)" Value="1" />
+                        <Setter Target="EndBox.(Grid.Column)" Value="0" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="Wide">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="560" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="EndColumn.Width" Value="*" />
+                        <Setter Target="EndBox.(Grid.Row)" Value="0" />
+                        <Setter Target="EndBox.(Grid.Column)" Value="1" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+    </controls:ToolPage>
+</local:RhumbLineViewBase>

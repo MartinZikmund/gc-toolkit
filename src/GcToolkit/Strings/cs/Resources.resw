@@ -4041,4 +4041,84 @@
   <data name="Base64_Tooltip" xml:space="preserve">
     <value>Zakódujte text do Base64 a zase zpět – se zalomenými řádky i chybějící výplní si poradí.</value>
   </data>
+  <data name="PolygonArea_Name" xml:space="preserve">
+    <value>Plocha a těžiště mnohoúhelníku</value>
+  </data>
+  <data name="PolygonArea_Tooltip" xml:space="preserve">
+    <value>Plocha, obvod a střed libovolného obrazce ze souřadnic jeho rohů.</value>
+  </data>
+  <data name="PolygonAreaExample" xml:space="preserve">
+    <value>Příklad</value>
+  </data>
+  <data name="PolygonAreaClear" xml:space="preserve">
+    <value>Vymazat</value>
+  </data>
+  <data name="PolygonAreaInputLabel" xml:space="preserve">
+    <value>Souřadnice rohů</value>
+  </data>
+  <data name="PolygonAreaInputPlaceholder" xml:space="preserve">
+    <value>N 50° 05.100' E 014° 25.000'
+50.085 14.4233
+...</value>
+  </data>
+  <data name="PolygonAreaInputHint" xml:space="preserve">
+    <value>Jeden roh na řádek, v pořadí kolem obrazce. Funguje jakýkoli formát souřadnic; poslední strana zpět k prvnímu rohu se doplní sama.</value>
+  </data>
+  <data name="PolygonAreaUnitLabel" xml:space="preserve">
+    <value>Jednotka plochy</value>
+  </data>
+  <data name="PolygonAreaLengthUnitLabel" xml:space="preserve">
+    <value>Jednotka délky</value>
+  </data>
+  <data name="PolygonAreaParseError" xml:space="preserve">
+    <value>Nelze přečíst řádky: {0}. Byly přeskočeny.</value>
+  </data>
+  <data name="PolygonAreaNeedPoints" xml:space="preserve">
+    <value>Mnohoúhelník potřebuje alespoň 3 různé rohy.</value>
+  </data>
+  <data name="PolygonAreaSelfIntersectTitle" xml:space="preserve">
+    <value>Strany se protínají</value>
+  </data>
+  <data name="PolygonAreaSelfIntersectNote" xml:space="preserve">
+    <value>Rohy jsou pravděpodobně ve špatném pořadí. Čísla níže platí pro obrazec tak, jak byl zadán, a nemusí znamenat to, co čekáte.</value>
+  </data>
+  <data name="PolygonAreaClosedNote" xml:space="preserve">
+    <value>Poslední řádek opakuje první roh, proto byl ignorován.</value>
+  </data>
+  <data name="PolygonAreaVertexCount" xml:space="preserve">
+    <value>Počet rohů: {0}</value>
+  </data>
+  <data name="PolygonAreaArea" xml:space="preserve">
+    <value>Plocha</value>
+  </data>
+  <data name="PolygonAreaPerimeter" xml:space="preserve">
+    <value>Obvod</value>
+  </data>
+  <data name="PolygonAreaCentroid" xml:space="preserve">
+    <value>Těžiště (střed plochy)</value>
+  </data>
+  <data name="PolygonAreaCentroidNote" xml:space="preserve">
+    <value>Bod, ve kterém by se obrazec vyvážil. Většinou právě ten mají hádanky na mysli.</value>
+  </data>
+  <data name="PolygonAreaVertexMean" xml:space="preserve">
+    <value>Průměr rohů</value>
+  </data>
+  <data name="PolygonAreaVertexMeanNote" xml:space="preserve">
+    <value>Prostý průměr bodů rohů, stejně jako nástroj Těžiště bodů. U nepravidelných obrazců se liší od výše uvedeného.</value>
+  </data>
+  <data name="PolygonAreaEdgesHeader" xml:space="preserve">
+    <value>Strany</value>
+  </data>
+  <data name="PolygonAreaColumnEdge" xml:space="preserve">
+    <value>Strana</value>
+  </data>
+  <data name="PolygonAreaColumnLength" xml:space="preserve">
+    <value>Délka</value>
+  </data>
+  <data name="PolygonAreaColumnBearing" xml:space="preserve">
+    <value>Azimut</value>
+  </data>
+  <data name="PolygonAreaAccuracyNote" xml:space="preserve">
+    <value>Plocha je geodetická na elipsoidu WGS84 (shoduje se s GeographicLib na miliardtiny). Strany jsou nejkratší spojnice rohů.</value>
+  </data>
 </root>

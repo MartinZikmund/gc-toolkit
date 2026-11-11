@@ -4041,4 +4041,84 @@
   <data name="Base64_Tooltip" xml:space="preserve">
     <value>Encode text to Base64 and decode it back — line breaks and missing padding are no problem.</value>
   </data>
+  <data name="PolygonArea_Name" xml:space="preserve">
+    <value>Polygon Area &amp; Centroid</value>
+  </data>
+  <data name="PolygonArea_Tooltip" xml:space="preserve">
+    <value>Area, perimeter and centre of any shape from its corner coordinates.</value>
+  </data>
+  <data name="PolygonAreaExample" xml:space="preserve">
+    <value>Example</value>
+  </data>
+  <data name="PolygonAreaClear" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="PolygonAreaInputLabel" xml:space="preserve">
+    <value>Corner coordinates</value>
+  </data>
+  <data name="PolygonAreaInputPlaceholder" xml:space="preserve">
+    <value>N 50° 05.100' E 014° 25.000'
+50.085 14.4233
+...</value>
+  </data>
+  <data name="PolygonAreaInputHint" xml:space="preserve">
+    <value>One corner per line, in order around the shape. Any coordinate format works; the last side back to the first corner is added for you.</value>
+  </data>
+  <data name="PolygonAreaUnitLabel" xml:space="preserve">
+    <value>Area unit</value>
+  </data>
+  <data name="PolygonAreaLengthUnitLabel" xml:space="preserve">
+    <value>Length unit</value>
+  </data>
+  <data name="PolygonAreaParseError" xml:space="preserve">
+    <value>Could not read line(s): {0}. They were skipped.</value>
+  </data>
+  <data name="PolygonAreaNeedPoints" xml:space="preserve">
+    <value>A polygon needs at least 3 different corners.</value>
+  </data>
+  <data name="PolygonAreaSelfIntersectTitle" xml:space="preserve">
+    <value>Sides cross each other</value>
+  </data>
+  <data name="PolygonAreaSelfIntersectNote" xml:space="preserve">
+    <value>The corners are probably out of order. The numbers below are for the shape as entered and may not mean what you expect.</value>
+  </data>
+  <data name="PolygonAreaClosedNote" xml:space="preserve">
+    <value>The last line repeats the first corner, so it was ignored.</value>
+  </data>
+  <data name="PolygonAreaVertexCount" xml:space="preserve">
+    <value>{0} corners</value>
+  </data>
+  <data name="PolygonAreaArea" xml:space="preserve">
+    <value>Area</value>
+  </data>
+  <data name="PolygonAreaPerimeter" xml:space="preserve">
+    <value>Perimeter</value>
+  </data>
+  <data name="PolygonAreaCentroid" xml:space="preserve">
+    <value>Centroid (centre of the area)</value>
+  </data>
+  <data name="PolygonAreaCentroidNote" xml:space="preserve">
+    <value>The balance point of the enclosed surface. This is usually the one a puzzle means.</value>
+  </data>
+  <data name="PolygonAreaVertexMean" xml:space="preserve">
+    <value>Average of the corners</value>
+  </data>
+  <data name="PolygonAreaVertexMeanNote" xml:space="preserve">
+    <value>The plain mean of the corner points, same as the Centroid tool. Differs from the above for uneven shapes.</value>
+  </data>
+  <data name="PolygonAreaEdgesHeader" xml:space="preserve">
+    <value>Sides</value>
+  </data>
+  <data name="PolygonAreaColumnEdge" xml:space="preserve">
+    <value>Side</value>
+  </data>
+  <data name="PolygonAreaColumnLength" xml:space="preserve">
+    <value>Length</value>
+  </data>
+  <data name="PolygonAreaColumnBearing" xml:space="preserve">
+    <value>Bearing</value>
+  </data>
+  <data name="PolygonAreaAccuracyNote" xml:space="preserve">
+    <value>Area is geodesic on the WGS84 ellipsoid (matches GeographicLib to better than 1 part in a billion). Sides are the shortest paths between corners.</value>
+  </data>
 </root>

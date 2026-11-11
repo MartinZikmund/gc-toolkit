@@ -12,9 +12,6 @@ namespace GcToolkit.Core.Geocaches.Gpx;
 /// </summary>
 internal sealed class GpxReader(string label, IProgress<int>? progress, Func<int> nextCacheNumber)
 {
-    private const string GroundspeakNamespace = "http://www.groundspeak.com/cache/";
-    private const string GsakNamespace = "http://www.gsak.net/";
-
     public List<Geocache> Caches { get; } = [];
 
     /// <summary>Waypoints that are not caches, with the parent code a GSAK export named, if any.</summary>
@@ -42,7 +39,7 @@ internal sealed class GpxReader(string label, IProgress<int>? progress, Func<int
             await reader.MoveToContentAsync();
             if (reader.NodeType != XmlNodeType.Element || reader.LocalName != "gpx")
             {
-                Errors.Add(new(label, "Not a GPX file."));
+                Errors.Add(new(label, GpxImportIssueKind.NotGpx));
                 return;
             }
 
@@ -50,13 +47,14 @@ internal sealed class GpxReader(string label, IProgress<int>? progress, Func<int
         }
         catch (XmlException ex)
         {
-            Errors.Add(new(label, $"The file is not valid XML ({ex.Message}). Everything before the problem was imported."));
+            Errors.Add(new(label, GpxImportIssueKind.InvalidXml, ex.Message));
         }
     }
 
     private async Task ReadWaypointsAsync(XmlReader reader, CancellationToken cancellationToken)
     {
         DateTimeOffset? fileTime = null;
+        var isOurOwnFile = reader.GetAttribute("creator") == GpxNamespaces.ExporterName;
         var isEmpty = reader.IsEmptyElement;
         await reader.ReadAsync();
         if (isEmpty)
@@ -78,7 +76,14 @@ internal sealed class GpxReader(string label, IProgress<int>? progress, Func<int
             }
             else if (reader.LocalName == "time")
             {
-                fileTime = ParseDate(await reader.ReadElementContentAsStringAsync());
+                var text = await reader.ReadElementContentAsStringAsync();
+                fileTime = isOurOwnFile ? null : ParseDate(text);
+            }
+            else if (reader.LocalName == "metadata")
+            {
+                // GPX 1.1 keeps the file time here instead of directly under <gpx>.
+                var metadata = (XElement)await XNode.ReadFromAsync(reader, cancellationToken);
+                fileTime = ParseDate(Text(metadata, "time")) ?? fileTime;
             }
             else
             {
@@ -92,12 +97,14 @@ internal sealed class GpxReader(string label, IProgress<int>? progress, Func<int
         var name = Text(wpt, "name") ?? string.Empty;
         if (!TryReadCoordinate(wpt, out var coordinate))
         {
-            Warnings.Add(new(name.Length > 0 ? name : label, "Skipped: the coordinates are missing or invalid."));
+            Warnings.Add(new(name.Length > 0 ? name : label, GpxImportIssueKind.MissingCoordinates));
             return;
         }
 
-        var cacheElement = wpt.Elements().FirstOrDefault(e => e.Name.LocalName == "cache" && e.Name.NamespaceName.StartsWith(GroundspeakNamespace, StringComparison.Ordinal));
-        var gsak = wpt.Elements().FirstOrDefault(e => e.Name.LocalName == "wptExtension" && e.Name.NamespaceName.StartsWith(GsakNamespace, StringComparison.Ordinal));
+        var cacheElement = wpt.Elements().FirstOrDefault(e => e.Name.LocalName == "cache" && e.Name.NamespaceName.StartsWith(GpxNamespaces.GroundspeakPrefix, StringComparison.Ordinal));
+        var gsak = wpt.Elements().FirstOrDefault(e => e.Name.LocalName == "wptExtension" && e.Name.NamespaceName.StartsWith(GpxNamespaces.GsakPrefix, StringComparison.Ordinal));
+
+        var gct = wpt.Element(GpxNamespaces.Gct + "cacheExtension");
 
         if (cacheElement is null)
         {
@@ -107,11 +114,11 @@ internal sealed class GpxReader(string label, IProgress<int>? progress, Func<int
 
         if (!GeocacheCode.TryParse(name, out var code))
         {
-            Warnings.Add(new(name.Length > 0 ? name : label, "Skipped: the cache has no valid code."));
+            Warnings.Add(new(name.Length > 0 ? name : label, GpxImportIssueKind.InvalidCacheCode));
             return;
         }
 
-        Caches.Add(BuildCache(wpt, cacheElement, gsak, code, coordinate, fileTime));
+        Caches.Add(BuildCache(wpt, cacheElement, gsak, gct, code, coordinate, fileTime));
         progress?.Report(nextCacheNumber());
     }
 
@@ -125,11 +132,12 @@ internal sealed class GpxReader(string label, IProgress<int>? progress, Func<int
             Symbol = Text(wpt, "sym"),
             Type = Text(wpt, "type"),
             Time = ParseDate(Text(wpt, "time")),
+            IsCorrectedCoordinateMarker = wpt.Element(GpxNamespaces.Gct + "correctedFinal") is not null,
         };
         Waypoints.Add((waypoint, parent));
     }
 
-    private Geocache BuildCache(XElement wpt, XElement cache, XElement? gsak, GeocacheCode code, GeoCoordinate coordinate, DateTimeOffset? fileTime)
+    private Geocache BuildCache(XElement wpt, XElement cache, XElement? gsak, XElement? gct, GeocacheCode code, GeoCoordinate coordinate, DateTimeOffset? fileTime)
     {
         var subject = code.Value;
         var typeText = Text(cache, "type") ?? WaypointTypeSuffix(Text(wpt, "type"));
@@ -138,20 +146,20 @@ internal sealed class GpxReader(string label, IProgress<int>? progress, Func<int
         var type = GeocacheType.Unknown;
         if (typeText is not null && !GpxVocabulary.TryParseType(typeText, out type))
         {
-            Warnings.Add(new(subject, $"Unknown cache type '{typeText}'."));
+            Warnings.Add(new(subject, GpxImportIssueKind.UnknownCacheType, typeText));
         }
 
         var size = GeocacheSize.Unknown;
         if (sizeText is not null && !GpxVocabulary.TryParseSize(sizeText, out size))
         {
-            Warnings.Add(new(subject, $"Unknown container size '{sizeText}'."));
+            Warnings.Add(new(subject, GpxImportIssueKind.UnknownContainerSize, sizeText));
         }
 
         var isArchived = IsTrue(cache.Attribute("archived")?.Value);
         var isAvailable = cache.Attribute("available") is not { } available || IsTrue(available.Value);
         var status = isArchived ? GeocacheStatus.Archived : isAvailable ? GeocacheStatus.Available : GeocacheStatus.Disabled;
 
-        var (posted, userData) = ReadUserData(wpt, gsak, coordinate);
+        var (posted, userData) = ReadUserData(wpt, gsak, gct, coordinate);
         var shortDescription = cache.Elements().FirstOrDefault(e => e.Name.LocalName == "short_description");
         var longDescription = cache.Elements().FirstOrDefault(e => e.Name.LocalName == "long_description");
 
@@ -167,6 +175,7 @@ internal sealed class GpxReader(string label, IProgress<int>? progress, Func<int
             Coordinate = posted,
             Owner = Text(cache, "owner") ?? Text(cache, "placed_by"),
             PlacedOn = ParseDate(Text(wpt, "time")),
+            IsPremiumOnly = IsTrue(Text(gct, "premiumOnly")),
             FavoritePoints = int.TryParse(Text(gsak, "FavPoints"), NumberStyles.Integer, CultureInfo.InvariantCulture, out var favorites) ? favorites : null,
             Country = Text(cache, "country"),
             State = Text(cache, "state"),
@@ -177,14 +186,15 @@ internal sealed class GpxReader(string label, IProgress<int>? progress, Func<int
             Hint = NullIfEmpty(Text(cache, "encoded_hints")),
             Attributes = ReadAttributes(cache),
             Logs = ReadLogs(cache, subject),
+            Images = ReadImages(gct),
             SourceId = GpxImporter.SourceId,
-            UpdatedAt = fileTime,
+            UpdatedAt = ParseDate(Text(gct, "updatedAt")) ?? fileTime,
             UserData = userData,
         };
     }
 
     // GSAK (and exports from it) write the corrected spot as the waypoint position and keep the posted one in *BeforeCorrect.
-    private static (GeoCoordinate Posted, GeocacheUserData UserData) ReadUserData(XElement wpt, XElement? gsak, GeoCoordinate coordinate)
+    private static (GeoCoordinate Posted, GeocacheUserData UserData) ReadUserData(XElement wpt, XElement? gsak, XElement? gct, GeoCoordinate coordinate)
     {
         var isFound = string.Equals(Text(wpt, "sym"), "Geocache Found", StringComparison.OrdinalIgnoreCase)
             || !string.IsNullOrWhiteSpace(Text(gsak, "FoundByMeDate"));
@@ -205,6 +215,7 @@ internal sealed class GpxReader(string label, IProgress<int>? progress, Func<int
         {
             CorrectedCoordinate = corrected,
             Note = Text(gsak, "GcNote"),
+            IsSolved = IsTrue(Text(gct, "solved")),
             IsFound = isFound,
         });
     }
@@ -224,6 +235,12 @@ internal sealed class GpxReader(string label, IProgress<int>? progress, Func<int
         return attributes;
     }
 
+    private static List<GeocacheImage> ReadImages(XElement? gct)
+        => [.. gct?.Elements(GpxNamespaces.Gct + "image").Select(e => new GeocacheImage(
+            e.Attribute("url")?.Value ?? string.Empty,
+            e.Attribute("name")?.Value,
+            e.Attribute("description")?.Value)) ?? []];
+
     private List<GeocacheLog> ReadLogs(XElement cache, string subject)
     {
         List<GeocacheLog> logs = [];
@@ -234,7 +251,7 @@ internal sealed class GpxReader(string label, IProgress<int>? progress, Func<int
             var type = GeocacheLogType.Unknown;
             if (typeText is not null && !GpxVocabulary.TryParseLogType(typeText, out type))
             {
-                Warnings.Add(new(subject, $"Unknown log type '{typeText}'."));
+                Warnings.Add(new(subject, GpxImportIssueKind.UnknownLogType, typeText));
             }
 
             logs.Add(new GeocacheLog

@@ -4332,4 +4332,238 @@
   <data name="CachesFiltersFlyoutTitle" xml:space="preserve">
     <value>Filtrovat keše</value>
   </data>
+  <data name="RhumbLine_Name" xml:space="preserve">
+    <value>Loxodroma</value>
+  </data>
+  <data name="RhumbLine_Tooltip" xml:space="preserve">
+    <value>Kurz s konstantním azimutem a vzdálenost mezi dvěma body, nebo cílový bod na takové dráze.</value>
+  </data>
+  <data name="RhumbLineModeInverse" xml:space="preserve">
+    <value>Kurz mezi dvěma body</value>
+  </data>
+  <data name="RhumbLineModeDirect" xml:space="preserve">
+    <value>Určit cílový bod</value>
+  </data>
+  <data name="RhumbLineHint" xml:space="preserve">
+    <value>Loxodroma drží po celou cestu jeden azimut, na rozdíl od nejkratší dráhy po ortodromě.</value>
+  </data>
+  <data name="RhumbLineStart" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="RhumbLineEnd" xml:space="preserve">
+    <value>Cíl</value>
+  </data>
+  <data name="RhumbLineCoordinatePlaceholder" xml:space="preserve">
+    <value>např. N 49° 12.345' E 016° 34.567'</value>
+  </data>
+  <data name="RhumbLineBearing" xml:space="preserve">
+    <value>Azimut (°)</value>
+  </data>
+  <data name="RhumbLineBearingPlaceholder" xml:space="preserve">
+    <value>0 až 360, od severu po směru hodin</value>
+  </data>
+  <data name="RhumbLineDistance" xml:space="preserve">
+    <value>Vzdálenost</value>
+  </data>
+  <data name="RhumbLineDistancePlaceholder" xml:space="preserve">
+    <value>např. 500</value>
+  </data>
+  <data name="RhumbLineUnit" xml:space="preserve">
+    <value>Jednotka</value>
+  </data>
+  <data name="RhumbLineUnitMeter" xml:space="preserve">
+    <value>Metry</value>
+  </data>
+  <data name="RhumbLineUnitKilometer" xml:space="preserve">
+    <value>Kilometry</value>
+  </data>
+  <data name="RhumbLineUnitFeet" xml:space="preserve">
+    <value>Stopy</value>
+  </data>
+  <data name="RhumbLineUnitYard" xml:space="preserve">
+    <value>Yardy</value>
+  </data>
+  <data name="RhumbLineUnitMile" xml:space="preserve">
+    <value>Míle</value>
+  </data>
+  <data name="RhumbLineUnitNauticalMile" xml:space="preserve">
+    <value>Námořní míle</value>
+  </data>
+  <data name="RhumbLineFormat" xml:space="preserve">
+    <value>Formát výstupu</value>
+  </data>
+  <data name="RhumbLineFormatDdm" xml:space="preserve">
+    <value>Stupně, desetinné minuty</value>
+  </data>
+  <data name="RhumbLineFormatDd" xml:space="preserve">
+    <value>Desetinné stupně</value>
+  </data>
+  <data name="RhumbLineFormatDms" xml:space="preserve">
+    <value>Stupně, minuty, vteřiny</value>
+  </data>
+  <data name="RhumbLineFormatUtm" xml:space="preserve">
+    <value>UTM</value>
+  </data>
+  <data name="RhumbLineFormatMgrs" xml:space="preserve">
+    <value>MGRS</value>
+  </data>
+  <data name="RhumbLineResults" xml:space="preserve">
+    <value>Výsledky</value>
+  </data>
+  <data name="RhumbLineResultRhumb" xml:space="preserve">
+    <value>Loxodroma</value>
+  </data>
+  <data name="RhumbLineResultGreatCircle" xml:space="preserve">
+    <value>Ortodroma (nejkratší dráha)</value>
+  </data>
+  <data name="RhumbLineRhumbDistance" xml:space="preserve">
+    <value>Vzdálenost po loxodromě</value>
+  </data>
+  <data name="RhumbLineRhumbBearing" xml:space="preserve">
+    <value>Konstantní azimut</value>
+  </data>
+  <data name="RhumbLineGreatCircleDistance" xml:space="preserve">
+    <value>Vzdálenost po ortodromě</value>
+  </data>
+  <data name="RhumbLineGreatCircleInitialBearing" xml:space="preserve">
+    <value>Počáteční azimut</value>
+  </data>
+  <data name="RhumbLineGreatCircleFinalBearing" xml:space="preserve">
+    <value>Koncový azimut</value>
+  </data>
+  <data name="RhumbLineExtraDistance" xml:space="preserve">
+    <value>Loxodroma je delší o</value>
+  </data>
+  <data name="RhumbLineDestination" xml:space="preserve">
+    <value>Cílový bod</value>
+  </data>
+  <data name="RhumbLineCopy" xml:space="preserve">
+    <value>Kopírovat</value>
+  </data>
+  <data name="RhumbLineCopyValue" xml:space="preserve">
+    <value>Kopírovat hodnotu</value>
+  </data>
+  <data name="RhumbLineShare" xml:space="preserve">
+    <value>Sdílet</value>
+  </data>
+  <data name="RhumbLineSwap" xml:space="preserve">
+    <value>Prohodit</value>
+  </data>
+  <data name="RhumbLineClear" xml:space="preserve">
+    <value>Vymazat</value>
+  </data>
+  <data name="RhumbLineExample" xml:space="preserve">
+    <value>Příklad</value>
+  </data>
+  <data name="RhumbLineErrorStart" xml:space="preserve">
+    <value>Souřadnici startu se nepodařilo přečíst.</value>
+  </data>
+  <data name="RhumbLineErrorEnd" xml:space="preserve">
+    <value>Souřadnici cíle se nepodařilo přečíst.</value>
+  </data>
+  <data name="RhumbLineErrorSamePoint" xml:space="preserve">
+    <value>Start a cíl jsou stejný bod, takže není co navigovat.</value>
+  </data>
+  <data name="RhumbLineErrorBearing" xml:space="preserve">
+    <value>Zadejte azimut jako číslo ve stupních.</value>
+  </data>
+  <data name="RhumbLineErrorDistance" xml:space="preserve">
+    <value>Zadejte vzdálenost jako kladné číslo.</value>
+  </data>
+  <data name="RhumbLineNotePole" xml:space="preserve">
+    <value>Tato vzdálenost vede za pól, cílem je proto sám pól.</value>
+  </data>
+  <data name="RhumbLineNotePoleEastWest" xml:space="preserve">
+    <value>Cesta z pólu na východ nebo západ nikam nevede.</value>
+  </data>
+  <data name="Workbench_VariablesProgress" xml:space="preserve">
+    <value>{0} z {1} proměnných</value>
+  </data>
+  <data name="Workbench_VariablesProgressOne" xml:space="preserve">
+    <value>{0} z {1} proměnné</value>
+  </data>
+  <data name="Workbench_ScratchpadLinesOne" xml:space="preserve">
+    <value>{0} řádek poznámek</value>
+  </data>
+  <data name="Workbench_ScratchpadLinesFew" xml:space="preserve">
+    <value>{0} řádky poznámek</value>
+  </data>
+  <data name="Workbench_ScratchpadLinesMany" xml:space="preserve">
+    <value>{0} řádků poznámek</value>
+  </data>
+  <data name="Workbench_EditedJustNow" xml:space="preserve">
+    <value>Upraveno právě teď</value>
+  </data>
+  <data name="Workbench_EditedMinutesAgo" xml:space="preserve">
+    <value>Upraveno před {0} min</value>
+  </data>
+  <data name="Workbench_EditedHoursAgo" xml:space="preserve">
+    <value>Upraveno před {0} h</value>
+  </data>
+  <data name="Workbench_EditedYesterday" xml:space="preserve">
+    <value>Upraveno včera</value>
+  </data>
+  <data name="Workbench_EditedDaysAgo" xml:space="preserve">
+    <value>Upraveno před {0} dny</value>
+  </data>
+  <data name="Workbench_ContinueSolving" xml:space="preserve">
+    <value>Pokračovat v luštění</value>
+  </data>
+  <data name="Workbench_Resume" xml:space="preserve">
+    <value>Pokračovat</value>
+  </data>
+  <data name="Workbench_SessionRestored" xml:space="preserve">
+    <value>Znovu otevřeny keše z minulé relace.</value>
+  </data>
+  <data name="Scratchpad_Saved" xml:space="preserve">
+    <value>Uloženo</value>
+  </data>
+  <data name="Scratchpad_SavedJustNow" xml:space="preserve">
+    <value>Uloženo právě teď</value>
+  </data>
+  <data name="Scratchpad_SavedMinutesAgo" xml:space="preserve">
+    <value>Uloženo před {0} min</value>
+  </data>
+  <data name="Scratchpad_SavedHoursAgo" xml:space="preserve">
+    <value>Uloženo před {0} h</value>
+  </data>
+  <data name="Scratchpad_Saving" xml:space="preserve">
+    <value>Ukládání…</value>
+  </data>
+  <data name="Scratchpad_Unsaved" xml:space="preserve">
+    <value>Neuložené změny</value>
+  </data>
+  <data name="GpxImport_MissingCoordinates" xml:space="preserve">
+    <value>{0}: přeskočeno, souřadnice chybí nebo jsou neplatné.</value>
+  </data>
+  <data name="GpxImport_InvalidCacheCode" xml:space="preserve">
+    <value>{0}: přeskočeno, keš nemá platný kód.</value>
+  </data>
+  <data name="GpxImport_UnknownCacheType" xml:space="preserve">
+    <value>{0}: neznámý typ keše „{1}“.</value>
+  </data>
+  <data name="GpxImport_UnknownContainerSize" xml:space="preserve">
+    <value>{0}: neznámá velikost schránky „{1}“.</value>
+  </data>
+  <data name="GpxImport_UnknownLogType" xml:space="preserve">
+    <value>{0}: neznámý typ logu „{1}“.</value>
+  </data>
+  <data name="GpxImport_DuplicateCache" xml:space="preserve">
+    <value>{0} je v importu vícekrát; použila se poslední kopie.</value>
+  </data>
+  <data name="GpxImport_NotGpx" xml:space="preserve">
+    <value>{0} není soubor GPX.</value>
+  </data>
+  <data name="GpxImport_InvalidXml" xml:space="preserve">
+    <value>{0} je poškozený ({1}). Vše před chybou se naimportovalo.</value>
+  </data>
+  <data name="GpxImport_DamagedZip" xml:space="preserve">
+    <value>Archiv ZIP {0} je poškozený ({1}).</value>
+  </data>
+  <data name="GpxImport_NoGpxInZip" xml:space="preserve">
+    <value>Archiv ZIP {0} neobsahuje žádné soubory GPX.</value>
+  </data>
+  <data name="GpxImport_FileUnreadable" xml:space="preserve">
+    <value>Soubor {0} nejde přečíst ({1}).</value>
+  </data>
 </root>

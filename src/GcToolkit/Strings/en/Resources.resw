@@ -4332,4 +4332,238 @@
   <data name="CachesFiltersFlyoutTitle" xml:space="preserve">
     <value>Filter caches</value>
   </data>
+  <data name="RhumbLine_Name" xml:space="preserve">
+    <value>Rhumb line</value>
+  </data>
+  <data name="RhumbLine_Tooltip" xml:space="preserve">
+    <value>Constant-bearing course and distance between two points, or a destination along one.</value>
+  </data>
+  <data name="RhumbLineModeInverse" xml:space="preserve">
+    <value>Course between two points</value>
+  </data>
+  <data name="RhumbLineModeDirect" xml:space="preserve">
+    <value>Project a destination</value>
+  </data>
+  <data name="RhumbLineHint" xml:space="preserve">
+    <value>A rhumb line holds one compass bearing the whole way, unlike the shortest great-circle path.</value>
+  </data>
+  <data name="RhumbLineStart" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="RhumbLineEnd" xml:space="preserve">
+    <value>End</value>
+  </data>
+  <data name="RhumbLineCoordinatePlaceholder" xml:space="preserve">
+    <value>e.g. N 49° 12.345' E 016° 34.567'</value>
+  </data>
+  <data name="RhumbLineBearing" xml:space="preserve">
+    <value>Bearing (°)</value>
+  </data>
+  <data name="RhumbLineBearingPlaceholder" xml:space="preserve">
+    <value>0 to 360, clockwise from north</value>
+  </data>
+  <data name="RhumbLineDistance" xml:space="preserve">
+    <value>Distance</value>
+  </data>
+  <data name="RhumbLineDistancePlaceholder" xml:space="preserve">
+    <value>e.g. 500</value>
+  </data>
+  <data name="RhumbLineUnit" xml:space="preserve">
+    <value>Unit</value>
+  </data>
+  <data name="RhumbLineUnitMeter" xml:space="preserve">
+    <value>Meters</value>
+  </data>
+  <data name="RhumbLineUnitKilometer" xml:space="preserve">
+    <value>Kilometers</value>
+  </data>
+  <data name="RhumbLineUnitFeet" xml:space="preserve">
+    <value>Feet</value>
+  </data>
+  <data name="RhumbLineUnitYard" xml:space="preserve">
+    <value>Yards</value>
+  </data>
+  <data name="RhumbLineUnitMile" xml:space="preserve">
+    <value>Statute miles</value>
+  </data>
+  <data name="RhumbLineUnitNauticalMile" xml:space="preserve">
+    <value>Nautical miles</value>
+  </data>
+  <data name="RhumbLineFormat" xml:space="preserve">
+    <value>Output format</value>
+  </data>
+  <data name="RhumbLineFormatDdm" xml:space="preserve">
+    <value>Degrees, decimal minutes</value>
+  </data>
+  <data name="RhumbLineFormatDd" xml:space="preserve">
+    <value>Decimal degrees</value>
+  </data>
+  <data name="RhumbLineFormatDms" xml:space="preserve">
+    <value>Degrees, minutes, seconds</value>
+  </data>
+  <data name="RhumbLineFormatUtm" xml:space="preserve">
+    <value>UTM</value>
+  </data>
+  <data name="RhumbLineFormatMgrs" xml:space="preserve">
+    <value>MGRS</value>
+  </data>
+  <data name="RhumbLineResults" xml:space="preserve">
+    <value>Results</value>
+  </data>
+  <data name="RhumbLineResultRhumb" xml:space="preserve">
+    <value>Rhumb line</value>
+  </data>
+  <data name="RhumbLineResultGreatCircle" xml:space="preserve">
+    <value>Great circle (shortest path)</value>
+  </data>
+  <data name="RhumbLineRhumbDistance" xml:space="preserve">
+    <value>Rhumb distance</value>
+  </data>
+  <data name="RhumbLineRhumbBearing" xml:space="preserve">
+    <value>Constant bearing</value>
+  </data>
+  <data name="RhumbLineGreatCircleDistance" xml:space="preserve">
+    <value>Great-circle distance</value>
+  </data>
+  <data name="RhumbLineGreatCircleInitialBearing" xml:space="preserve">
+    <value>Initial bearing</value>
+  </data>
+  <data name="RhumbLineGreatCircleFinalBearing" xml:space="preserve">
+    <value>Final bearing</value>
+  </data>
+  <data name="RhumbLineExtraDistance" xml:space="preserve">
+    <value>Rhumb line is longer by</value>
+  </data>
+  <data name="RhumbLineDestination" xml:space="preserve">
+    <value>Destination</value>
+  </data>
+  <data name="RhumbLineCopy" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="RhumbLineCopyValue" xml:space="preserve">
+    <value>Copy value</value>
+  </data>
+  <data name="RhumbLineShare" xml:space="preserve">
+    <value>Share</value>
+  </data>
+  <data name="RhumbLineSwap" xml:space="preserve">
+    <value>Swap</value>
+  </data>
+  <data name="RhumbLineClear" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="RhumbLineExample" xml:space="preserve">
+    <value>Example</value>
+  </data>
+  <data name="RhumbLineErrorStart" xml:space="preserve">
+    <value>The start coordinate could not be read.</value>
+  </data>
+  <data name="RhumbLineErrorEnd" xml:space="preserve">
+    <value>The end coordinate could not be read.</value>
+  </data>
+  <data name="RhumbLineErrorSamePoint" xml:space="preserve">
+    <value>Start and end are the same point, so there is no course to steer.</value>
+  </data>
+  <data name="RhumbLineErrorBearing" xml:space="preserve">
+    <value>Enter the bearing as a number of degrees.</value>
+  </data>
+  <data name="RhumbLineErrorDistance" xml:space="preserve">
+    <value>Enter the distance as a positive number.</value>
+  </data>
+  <data name="RhumbLineNotePole" xml:space="preserve">
+    <value>That distance runs past the pole, so the destination is the pole itself.</value>
+  </data>
+  <data name="RhumbLineNotePoleEastWest" xml:space="preserve">
+    <value>Heading east or west from a pole goes nowhere.</value>
+  </data>
+  <data name="Workbench_VariablesProgress" xml:space="preserve">
+    <value>{0} of {1} variables</value>
+  </data>
+  <data name="Workbench_VariablesProgressOne" xml:space="preserve">
+    <value>{0} of {1} variable</value>
+  </data>
+  <data name="Workbench_ScratchpadLinesOne" xml:space="preserve">
+    <value>{0} line of notes</value>
+  </data>
+  <data name="Workbench_ScratchpadLinesFew" xml:space="preserve">
+    <value>{0} lines of notes</value>
+  </data>
+  <data name="Workbench_ScratchpadLinesMany" xml:space="preserve">
+    <value>{0} lines of notes</value>
+  </data>
+  <data name="Workbench_EditedJustNow" xml:space="preserve">
+    <value>Edited just now</value>
+  </data>
+  <data name="Workbench_EditedMinutesAgo" xml:space="preserve">
+    <value>Edited {0} min ago</value>
+  </data>
+  <data name="Workbench_EditedHoursAgo" xml:space="preserve">
+    <value>Edited {0} h ago</value>
+  </data>
+  <data name="Workbench_EditedYesterday" xml:space="preserve">
+    <value>Edited yesterday</value>
+  </data>
+  <data name="Workbench_EditedDaysAgo" xml:space="preserve">
+    <value>Edited {0} days ago</value>
+  </data>
+  <data name="Workbench_ContinueSolving" xml:space="preserve">
+    <value>Continue solving</value>
+  </data>
+  <data name="Workbench_Resume" xml:space="preserve">
+    <value>Resume</value>
+  </data>
+  <data name="Workbench_SessionRestored" xml:space="preserve">
+    <value>Reopened the caches from your last session.</value>
+  </data>
+  <data name="Scratchpad_Saved" xml:space="preserve">
+    <value>Saved</value>
+  </data>
+  <data name="Scratchpad_SavedJustNow" xml:space="preserve">
+    <value>Saved just now</value>
+  </data>
+  <data name="Scratchpad_SavedMinutesAgo" xml:space="preserve">
+    <value>Saved {0} min ago</value>
+  </data>
+  <data name="Scratchpad_SavedHoursAgo" xml:space="preserve">
+    <value>Saved {0} h ago</value>
+  </data>
+  <data name="Scratchpad_Saving" xml:space="preserve">
+    <value>Saving…</value>
+  </data>
+  <data name="Scratchpad_Unsaved" xml:space="preserve">
+    <value>Unsaved changes</value>
+  </data>
+  <data name="GpxImport_MissingCoordinates" xml:space="preserve">
+    <value>{0}: skipped, the coordinates are missing or invalid.</value>
+  </data>
+  <data name="GpxImport_InvalidCacheCode" xml:space="preserve">
+    <value>{0}: skipped, the cache has no valid code.</value>
+  </data>
+  <data name="GpxImport_UnknownCacheType" xml:space="preserve">
+    <value>{0}: unknown cache type '{1}'.</value>
+  </data>
+  <data name="GpxImport_UnknownContainerSize" xml:space="preserve">
+    <value>{0}: unknown container size '{1}'.</value>
+  </data>
+  <data name="GpxImport_UnknownLogType" xml:space="preserve">
+    <value>{0}: unknown log type '{1}'.</value>
+  </data>
+  <data name="GpxImport_DuplicateCache" xml:space="preserve">
+    <value>{0} appears more than once; the last copy was used.</value>
+  </data>
+  <data name="GpxImport_NotGpx" xml:space="preserve">
+    <value>{0} is not a GPX file.</value>
+  </data>
+  <data name="GpxImport_InvalidXml" xml:space="preserve">
+    <value>{0} is damaged ({1}). Everything before the problem was imported.</value>
+  </data>
+  <data name="GpxImport_DamagedZip" xml:space="preserve">
+    <value>The ZIP archive {0} is damaged ({1}).</value>
+  </data>
+  <data name="GpxImport_NoGpxInZip" xml:space="preserve">
+    <value>The ZIP archive {0} contains no GPX files.</value>
+  </data>
+  <data name="GpxImport_FileUnreadable" xml:space="preserve">
+    <value>{0} could not be read ({1}).</value>
+  </data>
 </root>

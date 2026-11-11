@@ -173,7 +173,7 @@ public sealed partial class CachesView : CachesViewBase
 
     public static IReadOnlyList<string> NoticeIssues(CachesNotice? notice)
         => notice?.Summary is { } summary
-            ? [.. summary.Errors.Concat(summary.Issues).Take(MaxIssuesShown).Select(i => $"{i.Subject}: {i.Message}")]
+            ? [.. summary.Errors.Concat(summary.Issues).Take(MaxIssuesShown).Select(i => string.Format(CultureInfo.CurrentCulture, Localizer.Instance[i.ResourceKey], i.Subject, i.Detail ?? string.Empty))]
             : [];
 
     // Placeholder glyphs from Segoe Fluent Icons until real cache-type icons land (#412).

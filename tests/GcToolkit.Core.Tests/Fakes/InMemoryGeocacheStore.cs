@@ -22,11 +22,11 @@ public sealed class InMemoryGeocacheStore : IGeocacheStore
             GeocacheSort.Terrain => c => c.Terrain,
             GeocacheSort.PlacedOn => c => c.PlacedOn,
             GeocacheSort.FavoritePoints => c => c.FavoritePoints,
-            _ => c => c.Name,
+            _ => c => SearchText.Fold(c.Name),
         };
 
         var comparer = Comparer<object?>.Create((a, b) => query.Sort is GeocacheSort.Name or GeocacheSort.Code
-            ? string.Compare((string?)a, (string?)b, StringComparison.OrdinalIgnoreCase)
+            ? string.Compare((string?)a, (string?)b, StringComparison.Ordinal)
             : Comparer<object?>.Default.Compare(a, b));
 
         // Ties fall back to the code so paging is stable.
@@ -130,9 +130,9 @@ public sealed class InMemoryGeocacheStore : IGeocacheStore
 
     private bool Matches(Geocache c, GeocacheQuery q)
         => (string.IsNullOrWhiteSpace(q.Text)
-                || c.Name.Contains(q.Text.Trim(), StringComparison.OrdinalIgnoreCase)
+                || SearchText.Fold(c.Name).Contains(SearchText.Fold(q.Text.Trim()), StringComparison.Ordinal)
                 || c.Code.Value.Contains(q.Text.Trim(), StringComparison.OrdinalIgnoreCase)
-                || (c.Owner?.Contains(q.Text.Trim(), StringComparison.OrdinalIgnoreCase) ?? false))
+                || SearchText.Fold(c.Owner ?? string.Empty).Contains(SearchText.Fold(q.Text.Trim()), StringComparison.Ordinal))
             && (q.Types is not { Count: > 0 } || q.Types.Contains(c.Type))
             && (q.Sizes is not { Count: > 0 } || q.Sizes.Contains(c.Size))
             && InRange(c.Difficulty, q.MinDifficulty, q.MaxDifficulty)

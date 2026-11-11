@@ -76,6 +76,7 @@ internal static class GpxVocabulary
         ("Final Location", WaypointType.Final),
         ("Trailhead", WaypointType.Trailhead),
         ("Reference Point", WaypointType.ReferencePoint),
+        ("User Waypoint", WaypointType.User),
     ];
 
     public static bool TryParseType(string? text, out GeocacheType value) => TryFind(_types, text, out value);
@@ -86,11 +87,11 @@ internal static class GpxVocabulary
 
     public static bool TryParseWaypointType(string? text, out WaypointType value) => TryFind(_waypointTypes, text, out value);
 
-    public static string TypeText(GeocacheType value) => TextOf(_types, value, "Unknown Cache");
+    public static string? TypeText(GeocacheType value) => TextOfOrNull(_types, value);
 
-    public static string SizeText(GeocacheSize value) => TextOf(_sizes, value, "Unknown");
+    public static string? SizeText(GeocacheSize value) => TextOfOrNull(_sizes, value);
 
-    public static string LogTypeText(GeocacheLogType value) => TextOf(_logTypes, value, "Write note");
+    public static string? LogTypeText(GeocacheLogType value) => TextOfOrNull(_logTypes, value);
 
     public static string? WaypointTypeText(WaypointType value) => TextOfOrNull(_waypointTypes, value);
 
@@ -113,9 +114,6 @@ internal static class GpxVocabulary
 
         return false;
     }
-
-    private static string TextOf<T>((string Text, T Value)[] table, T value, string fallback)
-        => TextOfOrNull(table, value) ?? fallback;
 
     private static string? TextOfOrNull<T>((string Text, T Value)[] table, T value)
     {

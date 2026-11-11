@@ -68,7 +68,7 @@ public sealed class GpxImporter : ICacheSource
         {
             if (indexByCode.TryGetValue(cache.Code, out var index))
             {
-                warnings.Add(new(cache.Code.Value, "Appears more than once in this import; the last copy was used."));
+                warnings.Add(new(cache.Code.Value, GpxImportIssueKind.DuplicateCache));
                 caches[index] = cache;
             }
             else
@@ -79,12 +79,19 @@ public sealed class GpxImporter : ICacheSource
         }
 
         Dictionary<GeocacheCode, List<Waypoint>> attached = [];
+        Dictionary<GeocacheCode, GeoCoordinate> corrections = [];
         List<GpxWaypoint> plain = [];
         var merged = 0;
         foreach (var (waypoint, parent) in waypoints)
         {
             if (FindParent(waypoint, parent, indexByCode) is { } parentCode)
             {
+                if (waypoint.IsCorrectedCoordinateMarker)
+                {
+                    corrections[parentCode] = waypoint.Coordinate;
+                    continue;
+                }
+
                 if (!attached.TryGetValue(parentCode, out var list))
                 {
                     attached[parentCode] = list = [];
@@ -103,6 +110,13 @@ public sealed class GpxImporter : ICacheSource
         {
             var index = indexByCode[code];
             caches[index] = caches[index] with { Waypoints = list };
+        }
+
+        foreach (var (code, coordinate) in corrections)
+        {
+            var index = indexByCode[code];
+            var cache = caches[index];
+            caches[index] = cache with { UserData = cache.UserData with { CorrectedCoordinate = cache.UserData.CorrectedCoordinate ?? coordinate } };
         }
 
         return new GpxImportResult
@@ -198,13 +212,13 @@ public sealed class GpxImporter : ICacheSource
         }
         catch (InvalidDataException ex)
         {
-            errors.Add(new(label, $"The ZIP archive is damaged ({ex.Message})."));
+            errors.Add(new(label, GpxImportIssueKind.DamagedZip, ex.Message));
             yield break;
         }
 
         if (entries.Count == 0)
         {
-            errors.Add(new(label, "The ZIP archive contains no GPX files."));
+            errors.Add(new(label, GpxImportIssueKind.NoGpxInZip));
         }
 
         foreach (var entry in entries)

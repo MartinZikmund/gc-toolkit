@@ -459,7 +459,7 @@ public partial class CachesViewModel : ViewModelBase
             }
             catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
             {
-                errors.Add(new(group.First().Name, ex.Message));
+                errors.Add(new(group.First().Name, GpxImportIssueKind.FileUnreadable, ex.Message));
             }
             finally
             {

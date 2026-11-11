@@ -76,6 +76,35 @@ public class GeocacheTests
     }
 
     [TestMethod]
+    public void MergeFrom_BothHaveScratchpad_ExistingWins()
+    {
+        var existing = CreateCache(userData: new() { Scratchpad = "mine" });
+        var incoming = CreateCache(userData: new() { Scratchpad = "theirs" });
+
+        Assert.AreEqual("mine", existing.MergeFrom(incoming).UserData.Scratchpad);
+    }
+
+    [TestMethod]
+    public void MergeFrom_ExistingScratchpadEmpty_FillsFromIncoming()
+    {
+        var existing = CreateCache(userData: new() { Scratchpad = "" });
+        var incoming = CreateCache(userData: new() { Scratchpad = "theirs" });
+
+        Assert.AreEqual("theirs", existing.MergeFrom(incoming).UserData.Scratchpad);
+    }
+
+    [TestMethod]
+    public void MergeFrom_ScratchpadAndNote_AreIndependent()
+    {
+        var existing = CreateCache(userData: new() { Scratchpad = "private" });
+        var incoming = CreateCache(userData: new() { Note = "synced" });
+
+        var merged = existing.MergeFrom(incoming).UserData;
+
+        Assert.AreEqual("private", merged.Scratchpad);
+        Assert.AreEqual("synced", merged.Note);
+    }
+    [TestMethod]
     public void MergeFrom_DifferentCode_Throws()
     {
         var existing = CreateCache();
@@ -84,3 +113,4 @@ public class GeocacheTests
         Assert.ThrowsExactly<ArgumentException>(() => existing.MergeFrom(incoming));
     }
 }
+

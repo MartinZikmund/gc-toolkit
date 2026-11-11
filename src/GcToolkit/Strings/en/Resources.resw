@@ -4071,4 +4071,19 @@
   <data name="Workbench_SessionRestored" xml:space="preserve">
     <value>Reopened the caches from your last session.</value>
   </data>
+  <data name="Scratchpad_Saved" xml:space="preserve">
+    <value>Saved</value>
+  </data>
+  <data name="Scratchpad_SavedJustNow" xml:space="preserve">
+    <value>Saved just now</value>
+  </data>
+  <data name="Scratchpad_SavedMinutesAgo" xml:space="preserve">
+    <value>Saved {0} min ago</value>
+  </data>
+  <data name="Scratchpad_Saving" xml:space="preserve">
+    <value>Saving…</value>
+  </data>
+  <data name="Scratchpad_Unsaved" xml:space="preserve">
+    <value>Unsaved changes</value>
+  </data>
 </root>

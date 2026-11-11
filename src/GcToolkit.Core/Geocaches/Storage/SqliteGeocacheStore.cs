@@ -19,12 +19,13 @@ namespace GcToolkit.Core.Geocaches.Storage;
 public sealed class SqliteGeocacheStore(Func<Task<string>> databasePathProvider, IStorageFlusher flusher) : IGeocacheStore, IAsyncDisposable
 {
     /// <summary>The schema version this build writes. Stored in <c>PRAGMA user_version</c>.</summary>
-    public const int CurrentSchemaVersion = 1;
+    public const int CurrentSchemaVersion = 2;
 
     // Index n upgrades a database from version n to n + 1.
     private static readonly Action<SQLiteConnection>[] _migrations =
     [
         CreateVersion1,
+        AddMissingSearchColumns,
     ];
 
     private readonly SemaphoreSlim _openLock = new(1, 1);
@@ -323,6 +324,24 @@ public sealed class SqliteGeocacheStore(Func<Task<string>> databasePathProvider,
         connection.CreateTable<GeocacheListRow>();
         connection.CreateTable<GeocacheListMemberRow>();
         connection.Execute("CREATE UNIQUE INDEX IF NOT EXISTS UX_GeocacheLists_Name ON GeocacheLists (Name COLLATE NOCASE)");
+    }
+
+    // Pre-release builds wrote version 1 without SearchName/SearchOwner. CreateTable adds missing columns
+    // and indexes to an existing table; the folded values are computed here because SQL can't fold accents.
+    private static void AddMissingSearchColumns(SQLiteConnection connection)
+    {
+        connection.CreateTable<GeocacheRow>();
+
+        var stale = connection.Query<SearchBackfillRow>(
+            "SELECT Code, Name, Owner FROM Geocaches WHERE SearchName IS NULL OR SearchName = '' OR SearchOwner IS NULL");
+        foreach (var row in stale)
+        {
+            connection.Execute(
+                "UPDATE Geocaches SET SearchName = ?, SearchOwner = ? WHERE Code = ?",
+                SearchText.Fold(row.Name),
+                SearchText.Fold(row.Owner ?? string.Empty),
+                row.Code);
+        }
     }
 
     private static (string Where, List<object?> Args) BuildWhere(GeocacheQuery query)

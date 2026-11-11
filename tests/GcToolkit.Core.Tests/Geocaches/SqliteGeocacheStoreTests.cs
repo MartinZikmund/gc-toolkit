@@ -94,6 +94,32 @@ public class SqliteGeocacheStoreTests : GeocacheStoreContractTests
     }
 
     [TestMethod]
+    public async Task EarlyVersion1Database_WithoutSearchColumns_IsUpgraded()
+    {
+        var path = NewDatabasePath();
+        var first = CreateStore(path, new NoOpStorageFlusher());
+        await first.UpsertAsync([Cache(code: "GC1", name: "Český ráj") with { Owner = "Jiří" }]);
+        await first.DisposeAsync();
+        _stores.Remove(first);
+
+        // Pre-release builds created version 1 before the folded search columns existed.
+        using (SQLiteConnection connection = new(path))
+        {
+            connection.Execute("DROP INDEX IF EXISTS Geocaches_SearchName");
+            connection.Execute("ALTER TABLE Geocaches DROP COLUMN SearchName");
+            connection.Execute("ALTER TABLE Geocaches DROP COLUMN SearchOwner");
+            connection.Execute("PRAGMA user_version = 1");
+        }
+
+        var store = CreateStore(path, new NoOpStorageFlusher());
+        await store.UpsertAsync([Cache(code: "GC2", name: "Žluťoučký kůň")]);
+
+        Assert.AreEqual(1, (await store.QueryAsync(new() { Text = "cesky" })).TotalCount);
+        Assert.AreEqual(1, (await store.QueryAsync(new() { Text = "jiri" })).TotalCount);
+        Assert.AreEqual(1, (await store.QueryAsync(new() { Text = "zlutoucky" })).TotalCount);
+    }
+
+    [TestMethod]
     public async Task EveryCommittedWrite_FlushesStorage()
     {
         var flusher = new CountingFlusher();

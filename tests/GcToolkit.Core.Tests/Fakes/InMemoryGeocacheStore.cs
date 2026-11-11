@@ -44,8 +44,16 @@ public sealed class InMemoryGeocacheStore : IGeocacheStore
         return Task.FromResult(new GeocachePage([.. page.Select(ToSummary)], all.Count));
     }
 
+    /// <summary>When set, <see cref="UpsertAsync"/> throws it, like a database that can't be written.</summary>
+    public Exception? UpsertFailure { get; set; }
+
     public Task<UpsertResult> UpsertAsync(IReadOnlyCollection<Geocache> caches, CancellationToken cancellationToken = default)
     {
+        if (UpsertFailure is { } failure)
+        {
+            return Task.FromException<UpsertResult>(failure);
+        }
+
         int added = 0, updated = 0;
         foreach (var incoming in caches)
         {

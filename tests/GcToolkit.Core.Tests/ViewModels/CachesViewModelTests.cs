@@ -376,6 +376,22 @@ public class CachesViewModelTests
     }
 
     [TestMethod]
+    public async Task ImportGpx_StoreFails_ReportsErrorInsteadOfThrowing()
+    {
+        var vm = CreateViewModel();
+        _store.UpsertFailure = new InvalidOperationException("table Geocaches has no column named SearchName");
+        _picker.AddFixture("groundspeak-1.0.1-pq.gpx", "Prague.gpx");
+
+        await vm.ImportGpxCommand.ExecuteAsync(null);
+
+        Assert.AreEqual(CachesNoticeSeverity.Error, vm.Notice?.Severity);
+        var error = vm.Notice!.Summary!.Errors.Single();
+        Assert.AreEqual(GpxImportIssueKind.SaveFailed, error.Kind);
+        Assert.AreEqual("Prague.gpx", error.Subject);
+        Assert.IsFalse(vm.IsImporting);
+    }
+
+    [TestMethod]
     public async Task Import_SameFileTwice_UpdatesInsteadOfAddingAndReusesTheList()
     {
         var vm = await LoadedAsync([]);

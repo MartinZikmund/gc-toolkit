@@ -260,3 +260,14 @@ internal sealed class CountRow
 {
     public int Count { get; set; }
 }
+
+/// <summary>The source columns of the folded search columns, for the version 2 backfill.</summary>
+[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
+internal sealed class SearchBackfillRow
+{
+    public string Code { get; set; } = "";
+
+    public string Name { get; set; } = "";
+
+    public string? Owner { get; set; }
+}

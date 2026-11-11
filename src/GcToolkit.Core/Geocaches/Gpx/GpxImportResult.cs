@@ -26,6 +26,9 @@ public enum GpxImportIssueKind
 
     /// <summary>The file could not be opened or read at all (access denied, I/O error).</summary>
     FileUnreadable,
+
+    /// <summary>The caches were read but could not be saved to the offline database.</summary>
+    SaveFailed,
 }
 
 /// <summary>A GPX waypoint that is not a geocache and was not attached to one.</summary>

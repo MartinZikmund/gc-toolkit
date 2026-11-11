@@ -172,6 +172,6 @@ public class TriangulationSolveTests
         var fix = Triangulation.Solve([new(a, 45), new(new GeoCoordinate(0, 10), 315)]);
 
         Assert.AreEqual(Geodesy.DistanceMeters(a, fix.Point!.Value), fix.Residuals[0].DistanceMeters, 1e-6);
-        Assert.AreEqual(45.0, fix.Residuals[0].BearingToFixDegrees, 1e-6);
+        Assert.AreEqual(45.0, fix.Residuals[0].MeasuredBearingDegrees, 1e-6);
     }
 }

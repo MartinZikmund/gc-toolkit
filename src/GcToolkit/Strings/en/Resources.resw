@@ -5432,4 +5432,49 @@
   <data name="GpxImport_FileUnreadable" xml:space="preserve">
     <value>{0} could not be read ({1}).</value>
   </data>
+  <data name="Resection_Name" xml:space="preserve">
+    <value>Resection</value>
+  </data>
+  <data name="Resection_Tooltip" xml:space="preserve">
+    <value>Find your own position from bearings you sighted to two or more known landmarks.</value>
+  </data>
+  <data name="ResectionPointsHeader" xml:space="preserve">
+    <value>Known landmarks and the bearing you sighted to each</value>
+  </data>
+  <data name="ResectionPointHeader" xml:space="preserve">
+    <value>Landmark {0}</value>
+  </data>
+  <data name="ResectionBearingHeader" xml:space="preserve">
+    <value>Bearing to {0} (°)</value>
+  </data>
+  <data name="ResectionBearingHint" xml:space="preserve">
+    <value>Enter the bearing from where you stand to the landmark, clockwise from North. Each sight is turned into a back-bearing line through its landmark; with three or more the result is the least-squares best fit.</value>
+  </data>
+  <data name="ResectionAddPoint" xml:space="preserve">
+    <value>Add landmark</value>
+  </data>
+  <data name="ResectionResultLabel" xml:space="preserve">
+    <value>Your position</value>
+  </data>
+  <data name="ResectionErrorPoint" xml:space="preserve">
+    <value>Enter a valid coordinate for landmark {0}.</value>
+  </data>
+  <data name="ResectionErrorBearing" xml:space="preserve">
+    <value>Enter the bearing to {0} as a number in degrees.</value>
+  </data>
+  <data name="ResectionErrorTooFew" xml:space="preserve">
+    <value>Enter at least two landmarks, each with the bearing you sighted.</value>
+  </data>
+  <data name="ResectionErrorCoincident" xml:space="preserve">
+    <value>All the sight lines lie on one line, so every point on it fits. Sight landmarks in different directions.</value>
+  </data>
+  <data name="ResectionErrorIdentical" xml:space="preserve">
+    <value>All the landmarks are the same place. Use at least two different landmarks.</value>
+  </data>
+  <data name="ResectionWarnBehind" xml:space="preserve">
+    <value>The bearing to {0} points away from it. Did you enter the back bearing?</value>
+  </data>
+  <data name="ResectionWarnIllConditioned" xml:space="preserve">
+    <value>The sight lines are almost parallel, so a tiny error in any bearing moves your position a long way. Pick landmarks further apart in direction.</value>
+  </data>
 </root>

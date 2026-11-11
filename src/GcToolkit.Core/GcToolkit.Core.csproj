@@ -31,6 +31,8 @@
         <!-- Frequency-ordered English word list (gzipped) so the vanity-code decoder resolves 34448 -> DIGIT/EIGHT/FIGHT offline.
              WithCulture=false: a ".en." segment would make MSBuild treat this as a satellite resource. -->
         <EmbeddedResource Include="Ciphers\PhoneKeypadWords-en.gz" LogicalName="GcToolkit.Core.Ciphers.PhoneKeypadWords-en.gz" WithCulture="false" />
+        <!-- WMM2025 spherical-harmonic coefficients (NOAA NCEI, public domain) for offline magnetic declination -->
+        <EmbeddedResource Include="Coordinates\Magnetic\WMM2025.COF" LogicalName="GcToolkit.Core.Coordinates.Magnetic.WMM2025.COF" />
     </ItemGroup>
 
     <ItemGroup>

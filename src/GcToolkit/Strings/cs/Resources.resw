@@ -5003,4 +5003,148 @@
   <data name="ChecksumErrorTooLong" xml:space="preserve">
     <value>Příliš dlouhé pro převod mezi soustavami (přes {0} číslic).</value>
   </data>
+  <data name="Triangulation_Name" xml:space="preserve">
+    <value>Triangulace</value>
+  </data>
+  <data name="Triangulation_Tooltip" xml:space="preserve">
+    <value>Najděte bod, kde se protínají směry zaměřené ze dvou nebo více známých bodů.</value>
+  </data>
+  <data name="TriangulationPointsHeader" xml:space="preserve">
+    <value>Známé body a azimut zaměřený z každého z nich</value>
+  </data>
+  <data name="TriangulationPointHeader" xml:space="preserve">
+    <value>Bod {0}</value>
+  </data>
+  <data name="TriangulationBearingHeader" xml:space="preserve">
+    <value>Azimut z {0} (°)</value>
+  </data>
+  <data name="BearingFixPointPlaceholder" xml:space="preserve">
+    <value>N 49 12.345 E 016 34.567</value>
+  </data>
+  <data name="BearingFixBearingPlaceholder" xml:space="preserve">
+    <value>0–360</value>
+  </data>
+  <data name="TriangulationBearingHint" xml:space="preserve">
+    <value>Azimut se měří po směru hodinových ručiček od severu. Při třech a více bodech je výsledek nejlepší shoda metodou nejmenších čtverců.</value>
+  </data>
+  <data name="TriangulationAddPoint" xml:space="preserve">
+    <value>Přidat bod</value>
+  </data>
+  <data name="BearingFixRemovePoint" xml:space="preserve">
+    <value>Odebrat řádek</value>
+  </data>
+  <data name="TriangulationResultLabel" xml:space="preserve">
+    <value>Průsečík</value>
+  </data>
+  <data name="BearingFixFormatDdm" xml:space="preserve">
+    <value>Stupně a desetinné minuty</value>
+  </data>
+  <data name="BearingFixFormatDd" xml:space="preserve">
+    <value>Desetinné stupně</value>
+  </data>
+  <data name="BearingFixFormatDms" xml:space="preserve">
+    <value>Stupně, minuty, vteřiny</value>
+  </data>
+  <data name="BearingFixAlternateLabel" xml:space="preserve">
+    <value>Druhé řešení (na opačné straně Země)</value>
+  </data>
+  <data name="BearingFixReadoutsLabel" xml:space="preserve">
+    <value>Kontrola</value>
+  </data>
+  <data name="BearingFixReadoutPoint" xml:space="preserve">
+    <value>Bod</value>
+  </data>
+  <data name="BearingFixReadoutDistance" xml:space="preserve">
+    <value>Vzdálenost</value>
+  </data>
+  <data name="BearingFixReadoutBearing" xml:space="preserve">
+    <value>Azimut</value>
+  </data>
+  <data name="BearingFixReadoutOffset" xml:space="preserve">
+    <value>Přímka míjí o</value>
+  </data>
+  <data name="BearingFixReadoutBaseline" xml:space="preserve">
+    <value>Vzdálenost mezi A a B</value>
+  </data>
+  <data name="BearingFixCopy" xml:space="preserve">
+    <value>Kopírovat</value>
+  </data>
+  <data name="BearingFixShare" xml:space="preserve">
+    <value>Sdílet</value>
+  </data>
+  <data name="BearingFixExample" xml:space="preserve">
+    <value>Příklad</value>
+  </data>
+  <data name="BearingFixClear" xml:space="preserve">
+    <value>Vymazat</value>
+  </data>
+  <data name="TriangulationErrorPoint" xml:space="preserve">
+    <value>Zadejte platnou souřadnici bodu {0}.</value>
+  </data>
+  <data name="TriangulationErrorBearing" xml:space="preserve">
+    <value>Zadejte azimut z {0} jako číslo ve stupních.</value>
+  </data>
+  <data name="TriangulationErrorTooFew" xml:space="preserve">
+    <value>Zadejte alespoň dva body, každý s azimutem.</value>
+  </data>
+  <data name="TriangulationErrorCoincident" xml:space="preserve">
+    <value>Všechny směry leží na jedné přímce, takže vyhovuje každý její bod. Použijte různé směry.</value>
+  </data>
+  <data name="TriangulationErrorIdentical" xml:space="preserve">
+    <value>Všechny body jsou na stejném místě. Použijte alespoň dva různé body.</value>
+  </data>
+  <data name="TriangulationWarnBehind" xml:space="preserve">
+    <value>Průsečík leží za azimutem z {0} (v opačném směru).</value>
+  </data>
+  <data name="TriangulationWarnIllConditioned" xml:space="preserve">
+    <value>Azimuty jsou téměř rovnoběžné, takže drobná chyba v kterémkoli z nich posune výsledek hodně daleko.</value>
+  </data>
+  <data name="BearingFixMagneticToggle" xml:space="preserve">
+    <value>Azimuty jsou magnetické (odečtené z kompasu)</value>
+  </data>
+  <data name="BearingFixDeclinationAuto" xml:space="preserve">
+    <value>Automaticky (Světový magnetický model)</value>
+  </data>
+  <data name="BearingFixDeclinationManual" xml:space="preserve">
+    <value>Zadat ručně</value>
+  </data>
+  <data name="BearingFixDeclinationLabel" xml:space="preserve">
+    <value>Deklinace (°, východní kladná)</value>
+  </data>
+  <data name="BearingFixDeclinationPlaceholder" xml:space="preserve">
+    <value>např. 4,5 nebo 3W</value>
+  </data>
+  <data name="BearingFixDeclinationDate" xml:space="preserve">
+    <value>Datum měření</value>
+  </data>
+  <data name="BearingFixDeclinationHint" xml:space="preserve">
+    <value>Počítá se offline pro každý bod ze Světového magnetického modelu NOAA WMM2025 (platný 2025–2029).</value>
+  </data>
+  <data name="BearingFixDeclinationApplied" xml:space="preserve">
+    <value>Deklinace {0}, zeměpisný azimut {1}</value>
+  </data>
+  <data name="BearingFixErrorDeclination" xml:space="preserve">
+    <value>Zadejte deklinaci ve stupních, např. 4,5 nebo 3W.</value>
+  </data>
+  <data name="BearingFixWarnModelRange" xml:space="preserve">
+    <value>Datum je mimo platnost WMM2025 (2025–2029), takže vypočtená deklinace může být nepřesná.</value>
+  </data>
+  <data name="BearingFixAccuracyLabel" xml:space="preserve">
+    <value>Přesnost</value>
+  </data>
+  <data name="BearingFixAccuracyFormat" xml:space="preserve">
+    <value>Přímky míjejí výsledek o {0} (RMS, nejhorší {1}).</value>
+  </data>
+  <data name="BearingFixOffsetFormat" xml:space="preserve">
+    <value>{0} ({1:+0.0;-0.0;0.0}°)</value>
+  </data>
+  <data name="BearingFixPlotLabel" xml:space="preserve">
+    <value>Náčrt</value>
+  </data>
+  <data name="BearingFixPlotDescription" xml:space="preserve">
+    <value>Náčrt bodů, jejich směrových přímek a výsledku</value>
+  </data>
+  <data name="BearingFixPlotNote" xml:space="preserve">
+    <value>Pouze schéma, sever nahoře. Kružnice ukazuje střední (RMS) odchylku přímek.</value>
+  </data>
 </root>

@@ -4988,9 +4988,6 @@
   <data name="CachesOpen" xml:space="preserve">
     <value>Otevřít</value>
   </data>
-  <data name="CachesOpenSoon" xml:space="preserve">
-    <value>Úplné detaily keše přibudou brzy.</value>
-  </data>
   <data name="CachesDetailEmpty" xml:space="preserve">
     <value>Vyberte keš a zobrazí se tady.</value>
   </data>

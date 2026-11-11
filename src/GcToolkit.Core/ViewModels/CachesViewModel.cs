@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using GcToolkit.Core.Geocaches;
 using GcToolkit.Core.Geocaches.Gpx;
+using GcToolkit.Core.Services;
 using GcToolkit.Core.Services.Dialogs;
 using GcToolkit.Core.Services.Files;
 using Microsoft.Extensions.Localization;
@@ -46,6 +47,7 @@ public partial class CachesViewModel : ViewModelBase
     private readonly ITextPromptService _prompt;
     private readonly IStringLocalizer _localizer;
     private readonly GpxImporter _importer;
+    private readonly INavigationService _navigation;
 
     private CancellationTokenSource? _loadCts;
     private Task _loadTask = Task.CompletedTask;
@@ -60,7 +62,8 @@ public partial class CachesViewModel : ViewModelBase
         IConfirmationDialogService confirmation,
         ITextPromptService prompt,
         IStringLocalizer localizer,
-        GpxImporter importer)
+        GpxImporter importer,
+        INavigationService navigation)
     {
         _store = store;
         _filePicker = filePicker;
@@ -68,6 +71,7 @@ public partial class CachesViewModel : ViewModelBase
         _prompt = prompt;
         _localizer = localizer;
         _importer = importer;
+        _navigation = navigation;
 
         PageTitle = _localizer["Caches"];
 
@@ -262,10 +266,22 @@ public partial class CachesViewModel : ViewModelBase
         }
     }
 
+    [RelayCommand(CanExecute = nameof(CanOpen))]
+    private void Open()
+    {
+        if (Detail is { } cache)
+        {
+            _navigation.Navigate<GeocacheDetailViewModel>(cache.Code);
+        }
+    }
+
+    private bool CanOpen() => Detail is not null;
+
     public void SetSelection(IReadOnlyList<GeocacheSummary> selected)
     {
         SelectedItems = selected;
         Detail = selected.Count == 1 ? selected[0] : null;
+        OpenCommand.NotifyCanExecuteChanged();
         OnPropertyChanged(nameof(SelectedCount));
         OnPropertyChanged(nameof(HasSelection));
         DeleteSelectedCommand.NotifyCanExecuteChanged();

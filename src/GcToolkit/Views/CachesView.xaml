@@ -460,7 +460,7 @@
                     Content="{markup:Localize Key=CachesClearFilters}" />
             </StackPanel>
 
-            <!--  Detail: a placeholder until the full cache page lands (#411)  -->
+            <!--  Detail: summary of the selected cache; Open shows the full page  -->
             <Border
                 x:Name="DetailPanel"
                 Grid.Column="1"
@@ -492,13 +492,8 @@
                         <Button
                             AutomationProperties.AutomationId="CachesOpenButton"
                             AutomationProperties.Name="{markup:Localize Key=CachesOpenAutomation}"
-                            Content="{markup:Localize Key=CachesOpen}"
-                            IsEnabled="False" />
-                        <TextBlock
-                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                            Style="{ThemeResource CaptionTextBlockStyle}"
-                            Text="{markup:Localize Key=CachesOpenSoon}"
-                            TextWrapping="Wrap" />
+                            Command="{x:Bind ViewModel.OpenCommand}"
+                            Content="{markup:Localize Key=CachesOpen}" />
                     </StackPanel>
                 </StackPanel>
             </Border>

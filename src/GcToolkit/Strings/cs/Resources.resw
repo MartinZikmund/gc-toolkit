@@ -4928,4 +4928,79 @@
   <data name="GpxImport_NoGpxInZip" xml:space="preserve">
     <value>Archiv ZIP {0} neobsahuje žádné soubory GPX.</value>
   </data>
+  <data name="ChecksumCoordinateHeader" xml:space="preserve">
+    <value>Kontrolní součet souřadnic</value>
+  </data>
+  <data name="ChecksumCoordinateLabel" xml:space="preserve">
+    <value>Jedna souřadnice na řádek</value>
+  </data>
+  <data name="ChecksumCoordinateHint" xml:space="preserve">
+    <value>Přidejte = 62 na řádek pro ověření proti zveřejněnému součtu.</value>
+  </data>
+  <data name="ChecksumCoordinatePlaceholder" xml:space="preserve">
+    <value>např. N 49° 12.345' E 016° 30.678' = 59</value>
+  </data>
+  <data name="ChecksumModeDdm" xml:space="preserve">
+    <value>Stupně a desetinné minuty (standard)</value>
+  </data>
+  <data name="ChecksumModeAsEntered" xml:space="preserve">
+    <value>Jak zadáno</value>
+  </data>
+  <data name="ChecksumLatLabel" xml:space="preserve">
+    <value>Šířka</value>
+  </data>
+  <data name="ChecksumLonLabel" xml:space="preserve">
+    <value>Délka</value>
+  </data>
+  <data name="ChecksumMatch" xml:space="preserve">
+    <value>Odpovídá očekávanému součtu ({0})</value>
+  </data>
+  <data name="ChecksumMismatch" xml:space="preserve">
+    <value>Očekáváno {0}, vypočteno {1}</value>
+  </data>
+  <data name="ChecksumErrorCoordinate" xml:space="preserve">
+    <value>Nerozpoznaná souřadnice.</value>
+  </data>
+  <data name="ChecksumErrorNoDigits" xml:space="preserve">
+    <value>Žádné číslice k sečtení.</value>
+  </data>
+  <data name="ChecksumVariantsHeader" xml:space="preserve">
+    <value>Další ciferné součty</value>
+  </data>
+  <data name="ChecksumVariantsHint" xml:space="preserve">
+    <value>Střídavý součet se zobrazuje vždy. Pro další zvolte číselnou soustavu nebo modulo.</value>
+  </data>
+  <data name="ChecksumInputBaseLabel" xml:space="preserve">
+    <value>Číslo je v soustavě</value>
+  </data>
+  <data name="ChecksumDigitBaseLabel" xml:space="preserve">
+    <value>Sčítat číslice v soustavě</value>
+  </data>
+  <data name="ChecksumModulusLabel" xml:space="preserve">
+    <value>Ciferný součet mod n</value>
+  </data>
+  <data name="ChecksumModulusPlaceholder" xml:space="preserve">
+    <value>vypnuto</value>
+  </data>
+  <data name="ChecksumAlternatingLabel" xml:space="preserve">
+    <value>Střídavý ciferný součet</value>
+  </data>
+  <data name="ChecksumBaseSumLabel" xml:space="preserve">
+    <value>Ciferný součet (soustava {0})</value>
+  </data>
+  <data name="ChecksumModuloLabel" xml:space="preserve">
+    <value>Ciferný součet mod {0}</value>
+  </data>
+  <data name="ChecksumErrorDigit" xml:space="preserve">
+    <value>'{0}' není číslice v soustavě {1}.</value>
+  </data>
+  <data name="ChecksumErrorBase" xml:space="preserve">
+    <value>Soustavy jsou od 2 do 36.</value>
+  </data>
+  <data name="ChecksumErrorModulus" xml:space="preserve">
+    <value>Modulo musí být celé číslo větší než 0.</value>
+  </data>
+  <data name="ChecksumErrorTooLong" xml:space="preserve">
+    <value>Příliš dlouhé pro převod mezi soustavami (přes {0} číslic).</value>
+  </data>
 </root>

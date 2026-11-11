@@ -15,6 +15,7 @@ public class CachesViewModelTests
     private readonly FakeFilePickerService _picker = new();
     private readonly FakeConfirmationDialogService _confirm = new();
     private readonly FakeTextPromptService _prompt = new();
+    private readonly FakeNavigationService _navigation = new();
 
     private CachesViewModel CreateViewModel(int pageSize = 100) => new(
         _store,
@@ -22,7 +23,8 @@ public class CachesViewModelTests
         _confirm,
         _prompt,
         new FakeStringLocalizer(),
-        new GpxImporter())
+        new GpxImporter(),
+        _navigation)
     {
         PageSize = pageSize,
     };
@@ -222,6 +224,19 @@ public class CachesViewModelTests
 
         Assert.IsTrue(vm.IsEmpty);
         Assert.IsFalse(vm.HasNoMatches);
+    }
+
+    [TestMethod]
+    public async Task Open_SingleSelection_NavigatesToTheCacheDetail()
+    {
+        var vm = await LoadedAsync([Cache(1), Cache(2)]);
+        Assert.IsFalse(vm.OpenCommand.CanExecute(null));
+
+        vm.SetSelection([vm.Items[1]]);
+        vm.OpenCommand.Execute(null);
+
+        Assert.AreEqual(typeof(GeocacheDetailViewModel), _navigation.LastViewModelType);
+        Assert.AreEqual(vm.Items[1].Code, _navigation.LastParameter);
     }
 
     [TestMethod]

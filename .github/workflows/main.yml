@@ -66,6 +66,10 @@ jobs:
         if: matrix.workload != ''
         run: dotnet workload install ${{ matrix.workload }} --ignore-failed-sources
 
+      - name: Select the Xcode the iOS workload requires
+        if: matrix.label == 'iOS'
+        run: .github/scripts/select-xcode.sh
+
       # Ensure the iOS platform/SDK is present (newer macOS images may omit it for the
       # latest Xcode) — only download when missing. NOTE: this leg is a SIMULATOR build
       # (no -r ios-arm64); the iphoneos check is a cheap proxy for "iOS platform

@@ -45,6 +45,9 @@ jobs:
       - name: Install ios workload
         run: dotnet workload install ios --ignore-failed-sources
 
+      - name: Select the Xcode the iOS workload requires
+        run: .github/scripts/select-xcode.sh
+
       - name: Download iOS platform if missing
         run: xcrun --sdk iphoneos --show-sdk-path >/dev/null 2>&1 || xcodebuild -downloadPlatform iOS
 

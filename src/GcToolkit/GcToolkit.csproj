@@ -1,4 +1,4 @@
-﻿<Project Sdk="Uno.Sdk">
+<Project Sdk="Uno.Sdk">
     <PropertyGroup>
         <TargetFrameworks Condition="'$(SingleTargetFramework)' == ''">
             net10.0-android;
@@ -71,6 +71,7 @@
 
     <ItemGroup>
         <PackageReference Include="MZikmund.Toolkit.WinUI" />
+        <PackageReference Include="Mapsui.Uno.WinUI" />
         <PackageReference Include="sqlite-net-e" />
         <PackageReference Include="SourceGear.sqlite3" />
     </ItemGroup>

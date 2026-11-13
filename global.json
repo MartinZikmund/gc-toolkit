@@ -4,7 +4,7 @@
   },
   "msbuild-sdks": {
     "Uno.Sdk": "7.0.0-dev.175",
-    "MSTest.Sdk": "4.4.0"
+    "MSTest.Sdk": "4.5.3"
   },
   "test": {
     "runner": "Microsoft.Testing.Platform"

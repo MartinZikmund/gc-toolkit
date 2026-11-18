@@ -1,4 +1,4 @@
-using GcToolkit.Core.Coordinates;
+﻿using GcToolkit.Core.Coordinates;
 using GcToolkit.Core.Geocaches;
 using GcToolkit.Core.Services;
 using GcToolkit.Core.Services.Settings;
@@ -123,6 +123,24 @@ public class GeocacheDetailViewModelTests
         Assert.AreEqual("Available 24/7", vm.Attributes[1].Text);
         Assert.IsFalse(vm.Attributes[1].IsNegated);
         Assert.AreEqual("Attribute 999", vm.Attributes[2].Text);
+    }
+
+    [TestMethod]
+    public async Task Attributes_CarryTheirIcons()
+    {
+        var vm = await LoadAsync(c => c with { Attributes = [new(1, IsPositive: false), new(999, IsPositive: true)] });
+
+        Assert.AreEqual(GeocacheIcons.Attribute(1), vm.Attributes[0].IconPath);
+        Assert.AreEqual(GeocacheIcons.Unknown, vm.Attributes[1].IconPath);
+    }
+
+    [TestMethod]
+    public async Task LoadAsync_KnownCode_ExposesTypeAndSizeIcons()
+    {
+        var vm = await LoadAsync();
+
+        Assert.AreEqual(GeocacheIcons.Type(GeocacheType.Mystery), vm.TypeIconPath);
+        Assert.AreEqual(GeocacheIcons.Size(GeocacheSize.Small), vm.SizeIconPath);
     }
 
     [TestMethod]

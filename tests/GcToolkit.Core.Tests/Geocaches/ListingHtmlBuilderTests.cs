@@ -1,3 +1,4 @@
+﻿using GcToolkit.Core.Geocaches;
 using GcToolkit.Core.Geocaches.Detail;
 
 namespace GcToolkit.Core.Tests.Geocaches;
@@ -59,6 +60,26 @@ public class ListingHtmlBuilderTests
 
         Assert.IsTrue(html.Contains("src=\"https://img/1.jpg\"", StringComparison.Ordinal));
         Assert.IsTrue(html.Contains("<figcaption>Spoiler</figcaption>", StringComparison.Ordinal));
+    }
+
+    [TestMethod]
+    public void Build_AttributeChips_ShowTheirIcon()
+    {
+        var html = ListingHtmlBuilder.Build(
+            new ListingHtmlModel { Labels = _labels, Attributes = [new ListingChip("Dogs", IsNegated: false, GeocacheIcons.Attribute(1))] },
+            nonce: "n");
+
+        Assert.IsTrue(html.Contains(GeocacheIcons.ToSvg(GeocacheIcons.Attribute(1)), StringComparison.Ordinal));
+    }
+
+    [TestMethod]
+    public void Build_NegatedAttributeChip_StrikesItsIconThrough()
+    {
+        var html = ListingHtmlBuilder.Build(
+            new ListingHtmlModel { Labels = _labels, Attributes = [new ListingChip("Dogs", IsNegated: true, GeocacheIcons.Attribute(1))] },
+            nonce: "n");
+
+        Assert.IsTrue(html.Contains(GeocacheIcons.ToSvg(GeocacheIcons.Attribute(1), isNegated: true), StringComparison.Ordinal));
     }
 
     [TestMethod]

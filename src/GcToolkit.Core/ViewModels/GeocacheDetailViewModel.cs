@@ -18,7 +18,7 @@ public enum GeocacheDetailSection
     Logs,
 }
 
-public sealed partial record AttributeItem(int Id, string Text, bool IsNegated);
+public sealed partial record AttributeItem(int Id, string Text, bool IsNegated, string IconPath);
 
 public sealed record WaypointItem(string Prefix, string Name, string TypeLabel, string? CoordinateText, string? Note)
 {
@@ -79,6 +79,12 @@ public sealed partial class GeocacheDetailViewModel : ViewModelBase
 
     [ObservableProperty]
     public partial string SizeLabel { get; set; } = string.Empty;
+
+    [ObservableProperty]
+    public partial string TypeIconPath { get; set; } = GeocacheIcons.Unknown;
+
+    [ObservableProperty]
+    public partial string SizeIconPath { get; set; } = GeocacheIcons.Unknown;
 
     [ObservableProperty]
     public partial string StatusLabel { get; set; } = string.Empty;
@@ -300,6 +306,8 @@ public sealed partial class GeocacheDetailViewModel : ViewModelBase
         Code = cache.Code.Value;
         TypeLabel = Label(cache.Type);
         SizeLabel = Label(cache.Size);
+        TypeIconPath = GeocacheIcons.Type(cache.Type);
+        SizeIconPath = GeocacheIcons.Size(cache.Size);
         Status = cache.Status;
         StatusLabel = Label(cache.Status);
         DifficultyTerrain = FormatRatings(cache.Difficulty, cache.Terrain);
@@ -373,7 +381,7 @@ public sealed partial class GeocacheDetailViewModel : ViewModelBase
             ShortDescriptionIsHtml = _cache.ShortDescriptionIsHtml,
             LongDescription = _cache.LongDescription,
             LongDescriptionIsHtml = _cache.LongDescriptionIsHtml,
-            Attributes = [.. Attributes.Select(a => new ListingChip(a.Text, a.IsNegated))],
+            Attributes = [.. Attributes.Select(a => new ListingChip(a.Text, a.IsNegated, a.IconPath))],
             Images = Images,
             Note = UserNote,
             IsDark = IsDarkTheme,
@@ -390,7 +398,7 @@ public sealed partial class GeocacheDetailViewModel : ViewModelBase
             ? _localizer[GeocacheAttributeCatalog.ResourceKey(attribute.Id)].Value
             : Format("GeocacheAttributeUnknownFormat", attribute.Id);
 
-        return new AttributeItem(attribute.Id, name, !attribute.IsPositive);
+        return new AttributeItem(attribute.Id, name, !attribute.IsPositive, GeocacheIcons.Attribute(attribute.Id));
     }
 
     private WaypointItem ToWaypointItem(Waypoint waypoint, CoordinateFormat format) => new(

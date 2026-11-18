@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 
 namespace GcToolkit.Core.Geocaches.Detail;
 
-public sealed record ListingChip(string Text, bool IsNegated);
+public sealed record ListingChip(string Text, bool IsNegated, string? IconPath = null);
 
 public sealed record ListingImage(string Url, string? Caption);
 
@@ -118,8 +118,13 @@ public static partial class ListingHtmlBuilder
         sb.Append("<section><h2>").Append(Encode(model.Labels.Attributes)).AppendLine("</h2><ul class=\"chips\">");
         foreach (var chip in model.Attributes)
         {
-            sb.Append("<li").Append(chip.IsNegated ? " class=\"no\"" : string.Empty).Append('>')
-                .Append(Encode(chip.Text)).AppendLine("</li>");
+            sb.Append("<li").Append(chip.IsNegated ? " class=\"no\"" : string.Empty).Append('>');
+            if (chip.IconPath is { } icon)
+            {
+                sb.Append(GeocacheIcons.ToSvg(icon, chip.IsNegated));
+            }
+
+            sb.Append(Encode(chip.Text)).AppendLine("</li>");
         }
 
         sb.AppendLine("</ul></section>");
@@ -184,9 +189,9 @@ public static partial class ListingHtmlBuilder
             .note{border-left:3px solid {{link}};background:{{soft}};color:{{onSoft}};padding:4px 12px;border-radius:4px}
             .note h2{color:inherit;margin-top:8px}
             .chips{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
-            .chips li{border:1px solid {{stroke}};border-radius:12px;padding:2px 10px;font-size:13px}
+            .chips li{border:1px solid {{stroke}};border-radius:12px;padding:2px 10px;font-size:13px;display:flex;align-items:center;gap:6px}
             .chips li.no{color:{{muted}};text-decoration:line-through}
-            .chips li.no::before{content:"\00d7\00a0";display:inline-block;text-decoration:none}
+            .chips svg{flex:none}
             .description{margin-top:16px}
             .gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
             figure{margin:0}

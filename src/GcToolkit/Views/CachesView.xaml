@@ -342,16 +342,17 @@
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
 
-                            <!--  Placeholder glyph per type until real cache-type icons land (#412).  -->
                             <Border
                                 Width="36"
                                 Height="36"
                                 Background="{ThemeResource BrandPrimarySoftBrush}"
-                                CornerRadius="8">
-                                <FontIcon
-                                    FontSize="16"
-                                    Foreground="{ThemeResource BrandOnPrimarySoftBrush}"
-                                    Glyph="{x:Bind local:CachesView.TypeGlyph(Type)}" />
+                                CornerRadius="8"
+                                ToolTipService.ToolTip="{x:Bind local:CachesView.TypeLabel(Type)}">
+                                <PathIcon
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Data="{x:Bind local:CachesView.TypeIcon(Type)}"
+                                    Foreground="{ThemeResource BrandOnPrimarySoftBrush}" />
                             </Border>
 
                             <StackPanel Grid.Column="1" VerticalAlignment="Center">

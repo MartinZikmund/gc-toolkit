@@ -3,6 +3,7 @@ using System.Globalization;
 using GcToolkit.Core.Geocaches;
 using GcToolkit.Core.Navigation;
 using GcToolkit.Core.ViewModels;
+using GcToolkit.Helpers;
 using GcToolkit.Services.Localization;
 using Microsoft.UI.Xaml.Media;
 
@@ -177,21 +178,9 @@ public sealed partial class CachesView : CachesViewBase
             : [];
 
     // Placeholder glyphs from Segoe Fluent Icons until real cache-type icons land (#412).
-    public static string TypeGlyph(GeocacheType type) => type switch
-    {
-        GeocacheType.Traditional => "",
-        GeocacheType.Multi => "",
-        GeocacheType.Mystery => "",
-        GeocacheType.Letterbox => "",
-        GeocacheType.Wherigo => "",
-        GeocacheType.Earth => "",
-        GeocacheType.Virtual => "",
-        GeocacheType.Webcam => "",
-        GeocacheType.Event or GeocacheType.MegaEvent or GeocacheType.GigaEvent or GeocacheType.CacheInTrashOutEvent
-            or GeocacheType.CommunityCelebrationEvent or GeocacheType.GeocachingHqEvent => "",
-        GeocacheType.AdventureLab => "",
-        _ => "",
-    };
+    public static Geometry? TypeIcon(GeocacheType type) => PathData.ToGeometry(GeocacheIcons.Type(type));
+
+    public static string TypeLabel(GeocacheType type) => Localizer.Instance[$"GeocacheType_{type}"];
 
     public static string Subtitle(GeocacheCode code, double? difficulty, double? terrain, GeocacheSize size)
         => string.Format(

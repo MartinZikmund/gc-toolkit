@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using System.Text;
 using System.Threading.Tasks;
 using GcToolkit.Core.Catalog;
@@ -22,7 +22,7 @@ namespace GcToolkit.Core.ViewModels.Tools;
 [Tool("Base64", ToolCategory.Numbers,
       Introduced = "2026-09-03", Updated = "2026-09-03",
       Keywords = ["base64", "base 64", "encode", "decode", "encoder", "decoder", "encoding", "rfc 4648", "kódování", "zakódovat", "dekódovat", "dekodér", "převod textu"])]
-public sealed partial class Base64ViewModel : ToolViewModelBase, IToolStateful
+public sealed partial class Base64ViewModel : ToolViewModelBase, IToolStateful, IToolTextInput
 {
     private const int AutoDirection = 0;
     private const int EncodeDirection = 1;

@@ -4931,6 +4931,30 @@
   <data name="Workbench_Notes" xml:space="preserve">
     <value>Poznámky</value>
   </data>
+  <data name="Workbench_SendToFormat" xml:space="preserve">
+    <value>Poslat do: {0}</value>
+  </data>
+  <data name="Workbench_SendToOther" xml:space="preserve">
+    <value>Poslat do jiného nástroje…</value>
+  </data>
+  <data name="Workbench_SendTo" xml:space="preserve">
+    <value>Poslat do…</value>
+  </data>
+  <data name="Workbench_AddToScratchpad" xml:space="preserve">
+    <value>Přidat do zápisníku</value>
+  </data>
+  <data name="Workbench_ToNotes" xml:space="preserve">
+    <value>Do poznámek</value>
+  </data>
+  <data name="Workbench_PasteListingHint" xml:space="preserve">
+    <value>Tato keš byla importována bez popisu. Vložte sem text listingu a pak z něj vyberte text, který chcete poslat do nástroje.</value>
+  </data>
+  <data name="Workbench_PasteListing" xml:space="preserve">
+    <value>Text listingu</value>
+  </data>
+  <data name="Workbench_SelectionActions" xml:space="preserve">
+    <value>Akce s výběrem</value>
+  </data>
   <data name="Workbench_Scratchpad" xml:space="preserve">
     <value>Zápisník</value>
   </data>

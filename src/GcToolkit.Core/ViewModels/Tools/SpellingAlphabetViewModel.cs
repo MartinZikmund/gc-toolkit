@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using GcToolkit.Core.Alphabets;
 using GcToolkit.Core.Catalog;
 using GcToolkit.Core.Discovery;
@@ -29,7 +29,7 @@ public sealed record SpellingAlphabetVariantOption(SpellingAlphabetVariant Varia
           "spelling", "alphabet", "phonetic", "nato", "icao", "alfa", "bravo", "charlie", "radio",
           "callsign", "hláskovací", "abeceda", "fonetická", "telefonní", "alfa bravo",
       ])]
-public sealed partial class SpellingAlphabetViewModel : ToolViewModelBase
+public sealed partial class SpellingAlphabetViewModel : ToolViewModelBase, IToolTextInput
 {
     private readonly SpellingAlphabetCodec _codec = new();
     private readonly IStringLocalizer _localizer;

@@ -20,8 +20,12 @@ public sealed partial class WorkbenchCacheTab : ObservableObject
 
     public GeocacheCode Code { get; }
 
-    /// <summary>The cache code until the offline store (#408) can supply the cache name.</summary>
-    public string Title => Code.Value;
+    /// <summary>The cache's name once its listing has loaded; until then (or for a cache not in the store), its code.</summary>
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(Title))]
+    public partial string? Name { get; set; }
+
+    public string Title => string.IsNullOrWhiteSpace(Name) ? Code.Value : Name;
 
     public ObservableCollection<WorkbenchToolTab> Tools { get; } = [];
 
@@ -69,6 +73,8 @@ public sealed partial class WorkbenchCacheTab : ObservableObject
 public sealed class WorkbenchToolTab(string toolId, string name, string? iconKey, Type viewModelType, ToolInputState? state = null)
 {
     private IToolStateful? _tool;
+    private IToolTextInput? _input;
+    private string? _pendingText;
 
     public string ToolId { get; } = toolId;
 
@@ -84,24 +90,45 @@ public sealed class WorkbenchToolTab(string toolId, string name, string? iconKey
     /// <summary>Raised when the attached tool's inputs differ from <see cref="State"/>.</summary>
     public event EventHandler? StateChanged;
 
-    /// <summary>Connects the tool's view model once it exists: restores <see cref="State"/> into it, then tracks its edits.</summary>
+    /// <summary>
+    /// Connects the tool's view model once it exists: restores <see cref="State"/> into it, then tracks its
+    /// edits. Text sent before the tool existed lands in its input last, over the restored state.
+    /// </summary>
     public void Attach(object viewModel)
     {
-        if (viewModel is not IToolStateful tool || ReferenceEquals(tool, _tool))
+        if (viewModel is IToolStateful tool && !ReferenceEquals(tool, _tool))
         {
-            return;
+            Detach();
+            if (State is { } saved)
+            {
+                tool.RestoreState(saved);
+            }
+
+            _tool = tool;
+            if (tool is INotifyPropertyChanged observable)
+            {
+                observable.PropertyChanged += OnToolPropertyChanged;
+            }
         }
 
-        Detach();
-        if (State is { } saved)
+        _input = viewModel as IToolTextInput;
+        if (_input is not null && _pendingText is { } text)
         {
-            tool.RestoreState(saved);
+            _pendingText = null;
+            _input.InputText = text;
         }
+    }
 
-        _tool = tool;
-        if (tool is INotifyPropertyChanged observable)
+    /// <summary>Puts <paramref name="text"/> into the tool's input now, or as soon as the tool is attached.</summary>
+    public void SendText(string text)
+    {
+        if (_input is not null)
         {
-            observable.PropertyChanged += OnToolPropertyChanged;
+            _input.InputText = text;
+        }
+        else
+        {
+            _pendingText = text;
         }
     }
 
@@ -113,6 +140,7 @@ public sealed class WorkbenchToolTab(string toolId, string name, string? iconKey
         }
 
         _tool = null;
+        _input = null;
     }
 
     private void OnToolPropertyChanged(object? sender, PropertyChangedEventArgs e)

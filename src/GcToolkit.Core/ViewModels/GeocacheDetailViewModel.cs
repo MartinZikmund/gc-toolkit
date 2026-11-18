@@ -167,6 +167,10 @@ public sealed partial class GeocacheDetailViewModel : ViewModelBase
     [ObservableProperty]
     public partial string ListingHtml { get; set; } = string.Empty;
 
+    /// <summary>False for caches imported without a description (a plain GPX waypoint).</summary>
+    [ObservableProperty]
+    public partial bool HasDescription { get; set; }
+
     public bool HasCorrectedCoordinate => CorrectedCoordinate is not null;
 
     public bool HasUserNote => !string.IsNullOrWhiteSpace(UserNote);
@@ -332,6 +336,7 @@ public sealed partial class GeocacheDetailViewModel : ViewModelBase
         Images = [.. cache.Images.Select(i => new ListingImage(i.Url, i.Name ?? i.Description))];
         Waypoints = [.. cache.Waypoints.Select(w => ToWaypointItem(w, format))];
 
+        HasDescription = !string.IsNullOrWhiteSpace(cache.ShortDescription) || !string.IsNullOrWhiteSpace(cache.LongDescription);
         HasHint = !string.IsNullOrWhiteSpace(cache.Hint);
         IsHintRevealed = false;
         UpdateDisplayedHint();

@@ -59,8 +59,14 @@ internal sealed class FakeWorkbenchSession : IWorkbenchSessionService
 }
 
 /// <summary>A tool whose one input, <see cref="Text"/>, takes part in workbench state.</summary>
-internal sealed partial class FakeStatefulTool : ObservableObject, IToolStateful
+internal sealed partial class FakeStatefulTool : ObservableObject, IToolStateful, IToolTextInput
 {
+    public string InputText
+    {
+        get => Text;
+        set => Text = value;
+    }
+
     [ObservableProperty]
     public partial string Text { get; set; } = string.Empty;
 

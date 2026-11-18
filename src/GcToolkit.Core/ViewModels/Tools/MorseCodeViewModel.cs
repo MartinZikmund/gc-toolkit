@@ -20,7 +20,7 @@ namespace GcToolkit.Core.ViewModels.Tools;
 [Tool("MorseCode", ToolCategory.Alphabets,
       Introduced = "2026-05-31", Updated = "2026-05-31",
       Keywords = ["morse", "code", "kód", "telegraph", "abeceda", "tečka", "čárka", "dot", "dash"])]
-public sealed partial class MorseCodeViewModel : ToolViewModelBase
+public sealed partial class MorseCodeViewModel : ToolViewModelBase, IToolTextInput
 {
     private const int ToneFrequencyHz = 600;
 

@@ -19,7 +19,7 @@ namespace GcToolkit.Core.ViewModels.Tools;
 [Tool("SignalFlags", ToolCategory.Alphabets,
       Introduced = "2026-06-10", Updated = "2026-06-10",
       Keywords = ["signal", "flags", "maritime", "nautical", "ICS", "ship", "vlajky", "námořní", "signální", "vlajková abeceda"])]
-public sealed partial class SignalFlagsViewModel : ToolViewModelBase
+public sealed partial class SignalFlagsViewModel : ToolViewModelBase, IToolTextInput
 {
     private readonly SignalFlagsCodec _codec = new();
     private readonly IStringLocalizer _localizer;

@@ -44,11 +44,21 @@
 
         <Grid Grid.Row="1" Visibility="{x:Bind ViewModel.IsLoaded, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
 
-            <!--  Listing: the description is HTML, so it gets a WebView with our own CSS  -->
-            <WebView2
-                x:Name="ListingWebView"
-                AutomationProperties.AutomationId="ListingWebView"
-                Visibility="{x:Bind ViewModel.IsListingSelected, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+            <!--
+                Listing: the description is HTML, so it gets a WebView with our own CSS. A host can put
+                content above it for caches without a description (the workbench's paste box).
+            -->
+            <Grid RowSpacing="12" Visibility="{x:Bind ViewModel.IsListingSelected, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <ContentPresenter Content="{x:Bind NoDescriptionContent, Mode=OneWay}" />
+                <WebView2
+                    x:Name="ListingWebView"
+                    Grid.Row="1"
+                    AutomationProperties.AutomationId="ListingWebView" />
+            </Grid>
 
             <!--  Hint  -->
             <ScrollViewer Visibility="{x:Bind ViewModel.IsHintSelected, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
@@ -70,6 +80,7 @@
                             <TextBlock
                                 AutomationProperties.AutomationId="GeocacheHintText"
                                 IsTextSelectionEnabled="True"
+                                SelectionChanged="OnTextSelectionChanged"
                                 Style="{StaticResource ReadoutTextBlockStyle}"
                                 Text="{x:Bind ViewModel.DisplayedHint, Mode=OneWay}"
                                 TextWrapping="Wrap" />
@@ -131,6 +142,7 @@
                                                 Text="{x:Bind TypeLabel}" />
                                             <TextBlock
                                                 IsTextSelectionEnabled="True"
+                                                SelectionChanged="OnTextSelectionChanged"
                                                 Style="{StaticResource CoordinateTextBlockStyle}"
                                                 Text="{x:Bind CoordinateText}"
                                                 Visibility="{x:Bind IsHidden, Converter={StaticResource InvertedBoolToVisibilityConverter}}" />
@@ -220,6 +232,7 @@
                                         Text="{x:Bind TypeLabel}" />
                                     <TextBlock
                                         IsTextSelectionEnabled="True"
+                                        SelectionChanged="OnTextSelectionChanged"
                                         Text="{x:Bind Text}"
                                         TextWrapping="Wrap" />
                                 </StackPanel>

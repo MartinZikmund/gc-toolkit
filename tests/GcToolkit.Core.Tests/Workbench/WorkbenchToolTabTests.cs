@@ -21,6 +21,30 @@ public partial class WorkbenchToolTabTests
     }
 
     [TestMethod]
+    public void SendText_Attached_SetsTheInputNow()
+    {
+        WorkbenchToolTab tab = new("Fake", "Fake", null, typeof(FakeStatefulTool));
+        FakeStatefulTool tool = new();
+        tab.Attach(tool);
+
+        tab.SendText("WKUHH");
+
+        Assert.AreEqual("WKUHH", tool.Text);
+    }
+
+    [TestMethod]
+    public void SendText_BeforeAttach_IsDeliveredOverTheSavedState()
+    {
+        WorkbenchToolTab tab = new("Fake", "Fake", null, typeof(FakeStatefulTool), StateWith("saved"));
+        FakeStatefulTool tool = new();
+
+        tab.SendText("WKUHH");
+        tab.Attach(tool);
+
+        Assert.AreEqual("WKUHH", tool.Text);
+    }
+
+    [TestMethod]
     public void Attach_ToolEdited_CapturesAndRaisesStateChanged()
     {
         WorkbenchToolTab tab = new("Fake", "Fake", null, typeof(FakeStatefulTool));

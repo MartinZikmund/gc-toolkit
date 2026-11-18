@@ -19,7 +19,7 @@ namespace GcToolkit.Core.ViewModels.Tools;
 [Tool("AtbashCipher", ToolCategory.Ciphers,
       Introduced = "2026-06-06", Updated = "2026-06-06",
       Keywords = ["atbash", "mirror", "cipher", "reverse", "alphabet", "zrcadlo", "šifra", "zrcadlová", "obrácená abeceda"])]
-public sealed partial class AtbashCipherViewModel : ToolViewModelBase
+public sealed partial class AtbashCipherViewModel : ToolViewModelBase, IToolTextInput
 {
     private readonly AtbashCipher _cipher = new();
     private readonly IClipboardService _clipboard;

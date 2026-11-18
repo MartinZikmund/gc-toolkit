@@ -27,7 +27,7 @@ namespace GcToolkit.Core.ViewModels.Tools;
           "arcminute", "arcsecond", "convert", "conversion", "dms",
           "úhel", "stupně", "radián", "gradián", "převod", "převést", "mils", "otáčka"
       ])]
-public sealed partial class AngleConversionViewModel : ToolViewModelBase
+public sealed partial class AngleConversionViewModel : ToolViewModelBase, IToolTextInput
 {
     private const int MinDecimals = 0;
     private const int MaxDecimals = 15;

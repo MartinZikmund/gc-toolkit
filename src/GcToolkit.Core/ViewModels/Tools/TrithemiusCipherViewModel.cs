@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using GcToolkit.Core.Catalog;
 using GcToolkit.Core.Ciphers;
@@ -23,7 +23,7 @@ namespace GcToolkit.Core.ViewModels.Tools;
 [Tool("TrithemiusCipher", ToolCategory.Ciphers,
       Introduced = "2026-06-13", Updated = "2026-06-13",
       Keywords = ["trithemius", "progressive", "polyalphabetic", "tabula recta", "vigenere", "cipher", "šifra", "progresivní", "polyalfabetická"])]
-public sealed partial class TrithemiusCipherViewModel : ToolViewModelBase
+public sealed partial class TrithemiusCipherViewModel : ToolViewModelBase, IToolTextInput
 {
     private readonly TrithemiusCipher _cipher = new();
     private readonly IClipboardService _clipboard;

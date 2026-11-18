@@ -28,7 +28,7 @@ public sealed record PolygonEdgeRow(string Label, string Length, string Bearing)
           "polygon", "area", "perimeter", "centroid", "centre", "center", "boundary", "field", "acre", "hectare", "shape",
           "mnohoúhelník", "polygon", "plocha", "obvod", "těžiště", "střed", "hranice", "pozemek", "hektar"
       ])]
-public sealed partial class PolygonAreaViewModel : ToolViewModelBase
+public sealed partial class PolygonAreaViewModel : ToolViewModelBase, IToolTextInput
 {
     private const string InputKey = "PolygonArea.Input";
     private const string AreaUnitKey = "PolygonArea.AreaUnit";

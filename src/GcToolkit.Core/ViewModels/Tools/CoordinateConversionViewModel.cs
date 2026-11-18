@@ -24,7 +24,7 @@ namespace GcToolkit.Core.ViewModels.Tools;
 [Tool("CoordinateConversion", ToolCategory.Coordinates,
       Introduced = "2026-05-20", Updated = "2026-06-06",
       Keywords = ["wgs84", "utm", "mgrs", "convert", "notation", "dd", "ddm", "dms", "souřadnice", "převod", "gps", "formát"])]
-public sealed partial class CoordinateConversionViewModel : ToolViewModelBase, IToolStateful
+public sealed partial class CoordinateConversionViewModel : ToolViewModelBase, IToolStateful, IToolTextInput
 {
     private readonly IStringLocalizer _localizer;
     private readonly IClipboardService _clipboard;

@@ -52,7 +52,7 @@ internal static class CoordinateMeanFormat
 [Tool("Centroid", ToolCategory.Coordinates,
       Introduced = "2026-09-03", Updated = "2026-09-03",
       Keywords = ["centroid", "center", "centre", "mean", "average", "middle", "těžiště", "střed", "průměr", "geografický střed", "body"])]
-public sealed partial class CentroidViewModel : ToolViewModelBase
+public sealed partial class CentroidViewModel : ToolViewModelBase, IToolTextInput
 {
     private readonly IStringLocalizer _localizer;
     private readonly IClipboardService _clipboard;

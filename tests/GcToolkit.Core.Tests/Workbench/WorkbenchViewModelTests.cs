@@ -30,7 +30,7 @@ public class WorkbenchViewModelTests
             InMemoryPreferences.TrimmedHead(),
             _messenger);
 
-    private WorkbenchViewModel Create(double width = 1200)
+    private WorkbenchViewModel Create(double width = 1200, ICatalogService? catalog = null)
     {
         var localizer = new FakeStringLocalizer(new Dictionary<string, string>
         {
@@ -40,7 +40,7 @@ public class WorkbenchViewModelTests
         });
         var vm = new WorkbenchViewModel(
             _session,
-            new FilteringCatalog("Caesar", "Morse", "Roman"),
+            catalog ?? new FilteringCatalog("Caesar", "Morse", "Roman"),
             localizer,
             _toolStore,
             _favorites,
@@ -538,7 +538,7 @@ public class WorkbenchViewModelTests
 
         Assert.AreEqual(2, vm.ActiveCache!.Tools.Count);
         Assert.AreEqual("Morse", vm.ActiveCache.SelectedTool!.ToolId);
-        Assert.AreEqual(typeof(object), vm.ActiveCache.SelectedTool.ViewModelType);
+        Assert.AreEqual(typeof(FakeStatefulTool), vm.ActiveCache.SelectedTool.ViewModelType);
         Assert.IsTrue(vm.ActiveCache.HasTools);
     }
 
@@ -839,6 +839,180 @@ public class WorkbenchViewModelTests
     }
 
     [TestMethod]
+    public async Task ActiveCache_ListingLoaded_TabShowsTheCacheName()
+    {
+        await _store.UpsertAsync([new Geocache { Code = A, Name = "Alpha", Coordinate = new(50, 14) }]);
+        _session.Open(A);
+
+        var vm = Create();
+
+        Assert.AreEqual("Alpha", vm.ActiveCache!.Title);
+    }
+
+    // Selection → tool
+
+    private WorkbenchViewModel CreateWithTextTools(double width = 1200)
+    {
+        _session.Open(A);
+        return Create(width, new FilteringCatalog("CaesarCipher", "VigenereCipher", "MorseCode", "WordValue"));
+    }
+
+    [TestMethod]
+    public void SelectedText_Letters_SuggestsTheLetterToolsInTheCatalog()
+    {
+        var vm = CreateWithTextTools();
+
+        vm.SelectedText = "WKUHH VHYHQ";
+
+        Assert.IsTrue(vm.HasSelection);
+        Assert.AreEqual("CaesarCipher", vm.SelectionSuggestions[0].ToolId);
+        CollectionAssert.DoesNotContain(vm.SelectionSuggestions.Select(t => t.ToolId).ToList(), "MorseCode");
+    }
+
+    [TestMethod]
+    public void SelectedText_Cleared_HasNoSelectionOrSuggestions()
+    {
+        var vm = CreateWithTextTools();
+        vm.SelectedText = "WKUHH";
+
+        vm.SelectedText = "  ";
+
+        Assert.IsFalse(vm.HasSelection);
+        Assert.AreEqual(0, vm.SelectionSuggestions.Count);
+    }
+
+    [TestMethod]
+    public void SendSelectionTo_ToolNotOpen_OpensItWithTheText()
+    {
+        var vm = CreateWithTextTools();
+        vm.SelectedText = "WKUHH";
+
+        vm.SendSelectionTo(vm.SelectionSuggestions[0]);
+
+        var tab = vm.ActiveCache!.SelectedTool!;
+        Assert.AreEqual("CaesarCipher", tab.ToolId);
+        FakeStatefulTool tool = new();
+        tab.Attach(tool);
+        Assert.AreEqual("WKUHH", tool.Text);
+    }
+
+    [TestMethod]
+    public void SendSelectionTo_ToolAlreadyOpen_ReusesItsTab()
+    {
+        var vm = CreateWithTextTools();
+        vm.SelectedText = "WKUHH";
+        var caesar = vm.SelectionSuggestions[0];
+        vm.SendSelectionTo(caesar);
+        FakeStatefulTool tool = new();
+        vm.ActiveCache!.SelectedTool!.Attach(tool);
+
+        vm.SelectedText = "VHYHQ";
+        vm.SendSelectionTo(caesar);
+
+        Assert.AreEqual(1, vm.ActiveCache.Tools.Count);
+        Assert.AreEqual("VHYHQ", tool.Text);
+    }
+
+    [TestMethod]
+    public void SendSelectionTo_Compact_SwitchesToTheToolSection()
+    {
+        var vm = CreateWithTextTools(400);
+        vm.SelectedText = "WKUHH";
+
+        vm.SendSelectionTo(vm.SelectionSuggestions[0]);
+
+        Assert.AreEqual(WorkbenchPhoneSection.Tool, vm.PhoneSection);
+    }
+
+    [TestMethod]
+    public void SendSelectionToSuggested_SendsToTheFirstSuggestion()
+    {
+        var vm = CreateWithTextTools();
+        vm.SelectedText = "WKUHH";
+
+        Assert.AreEqual("CaesarCipher", vm.SuggestedTool!.ToolId);
+        vm.SendSelectionToSuggestedCommand.Execute(null);
+
+        Assert.AreEqual("CaesarCipher", vm.ActiveCache!.SelectedTool!.ToolId);
+    }
+
+    [TestMethod]
+    public void PickTool_AfterSendToOther_SendsTheSelectionInsteadOfAddingAnEmptyTool()
+    {
+        var vm = CreateWithTextTools();
+        vm.SelectedText = "... ---";
+        vm.BeginSendToOtherTool();
+
+        vm.PickTool(Pick(vm, "VigenereCipher"));
+
+        var tab = vm.ActiveCache!.SelectedTool!;
+        FakeStatefulTool tool = new();
+        tab.Attach(tool);
+        Assert.AreEqual("... ---", tool.Text);
+        Assert.IsFalse(vm.IsPickingForSelection);
+    }
+
+    [TestMethod]
+    public void PickTool_Normally_AddsAnEmptyTool()
+    {
+        var vm = CreateWithTextTools();
+        vm.SelectedText = "WKUHH";
+
+        vm.PickTool(Pick(vm, "VigenereCipher"));
+
+        FakeStatefulTool tool = new();
+        vm.ActiveCache!.SelectedTool!.Attach(tool);
+        Assert.AreEqual(string.Empty, tool.Text);
+    }
+
+    [TestMethod]
+    public async Task ShowPasteBox_CacheWithoutDescription_IsShown()
+    {
+        await _store.UpsertAsync([new Geocache { Code = A, Name = "Plain", Coordinate = new(50, 14) }]);
+        _session.Open(A);
+
+        var vm = Create();
+
+        Assert.IsTrue(vm.ShowPasteBox);
+    }
+
+    [TestMethod]
+    public async Task ShowPasteBox_CacheWithDescription_IsHidden()
+    {
+        await _store.UpsertAsync([new Geocache { Code = A, Name = "Full", Coordinate = new(50, 14), LongDescription = "Hello" }]);
+        _session.Open(A);
+
+        var vm = Create();
+
+        Assert.IsFalse(vm.ShowPasteBox);
+    }
+
+    [TestMethod]
+    public async Task PastedListing_IsKeptPerCacheAcrossRelaunch()
+    {
+        await _store.UpsertAsync([new Geocache { Code = A, Name = "Plain", Coordinate = new(50, 14) }]);
+        _session.Open(A);
+        var first = Create();
+        first.PastedListing = "WKUHH VHYHQ";
+
+        var second = Create();
+
+        Assert.AreEqual("WKUHH VHYHQ", second.PastedListing);
+    }
+
+    [TestMethod]
+    public void AddSelectionToScratchpad_AppendsALine()
+    {
+        var vm = CreateWithTextTools();
+        vm.Scratchpad.Text = "first";
+        vm.SelectedText = "WKUHH";
+
+        vm.AddSelectionToScratchpadCommand.Execute(null);
+
+        Assert.AreEqual("first\nWKUHH", vm.Scratchpad.Text.Replace("\r\n", "\n"));
+    }
+
+    [TestMethod]
     public void ActiveCache_Loads_ItsScratchpad()
     {
         _scratchpads.Seed(A, "Wall: Caesar +3");
@@ -878,7 +1052,7 @@ public class WorkbenchViewModelTests
     private sealed class FilteringCatalog(params string[] toolIds) : ICatalogService
     {
         private readonly IReadOnlyList<ToolDescriptor> _tools =
-            [.. toolIds.Select(id => new ToolDescriptor(id, $"Name_{id}", "cat", [], id, typeof(object)))];
+            [.. toolIds.Select(id => new ToolDescriptor(id, $"Name_{id}", "cat", [], id, typeof(FakeStatefulTool)))];
 
         public IReadOnlyList<Category> GetCategories() => [];
 

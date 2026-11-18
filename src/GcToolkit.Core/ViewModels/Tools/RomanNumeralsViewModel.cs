@@ -21,7 +21,7 @@ namespace GcToolkit.Core.ViewModels.Tools;
 [Tool("RomanNumerals", ToolCategory.Numbers,
       Introduced = "2026-06-01", Updated = "2026-06-01",
       Keywords = ["roman", "numeral", "číslice", "římské", "latin", "vinculum", "I", "V", "X"])]
-public sealed partial class RomanNumeralsViewModel : ToolViewModelBase, IToolStateful
+public sealed partial class RomanNumeralsViewModel : ToolViewModelBase, IToolStateful, IToolTextInput
 {
     private const string InvalidToken = "?";
 

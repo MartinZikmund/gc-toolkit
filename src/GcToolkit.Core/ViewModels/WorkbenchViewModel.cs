@@ -45,6 +45,7 @@ public partial class WorkbenchViewModel : ViewModelBase
     private const string ToolPaneWidthKey = "workbench.layout.toolPaneWidth";
     private const string DockHeightKey = "workbench.layout.dockHeight";
     private const string PinnedKey = "workbench.layout.pinned";
+    private const string PastedListingKeyPrefix = "workbench.pasted.";
 
     private object[] _layoutSnapshot = [];
 
@@ -61,6 +62,7 @@ public partial class WorkbenchViewModel : ViewModelBase
     private bool _isOverlayOpen;
     private bool _syncing;
     private GeocacheCode? _loadedCode;
+    private string _pastedListing = string.Empty;
 
     public WorkbenchViewModel(
         IWorkbenchSessionService session,
@@ -82,6 +84,13 @@ public partial class WorkbenchViewModel : ViewModelBase
         _recents = recents;
         Scratchpad = scratchpad;
         Listing = listing;
+        Listing.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName is nameof(GeocacheDetailViewModel.IsLoaded) or nameof(GeocacheDetailViewModel.HasDescription))
+            {
+                OnPropertyChanged(nameof(ShowPasteBox));
+            }
+        };
         _preferences = preferences;
         RestoreLayout();
 
@@ -232,6 +241,40 @@ public partial class WorkbenchViewModel : ViewModelBase
 
     public ObservableCollection<ToolPickerItem> ToolPickerResults { get; } = [];
 
+    // Selection → tool
+
+    /// <summary>Text the user selected in the listing (or the pasted listing); set by the view.</summary>
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasSelection))]
+    [NotifyCanExecuteChangedFor(nameof(AddSelectionToScratchpadCommand))]
+    public partial string SelectedText { get; set; } = string.Empty;
+
+    public bool HasSelection => !string.IsNullOrWhiteSpace(SelectedText);
+
+    /// <summary>Tools that fit the selection, best first; the first is offered as the suggested one.</summary>
+    public ObservableCollection<ToolPickerItem> SelectionSuggestions { get; } = [];
+
+    public ToolPickerItem? SuggestedTool => SelectionSuggestions.FirstOrDefault();
+
+    /// <summary>The tool picker is open to choose where the selection goes, not to add an empty tool.</summary>
+    public bool IsPickingForSelection { get; private set; }
+
+    /// <summary>The cache was imported without a description, so the workbench offers a box to paste it into.</summary>
+    public bool ShowPasteBox => Listing.IsLoaded && !Listing.HasDescription;
+
+    /// <summary>Listing text the user pasted for a cache without a description; kept per cache.</summary>
+    public string PastedListing
+    {
+        get => _pastedListing;
+        set
+        {
+            if (SetProperty(ref _pastedListing, value) && _loadedCode is { } code)
+            {
+                _preferences.Set(PastedListingKeyPrefix + code.Value, value);
+            }
+        }
+    }
+
     /// <summary>Called by the view whenever its width changes.</summary>
     public void UpdateAvailableWidth(double width)
     {
@@ -257,7 +300,82 @@ public partial class WorkbenchViewModel : ViewModelBase
         cache.Tools.Add(tab);
         cache.SelectedTool = tab;
         ToolSearchQuery = string.Empty;
+        RevealTools();
+    }
 
+    /// <summary>Sends the selection to <paramref name="item"/>, reusing the cache's tab for that tool if it has one.</summary>
+    public void SendSelectionTo(ToolPickerItem item)
+    {
+        if (ActiveCache is not { } cache || !HasSelection)
+        {
+            return;
+        }
+
+        if (cache.Tools.FirstOrDefault(t => t.ToolId == item.ToolId) is { } open)
+        {
+            cache.SelectedTool = open;
+            RevealTools();
+        }
+        else
+        {
+            AddTool(item);
+        }
+
+        cache.SelectedTool?.SendText(SelectedText.Trim());
+    }
+
+    [RelayCommand(CanExecute = nameof(HasSelection))]
+    private void AddSelectionToScratchpad() => Scratchpad.Append(SelectedText.Trim());
+
+    [RelayCommand(CanExecute = nameof(CanSendToSuggested))]
+    private void SendSelectionToSuggested()
+    {
+        if (SuggestedTool is { } tool)
+        {
+            SendSelectionTo(tool);
+        }
+    }
+
+    private bool CanSendToSuggested() => HasSelection && SuggestedTool is not null;
+
+    /// <summary>The next tool picked in the picker receives the selection.</summary>
+    public void BeginSendToOtherTool() => IsPickingForSelection = HasSelection;
+
+    /// <summary>Called when a tool is chosen in the picker.</summary>
+    public void PickTool(ToolPickerItem item)
+    {
+        if (IsPickingForSelection)
+        {
+            IsPickingForSelection = false;
+            SendSelectionTo(item);
+        }
+        else
+        {
+            AddTool(item);
+        }
+    }
+
+    partial void OnSelectedTextChanged(string value)
+    {
+        IsPickingForSelection = false;
+        SelectionSuggestions.Clear();
+        var available = _catalog.GetTools()
+            .Where(t => typeof(IToolTextInput).IsAssignableFrom(t.ViewModelType))
+            .ToDictionary(t => t.Id);
+        foreach (var id in ToolSuggester.Suggest(value))
+        {
+            if (available.TryGetValue(id, out var tool))
+            {
+                SelectionSuggestions.Add(new ToolPickerItem(tool.Id, _localizer[tool.NameKey].Value, tool.IconKey, tool.ViewModelType));
+            }
+        }
+
+        OnPropertyChanged(nameof(SuggestedTool));
+        SendSelectionToSuggestedCommand.NotifyCanExecuteChanged();
+    }
+
+    private void RevealTools()
+    {
         if (IsCompact)
         {
             PhoneSection = WorkbenchPhoneSection.Tool;
@@ -523,6 +641,8 @@ public partial class WorkbenchViewModel : ViewModelBase
         }
 
         _loadedCode = code;
+        SelectedText = string.Empty;
+        LoadPastedListing(code);
         var listing = Listing.LoadAsync(code);
         try
         {
@@ -541,7 +661,16 @@ public partial class WorkbenchViewModel : ViewModelBase
         {
             // An unreadable store leaves the listing empty, as on the cache page.
         }
+
+        if (Listing.IsLoaded && Listing.Code == code.Value && _tabs.TryGetValue(code, out var tab))
+        {
+            tab.Name = Listing.Name;
+        }
     }
+
+    // Through the field, not the setter: reading the saved text back is not an edit to save.
+    private void LoadPastedListing(GeocacheCode code)
+        => SetProperty(ref _pastedListing, _preferences.Get(PastedListingKeyPrefix + code.Value, string.Empty), nameof(PastedListing));
 
     private void RaiseLayoutChanged()
     {

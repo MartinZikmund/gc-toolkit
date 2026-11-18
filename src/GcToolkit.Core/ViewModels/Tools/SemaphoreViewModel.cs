@@ -20,7 +20,7 @@ namespace GcToolkit.Core.ViewModels.Tools;
 [Tool("Semaphore", ToolCategory.Alphabets,
       Introduced = "2026-06-10", Updated = "2026-06-10",
       Keywords = ["semaphore", "flags", "flag", "semafor", "vlajková abeceda", "vlajky", "abeceda", "paže"])]
-public sealed partial class SemaphoreViewModel : ToolViewModelBase
+public sealed partial class SemaphoreViewModel : ToolViewModelBase, IToolTextInput
 {
     // A long paste rebuilds one figure item per character, so coalesce those into a single rebuild;
     // short input (the common case) still converts on every keystroke.

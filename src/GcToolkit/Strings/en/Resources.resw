@@ -4934,6 +4934,9 @@
   <data name="Workbench_Variables" xml:space="preserve">
     <value>Variables</value>
   </data>
+  <data name="Workbench_Notes" xml:space="preserve">
+    <value>Notes</value>
+  </data>
   <data name="Workbench_Scratchpad" xml:space="preserve">
     <value>Scratchpad</value>
   </data>

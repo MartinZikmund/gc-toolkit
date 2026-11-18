@@ -1,6 +1,9 @@
 using GcToolkit.Core.Navigation;
 using GcToolkit.Core.ViewModels;
 using GcToolkit.Core.Workbench;
+using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Media;
+using Windows.System;
 
 namespace GcToolkit.Views;
 
@@ -111,6 +114,60 @@ public sealed partial class WorkbenchView : WorkbenchViewBase
         if (ViewModel is { } viewModel && sender.SelectedItem is { } item)
         {
             viewModel.PhoneSection = (WorkbenchPhoneSection)sender.Items.IndexOf(item);
+        }
+    }
+
+    private void OnMoveFocusInvoked(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
+    {
+        if (ViewModel is not { } viewModel)
+        {
+            return;
+        }
+
+        args.Handled = true;
+        var target = viewModel.MoveFocus(FocusedPane(), sender.Modifiers.HasFlag(VirtualKeyModifiers.Shift));
+
+        // The target may only become visible on the next layout pass (phone section, overlay pane).
+        DispatcherQueue.TryEnqueue(() => FocusPane(target));
+    }
+
+    private WorkbenchPane FocusedPane()
+    {
+        var element = FocusManager.GetFocusedElement(XamlRoot) as DependencyObject;
+        while (element is not null)
+        {
+            if (element == DockPanel)
+            {
+                return WorkbenchPane.Dock;
+            }
+
+            if (element == ToolPaneContent)
+            {
+                return WorkbenchPane.Tools;
+            }
+
+            element = VisualTreeHelper.GetParent(element);
+        }
+
+        return WorkbenchPane.Listing;
+    }
+
+    private void FocusPane(WorkbenchPane pane)
+    {
+        DependencyObject container = pane switch
+        {
+            WorkbenchPane.Tools => ToolTabs,
+            WorkbenchPane.Dock => DockPanel,
+            _ => ListingPanel,
+        };
+
+        if (FocusManager.FindFirstFocusableElement(container) is Control control)
+        {
+            control.Focus(FocusState.Keyboard);
+        }
+        else if (container is Control fallback)
+        {
+            fallback.Focus(FocusState.Keyboard);
         }
     }
 

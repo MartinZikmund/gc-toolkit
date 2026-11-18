@@ -1,4 +1,4 @@
-﻿using GcToolkit.Core.Coordinates;
+using GcToolkit.Core.Coordinates;
 using GcToolkit.Core.Geocaches;
 using GcToolkit.Core.Services;
 using GcToolkit.Core.Services.Settings;
@@ -19,7 +19,7 @@ public class GeocacheDetailViewModelTests
     private readonly InMemoryGeocacheStore _store = new();
     private readonly FakeClipboardService _clipboard = new();
     private readonly FakeNavigationService _navigation = new();
-    private readonly FakePreferences _preferences = new();
+    private readonly FakeAppPreferences _preferences = new();
 
     private static Geocache CreateCache(Func<Geocache, Geocache>? customize = null)
     {
@@ -272,9 +272,21 @@ public class GeocacheDetailViewModelTests
     }
 
     [TestMethod]
-    public async Task Solve_IsDisabledUntilTheWorkbenchExists()
+    public async Task Solve_Loaded_OpensTheWorkbenchOnTheCache()
     {
         var vm = await LoadAsync();
+
+        Assert.IsTrue(vm.SolveCommand.CanExecute(null));
+        vm.SolveCommand.Execute(null);
+
+        Assert.AreEqual(typeof(WorkbenchViewModel), _navigation.LastViewModelType);
+        Assert.AreEqual(_code, _navigation.LastParameter);
+    }
+
+    [TestMethod]
+    public void Solve_NotLoaded_IsDisabled()
+    {
+        GeocacheDetailViewModel vm = new(_store, _clipboard, _navigation, new FakeStringLocalizer(), _preferences);
 
         Assert.IsFalse(vm.SolveCommand.CanExecute(null));
     }
@@ -306,24 +318,5 @@ public class GeocacheDetailViewModelTests
 
         Assert.AreEqual("N 49° 12.342' E 016° 34.566'", vm.InputText);
         Assert.IsTrue(vm.HasResult);
-    }
-
-    private sealed class FakePreferences : IAppPreferences
-    {
-        public int DataVersion { get; set; }
-
-        public bool FirstStart { get; set; }
-
-        public int LaunchCount { get; set; }
-
-        public bool OfferUserRating { get; set; }
-
-        public ElementTheme Theme { get; set; } = ElementTheme.Default;
-
-        public CoordinateFormat CoordinateFormat { get; set; } = CoordinateFormat.DegreesDecimalMinutes;
-
-        public void Clear()
-        {
-        }
     }
 }

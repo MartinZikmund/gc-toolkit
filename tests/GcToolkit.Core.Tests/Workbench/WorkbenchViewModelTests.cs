@@ -21,6 +21,7 @@ public class WorkbenchViewModelTests
     private readonly FakeFavoriteToolsService _favorites = new();
     private readonly FakeRecentsService _recents = new();
     private readonly InMemoryPreferences _layoutPreferences = InMemoryPreferences.TrimmedHead();
+    private readonly InMemoryGeocacheStore _store = new();
     private WorkbenchSessionService _session = null!;
 
     [TestInitialize]
@@ -45,6 +46,7 @@ public class WorkbenchViewModelTests
             _favorites,
             _recents,
             new ScratchpadViewModel(_scratchpads, localizer, _time),
+            new GeocacheDetailViewModel(_store, new FakeClipboardService(), new FakeNavigationService(), localizer, new FakeAppPreferences()),
             _layoutPreferences,
             _messenger);
         vm.ViewCreated();
@@ -822,6 +824,19 @@ public class WorkbenchViewModelTests
     }
 
     // Scratchpad
+
+    [TestMethod]
+    public async Task ActiveCache_LoadsItsListing()
+    {
+        await _store.UpsertAsync([new Geocache { Code = A, Name = "Alpha", Coordinate = new(50, 14) }, new Geocache { Code = B, Name = "Bravo", Coordinate = new(50, 14) }]);
+        _session.Open(A);
+        var vm = Create();
+
+        _session.Open(B);
+
+        Assert.AreEqual("Bravo", vm.Listing.Name);
+        Assert.IsTrue(vm.Listing.IsLoaded);
+    }
 
     [TestMethod]
     public void ActiveCache_Loads_ItsScratchpad()

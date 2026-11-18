@@ -60,7 +60,7 @@ public partial class WorkbenchViewModel : ViewModelBase
     private double _requestedToolPaneWidth = WorkbenchLayout.DefaultToolPaneWidth;
     private bool _isOverlayOpen;
     private bool _syncing;
-    private GeocacheCode? _scratchpadCode;
+    private GeocacheCode? _loadedCode;
 
     public WorkbenchViewModel(
         IWorkbenchSessionService session,
@@ -70,6 +70,7 @@ public partial class WorkbenchViewModel : ViewModelBase
         IFavoriteToolsService favorites,
         IRecentsService recents,
         ScratchpadViewModel scratchpad,
+        GeocacheDetailViewModel listing,
         IPreferences preferences,
         IMessenger? messenger = null)
     {
@@ -80,6 +81,7 @@ public partial class WorkbenchViewModel : ViewModelBase
         _favorites = favorites;
         _recents = recents;
         Scratchpad = scratchpad;
+        Listing = listing;
         _preferences = preferences;
         RestoreLayout();
 
@@ -92,6 +94,9 @@ public partial class WorkbenchViewModel : ViewModelBase
     }
 
     public ScratchpadViewModel Scratchpad { get; }
+
+    /// <summary>The active cache's listing, hint, waypoints and logs; reloaded when the active cache changes.</summary>
+    public GeocacheDetailViewModel Listing { get; }
 
     // Caches
 
@@ -388,7 +393,7 @@ public partial class WorkbenchViewModel : ViewModelBase
         }
 
         _session.Activate(value.Code);
-        LoadScratchpad(value.Code);
+        LoadCache(value.Code);
     }
 
     partial void OnPhoneSectionChanged(WorkbenchPhoneSection value) => RaiseLayoutChanged();
@@ -495,7 +500,7 @@ public partial class WorkbenchViewModel : ViewModelBase
         OnPropertyChanged(nameof(HasOpenCaches));
         if (ActiveCache is { } current)
         {
-            LoadScratchpad(current.Code);
+            LoadCache(current.Code);
         }
     }
 
@@ -510,14 +515,15 @@ public partial class WorkbenchViewModel : ViewModelBase
         _session.Move(tab.Code, e.NewStartingIndex);
     }
 
-    private async void LoadScratchpad(GeocacheCode code)
+    private async void LoadCache(GeocacheCode code)
     {
-        if (_scratchpadCode == code)
+        if (_loadedCode == code)
         {
             return;
         }
 
-        _scratchpadCode = code;
+        _loadedCode = code;
+        var listing = Listing.LoadAsync(code);
         try
         {
             await Scratchpad.InitializeAsync(code);
@@ -525,6 +531,15 @@ public partial class WorkbenchViewModel : ViewModelBase
         catch (Exception)
         {
             // The scratchpad stays empty; the rest of the workbench keeps working.
+        }
+
+        try
+        {
+            await listing;
+        }
+        catch (Exception)
+        {
+            // An unreadable store leaves the listing empty, as on the cache page.
         }
     }
 

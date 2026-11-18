@@ -4593,9 +4593,6 @@
   <data name="GeocacheSolve" xml:space="preserve">
     <value>Solve</value>
   </data>
-  <data name="GeocacheSolveUnavailable" xml:space="preserve">
-    <value>The solving workbench is coming soon.</value>
-  </data>
   <data name="GeocacheWaypointHidden" xml:space="preserve">
     <value>Coordinates hidden</value>
   </data>
@@ -4921,9 +4918,6 @@
   </data>
   <data name="Workbench_EmptyBody" xml:space="preserve">
     <value>Open a cache to solve it with the listing and your tools side by side.</value>
-  </data>
-  <data name="Workbench_ListingPlaceholder" xml:space="preserve">
-    <value>The cache listing comes in #411. For now the workbench only knows the cache code.</value>
   </data>
   <data name="Workbench_Listing" xml:space="preserve">
     <value>Listing</value>

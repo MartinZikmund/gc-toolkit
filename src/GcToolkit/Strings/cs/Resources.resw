@@ -4593,9 +4593,6 @@
   <data name="GeocacheSolve" xml:space="preserve">
     <value>Řešit</value>
   </data>
-  <data name="GeocacheSolveUnavailable" xml:space="preserve">
-    <value>Řešitelská pracovna přijde brzy.</value>
-  </data>
   <data name="GeocacheWaypointHidden" xml:space="preserve">
     <value>Souřadnice skryty</value>
   </data>
@@ -4921,9 +4918,6 @@
   </data>
   <data name="Workbench_EmptyBody" xml:space="preserve">
     <value>Otevřete keš a luštěte ji s výpisem a nástroji vedle sebe.</value>
-  </data>
-  <data name="Workbench_ListingPlaceholder" xml:space="preserve">
-    <value>Výpis keše přibude v #411. Zatím pracovní stůl zná jen kód keše.</value>
   </data>
   <data name="Workbench_Listing" xml:space="preserve">
     <value>Výpis</value>

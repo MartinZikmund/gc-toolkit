@@ -19,7 +19,7 @@ namespace GcToolkit.Core.ViewModels.Tools;
 [Tool("GronsfeldCipher", ToolCategory.Ciphers,
       Introduced = "2026-06-13", Updated = "2026-06-13",
       Keywords = ["gronsfeld", "vigenère", "vigenere", "numeric key", "cipher", "shift", "číselný klíč", "posun", "šifra"])]
-public sealed partial class GronsfeldCipherViewModel : ToolViewModelBase
+public sealed partial class GronsfeldCipherViewModel : ToolViewModelBase, IToolTextInput
 {
     private readonly GronsfeldCipher _cipher = new();
     private readonly IClipboardService _clipboard;

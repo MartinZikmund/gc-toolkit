@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using GcToolkit.Core.Catalog;
 using GcToolkit.Core.Ciphers;
 using GcToolkit.Core.Discovery;
@@ -22,7 +22,7 @@ namespace GcToolkit.Core.ViewModels.Tools;
 [Tool("RailFenceCipher", ToolCategory.Ciphers,
       Introduced = "2026-06-13", Updated = "2026-06-13",
       Keywords = ["rail", "fence", "zigzag", "zig-zag", "transposition", "cipher", "rails", "plot", "klikatá", "šifra", "transpozice", "kolová"])]
-public sealed partial class RailFenceCipherViewModel : ToolViewModelBase
+public sealed partial class RailFenceCipherViewModel : ToolViewModelBase, IToolTextInput
 {
     private readonly RailFenceCipher _cipher = new();
     private readonly IClipboardService _clipboard;

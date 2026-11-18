@@ -21,7 +21,7 @@ namespace GcToolkit.Core.ViewModels.Tools;
 [Tool("AsciiConverter", ToolCategory.Text,
       Introduced = "2026-06-06", Updated = "2026-06-06",
       Keywords = ["ascii", "unicode", "code", "codes", "character", "decimal", "hex", "hexadecimal", "octal", "binary", "base32", "base64", "html", "entity", "kód", "kódy", "znak", "převod", "ascii kód"])]
-public sealed partial class AsciiConverterViewModel : ToolViewModelBase
+public sealed partial class AsciiConverterViewModel : ToolViewModelBase, IToolTextInput
 {
     /// <summary>The <b>To</b> dropdown's items, in order — the <b>From</b> list is this prefixed by "auto".</summary>
     private static readonly AsciiFormat[] Formats =

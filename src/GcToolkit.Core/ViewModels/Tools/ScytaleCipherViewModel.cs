@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using GcToolkit.Core.Catalog;
 using GcToolkit.Core.Ciphers;
 using GcToolkit.Core.Discovery;
@@ -22,7 +22,7 @@ namespace GcToolkit.Core.ViewModels.Tools;
 [Tool("ScytaleCipher", ToolCategory.Ciphers,
       Introduced = "2026-06-13", Updated = "2026-06-13",
       Keywords = ["scytale", "skytale", "rod", "rail", "transposition", "columns", "caesar box", "cipher", "skytalé", "tyč", "sloupce", "transpozice", "šifra"])]
-public sealed partial class ScytaleCipherViewModel : ToolViewModelBase
+public sealed partial class ScytaleCipherViewModel : ToolViewModelBase, IToolTextInput
 {
     private const int DefaultColumns = 4;
 

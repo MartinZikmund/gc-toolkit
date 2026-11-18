@@ -21,7 +21,7 @@ namespace GcToolkit.Core.ViewModels.Tools;
 [Tool("CaesarCipher", ToolCategory.Ciphers,
       Introduced = "2026-06-01", Updated = "2026-06-01",
       Keywords = ["caesar", "rot13", "rot5", "rot47", "shift", "rotation", "cipher", "posun", "šifra", "rot"])]
-public sealed partial class CaesarCipherViewModel : ToolViewModelBase, IToolStateful
+public sealed partial class CaesarCipherViewModel : ToolViewModelBase, IToolStateful, IToolTextInput
 {
     private readonly CaesarCipher _cipher = new();
     private readonly IClipboardService _clipboard;

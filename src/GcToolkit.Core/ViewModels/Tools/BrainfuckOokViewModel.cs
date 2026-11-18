@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using GcToolkit.Core.Alphabets;
 using GcToolkit.Core.Catalog;
 using GcToolkit.Core.Discovery;
@@ -22,7 +22,7 @@ namespace GcToolkit.Core.ViewModels.Tools;
 [Tool("BrainfuckOok", ToolCategory.Alphabets,
       Introduced = "2026-06-13", Updated = "2026-06-13",
       Keywords = ["brainfuck", "ook", "esoteric", "interpreter", "code", "ezoterický", "jazyk", "interpret", "kód", "opice"])]
-public sealed partial class BrainfuckOokViewModel : ToolViewModelBase
+public sealed partial class BrainfuckOokViewModel : ToolViewModelBase, IToolTextInput
 {
     private readonly BrainfuckOok _codec = new();
     private readonly IClipboardService _clipboard;

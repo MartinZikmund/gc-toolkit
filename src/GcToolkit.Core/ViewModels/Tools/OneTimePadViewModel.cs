@@ -22,7 +22,7 @@ namespace GcToolkit.Core.ViewModels.Tools;
       Introduced = "2026-06-13", Updated = "2026-06-13",
       Keywords = ["one-time pad", "onetime pad", "otp", "vernam", "vigenere", "beaufort", "pad", "key", "cipher",
                   "jednorázová tabulka", "vernamova šifra", "klíč", "šifra"])]
-public sealed partial class OneTimePadViewModel : ToolViewModelBase
+public sealed partial class OneTimePadViewModel : ToolViewModelBase, IToolTextInput
 {
     private readonly OneTimePad _cipher = new();
     private readonly IClipboardService _clipboard;

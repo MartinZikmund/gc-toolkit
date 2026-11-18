@@ -27,7 +27,7 @@ namespace GcToolkit.Core.ViewModels.Tools;
       Keywords = ["word", "value", "digital", "root", "sum", "letters", "cross sum", "checksum",
                   "scrabble", "vanity", "keypad", "method",
                   "hodnota", "slova", "ciferný", "kořen", "součet", "písmena"])]
-public sealed partial class WordValueViewModel : ToolViewModelBase, IToolStateful
+public sealed partial class WordValueViewModel : ToolViewModelBase, IToolStateful, IToolTextInput
 {
     private readonly WordValueCalculator _calculator = new();
     private readonly UiDebouncer _debouncer = new(TimeSpan.FromMilliseconds(200));

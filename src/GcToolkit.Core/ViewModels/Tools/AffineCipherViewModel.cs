@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using GcToolkit.Core.Catalog;
 using GcToolkit.Core.Ciphers;
 using GcToolkit.Core.Discovery;
@@ -22,7 +22,7 @@ namespace GcToolkit.Core.ViewModels.Tools;
 [Tool("AffineCipher", ToolCategory.Ciphers,
       Introduced = "2026-06-13", Updated = "2026-06-13",
       Keywords = ["affine", "cipher", "monoalphabetic", "substitution", "modular", "afinní", "afinni", "šifra", "sifra", "substituce", "modulární"])]
-public sealed partial class AffineCipherViewModel : ToolViewModelBase
+public sealed partial class AffineCipherViewModel : ToolViewModelBase, IToolTextInput
 {
     private readonly AffineCipher _cipher = new();
     private readonly IClipboardService _clipboard;

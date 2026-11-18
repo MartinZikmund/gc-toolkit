@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using GcToolkit.Core.Alphabets;
 using GcToolkit.Core.Catalog;
@@ -23,7 +23,7 @@ namespace GcToolkit.Core.ViewModels.Tools;
 [Tool("DvorakKeyboard", ToolCategory.Alphabets,
       Introduced = "2026-06-13", Updated = "2026-06-13",
       Keywords = ["dvorak", "qwerty", "keyboard", "layout", "remap", "klávesnice", "rozložení", "rozlozeni", "klavesnice", "one-handed"])]
-public sealed partial class DvorakKeyboardViewModel : ToolViewModelBase
+public sealed partial class DvorakKeyboardViewModel : ToolViewModelBase, IToolTextInput
 {
     private const int RecomputeDebounceMs = 200;
 

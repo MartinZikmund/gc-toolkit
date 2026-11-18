@@ -27,7 +27,7 @@ namespace GcToolkit.Core.ViewModels.Tools;
       Keywords = ["checksum", "cross sum", "digit sum", "digital root", "letter value", "reduce",
                   "kontrolní součet", "ciferný součet", "ciferný kořen", "součet číslic",
                   "hodnota písmen", "coordinate checksum", "kontrolní součet souřadnic"])]
-public sealed partial class ChecksumViewModel : ToolViewModelBase
+public sealed partial class ChecksumViewModel : ToolViewModelBase, IToolTextInput
 {
     /// <summary>A coordinate line: digits, a letter and punctuation, so every section has something to show.</summary>
     private const string ExampleInput = "N 49 12.345 E 016 30.678";

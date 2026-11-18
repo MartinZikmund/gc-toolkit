@@ -80,7 +80,7 @@
             TabWidthMode="SizeToContent">
             <TabView.TabItemTemplate>
                 <DataTemplate x:DataType="workbench:WorkbenchCacheTab">
-                    <TabViewItem AutomationProperties.Name="{x:Bind Title}" Header="{x:Bind Title}">
+                    <TabViewItem AutomationProperties.Name="{x:Bind Title, Mode=OneWay}" Header="{x:Bind Title, Mode=OneWay}">
                         <TabViewItem.IconSource>
                             <FontIconSource Glyph="&#xE707;" />
                         </TabViewItem.IconSource>
@@ -170,7 +170,7 @@
                                 SelectedItem="{x:Bind ViewModel.ActiveCache, Mode=OneWay}">
                                 <ListView.ItemTemplate>
                                     <DataTemplate x:DataType="workbench:WorkbenchCacheTab">
-                                        <TextBlock Text="{x:Bind Title}" />
+                                        <TextBlock Text="{x:Bind Title, Mode=OneWay}" />
                                     </DataTemplate>
                                 </ListView.ItemTemplate>
                             </ListView>
@@ -232,11 +232,73 @@
             PanePlacement="Right"
             Visibility="{x:Bind ViewModel.HasOpenCaches, Mode=OneWay}">
 
-            <controls:GeocacheListingPanel
-                x:Name="ListingPanel"
-                AutomationProperties.AutomationId="WorkbenchListing"
-                ViewModel="{x:Bind ViewModel.Listing}"
-                Visibility="{x:Bind ViewModel.IsListingVisible, Mode=OneWay}" />
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <controls:GeocacheListingPanel
+                    x:Name="ListingPanel"
+                    AutomationProperties.AutomationId="WorkbenchListing"
+                    SelectionChanged="OnListingSelectionChanged"
+                    ViewModel="{x:Bind ViewModel.Listing}"
+                    Visibility="{x:Bind ViewModel.IsListingVisible, Mode=OneWay}">
+                    <controls:GeocacheListingPanel.NoDescriptionContent>
+                        <!--  Caches imported without a description: paste the listing, then select from it.  -->
+                        <StackPanel
+                            Padding="24,16,24,0"
+                            Spacing="8"
+                            Visibility="{x:Bind ViewModel.ShowPasteBox, Mode=OneWay}">
+                            <TextBlock
+                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                Text="{markup:Localize Key=Workbench_PasteListingHint}"
+                                TextWrapping="Wrap" />
+                            <TextBox
+                                Height="180"
+                                AcceptsReturn="True"
+                                AutomationProperties.AutomationId="WorkbenchPastedListing"
+                                Header="{markup:Localize Key=Workbench_PasteListing}"
+                                IsSpellCheckEnabled="False"
+                                SelectionChanged="OnPastedSelectionChanged"
+                                Text="{x:Bind ViewModel.PastedListing, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                TextWrapping="Wrap" />
+                        </StackPanel>
+                    </controls:GeocacheListingPanel.NoDescriptionContent>
+                </controls:GeocacheListingPanel>
+
+                <!--  Phones: the selection actions sit in a bottom bar instead of a flyout.  -->
+                <CommandBar
+                    Grid.Row="1"
+                    AutomationProperties.AutomationId="WorkbenchSelectionBar"
+                    AutomationProperties.Name="{markup:Localize Key=Workbench_SelectionActions}"
+                    DefaultLabelPosition="Bottom"
+                    IsDynamicOverflowEnabled="False"
+                    OverflowButtonVisibility="Collapsed"
+                    Visibility="{x:Bind local:WorkbenchView.ShowSelectionBar(ViewModel.IsCompact, ViewModel.HasSelection, ViewModel.IsListingVisible), Mode=OneWay}">
+                    <AppBarButton
+                        AutomationProperties.AutomationId="WorkbenchSendToSuggested"
+                        Command="{x:Bind ViewModel.SendSelectionToSuggestedCommand}"
+                        Label="{x:Bind ViewModel.SuggestedTool.Name, Mode=OneWay, FallbackValue=''}">
+                        <AppBarButton.Icon>
+                            <FontIcon Glyph="&#xE724;" />
+                        </AppBarButton.Icon>
+                    </AppBarButton>
+                    <AppBarButton
+                        x:Name="SendToOtherButton"
+                        Click="OnSendToOtherClick"
+                        Label="{markup:Localize Key=Workbench_SendTo}">
+                        <AppBarButton.Icon>
+                            <FontIcon Glyph="&#xE8A7;" />
+                        </AppBarButton.Icon>
+                    </AppBarButton>
+                    <AppBarButton Command="{x:Bind ViewModel.AddSelectionToScratchpadCommand}" Label="{markup:Localize Key=Workbench_ToNotes}">
+                        <AppBarButton.Icon>
+                            <FontIcon Glyph="&#xE70B;" />
+                        </AppBarButton.Icon>
+                    </AppBarButton>
+                </CommandBar>
+            </Grid>
 
             <SplitView.Pane>
                 <Grid>

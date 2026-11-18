@@ -2,6 +2,7 @@ using System.ComponentModel;
 using GcToolkit.Core.Geocaches.Detail;
 using GcToolkit.Core.ViewModels;
 using Microsoft.Web.WebView2.Core;
+using Windows.Foundation;
 
 namespace GcToolkit.Controls;
 
@@ -10,12 +11,22 @@ public sealed partial class GeocacheListingPanel : UserControl
 {
     private string? _shownHtml;
     private bool _webViewReady;
+#if __WASM__
+    // WebAssembly never raises WebMessageReceived (Uno gap), so the selection is read on a timer instead.
+    private readonly DispatcherTimer _selectionPoll = new() { Interval = TimeSpan.FromMilliseconds(600) };
+    private string _polledText = string.Empty;
+#endif
 
     public GeocacheListingPanel()
     {
         InitializeComponent();
         Loaded += (_, _) => Attach(ViewModel);
         Unloaded += (_, _) => Detach(ViewModel);
+#if __WASM__
+        _selectionPoll.Tick += async (_, _) => await PollSelectionAsync();
+        Loaded += (_, _) => _selectionPoll.Start();
+        Unloaded += (_, _) => _selectionPoll.Stop();
+#endif
         ActualThemeChanged += (_, _) => ApplyTheme();
     }
 
@@ -30,6 +41,19 @@ public sealed partial class GeocacheListingPanel : UserControl
         get => (GeocacheDetailViewModel?)GetValue(ViewModelProperty);
         set => SetValue(ViewModelProperty, value);
     }
+
+    public static readonly DependencyProperty NoDescriptionContentProperty = DependencyProperty.Register(
+        nameof(NoDescriptionContent), typeof(object), typeof(GeocacheListingPanel), new PropertyMetadata(null));
+
+    /// <summary>Shown above the listing; the host decides when (the workbench's paste box for caches without a description).</summary>
+    public object? NoDescriptionContent
+    {
+        get => GetValue(NoDescriptionContentProperty);
+        set => SetValue(NoDescriptionContentProperty, value);
+    }
+
+    /// <summary>Text selected in the listing, hint, a waypoint or a log, with where it is (top centre, in this panel's coordinates).</summary>
+    public event EventHandler<ListingSelectionEventArgs>? SelectionChanged;
 
     private void OnViewModelChanged(DependencyPropertyChangedEventArgs e)
     {
@@ -92,6 +116,7 @@ public sealed partial class GeocacheListingPanel : UserControl
             await ListingWebView.EnsureCoreWebView2Async();
             ListingWebView.CoreWebView2.NavigationStarting += OnNavigationStarting;
             ListingWebView.CoreWebView2.NewWindowRequested += OnNewWindowRequested;
+            ListingWebView.CoreWebView2.WebMessageReceived += OnWebMessageReceived;
             _webViewReady = true;
         }
 
@@ -132,6 +157,53 @@ public sealed partial class GeocacheListingPanel : UserControl
         }
     }
 
+    private void OnWebMessageReceived(CoreWebView2 sender, CoreWebView2WebMessageReceivedEventArgs args)
+    {
+        if (ListingSelection.TryParse(args.WebMessageAsJson, out var selection))
+        {
+            RaiseWebSelection(selection);
+        }
+    }
+
+    private void RaiseWebSelection(ListingSelection selection)
+    {
+        var anchor = ListingWebView.TransformToVisual(this).TransformPoint(new Point(selection.X + (selection.Width / 2), selection.Y));
+        SelectionChanged?.Invoke(this, new(selection.Text, anchor));
+    }
+
+#if __WASM__
+    private async Task PollSelectionAsync()
+    {
+        if (!_webViewReady || ViewModel?.IsListingSelected != true)
+        {
+            return;
+        }
+
+        try
+        {
+            var json = await ListingWebView.ExecuteScriptAsync("String(window.gcGetSelection ? window.gcGetSelection() : '')");
+            if (ListingSelection.TryParse(json, out var selection) && selection.Text != _polledText)
+            {
+                _polledText = selection.Text;
+                RaiseWebSelection(selection);
+            }
+        }
+        catch (Exception)
+        {
+            // The page may be mid-navigation; the next tick tries again.
+        }
+    }
+#endif
+
+    private void OnTextSelectionChanged(object sender, RoutedEventArgs e)
+    {
+        if (sender is TextBlock text)
+        {
+            var anchor = text.TransformToVisual(this).TransformPoint(new Point(text.ActualWidth / 2, 0));
+            SelectionChanged?.Invoke(this, new(text.SelectedText, anchor));
+        }
+    }
+
     private void OnSectionChanged(SelectorBar sender, SelectorBarSelectionChangedEventArgs args)
     {
         if (ViewModel is not null
@@ -149,4 +221,11 @@ public sealed partial class GeocacheListingPanel : UserControl
             ViewModel?.CopyWaypointCoordinateCommand.Execute(waypoint);
         }
     }
+}
+
+public sealed class ListingSelectionEventArgs(string text, Point anchor) : EventArgs
+{
+    public string Text { get; } = text;
+
+    public Point Anchor { get; } = anchor;
 }

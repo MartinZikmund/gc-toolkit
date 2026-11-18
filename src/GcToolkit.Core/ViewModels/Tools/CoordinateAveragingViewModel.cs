@@ -21,7 +21,7 @@ namespace GcToolkit.Core.ViewModels.Tools;
 [Tool("CoordinateAveraging", ToolCategory.Coordinates,
       Introduced = "2026-09-03", Updated = "2026-09-03",
       Keywords = ["averaging", "average", "mean", "readings", "accuracy", "gps", "průměrování", "průměr", "měření", "přesnost", "zaměření"])]
-public sealed partial class CoordinateAveragingViewModel : ToolViewModelBase
+public sealed partial class CoordinateAveragingViewModel : ToolViewModelBase, IToolTextInput
 {
     private readonly IStringLocalizer _localizer;
     private readonly IClipboardService _clipboard;

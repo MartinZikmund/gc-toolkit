@@ -25,7 +25,7 @@ namespace GcToolkit.Core.ViewModels.Tools;
       Introduced = "2026-02-10", Updated = "2026-06-06",
       Keywords = ["vigenère", "vigenere", "key", "keyword", "polyalphabetic", "cipher", "solve", "break",
                   "klíč", "klic", "šifra", "sifra", "heslo"])]
-public sealed partial class VigenereCipherViewModel : ToolViewModelBase, IToolStateful
+public sealed partial class VigenereCipherViewModel : ToolViewModelBase, IToolStateful, IToolTextInput
 {
     private const int DefaultMaxKeyLength = 12;
     private const int TopCandidateCount = 8;

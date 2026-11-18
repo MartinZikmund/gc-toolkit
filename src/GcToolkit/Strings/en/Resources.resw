@@ -4931,6 +4931,30 @@
   <data name="Workbench_Notes" xml:space="preserve">
     <value>Notes</value>
   </data>
+  <data name="Workbench_SendToFormat" xml:space="preserve">
+    <value>Send to {0}</value>
+  </data>
+  <data name="Workbench_SendToOther" xml:space="preserve">
+    <value>Send to another tool…</value>
+  </data>
+  <data name="Workbench_SendTo" xml:space="preserve">
+    <value>Send to…</value>
+  </data>
+  <data name="Workbench_AddToScratchpad" xml:space="preserve">
+    <value>Add to scratchpad</value>
+  </data>
+  <data name="Workbench_ToNotes" xml:space="preserve">
+    <value>To notes</value>
+  </data>
+  <data name="Workbench_PasteListingHint" xml:space="preserve">
+    <value>This cache was imported without a description. Paste the listing text here, then select text in it to send it to a tool.</value>
+  </data>
+  <data name="Workbench_PasteListing" xml:space="preserve">
+    <value>Listing text</value>
+  </data>
+  <data name="Workbench_SelectionActions" xml:space="preserve">
+    <value>Selection actions</value>
+  </data>
   <data name="Workbench_Scratchpad" xml:space="preserve">
     <value>Scratchpad</value>
   </data>

@@ -41,14 +41,23 @@ public sealed record ListingHtmlModel
 /// </summary>
 public static partial class ListingHtmlBuilder
 {
-    /// <summary>Reads the current text selection. Posts it to the host where the platform allows (see #416).</summary>
+    /// <summary>
+    /// Reports the text selection to the host once it settles (pointer or key released), with its bounds so the
+    /// host can place actions above it, and when it is cleared. <c>gcGetSelection()</c> returns the same message
+    /// as JSON for hosts that cannot receive messages and poll instead (WebAssembly).
+    /// </summary>
     public const string SelectionScript =
         "(function(){function post(m){try{if(window.chrome&&chrome.webview){chrome.webview.postMessage(m);}" +
         "else if(window.unoWebView){unoWebView.postMessage(JSON.stringify(m));}" +
         "else if(window.webkit&&webkit.messageHandlers&&webkit.messageHandlers.unoWebView)" +
         "{webkit.messageHandlers.unoWebView.postMessage(JSON.stringify(m));}}catch(e){}}" +
-        "window.gcGetSelection=function(){return String(window.getSelection());};" +
-        "document.addEventListener('selectionchange',function(){post({type:'selection',text:String(window.getSelection())});});})();";
+        "function current(){var s=window.getSelection(),t=String(s),r={left:0,top:0,width:0,height:0};" +
+        "if(t&&s.rangeCount){r=s.getRangeAt(0).getBoundingClientRect();}" +
+        "return{type:'selection',text:t,x:r.left,y:r.top,w:r.width,h:r.height};}" +
+        "var last='';function report(){var m=current();if(m.text!==last){last=m.text;post(m);}}" +
+        "window.gcGetSelection=function(){return JSON.stringify(current());};" +
+        "['mouseup','touchend','keyup'].forEach(function(e){document.addEventListener(e,function(){setTimeout(report,0);});});" +
+        "document.addEventListener('selectionchange',function(){if(!String(window.getSelection())&&last){report();}});})();";
 
     public static string Build(ListingHtmlModel model, string? nonce = null)
     {

@@ -1,6 +1,11 @@
 using GcToolkit.Core.Navigation;
 using GcToolkit.Core.ViewModels;
+using System.Globalization;
+using GcToolkit.Controls;
 using GcToolkit.Core.Workbench;
+using GcToolkit.Helpers;
+using GcToolkit.Services.Localization;
+using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Windows.System;
@@ -47,6 +52,99 @@ public sealed partial class WorkbenchView : WorkbenchViewBase
 
     public static Visibility Not(bool value) => value ? Visibility.Collapsed : Visibility.Visible;
 
+    public static Visibility ShowSelectionBar(bool compact, bool hasSelection, bool listingVisible)
+        => compact && hasSelection && listingVisible ? Visibility.Visible : Visibility.Collapsed;
+
+    private CommandBarFlyout? _selectionFlyout;
+
+    private void OnListingSelectionChanged(object? sender, ListingSelectionEventArgs e) => OnSelection(e.Text, ListingPanel, e.Anchor);
+
+    private void OnPastedSelectionChanged(object sender, RoutedEventArgs e)
+    {
+        if (sender is TextBox box)
+        {
+            OnSelection(box.SelectedText, box, new(box.ActualWidth / 2, 0));
+        }
+    }
+
+    // Wide and medium windows get a flyout above the selection; phones use the bottom bar in the XAML.
+    private void OnSelection(string text, FrameworkElement target, Windows.Foundation.Point anchor)
+    {
+        if (ViewModel is not { } viewModel)
+        {
+            return;
+        }
+
+        viewModel.SelectedText = text;
+        _selectionFlyout?.Hide();
+        if (!viewModel.HasSelection || viewModel.IsCompact)
+        {
+            return;
+        }
+
+        _selectionFlyout = BuildSelectionFlyout(viewModel);
+        _selectionFlyout.ShowAt(target, new FlyoutShowOptions
+        {
+            Position = anchor,
+            Placement = FlyoutPlacementMode.Top,
+            ShowMode = FlyoutShowMode.Transient,
+        });
+    }
+
+    private CommandBarFlyout BuildSelectionFlyout(WorkbenchViewModel viewModel)
+    {
+        CommandBarFlyout flyout = new();
+        if (viewModel.SuggestedTool is { } suggested)
+        {
+            flyout.PrimaryCommands.Add(SendButton(viewModel, suggested, ToolIcons.CreateIcon(suggested.IconKey)));
+        }
+
+        AppBarButton scratchpad = new()
+        {
+            Label = Localizer.Instance["Workbench_AddToScratchpad"],
+            Icon = new FontIcon { Glyph = "\uE70B" },
+            Command = viewModel.AddSelectionToScratchpadCommand,
+        };
+        ToolTipService.SetToolTip(scratchpad, scratchpad.Label);
+        flyout.PrimaryCommands.Add(scratchpad);
+
+        foreach (var tool in viewModel.SelectionSuggestions)
+        {
+            flyout.SecondaryCommands.Add(SendButton(viewModel, tool, ToolIcons.NavIcon(tool.IconKey)));
+        }
+
+        AppBarButton other = new() { Label = Localizer.Instance["Workbench_SendToOther"] };
+        other.Click += (_, _) => SendToOtherTool(ListingPanel);
+        flyout.SecondaryCommands.Add(other);
+        return flyout;
+    }
+
+    private AppBarButton SendButton(WorkbenchViewModel viewModel, ToolPickerItem tool, IconElement? icon)
+    {
+        AppBarButton button = new()
+        {
+            Label = string.Format(CultureInfo.CurrentCulture, Localizer.Instance["Workbench_SendToFormat"], tool.Name),
+            Icon = icon,
+        };
+        ToolTipService.SetToolTip(button, button.Label);
+        button.Click += (_, _) =>
+        {
+            _selectionFlyout?.Hide();
+            viewModel.SendSelectionTo(tool);
+        };
+        return button;
+    }
+
+    private void OnSendToOtherClick(object sender, RoutedEventArgs e) => SendToOtherTool(SendToOtherButton);
+
+    private void SendToOtherTool(FrameworkElement target)
+    {
+        _selectionFlyout?.Hide();
+        ViewModel?.BeginSendToOtherTool();
+        ViewModel?.RefreshToolPicker();
+        ToolPickerFlyout.ShowAt(target);
+    }
+
     // The only layout input the view supplies; the view model decides the mode from it.
     private void OnSizeChanged(object sender, SizeChangedEventArgs e) => ViewModel?.UpdateAvailableWidth(e.NewSize.Width);
 
@@ -90,7 +188,7 @@ public sealed partial class WorkbenchView : WorkbenchViewBase
         if (e.ClickedItem is ToolPickerItem item)
         {
             ToolPickerFlyout.Hide();
-            ViewModel?.AddTool(item);
+            ViewModel?.PickTool(item);
         }
     }
 

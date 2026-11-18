@@ -22,7 +22,7 @@ namespace GcToolkit.Core.ViewModels.Tools;
       Introduced = "2026-06-13", Updated = "2026-06-13",
       Keywords = ["bacon", "baconian", "biliteral", "cipher", "binary", "steganography",
                   "baconova", "baconova šifra", "dvojková", "šifra"])]
-public sealed partial class BaconCipherViewModel : ToolViewModelBase
+public sealed partial class BaconCipherViewModel : ToolViewModelBase, IToolTextInput
 {
     private readonly BaconCipher _cipher = new();
     private readonly IClipboardService _clipboard;

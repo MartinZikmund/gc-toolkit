@@ -20,6 +20,7 @@ public class WorkbenchViewModelTests
     private readonly PreferencesWorkbenchToolStore _toolStore = new(InMemoryPreferences.TrimmedHead());
     private readonly FakeFavoriteToolsService _favorites = new();
     private readonly FakeRecentsService _recents = new();
+    private readonly InMemoryPreferences _layoutPreferences = InMemoryPreferences.TrimmedHead();
     private WorkbenchSessionService _session = null!;
 
     [TestInitialize]
@@ -44,6 +45,7 @@ public class WorkbenchViewModelTests
             _favorites,
             _recents,
             new ScratchpadViewModel(_scratchpads, localizer, _time),
+            _layoutPreferences,
             _messenger);
         vm.ViewCreated();
         vm.UpdateAvailableWidth(width);
@@ -162,11 +164,11 @@ public class WorkbenchViewModelTests
     }
 
     [TestMethod]
-    public void PhoneSection_Scratchpad_ShowsOnlyTheScratchpad()
+    public void PhoneSection_Notes_ShowsOnlyTheScratchpad()
     {
         var vm = Create(400);
 
-        vm.PhoneSection = WorkbenchPhoneSection.Scratchpad;
+        vm.PhoneSection = WorkbenchPhoneSection.Notes;
 
         Assert.IsTrue(vm.IsToolPaneOpen);
         Assert.IsFalse(vm.IsToolTabsVisible);
@@ -174,6 +176,77 @@ public class WorkbenchViewModelTests
         Assert.IsTrue(vm.IsScratchpadVisible);
         Assert.IsFalse(vm.IsVariablesVisible);
         Assert.IsFalse(vm.IsDockSelectorVisible);
+    }
+
+    [TestMethod]
+    public void PhoneSection_Variables_ShowsOnlyTheVariables()
+    {
+        var vm = Create(400);
+
+        vm.PhoneSection = WorkbenchPhoneSection.Variables;
+
+        Assert.IsTrue(vm.IsToolPaneOpen);
+        Assert.IsFalse(vm.IsListingVisible);
+        Assert.IsFalse(vm.IsToolTabsVisible);
+        Assert.IsTrue(vm.IsDockVisible);
+        Assert.IsTrue(vm.IsVariablesVisible);
+        Assert.IsFalse(vm.IsScratchpadVisible);
+        Assert.IsFalse(vm.IsDockSelectorVisible);
+    }
+
+    [TestMethod]
+    public void Relaunch_RestoresPaneWidthDockHeightAndPin()
+    {
+        var first = Create(1400);
+        first.ToolPaneWidth = 520;
+        first.DockHeight = 300;
+        first.TogglePinCommand.Execute(null);
+
+        var second = Create(1400);
+
+        Assert.AreEqual(520d, second.ToolPaneWidth);
+        Assert.AreEqual(300d, second.DockHeight);
+        Assert.IsTrue(second.IsToolPanePinned);
+    }
+
+    [TestMethod]
+    [DataRow(WorkbenchPane.Listing, false, WorkbenchPane.Tools)]
+    [DataRow(WorkbenchPane.Tools, false, WorkbenchPane.Dock)]
+    [DataRow(WorkbenchPane.Dock, false, WorkbenchPane.Listing)]
+    [DataRow(WorkbenchPane.Listing, true, WorkbenchPane.Dock)]
+    [DataRow(WorkbenchPane.Tools, true, WorkbenchPane.Listing)]
+    public void MoveFocus_Wide_CyclesThePanes(WorkbenchPane from, bool backwards, WorkbenchPane expected)
+    {
+        var vm = Create(1400);
+
+        Assert.AreEqual(expected, vm.MoveFocus(from, backwards));
+    }
+
+    [TestMethod]
+    public void MoveFocus_MediumToTheTools_OpensTheOverlay()
+    {
+        var vm = Create(700);
+
+        var target = vm.MoveFocus(WorkbenchPane.Listing);
+
+        Assert.AreEqual(WorkbenchPane.Tools, target);
+        Assert.IsTrue(vm.IsToolPaneOpen);
+    }
+
+    [TestMethod]
+    [DataRow(WorkbenchPhoneSection.Listing, false, WorkbenchPhoneSection.Tool, WorkbenchPane.Tools)]
+    [DataRow(WorkbenchPhoneSection.Tool, false, WorkbenchPhoneSection.Variables, WorkbenchPane.Dock)]
+    [DataRow(WorkbenchPhoneSection.Notes, false, WorkbenchPhoneSection.Listing, WorkbenchPane.Listing)]
+    [DataRow(WorkbenchPhoneSection.Listing, true, WorkbenchPhoneSection.Notes, WorkbenchPane.Dock)]
+    public void MoveFocus_Compact_StepsThroughTheSections(WorkbenchPhoneSection from, bool backwards, WorkbenchPhoneSection expectedSection, WorkbenchPane expectedPane)
+    {
+        var vm = Create(400);
+        vm.PhoneSection = from;
+
+        var target = vm.MoveFocus(WorkbenchPane.Listing, backwards);
+
+        Assert.AreEqual(expectedSection, vm.PhoneSection);
+        Assert.AreEqual(expectedPane, target);
     }
 
     [TestMethod]

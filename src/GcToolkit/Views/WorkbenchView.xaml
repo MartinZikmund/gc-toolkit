@@ -232,42 +232,11 @@
             PanePlacement="Right"
             Visibility="{x:Bind ViewModel.HasOpenCaches, Mode=OneWay}">
 
-            <!--  Placeholder until the listing page (#411) lands.  -->
-            <ScrollViewer
+            <controls:GeocacheListingPanel
                 x:Name="ListingPanel"
-                Padding="24,8,24,24"
                 AutomationProperties.AutomationId="WorkbenchListing"
-                IsTabStop="True"
-                Visibility="{x:Bind ViewModel.IsListingVisible, Mode=OneWay}">
-                <Grid>
-                    <StackPanel
-                        MaxWidth="760"
-                        HorizontalAlignment="Stretch"
-                        Spacing="12">
-                        <TextBlock
-                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                            Style="{StaticResource CaptionTextBlockStyle}"
-                            Text="{markup:Localize Key=Workbench_Listing}" />
-                        <Border
-                            Padding="16"
-                            Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-                            BorderThickness="1"
-                            CornerRadius="{StaticResource OverlayCornerRadius}">
-                            <StackPanel Spacing="8">
-                                <TextBlock
-                                    FontFamily="{StaticResource MonospaceFontFamily}"
-                                    Style="{StaticResource SubtitleTextBlockStyle}"
-                                    Text="{x:Bind ViewModel.ActiveCache.Title, Mode=OneWay, FallbackValue=''}" />
-                                <TextBlock
-                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                    Text="{markup:Localize Key=Workbench_ListingPlaceholder}"
-                                    TextWrapping="Wrap" />
-                            </StackPanel>
-                        </Border>
-                    </StackPanel>
-                </Grid>
-            </ScrollViewer>
+                ViewModel="{x:Bind ViewModel.Listing}"
+                Visibility="{x:Bind ViewModel.IsListingVisible, Mode=OneWay}" />
 
             <SplitView.Pane>
                 <Grid>

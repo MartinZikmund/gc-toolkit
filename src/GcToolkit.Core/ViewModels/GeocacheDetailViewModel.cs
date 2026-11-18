@@ -63,6 +63,7 @@ public sealed partial class GeocacheDetailViewModel : ViewModelBase
     }
 
     [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(SolveCommand))]
     public partial bool IsLoaded { get; set; }
 
     [ObservableProperty]
@@ -289,13 +290,14 @@ public sealed partial class GeocacheDetailViewModel : ViewModelBase
         }
     }
 
-    // The solving workbench (#414) does not exist yet, so there is nothing to navigate to.
-    [RelayCommand(CanExecute = nameof(CanSolve))]
+    [RelayCommand(CanExecute = nameof(IsLoaded))]
     private void Solve()
     {
+        if (_cache is not null)
+        {
+            _navigation.Navigate<WorkbenchViewModel>(_cache.Code);
+        }
     }
-
-    private static bool CanSolve() => false;
 
     private void Populate(Geocache cache)
     {

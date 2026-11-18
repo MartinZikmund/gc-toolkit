@@ -7,6 +7,7 @@ using GcToolkit.Core.Geocaches;
 using GcToolkit.Core.Messages;
 using GcToolkit.Core.Recents;
 using GcToolkit.Core.Workbench;
+using MZikmund.Toolkit.WinUI.Services;
 
 namespace GcToolkit.Core.ViewModels;
 
@@ -35,10 +36,15 @@ public partial class WorkbenchViewModel : ViewModelBase
         (nameof(IsScratchpadVisible), vm => vm.IsScratchpadVisible),
         (nameof(IsPhoneListingSelected), vm => vm.IsPhoneListingSelected),
         (nameof(IsPhoneToolSelected), vm => vm.IsPhoneToolSelected),
-        (nameof(IsPhoneScratchpadSelected), vm => vm.IsPhoneScratchpadSelected),
+        (nameof(IsPhoneVariablesSelected), vm => vm.IsPhoneVariablesSelected),
+        (nameof(IsPhoneNotesSelected), vm => vm.IsPhoneNotesSelected),
         (nameof(IsDockVariablesSelected), vm => vm.IsDockVariablesSelected),
         (nameof(IsDockScratchpadSelected), vm => vm.IsDockScratchpadSelected),
     ];
+
+    private const string ToolPaneWidthKey = "workbench.layout.toolPaneWidth";
+    private const string DockHeightKey = "workbench.layout.dockHeight";
+    private const string PinnedKey = "workbench.layout.pinned";
 
     private object[] _layoutSnapshot = [];
 
@@ -48,6 +54,7 @@ public partial class WorkbenchViewModel : ViewModelBase
     private readonly IWorkbenchToolStore _toolStore;
     private readonly IFavoriteToolsService _favorites;
     private readonly IRecentsService _recents;
+    private readonly IPreferences _preferences;
     private readonly Dictionary<GeocacheCode, WorkbenchCacheTab> _tabs = [];
     private double _availableWidth;
     private double _requestedToolPaneWidth = WorkbenchLayout.DefaultToolPaneWidth;
@@ -63,6 +70,7 @@ public partial class WorkbenchViewModel : ViewModelBase
         IFavoriteToolsService favorites,
         IRecentsService recents,
         ScratchpadViewModel scratchpad,
+        IPreferences preferences,
         IMessenger? messenger = null)
     {
         _session = session;
@@ -72,6 +80,8 @@ public partial class WorkbenchViewModel : ViewModelBase
         _favorites = favorites;
         _recents = recents;
         Scratchpad = scratchpad;
+        _preferences = preferences;
+        RestoreLayout();
 
         OpenCaches.CollectionChanged += OnOpenCachesChanged;
         (messenger ?? WeakReferenceMessenger.Default)
@@ -152,6 +162,7 @@ public partial class WorkbenchViewModel : ViewModelBase
         {
             var previous = ToolPaneWidth;
             _requestedToolPaneWidth = WorkbenchLayout.ClampToolPaneWidth(value, _availableWidth);
+            _preferences.Set(ToolPaneWidthKey, _requestedToolPaneWidth);
             if (previous != ToolPaneWidth)
             {
                 OnPropertyChanged();
@@ -164,7 +175,13 @@ public partial class WorkbenchViewModel : ViewModelBase
     public double DockHeight
     {
         get;
-        set => SetProperty(ref field, Math.Max(WorkbenchLayout.MinDockHeight, value));
+        set
+        {
+            if (SetProperty(ref field, Math.Max(WorkbenchLayout.MinDockHeight, value)))
+            {
+                _preferences.Set(DockHeightKey, field);
+            }
+        }
     } = WorkbenchLayout.DefaultDockHeight;
 
     public double PaneLength => LayoutMode switch
@@ -178,22 +195,26 @@ public partial class WorkbenchViewModel : ViewModelBase
 
     public bool IsToolTabsVisible => !IsCompact || PhoneSection == WorkbenchPhoneSection.Tool;
 
-    public bool IsDockVisible => !IsCompact || PhoneSection == WorkbenchPhoneSection.Scratchpad;
+    public bool IsDockVisible => !IsCompact || PhoneSection is WorkbenchPhoneSection.Variables or WorkbenchPhoneSection.Notes;
 
-    /// <summary>Phones have no Variables·Scratchpad switch: the scratchpad is its own section there.</summary>
+    /// <summary>Phones have no Variables·Scratchpad switch: each is its own section there.</summary>
     public bool IsDockSelectorVisible => !IsCompact;
 
-    public bool IsVariablesVisible => !IsCompact && DockSection == WorkbenchDockSection.Variables;
+    public bool IsVariablesVisible => IsCompact
+        ? PhoneSection == WorkbenchPhoneSection.Variables
+        : DockSection == WorkbenchDockSection.Variables;
 
     public bool IsScratchpadVisible => IsCompact
-        ? PhoneSection == WorkbenchPhoneSection.Scratchpad
+        ? PhoneSection == WorkbenchPhoneSection.Notes
         : DockSection == WorkbenchDockSection.Scratchpad;
 
     public bool IsPhoneListingSelected => PhoneSection == WorkbenchPhoneSection.Listing;
 
     public bool IsPhoneToolSelected => PhoneSection == WorkbenchPhoneSection.Tool;
 
-    public bool IsPhoneScratchpadSelected => PhoneSection == WorkbenchPhoneSection.Scratchpad;
+    public bool IsPhoneVariablesSelected => PhoneSection == WorkbenchPhoneSection.Variables;
+
+    public bool IsPhoneNotesSelected => PhoneSection == WorkbenchPhoneSection.Notes;
 
     public bool IsDockVariablesSelected => DockSection == WorkbenchDockSection.Variables;
 
@@ -298,10 +319,48 @@ public partial class WorkbenchViewModel : ViewModelBase
     [RelayCommand]
     private void ToggleToolPane() => IsToolPaneOpen = !IsToolPaneOpen;
 
+    /// <summary>
+    /// F6 / Shift+F6: the pane focus should move to from <paramref name="from"/>. On phones it steps
+    /// through the sections instead; on medium windows it opens the overlay when focus goes into it.
+    /// </summary>
+    public WorkbenchPane MoveFocus(WorkbenchPane from, bool backwards = false)
+    {
+        var step = backwards ? -1 : 1;
+        if (IsCompact)
+        {
+            var count = Enum.GetValues<WorkbenchPhoneSection>().Length;
+            PhoneSection = (WorkbenchPhoneSection)(((int)PhoneSection + step + count) % count);
+            return PhoneSection switch
+            {
+                WorkbenchPhoneSection.Listing => WorkbenchPane.Listing,
+                WorkbenchPhoneSection.Tool => WorkbenchPane.Tools,
+                _ => WorkbenchPane.Dock,
+            };
+        }
+
+        var panes = Enum.GetValues<WorkbenchPane>().Length;
+        var target = (WorkbenchPane)(((int)from + step + panes) % panes);
+        if (target != WorkbenchPane.Listing)
+        {
+            IsToolPaneOpen = true;
+        }
+
+        return target;
+    }
+
+    private void RestoreLayout()
+    {
+        _requestedToolPaneWidth = _preferences.Get(ToolPaneWidthKey, WorkbenchLayout.DefaultToolPaneWidth);
+        DockHeight = _preferences.Get(DockHeightKey, WorkbenchLayout.DefaultDockHeight);
+        IsToolPanePinned = _preferences.Get(PinnedKey, false);
+        _isOverlayOpen = IsToolPanePinned;
+    }
+
     [RelayCommand]
     private void TogglePin()
     {
         IsToolPanePinned = !IsToolPanePinned;
+        _preferences.Set(PinnedKey, IsToolPanePinned);
         if (IsToolPanePinned)
         {
             _isOverlayOpen = true;

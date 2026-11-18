@@ -17,7 +17,18 @@ public enum WorkbenchPhoneSection
 {
     Listing,
     Tool,
-    Scratchpad,
+    Variables,
+
+    /// <summary>The scratchpad (#431).</summary>
+    Notes,
+}
+
+/// <summary>A part of the workbench that keyboard focus moves between (F6).</summary>
+public enum WorkbenchPane
+{
+    Listing,
+    Tools,
+    Dock,
 }
 
 /// <summary>What the panel docked under the tools shows.</summary>

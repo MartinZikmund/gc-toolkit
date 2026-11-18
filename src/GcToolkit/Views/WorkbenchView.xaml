@@ -8,6 +8,15 @@
     xmlns:workbench="using:GcToolkit.Core.Workbench"
     SizeChanged="OnSizeChanged">
 
+    <!--  F6 / Shift+F6 move focus between the listing, the tools and the docked panel.  -->
+    <local:WorkbenchViewBase.KeyboardAccelerators>
+        <KeyboardAccelerator Key="F6" Invoked="OnMoveFocusInvoked" />
+        <KeyboardAccelerator
+            Key="F6"
+            Invoked="OnMoveFocusInvoked"
+            Modifiers="Shift" />
+    </local:WorkbenchViewBase.KeyboardAccelerators>
+
     <local:WorkbenchViewBase.Resources>
         <!--  Resize handles: a transparent hit area with a short grip line.  -->
         <Style x:Key="PaneResizerStyle" TargetType="controls:PaneResizer">
@@ -204,13 +213,14 @@
                 Visibility="Collapsed">
                 <SelectorBarItem IsSelected="{x:Bind ViewModel.IsPhoneListingSelected, Mode=OneWay}" Text="{markup:Localize Key=Workbench_Listing}" />
                 <SelectorBarItem IsSelected="{x:Bind ViewModel.IsPhoneToolSelected, Mode=OneWay}" Text="{markup:Localize Key=Workbench_Tool}" />
-                <SelectorBarItem IsSelected="{x:Bind ViewModel.IsPhoneScratchpadSelected, Mode=OneWay}" Text="{markup:Localize Key=Workbench_Scratchpad}" />
+                <SelectorBarItem IsSelected="{x:Bind ViewModel.IsPhoneVariablesSelected, Mode=OneWay}" Text="{markup:Localize Key=Workbench_Variables}" />
+                <SelectorBarItem IsSelected="{x:Bind ViewModel.IsPhoneNotesSelected, Mode=OneWay}" Text="{markup:Localize Key=Workbench_Notes}" />
             </SelectorBar>
         </Grid>
 
         <!--
             One SplitView for every size: wide = inline pane at the dragged width, medium = overlay
-            (inline when pinned), phone = inline pane at full width while Tool or Scratchpad is selected.
+            (inline when pinned), phone = inline pane at full width while Tool, Variables or Notes is selected.
         -->
         <SplitView
             x:Name="Split"
@@ -227,6 +237,7 @@
                 x:Name="ListingPanel"
                 Padding="24,8,24,24"
                 AutomationProperties.AutomationId="WorkbenchListing"
+                IsTabStop="True"
                 Visibility="{x:Bind ViewModel.IsListingVisible, Mode=OneWay}">
                 <Grid>
                     <StackPanel
@@ -395,8 +406,9 @@
                             Style="{StaticResource DockResizerStyle}"
                             Visibility="{x:Bind ViewModel.IsDockSelectorVisible, Mode=OneWay}" />
 
-                        <!--  Docked panel: Variables · Scratchpad. On phones only the scratchpad, as its own section.  -->
+                        <!--  Docked panel: Variables · Scratchpad. On phones each is its own section.  -->
                         <Grid
+                            x:Name="DockPanel"
                             Grid.Row="2"
                             Padding="16,0,16,12"
                             RowSpacing="8"

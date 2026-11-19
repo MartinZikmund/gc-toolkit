@@ -23,13 +23,17 @@ public class WorkbenchViewModelTests
     private readonly FakeRecentsService _recents = new();
     private readonly InMemoryPreferences _layoutPreferences = InMemoryPreferences.TrimmedHead();
     private readonly InMemoryGeocacheStore _store = new();
+    private WorkbenchProgressStore _progress = null!;
     private WorkbenchSessionService _session = null!;
 
     [TestInitialize]
     public void Setup()
-        => _session = new WorkbenchSessionService(
+    {
+        _session = new WorkbenchSessionService(
             InMemoryPreferences.TrimmedHead(),
             _messenger);
+        _progress = new WorkbenchProgressStore(InMemoryPreferences.TrimmedHead(), _time);
+    }
 
     private WorkbenchViewModel Create(double width = 1200, ICatalogService? catalog = null)
     {
@@ -49,6 +53,7 @@ public class WorkbenchViewModelTests
             new ScratchpadViewModel(_scratchpads, localizer, _time),
             new GeocacheDetailViewModel(_store, new FakeClipboardService(), new FakeNavigationService(), localizer, new FakeAppPreferences()),
             CreateSheet(),
+            _progress,
             _layoutPreferences,
             _messenger);
         vm.ViewCreated();
@@ -1273,6 +1278,96 @@ public class WorkbenchViewModelTests
         vm.CloseCache(vm.ActiveCache!);
 
         Assert.IsFalse(vm.HasToolResult);
+    }
+
+    // Progress for Home's "Continue solving"
+
+    private CacheProgress ProgressOf(GeocacheCode code) => _progress.GetProgress().Single(p => p.Code == code);
+
+    [TestMethod]
+    public void Progress_VariableFilled_IsRecorded()
+    {
+        _session.Open(A);
+        var vm = Create();
+        vm.Variables.Stages[0].Template = "N 50° 0A.B00 E 014° 25.000";
+
+        vm.Variables.SetVariable("A", "1");
+
+        Assert.AreEqual(1, ProgressOf(A).VariablesFilled);
+        Assert.AreEqual(2, ProgressOf(A).VariablesTotal);
+        Assert.IsTrue(ProgressOf(A).IsInProgress);
+    }
+
+    [TestMethod]
+    public void Progress_ToolAdded_IsRecorded()
+    {
+        _session.Open(A);
+        var vm = Create();
+
+        vm.AddTool(Pick(vm, "Caesar"));
+
+        Assert.AreEqual(1, ProgressOf(A).OpenToolCount);
+    }
+
+    [TestMethod]
+    public async Task Progress_ScratchpadSaved_RecordsItsLines()
+    {
+        _session.Open(A);
+        var vm = Create();
+        vm.Scratchpad.Text = "Wall: Caesar +3\n\ncount the stones";
+
+        await vm.Scratchpad.FlushAsync();
+
+        Assert.AreEqual(2, ProgressOf(A).ScratchpadLineCount);
+    }
+
+    [TestMethod]
+    public async Task Progress_ScratchpadWithTextBoxLineBreaks_CountsEveryLine()
+    {
+        _session.Open(A);
+        var vm = Create();
+        vm.Scratchpad.Text = "line one\rline two\rline three";
+
+        await vm.Scratchpad.FlushAsync();
+
+        Assert.AreEqual(3, ProgressOf(A).ScratchpadLineCount);
+    }
+
+    [TestMethod]
+    public async Task Progress_ScratchpadOfThePreviousCache_IsRecordedForThatCache()
+    {
+        _session.Open(A);
+        _session.Open(B);
+        var vm = Create();
+        vm.Scratchpad.Text = "B notes";
+
+        vm.ActiveCache = vm.OpenCaches.Single(c => c.Code == A);
+        await Task.Yield();
+
+        Assert.AreEqual(1, ProgressOf(B).ScratchpadLineCount);
+        Assert.IsFalse(_progress.GetProgress().Any(p => p.Code == A && p.ScratchpadLineCount > 0));
+    }
+
+    [TestMethod]
+    public async Task Progress_ListingLoaded_RecordsNameAndFlags()
+    {
+        await _store.UpsertAsync([new Geocache { Code = A, Name = "Alpha", Coordinate = new(50, 14), UserData = new() { IsSolved = true } }]);
+        _session.Open(A);
+
+        Create();
+
+        Assert.AreEqual("Alpha", ProgressOf(A).Name);
+        Assert.IsTrue(ProgressOf(A).IsSolved);
+    }
+
+    [TestMethod]
+    public void Progress_OpeningACache_IsNotWork()
+    {
+        _session.Open(A);
+
+        Create();
+
+        Assert.IsFalse(_progress.GetProgress().Any(p => p.IsInProgress));
     }
 
     private sealed class FilteringCatalog(params string[] toolIds) : ICatalogService

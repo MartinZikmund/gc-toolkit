@@ -28,6 +28,15 @@ internal sealed class FakeProgressProvider : IWorkbenchProgressProvider
 
     public int HandlerCount { get; private set; }
 
+    public List<GeocacheCode> Removed { get; } = [];
+
+    public void Remove(GeocacheCode code)
+    {
+        Removed.Add(code);
+        Items.RemoveAll(p => p.Code == code);
+        _progressChanged?.Invoke(this, EventArgs.Empty);
+    }
+
     public IReadOnlyList<CacheProgress> GetProgress() => Items;
 
     public void Raise() => _progressChanged?.Invoke(this, EventArgs.Empty);

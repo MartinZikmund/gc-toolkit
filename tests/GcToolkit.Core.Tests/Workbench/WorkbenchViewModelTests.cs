@@ -53,6 +53,7 @@ public class WorkbenchViewModelTests
             new ScratchpadViewModel(_scratchpads, localizer, _time),
             new GeocacheDetailViewModel(_store, new FakeClipboardService(), new FakeNavigationService(), localizer, new FakeAppPreferences()),
             CreateSheet(),
+            new CorrectedCoordinatesViewModel(_store, localizer),
             _progress,
             _store,
             _layoutPreferences,
@@ -1369,6 +1370,36 @@ public class WorkbenchViewModelTests
         Create();
 
         Assert.IsFalse(_progress.GetProgress().Any(p => p.IsInProgress));
+    }
+
+    // Solved caches
+
+    [TestMethod]
+    public async Task SaveCorrected_MarksTheTabListingAndProgressSolved()
+    {
+        await _store.UpsertAsync([new Geocache { Code = A, Name = "Alpha", Coordinate = new(50, 14) }]);
+        _session.Open(A);
+        var vm = Create();
+        await Task.Yield();
+        vm.Variables.Stages[0].Template = "N 50° 01.000 E 014° 25.000";
+
+        await vm.Corrected.SaveCommand.ExecuteAsync(null);
+
+        Assert.IsTrue(vm.ActiveCache!.IsSolved);
+        Assert.IsTrue(vm.Listing.IsSolved);
+        Assert.IsTrue(ProgressOf(A).IsSolved);
+    }
+
+    [TestMethod]
+    public async Task SolvedCache_TabShowsItWhenOpened()
+    {
+        await _store.UpsertAsync([new Geocache { Code = A, Name = "Alpha", Coordinate = new(50, 14), UserData = new() { IsSolved = true, CorrectedCoordinate = new(50.1, 14.1) } }]);
+        _session.Open(A);
+
+        var vm = Create();
+
+        Assert.IsTrue(vm.ActiveCache!.IsSolved);
+        Assert.IsTrue(vm.Corrected.HasSaved);
     }
 
     // Opening a stored cache

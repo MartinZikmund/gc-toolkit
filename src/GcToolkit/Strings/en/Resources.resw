@@ -5516,4 +5516,25 @@
   <data name="Workbench_RemoveFromContinue" xml:space="preserve">
     <value>Remove from the list</value>
   </data>
+  <data name="Workbench_SaveCorrected" xml:space="preserve">
+    <value>Save as corrected coordinates</value>
+  </data>
+  <data name="Workbench_UpdateCorrected" xml:space="preserve">
+    <value>Update corrected coordinates</value>
+  </data>
+  <data name="Workbench_KeepCorrected" xml:space="preserve">
+    <value>Keep saved</value>
+  </data>
+  <data name="Workbench_FinalChanged" xml:space="preserve">
+    <value>The final no longer matches the saved corrected coordinates. They stay as they are until you update them.</value>
+  </data>
+  <data name="Workbench_CorrectedSaved" xml:space="preserve">
+    <value>Corrected: {0}</value>
+  </data>
+  <data name="Workbench_ClearCorrected" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="Workbench_CorrectedNeedsStore" xml:space="preserve">
+    <value>Import this cache to save corrected coordinates.</value>
+  </data>
 </root>

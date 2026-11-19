@@ -205,6 +205,7 @@ public partial class App : Application, IApplication
         services.AddTransient<HomeViewModel>();
         services.AddTransient<ContinueSolvingViewModel>();
         services.AddTransient<ScratchpadViewModel>();
+        services.AddTransient<CorrectedCoordinatesViewModel>();
         services.AddTransient<CatalogViewModel>();
         services.AddTransient<CachesViewModel>();
         services.AddTransient<SettingsViewModel>();

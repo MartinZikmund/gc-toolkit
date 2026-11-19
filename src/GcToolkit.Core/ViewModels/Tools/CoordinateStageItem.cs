@@ -1,4 +1,5 @@
 using System.Windows.Input;
+using GcToolkit.Core.Coordinates;
 
 namespace GcToolkit.Core.ViewModels.Tools;
 
@@ -17,6 +18,9 @@ public sealed partial class CoordinateStageItem(string name, string template, Ac
 
     [ObservableProperty]
     public partial string Template { get; set; } = template;
+
+    /// <summary>The solved coordinate; null until the stage is complete.</summary>
+    public GeoCoordinate? Coordinate { get; set; }
 
     /// <summary>The solved coordinate in the chosen format; empty until the stage is complete.</summary>
     [ObservableProperty]

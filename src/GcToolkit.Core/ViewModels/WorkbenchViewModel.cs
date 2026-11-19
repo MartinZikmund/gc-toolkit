@@ -83,6 +83,7 @@ public partial class WorkbenchViewModel : ViewModelBase
         ScratchpadViewModel scratchpad,
         GeocacheDetailViewModel listing,
         VariableCoordinateCalculatorViewModel variables,
+        CorrectedCoordinatesViewModel corrected,
         IWorkbenchProgressRecorder progress,
         IGeocacheStore store,
         IPreferences preferences,
@@ -106,6 +107,8 @@ public partial class WorkbenchViewModel : ViewModelBase
         Variables = variables;
         Variables.Edited += (_, _) => OnVariablesEdited();
         _progress = progress;
+        Corrected = corrected;
+        Corrected.SolvedChanged += (_, _) => OnSolvedChanged();
         _store = store;
         Scratchpad.PropertyChanged += (_, e) =>
         {
@@ -132,6 +135,9 @@ public partial class WorkbenchViewModel : ViewModelBase
 
     /// <summary>The active cache's variable sheet: its coordinate templates, variables and solved finals.</summary>
     public VariableCoordinateCalculatorViewModel Variables { get; }
+
+    /// <summary>Save as corrected coordinates, and the question before a solved cache's are overwritten.</summary>
+    public CorrectedCoordinatesViewModel Corrected { get; }
 
     // Caches
 
@@ -374,6 +380,22 @@ public partial class WorkbenchViewModel : ViewModelBase
         {
             _progress.RecordWork(code, scratchpadLines: CountLines(Scratchpad.Text));
         }
+    }
+
+    private void OnSolvedChanged()
+    {
+        if (_loadedCode is not { } code)
+        {
+            return;
+        }
+
+        if (_tabs.TryGetValue(code, out var tab))
+        {
+            tab.IsSolved = Corrected.IsSolved;
+        }
+
+        Listing.IsSolved = Corrected.IsSolved;
+        _progress.RecordDetails(code, Listing.IsLoaded ? Listing.Name : code.Value, Corrected.IsSolved, Listing.IsFound);
     }
 
     private static int CountLines(string text)
@@ -857,6 +879,7 @@ public partial class WorkbenchViewModel : ViewModelBase
         LoadPastedListing(code);
         Variables.ShowSheetOf(code);
         RefreshResultTarget();
+        var corrected = Corrected.LoadAsync(code, Variables);
         var listing = Listing.LoadAsync(code);
         try
         {
@@ -866,6 +889,15 @@ public partial class WorkbenchViewModel : ViewModelBase
         catch (Exception)
         {
             // The scratchpad stays empty; the rest of the workbench keeps working.
+        }
+
+        try
+        {
+            await corrected;
+        }
+        catch (Exception)
+        {
+            // Without the store the sheet still solves; only saving is unavailable.
         }
 
         try
@@ -880,6 +912,7 @@ public partial class WorkbenchViewModel : ViewModelBase
         if (Listing.IsLoaded && Listing.Code == code.Value && _tabs.TryGetValue(code, out var tab))
         {
             tab.Name = Listing.Name;
+            tab.IsSolved = Listing.IsSolved;
             _progress.RecordDetails(code, Listing.Name, Listing.IsSolved, Listing.IsFound);
             if (string.IsNullOrWhiteSpace(Variables.PostedCoordinate))
             {

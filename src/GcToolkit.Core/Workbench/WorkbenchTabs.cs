@@ -27,6 +27,10 @@ public sealed partial class WorkbenchCacheTab : ObservableObject
 
     public string Title => string.IsNullOrWhiteSpace(Name) ? Code.Value : Name;
 
+    /// <summary>The cache has saved corrected coordinates; its tab shows the amber solved mark.</summary>
+    [ObservableProperty]
+    public partial bool IsSolved { get; set; }
+
     public ObservableCollection<WorkbenchToolTab> Tools { get; } = [];
 
     public bool HasTools => Tools.Count > 0;

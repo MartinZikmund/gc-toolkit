@@ -83,6 +83,9 @@ public partial class ContinueSolvingViewModel : ViewModelBase
     }
 
     [RelayCommand]
+    private void Remove(ContinueSolvingItem item) => _progress.Remove(item.Code);
+
+    [RelayCommand]
     private void DismissRestoredNotice() => IsRestoredNoticeVisible = false;
 
     private void OnProgressChanged(object? sender, EventArgs e)
@@ -116,7 +119,7 @@ public partial class ContinueSolvingViewModel : ViewModelBase
 
     // "of 1 variable" / "z 1 proměnné" are the only singular forms in both languages.
     private string FormatVariables(int filled, int total)
-        => string.Format(
+        => total == 0 ? string.Empty : string.Format(
             CultureInfo.CurrentCulture,
             _localizer[total == 1 ? "Workbench_VariablesProgressOne" : "Workbench_VariablesProgress"].Value,
             filled,
@@ -125,6 +128,11 @@ public partial class ContinueSolvingViewModel : ViewModelBase
     // 1 / 2–4 / 5+ covers both English and Czech.
     private string FormatScratchpadLines(int count)
     {
+        if (count == 0)
+        {
+            return string.Empty;
+        }
+
         var key = count switch
         {
             1 => "Workbench_ScratchpadLinesOne",

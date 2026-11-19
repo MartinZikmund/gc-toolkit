@@ -5513,4 +5513,7 @@
   <data name="Workbench_Undo" xml:space="preserve">
     <value>Zpět</value>
   </data>
+  <data name="Workbench_RemoveFromContinue" xml:space="preserve">
+    <value>Odebrat ze seznamu</value>
+  </data>
 </root>

@@ -5513,4 +5513,7 @@
   <data name="Workbench_Undo" xml:space="preserve">
     <value>Undo</value>
   </data>
+  <data name="Workbench_RemoveFromContinue" xml:space="preserve">
+    <value>Remove from the list</value>
+  </data>
 </root>

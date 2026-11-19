@@ -79,7 +79,6 @@ public class ContinueSolvingViewModelTests
     }
 
     [TestMethod]
-    [DataRow(0, "0 lines")]
     [DataRow(1, "1 line")]
     [DataRow(2, "2 lines (few)")]
     [DataRow(4, "4 lines (few)")]
@@ -187,6 +186,32 @@ public class ContinueSolvingViewModelTests
 
         Assert.AreEqual(GeocacheCode.Parse("GC1AAA"), _session.ActiveCache);
         Assert.AreEqual(typeof(WorkbenchViewModel), _navigation.LastType);
+    }
+
+    [TestMethod]
+    public void Remove_TakesTheCacheOffTheList()
+    {
+        _progress.Items.Add(Progress("GC1AAA", Now.AddHours(-1)));
+        var sut = Create();
+        sut.ViewCreated();
+        sut.ViewLoaded();
+
+        sut.RemoveCommand.Execute(sut.Items.Single());
+
+        CollectionAssert.AreEqual(new[] { GeocacheCode.Parse("GC1AAA") }, _progress.Removed);
+        Assert.IsFalse(sut.HasItems);
+    }
+
+    [TestMethod]
+    public void Refresh_NoVariablesAndNoNotes_LeavesThoseTextsEmpty()
+    {
+        _progress.Items.Add(new(GeocacheCode.Parse("GC1AAA"), "Alpha", 0, 0, 0, 2, Now, false, false, false));
+        var sut = Create();
+
+        sut.ViewCreated();
+
+        Assert.AreEqual(string.Empty, sut.Items.Single().VariablesText);
+        Assert.AreEqual(string.Empty, sut.Items.Single().ScratchpadText);
     }
 
     [TestMethod]

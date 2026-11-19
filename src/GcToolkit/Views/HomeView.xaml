@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:GcToolkit.Views"
     xmlns:markup="using:GcToolkit.Markup"
+    xmlns:vm="using:GcToolkit.Core.ViewModels"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     NavigationCacheMode="Required">
 
@@ -79,6 +80,111 @@
                     PlaceholderText="{markup:Localize Key=SearchPlaceholder}"
                     QueryIcon="Find"
                     Text="{x:Bind ViewModel.Search.Query, Mode=TwoWay}" />
+
+                <!--  Continue solving: caches with work in progress, newest edit first (#432).  -->
+                <StackPanel Spacing="8" Visibility="{x:Bind local:HomeView.ShowContinueSolving(ViewModel.ContinueSolving.HasItems, ViewModel.ContinueSolving.IsRestoredNoticeVisible), Mode=OneWay}">
+                    <Grid ColumnSpacing="12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock
+                            AutomationProperties.Name="{markup:Localize Key=Workbench_ContinueSolving}"
+                            Style="{StaticResource SectionCaptionStyle}"
+                            Text="{x:Bind ContinueSolvingHeader}" />
+                        <Rectangle Grid.Column="1" Style="{StaticResource SectionRuleStyle}" />
+                    </Grid>
+                    <InfoBar
+                        AutomationProperties.AutomationId="HomeSessionRestored"
+                        CloseButtonCommand="{x:Bind ViewModel.ContinueSolving.DismissRestoredNoticeCommand}"
+                        IsOpen="{x:Bind ViewModel.ContinueSolving.IsRestoredNoticeVisible, Mode=OneWay}"
+                        Message="{markup:Localize Key=Workbench_SessionRestored}"
+                        Severity="Informational" />
+                    <ItemsRepeater AutomationProperties.AutomationId="HomeContinueSolving" ItemsSource="{x:Bind ViewModel.ContinueSolving.Items}">
+                        <ItemsRepeater.Layout>
+                            <UniformGridLayout
+                                ItemsStretch="Fill"
+                                MinColumnSpacing="8"
+                                MinItemWidth="300"
+                                MinRowSpacing="8" />
+                        </ItemsRepeater.Layout>
+                        <ItemsRepeater.ItemTemplate>
+                            <DataTemplate x:DataType="vm:ContinueSolvingItem">
+                                <Border
+                                    Padding="16,12"
+                                    Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="8">
+                                    <Grid ColumnSpacing="8" RowSpacing="4">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+                                        <StackPanel Orientation="Horizontal" Spacing="8">
+                                            <TextBlock
+                                                VerticalAlignment="Center"
+                                                Style="{StaticResource BodyStrongTextBlockStyle}"
+                                                Text="{x:Bind Name}"
+                                                TextTrimming="CharacterEllipsis" />
+                                            <Border
+                                                Padding="6,0"
+                                                VerticalAlignment="Center"
+                                                Background="{ThemeResource AccentFoundSoftBrush}"
+                                                CornerRadius="4"
+                                                Visibility="{x:Bind IsSolved, Converter={StaticResource BoolToVisibilityConverter}}">
+                                                <TextBlock
+                                                    Foreground="{ThemeResource AccentFoundTextBrush}"
+                                                    Style="{ThemeResource CaptionTextBlockStyle}"
+                                                    Text="{markup:Localize Key=GeocacheSolved}" />
+                                            </Border>
+                                        </StackPanel>
+                                        <TextBlock
+                                            Grid.Row="1"
+                                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                            Style="{StaticResource CaptionTextBlockStyle}"
+                                            Text="{x:Bind local:HomeView.ProgressLine(VariablesText, ScratchpadText)}"
+                                            TextTrimming="CharacterEllipsis" />
+                                        <TextBlock
+                                            Grid.Row="2"
+                                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                            Style="{StaticResource CaptionTextBlockStyle}"
+                                            Text="{x:Bind EditedText}" />
+                                        <Button
+                                            Grid.RowSpan="3"
+                                            Grid.Column="1"
+                                            VerticalAlignment="Center"
+                                            AutomationProperties.Name="{x:Bind local:HomeView.ResumeLabel(Name, IsSolved)}"
+                                            Click="OnResumeClick"
+                                            Content="{x:Bind local:HomeView.ResumeText(IsSolved)}"
+                                            Style="{StaticResource AccentButtonStyle}"
+                                            Tag="{x:Bind}" />
+                                        <Button
+                                            Grid.RowSpan="3"
+                                            Grid.Column="2"
+                                            Width="32"
+                                            Height="32"
+                                            Padding="0"
+                                            VerticalAlignment="Center"
+                                            AutomationProperties.Name="{markup:Localize Key=Workbench_RemoveFromContinue}"
+                                            Click="OnRemoveClick"
+                                            Style="{StaticResource SubtleButtonStyle}"
+                                            Tag="{x:Bind}"
+                                            ToolTipService.ToolTip="{markup:Localize Key=Workbench_RemoveFromContinue}">
+                                            <FontIcon FontSize="12" Glyph="&#xE711;" />
+                                        </Button>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsRepeater.ItemTemplate>
+                    </ItemsRepeater>
+                </StackPanel>
 
                 <!--  Recently used leads: it is the strongest re-entry signal for a returning user.  -->
                 <StackPanel Spacing="8">

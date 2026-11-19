@@ -106,10 +106,12 @@
                                     Style="{StaticResource CaptionTextBlockStyle}"
                                     Text="{markup:Localize Key=Workbench_OpenCacheHint}"
                                     TextWrapping="Wrap" />
-                                <TextBox
+                                <AutoSuggestBox
                                     AutomationProperties.AutomationId="WorkbenchOpenCacheCode"
                                     AutomationProperties.Name="{markup:Localize Key=Workbench_CacheCodePlaceholder}"
+                                    ItemsSource="{x:Bind ViewModel.CacheSuggestions}"
                                     PlaceholderText="{markup:Localize Key=Workbench_CacheCodePlaceholder}"
+                                    QuerySubmitted="OnOpenCacheQuerySubmitted"
                                     Text="{x:Bind ViewModel.NewCacheCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                 <Button
                                     HorizontalAlignment="Right"

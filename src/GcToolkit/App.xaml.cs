@@ -185,9 +185,11 @@ public partial class App : Application, IApplication
             sp.GetRequiredService<IPreferences>(),
             CultureInfo.CurrentUICulture.TwoLetterISOLanguageName));
 
-        // Workbench session is app-wide; the progress source is a placeholder until the store lands.
+        // Workbench session and progress are app-wide.
         services.AddSingleton(TimeProvider.System);
-        services.AddSingleton<IWorkbenchProgressProvider, EmptyWorkbenchProgressProvider>();
+        services.AddSingleton<WorkbenchProgressStore>();
+        services.AddSingleton<IWorkbenchProgressProvider>(sp => sp.GetRequiredService<WorkbenchProgressStore>());
+        services.AddSingleton<IWorkbenchProgressRecorder>(sp => sp.GetRequiredService<WorkbenchProgressStore>());
         services.AddSingleton<IWorkbenchSessionService, WorkbenchSessionService>();
         services.AddSingleton<IScratchpadRepository, StoreScratchpadRepository>();
         services.AddSingleton<IWorkbenchToolStore, PreferencesWorkbenchToolStore>();

@@ -8,6 +8,9 @@ public interface IWorkbenchProgressProvider
     /// <summary>Work state of every cache that has a record. Callers filter with <see cref="CacheProgress.IsInProgress"/>.</summary>
     IReadOnlyList<CacheProgress> GetProgress();
 
+    /// <summary>Takes the cache off "Continue solving" until the user works on it again.</summary>
+    void Remove(GeocacheCode code);
+
     event EventHandler? ProgressChanged;
 }
 

@@ -27,7 +27,8 @@ public partial class HomeViewModel : ViewModelBase
         ICatalogService catalog,
         INavigationService navigation,
         IStringLocalizer localizer,
-        SearchViewModel search)
+        SearchViewModel search,
+        ContinueSolvingViewModel continueSolving)
     {
         _favorites = favorites;
         _recents = recents;
@@ -35,10 +36,14 @@ public partial class HomeViewModel : ViewModelBase
         _navigation = navigation;
         _localizer = localizer;
         Search = search;
+        ContinueSolving = continueSolving;
         PageTitle = _localizer["ApplicationName"];
     }
 
     public SearchViewModel Search { get; }
+
+    /// <summary>Caches with work in progress, shown first on Home.</summary>
+    public ContinueSolvingViewModel ContinueSolving { get; }
 
     public ObservableCollection<ToolListItem> FavoriteTools { get; } = new();
 
@@ -65,6 +70,19 @@ public partial class HomeViewModel : ViewModelBase
         }
 
         Refresh();
+        ContinueSolving.ViewCreated();
+    }
+
+    public override void ViewLoaded()
+    {
+        base.ViewLoaded();
+        ContinueSolving.ViewLoaded();
+    }
+
+    public override void ViewUnloaded()
+    {
+        base.ViewUnloaded();
+        ContinueSolving.ViewUnloaded();
     }
 
     public override void OnNavigatedTo(object? parameter)

@@ -193,6 +193,29 @@ public sealed partial class WorkbenchView : WorkbenchViewBase
 
     private void OnToolPickerOpening(object? sender, object e) => ViewModel?.RefreshToolPicker();
 
+    private void OnOpenCacheQuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+    {
+        if (ViewModel is not { } vm)
+        {
+            return;
+        }
+
+        if (args.ChosenSuggestion is CacheSuggestion suggestion)
+        {
+            vm.OpenSuggestedCache(suggestion);
+        }
+        else if (vm.OpenCacheCommand.CanExecute(null))
+        {
+            vm.OpenCacheCommand.Execute(null);
+        }
+        else
+        {
+            return;
+        }
+
+        OpenCacheFlyout.Hide();
+    }
+
     private void OnVariablePicked(object sender, ItemClickEventArgs e)
     {
         if (e.ClickedItem is string name)

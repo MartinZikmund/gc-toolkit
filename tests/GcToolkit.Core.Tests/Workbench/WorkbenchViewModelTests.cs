@@ -1265,6 +1265,16 @@ public class WorkbenchViewModelTests
         Assert.IsFalse(vm.UndoSendToVariablesCommand.CanExecute(null));
     }
 
+    [TestMethod]
+    public void ToVariables_LastCacheClosed_IsUnavailable()
+    {
+        var (vm, _) = CreateWithResultTool();
+
+        vm.CloseCache(vm.ActiveCache!);
+
+        Assert.IsFalse(vm.HasToolResult);
+    }
+
     private sealed class FilteringCatalog(params string[] toolIds) : ICatalogService
     {
         private readonly IReadOnlyList<ToolDescriptor> _tools =

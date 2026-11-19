@@ -119,6 +119,18 @@ public abstract class GeocacheStoreContractTests
         => Assert.IsFalse(await CreateStore().UpdateUserDataAsync(Code("GC1"), new()));
 
     [TestMethod]
+    public async Task UpdateUserData_Scratchpad_IsKept()
+    {
+        var store = CreateStore();
+        await store.UpsertAsync([Cache()]);
+
+        await store.UpdateUserDataAsync(Code("GC8KX2Q"), new() { Scratchpad = "Wall: Caesar +3\nA = 7" });
+        var loaded = await store.GetAsync(Code("GC8KX2Q"));
+
+        Assert.AreEqual("Wall: Caesar +3\nA = 7", loaded!.UserData.Scratchpad);
+    }
+
+    [TestMethod]
     public async Task Delete_StoredAndUnknown_ReturnsHowManyWereStored()
     {
         var store = CreateStore();

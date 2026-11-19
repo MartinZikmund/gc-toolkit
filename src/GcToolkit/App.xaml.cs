@@ -189,7 +189,7 @@ public partial class App : Application, IApplication
         services.AddSingleton(TimeProvider.System);
         services.AddSingleton<IWorkbenchProgressProvider, EmptyWorkbenchProgressProvider>();
         services.AddSingleton<IWorkbenchSessionService, WorkbenchSessionService>();
-        services.AddSingleton<IScratchpadRepository, MemoryScratchpadRepository>();
+        services.AddSingleton<IScratchpadRepository, StoreScratchpadRepository>();
         services.AddSingleton<IWorkbenchToolStore, PreferencesWorkbenchToolStore>();
 
         // Scoped ViewModels

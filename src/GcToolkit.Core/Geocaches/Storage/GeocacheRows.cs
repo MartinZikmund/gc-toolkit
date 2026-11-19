@@ -75,6 +75,8 @@ internal sealed class GeocacheRow
 
     public string? Note { get; set; }
 
+    public string? Scratchpad { get; set; }
+
     public bool IsSolved { get; set; }
 
     [Indexed]
@@ -117,6 +119,7 @@ internal sealed class GeocacheRow
         SourceId = cache.SourceId,
         UpdatedAt = cache.UpdatedAt?.UtcTicks,
         Note = cache.UserData.Note,
+        Scratchpad = cache.UserData.Scratchpad,
         IsSolved = cache.UserData.IsSolved,
         IsFound = cache.UserData.IsFound,
         AttributesJson = JsonSerializer.Serialize(cache.Attributes.ToArray(), GeocacheJsonContext.Default.GeocacheAttributeArray),
@@ -156,6 +159,7 @@ internal sealed class GeocacheRow
         {
             CorrectedCoordinate = CorrectedLatitude is { } lat && CorrectedLongitude is { } lon ? new GeoCoordinate(lat, lon) : null,
             Note = Note,
+            Scratchpad = Scratchpad,
             IsSolved = IsSolved,
             IsFound = IsFound,
         },

@@ -120,6 +120,27 @@ public class SqliteGeocacheStoreTests : GeocacheStoreContractTests
     }
 
     [TestMethod]
+    public async Task Version2Database_WithoutScratchpad_IsUpgraded()
+    {
+        var path = NewDatabasePath();
+        var first = CreateStore(path, new NoOpStorageFlusher());
+        await first.UpsertAsync([Cache(code: "GC1")]);
+        await first.DisposeAsync();
+        _stores.Remove(first);
+
+        using (SQLiteConnection connection = new(path))
+        {
+            connection.Execute("ALTER TABLE Geocaches DROP COLUMN Scratchpad");
+            connection.Execute("PRAGMA user_version = 2");
+        }
+
+        var store = CreateStore(path, new NoOpStorageFlusher());
+        await store.UpdateUserDataAsync(Code("GC1"), new() { Scratchpad = "notes" });
+
+        Assert.AreEqual("notes", (await store.GetAsync(Code("GC1")))!.UserData.Scratchpad);
+    }
+
+    [TestMethod]
     public async Task EveryCommittedWrite_FlushesStorage()
     {
         var flusher = new CountingFlusher();

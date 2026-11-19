@@ -459,12 +459,29 @@
                                 <SelectorBarItem IsSelected="{x:Bind ViewModel.IsDockScratchpadSelected, Mode=OneWay}" Text="{markup:Localize Key=Workbench_Scratchpad}" />
                             </SelectorBar>
 
-                            <TextBlock
+                            <ScrollViewer
                                 Grid.Row="1"
-                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                Text="{markup:Localize Key=Workbench_VariablesPlaceholder}"
-                                TextWrapping="Wrap"
-                                Visibility="{x:Bind ViewModel.IsVariablesVisible, Mode=OneWay}" />
+                                AutomationProperties.AutomationId="WorkbenchVariables"
+                                AutomationProperties.Name="{markup:Localize Key=Workbench_Variables}"
+                                Visibility="{x:Bind ViewModel.IsVariablesVisible, Mode=OneWay}">
+                                <StackPanel Padding="0,0,12,0" Spacing="12">
+                                    <controls:VariableSheetPanel ViewModel="{x:Bind ViewModel.Variables}" />
+                                    <StackPanel Orientation="Horizontal" Spacing="8">
+                                        <Button Command="{x:Bind ViewModel.Variables.AddStageCommand}">
+                                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                                <FontIcon FontSize="16" Glyph="&#xE710;" />
+                                                <TextBlock Text="{markup:Localize Key=VariableCoordinateAddStage}" />
+                                            </StackPanel>
+                                        </Button>
+                                        <Button Command="{x:Bind ViewModel.Variables.CopyAllCommand}">
+                                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                                <FontIcon FontSize="16" Glyph="&#xE8C8;" />
+                                                <TextBlock Text="{markup:Localize Key=VariableCoordinateCopyAll}" />
+                                            </StackPanel>
+                                        </Button>
+                                    </StackPanel>
+                                </StackPanel>
+                            </ScrollViewer>
 
                             <Grid
                                 Grid.Row="1"

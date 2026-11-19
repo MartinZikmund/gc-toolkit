@@ -19,13 +19,14 @@ namespace GcToolkit.Core.Geocaches.Storage;
 public sealed class SqliteGeocacheStore(Func<Task<string>> databasePathProvider, IStorageFlusher flusher) : IGeocacheStore, IAsyncDisposable
 {
     /// <summary>The schema version this build writes. Stored in <c>PRAGMA user_version</c>.</summary>
-    public const int CurrentSchemaVersion = 2;
+    public const int CurrentSchemaVersion = 3;
 
     // Index n upgrades a database from version n to n + 1.
     private static readonly Action<SQLiteConnection>[] _migrations =
     [
         CreateVersion1,
         AddMissingSearchColumns,
+        AddScratchpadColumn,
     ];
 
     private readonly SemaphoreSlim _openLock = new(1, 1);
@@ -325,6 +326,9 @@ public sealed class SqliteGeocacheStore(Func<Task<string>> databasePathProvider,
         connection.CreateTable<GeocacheListMemberRow>();
         connection.Execute("CREATE UNIQUE INDEX IF NOT EXISTS UX_GeocacheLists_Name ON GeocacheLists (Name COLLATE NOCASE)");
     }
+
+    // CreateTable adds the columns the row type gained since (Scratchpad).
+    private static void AddScratchpadColumn(SQLiteConnection connection) => connection.CreateTable<GeocacheRow>();
 
     // Pre-release builds wrote version 1 without SearchName/SearchOwner. CreateTable adds missing columns
     // and indexes to an existing table; the folded values are computed here because SQL can't fold accents.

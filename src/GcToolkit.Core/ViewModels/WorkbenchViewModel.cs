@@ -843,6 +843,11 @@ public partial class WorkbenchViewModel : ViewModelBase
             {
                 if (!open.Contains(OpenCaches[i].Code))
                 {
+                    foreach (var tool in OpenCaches[i].Tools)
+                    {
+                        _toolWindows.Close(tool);
+                    }
+
                     _tabs.Remove(OpenCaches[i].Code);
                     OpenCaches.RemoveAt(i);
                 }

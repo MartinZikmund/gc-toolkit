@@ -6,6 +6,7 @@ using GcToolkit.Core.FavoriteTools;
 using GcToolkit.Core.Geocaches;
 using GcToolkit.Core.Messages;
 using GcToolkit.Core.Recents;
+using GcToolkit.Core.ViewModels.Tools;
 using GcToolkit.Core.Workbench;
 using MZikmund.Toolkit.WinUI.Services;
 
@@ -73,6 +74,7 @@ public partial class WorkbenchViewModel : ViewModelBase
         IRecentsService recents,
         ScratchpadViewModel scratchpad,
         GeocacheDetailViewModel listing,
+        VariableCoordinateCalculatorViewModel variables,
         IPreferences preferences,
         IMessenger? messenger = null)
     {
@@ -91,6 +93,7 @@ public partial class WorkbenchViewModel : ViewModelBase
                 OnPropertyChanged(nameof(ShowPasteBox));
             }
         };
+        Variables = variables;
         _preferences = preferences;
         RestoreLayout();
 
@@ -106,6 +109,9 @@ public partial class WorkbenchViewModel : ViewModelBase
 
     /// <summary>The active cache's listing, hint, waypoints and logs; reloaded when the active cache changes.</summary>
     public GeocacheDetailViewModel Listing { get; }
+
+    /// <summary>The active cache's variable sheet: its coordinate templates, variables and solved finals.</summary>
+    public VariableCoordinateCalculatorViewModel Variables { get; }
 
     // Caches
 
@@ -643,6 +649,7 @@ public partial class WorkbenchViewModel : ViewModelBase
         _loadedCode = code;
         SelectedText = string.Empty;
         LoadPastedListing(code);
+        Variables.ShowSheetOf(code);
         var listing = Listing.LoadAsync(code);
         try
         {
@@ -665,6 +672,10 @@ public partial class WorkbenchViewModel : ViewModelBase
         if (Listing.IsLoaded && Listing.Code == code.Value && _tabs.TryGetValue(code, out var tab))
         {
             tab.Name = Listing.Name;
+            if (string.IsNullOrWhiteSpace(Variables.PostedCoordinate))
+            {
+                Variables.PostedCoordinate = Listing.PostedCoordinate;
+            }
         }
     }
 

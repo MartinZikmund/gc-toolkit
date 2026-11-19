@@ -4964,9 +4964,6 @@
   <data name="Workbench_DockSections" xml:space="preserve">
     <value>Části panelu</value>
   </data>
-  <data name="Workbench_VariablesPlaceholder" xml:space="preserve">
-    <value>Tabulka proměnných přibude v některé z dalších verzí.</value>
-  </data>
   <data name="Workbench_ScratchpadPlaceholder" xml:space="preserve">
     <value>Zapište si cokoli, na co při luštění přijdete. Ukládá se samo.</value>
   </data>

@@ -4964,9 +4964,6 @@
   <data name="Workbench_DockSections" xml:space="preserve">
     <value>Panel sections</value>
   </data>
-  <data name="Workbench_VariablesPlaceholder" xml:space="preserve">
-    <value>The variable sheet comes in a later update.</value>
-  </data>
   <data name="Workbench_ScratchpadPlaceholder" xml:space="preserve">
     <value>Jot down anything that comes up while solving. It saves itself.</value>
   </data>

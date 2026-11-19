@@ -1,9 +1,10 @@
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Globalization;
 using GcToolkit.Core.Catalog;
 using GcToolkit.Core.Coordinates;
 using GcToolkit.Core.Discovery;
 using GcToolkit.Core.FavoriteTools;
+using GcToolkit.Core.Geocaches;
 using GcToolkit.Core.Recents;
 using GcToolkit.Core.Services;
 using GcToolkit.Core.Workbench;
@@ -25,6 +26,7 @@ namespace GcToolkit.Core.ViewModels.Tools;
 public sealed partial class VariableCoordinateCalculatorViewModel : ToolViewModelBase
 {
     private const string PreferencesKey = "variable-coordinate-sheet";
+    private const string CacheSheetKeyPrefix = "workbench.variables.";
     private const string ExampleTemplate = "N 50° 0A.BCD E 014° 2E.FGH";
     private const string ExamplePosted = "N 50° 01.000 E 014° 25.000";
     private const string ExampleLetters = "ABCDEFGH";
@@ -36,6 +38,7 @@ public sealed partial class VariableCoordinateCalculatorViewModel : ToolViewMode
     private readonly IPreferences _preferences;
     private readonly Dictionary<string, string> _values = new(StringComparer.OrdinalIgnoreCase);
     private readonly Dictionary<string, VariableItem> _items = new(StringComparer.OrdinalIgnoreCase);
+    private string _preferencesKey = PreferencesKey;
     private bool _suspended;
 
     public VariableCoordinateCalculatorViewModel(
@@ -85,6 +88,17 @@ public sealed partial class VariableCoordinateCalculatorViewModel : ToolViewMode
     {
         CopyAllCommand.NotifyCanExecuteChanged();
         ShareAllCommand.NotifyCanExecuteChanged();
+    }
+
+    /// <summary>Switches to the sheet of <paramref name="code"/>, kept apart from the standalone calculator's sheet.</summary>
+    public void ShowSheetOf(GeocacheCode code)
+    {
+        var key = CacheSheetKeyPrefix + code.Value;
+        if (key != _preferencesKey)
+        {
+            _preferencesKey = key;
+            Load();
+        }
     }
 
     private CoordinateFormat SelectedFormat => Enum.IsDefined((CoordinateFormat)FormatIndex)
@@ -211,7 +225,7 @@ public sealed partial class VariableCoordinateCalculatorViewModel : ToolViewMode
         SavedVariableSheet? saved = null;
         try
         {
-            if (_preferences.TryGetComplex<SavedVariableSheet>(PreferencesKey, out var stored))
+            if (_preferences.TryGetComplex<SavedVariableSheet>(_preferencesKey, out var stored))
             {
                 saved = stored;
             }
@@ -224,8 +238,10 @@ public sealed partial class VariableCoordinateCalculatorViewModel : ToolViewMode
         _suspended = true;
         try
         {
+            ResetSheet();
             if (saved is not null)
             {
+                Stages.Clear();
                 foreach (var (name, value) in saved.Variables)
                 {
                     _values[name.ToUpperInvariant()] = value;
@@ -259,7 +275,7 @@ public sealed partial class VariableCoordinateCalculatorViewModel : ToolViewMode
             FormatIndex);
         try
         {
-            _preferences.SetComplex(PreferencesKey, sheet);
+            _preferences.SetComplex(_preferencesKey, sheet);
         }
         catch (Exception)
         {

@@ -80,7 +80,19 @@
             TabWidthMode="SizeToContent">
             <TabView.TabItemTemplate>
                 <DataTemplate x:DataType="workbench:WorkbenchCacheTab">
-                    <TabViewItem AutomationProperties.Name="{x:Bind Title, Mode=OneWay}" Header="{x:Bind Title, Mode=OneWay}">
+                    <TabViewItem AutomationProperties.Name="{x:Bind Title, Mode=OneWay}">
+                        <TabViewItem.Header>
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <TextBlock Text="{x:Bind Title, Mode=OneWay}" />
+                                <!--  Amber marks solved only.  -->
+                                <Ellipse
+                                    Width="6"
+                                    Height="6"
+                                    VerticalAlignment="Center"
+                                    Fill="{ThemeResource AccentFoundBrush}"
+                                    Visibility="{x:Bind IsSolved, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                            </StackPanel>
+                        </TabViewItem.Header>
                         <TabViewItem.IconSource>
                             <FontIconSource Glyph="&#xE707;" />
                         </TabViewItem.IconSource>
@@ -525,7 +537,72 @@
                                 AutomationProperties.Name="{markup:Localize Key=Workbench_Variables}"
                                 Visibility="{x:Bind ViewModel.IsVariablesVisible, Mode=OneWay}">
                                 <StackPanel Padding="0,0,12,0" Spacing="12">
+                                    <!--  A solved cache's final changed: ask, never overwrite on its own (#465).  -->
+                                    <InfoBar
+                                        AutomationProperties.AutomationId="WorkbenchFinalChanged"
+                                        IsClosable="False"
+                                        IsOpen="{x:Bind ViewModel.Corrected.NeedsUpdate, Mode=OneWay}"
+                                        Message="{markup:Localize Key=Workbench_FinalChanged}"
+                                        Severity="Warning">
+                                        <InfoBar.Content>
+                                            <StackPanel
+                                                Margin="0,0,0,12"
+                                                Orientation="Horizontal"
+                                                Spacing="8">
+                                                <Button
+                                                    AutomationProperties.AutomationId="WorkbenchUpdateCorrected"
+                                                    Command="{x:Bind ViewModel.Corrected.SaveCommand}"
+                                                    Content="{markup:Localize Key=Workbench_UpdateCorrected}"
+                                                    Style="{StaticResource AccentButtonStyle}" />
+                                                <Button
+                                                    AutomationProperties.AutomationId="WorkbenchKeepCorrected"
+                                                    Command="{x:Bind ViewModel.Corrected.KeepCommand}"
+                                                    Content="{markup:Localize Key=Workbench_KeepCorrected}" />
+                                            </StackPanel>
+                                        </InfoBar.Content>
+                                    </InfoBar>
                                     <controls:VariableSheetPanel ViewModel="{x:Bind ViewModel.Variables}" />
+                                    <!--  Corrected coordinates: saved ones with the solved mark, else the save button.  -->
+                                    <StackPanel
+                                        Orientation="Horizontal"
+                                        Spacing="8"
+                                        Visibility="{x:Bind ViewModel.Corrected.HasSaved, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                                        <Border
+                                            Padding="6,0"
+                                            VerticalAlignment="Center"
+                                            Background="{ThemeResource AccentFoundSoftBrush}"
+                                            CornerRadius="4">
+                                            <TextBlock
+                                                Foreground="{ThemeResource AccentFoundTextBrush}"
+                                                Style="{ThemeResource CaptionTextBlockStyle}"
+                                                Text="{markup:Localize Key=GeocacheSolved}" />
+                                        </Border>
+                                        <TextBlock
+                                            VerticalAlignment="Center"
+                                            FontFamily="{ThemeResource AppMonoFontFamily}"
+                                            Text="{x:Bind ViewModel.Corrected.SavedText, Mode=OneWay}" />
+                                        <Button
+                                            AutomationProperties.AutomationId="WorkbenchClearCorrected"
+                                            Command="{x:Bind ViewModel.Corrected.ClearCommand}"
+                                            Content="{markup:Localize Key=Workbench_ClearCorrected}"
+                                            Style="{StaticResource SubtleButtonStyle}" />
+                                    </StackPanel>
+                                    <Button
+                                        AutomationProperties.AutomationId="WorkbenchSaveCorrected"
+                                        Command="{x:Bind ViewModel.Corrected.SaveCommand}"
+                                        Style="{StaticResource AccentButtonStyle}"
+                                        Visibility="{x:Bind local:WorkbenchView.Not(ViewModel.Corrected.HasSaved), Mode=OneWay}">
+                                        <StackPanel Orientation="Horizontal" Spacing="8">
+                                            <FontIcon FontSize="16" Glyph="&#xE73E;" />
+                                            <TextBlock Text="{markup:Localize Key=Workbench_SaveCorrected}" />
+                                        </StackPanel>
+                                    </Button>
+                                    <TextBlock
+                                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                        Style="{StaticResource CaptionTextBlockStyle}"
+                                        Text="{markup:Localize Key=Workbench_CorrectedNeedsStore}"
+                                        TextWrapping="Wrap"
+                                        Visibility="{x:Bind local:WorkbenchView.Not(ViewModel.Corrected.IsStored), Mode=OneWay}" />
                                     <StackPanel Orientation="Horizontal" Spacing="8">
                                         <Button Command="{x:Bind ViewModel.Variables.AddStageCommand}">
                                             <StackPanel Orientation="Horizontal" Spacing="8">

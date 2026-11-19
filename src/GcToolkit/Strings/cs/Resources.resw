@@ -5516,4 +5516,25 @@
   <data name="Workbench_RemoveFromContinue" xml:space="preserve">
     <value>Odebrat ze seznamu</value>
   </data>
+  <data name="Workbench_SaveCorrected" xml:space="preserve">
+    <value>Uložit jako opravené souřadnice</value>
+  </data>
+  <data name="Workbench_UpdateCorrected" xml:space="preserve">
+    <value>Aktualizovat opravené souřadnice</value>
+  </data>
+  <data name="Workbench_KeepCorrected" xml:space="preserve">
+    <value>Ponechat uložené</value>
+  </data>
+  <data name="Workbench_FinalChanged" xml:space="preserve">
+    <value>Finálka už neodpovídá uloženým opraveným souřadnicím. Zůstanou beze změny, dokud je neaktualizujete.</value>
+  </data>
+  <data name="Workbench_CorrectedSaved" xml:space="preserve">
+    <value>Opraveno: {0}</value>
+  </data>
+  <data name="Workbench_ClearCorrected" xml:space="preserve">
+    <value>Vymazat</value>
+  </data>
+  <data name="Workbench_CorrectedNeedsStore" xml:space="preserve">
+    <value>Pro uložení opravených souřadnic tuto keš importujte.</value>
+  </data>
 </root>

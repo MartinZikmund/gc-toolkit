@@ -196,6 +196,7 @@ public sealed partial class VariableCoordinateCalculatorViewModel : ToolViewMode
     private void Show(CoordinateStageItem stage, TemplateSolution solution)
     {
         stage.CanRemove = Stages.Count > 1;
+        stage.Coordinate = solution.Coordinate;
         stage.ResultText = solution.Coordinate is { } c ? CoordinateFormatter.Format(c, SelectedFormat) : string.Empty;
 
         var blank = string.IsNullOrWhiteSpace(stage.Template);

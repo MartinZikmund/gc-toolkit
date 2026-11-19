@@ -4,6 +4,7 @@ using GcToolkit.Core.Geocaches;
 using GcToolkit.Core.Navigation;
 using GcToolkit.Core.Tests.Fakes;
 using GcToolkit.Core.ViewModels;
+using GcToolkit.Core.ViewModels.Tools;
 using GcToolkit.Core.Workbench;
 
 namespace GcToolkit.Core.Tests.Workbench;
@@ -47,12 +48,22 @@ public class WorkbenchViewModelTests
             _recents,
             new ScratchpadViewModel(_scratchpads, localizer, _time),
             new GeocacheDetailViewModel(_store, new FakeClipboardService(), new FakeNavigationService(), localizer, new FakeAppPreferences()),
+            CreateSheet(),
             _layoutPreferences,
             _messenger);
         vm.ViewCreated();
         vm.UpdateAvailableWidth(width);
         return vm;
     }
+
+    private VariableCoordinateCalculatorViewModel CreateSheet() => new(
+        new StubCatalogService("VariableCoordinateCalculator"),
+        new FakeRecentsService(),
+        new FakeFavoriteToolsService(),
+        new FakeStringLocalizer(),
+        new FakeClipboardService(),
+        new FakeShareService(),
+        _layoutPreferences);
 
     private static ToolPickerItem Pick(WorkbenchViewModel vm, string toolId)
         => vm.ToolPickerResults.Single(t => t.ToolId == toolId);
@@ -1047,6 +1058,81 @@ public class WorkbenchViewModelTests
         vm.OnNavigatedFrom();
 
         Assert.AreEqual("count the stones", _scratchpads.Get(A));
+    }
+
+    // Variable sheet
+
+    private const string SheetTemplate = "N 50° 0A.000 E 014° 25.000";
+
+    [TestMethod]
+    public void Variables_AreKeptPerCache()
+    {
+        _session.Open(A);
+        _session.Open(B);
+        var vm = Create();
+        vm.Variables.Stages[0].Template = SheetTemplate;
+        vm.Variables.Variables.Single(v => v.Name == "A").Value = "7";
+
+        vm.ActiveCache = vm.OpenCaches[0];
+
+        Assert.AreEqual(string.Empty, vm.Variables.Stages[0].Template);
+        Assert.AreEqual(0, vm.Variables.Variables.Count);
+
+        vm.ActiveCache = vm.OpenCaches[1];
+
+        Assert.AreEqual(SheetTemplate, vm.Variables.Stages[0].Template);
+        Assert.AreEqual("7", vm.Variables.Variables.Single(v => v.Name == "A").Value);
+    }
+
+    [TestMethod]
+    public void Variables_SurviveRelaunch()
+    {
+        _session.Open(A);
+        var first = Create();
+        first.Variables.Stages[0].Template = SheetTemplate;
+        first.Variables.Variables.Single(v => v.Name == "A").Value = "7";
+
+        var second = Create();
+
+        Assert.AreEqual(SheetTemplate, second.Variables.Stages[0].Template);
+        Assert.AreEqual("7", second.Variables.Variables.Single(v => v.Name == "A").Value);
+    }
+
+    [TestMethod]
+    public void Variables_DoNotTouchTheStandaloneCalculator()
+    {
+        _session.Open(A);
+        var vm = Create();
+        vm.Variables.Stages[0].Template = SheetTemplate;
+
+        var calculator = CreateSheet();
+
+        Assert.AreEqual(string.Empty, calculator.Stages[0].Template);
+    }
+
+    [TestMethod]
+    public async Task Variables_PostedCoordinate_IsTakenFromTheListing()
+    {
+        await _store.UpsertAsync([new Geocache { Code = A, Name = "Alpha", Coordinate = new(50, 14) }]);
+        _session.Open(A);
+
+        var vm = Create();
+
+        Assert.AreEqual(vm.Listing.PostedCoordinate, vm.Variables.PostedCoordinate);
+        Assert.AreNotEqual(string.Empty, vm.Variables.PostedCoordinate);
+    }
+
+    [TestMethod]
+    public async Task Variables_PostedCoordinateTypedByTheUser_IsKept()
+    {
+        await _store.UpsertAsync([new Geocache { Code = A, Name = "Alpha", Coordinate = new(50, 14) }]);
+        _session.Open(A);
+        var first = Create();
+        first.Variables.PostedCoordinate = "N 49° 00.000 E 016° 00.000";
+
+        var second = Create();
+
+        Assert.AreEqual("N 49° 00.000 E 016° 00.000", second.Variables.PostedCoordinate);
     }
 
     private sealed class FilteringCatalog(params string[] toolIds) : ICatalogService

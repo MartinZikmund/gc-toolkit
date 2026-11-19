@@ -23,6 +23,7 @@ public class WorkbenchViewModelTests
     private readonly FakeRecentsService _recents = new();
     private readonly InMemoryPreferences _layoutPreferences = InMemoryPreferences.TrimmedHead();
     private readonly InMemoryGeocacheStore _store = new();
+    private readonly FakeToolWindowService _toolWindows = new();
     private WorkbenchProgressStore _progress = null!;
     private WorkbenchSessionService _session = null!;
 
@@ -56,6 +57,7 @@ public class WorkbenchViewModelTests
             new CorrectedCoordinatesViewModel(_store, localizer),
             _progress,
             _store,
+            _toolWindows,
             _layoutPreferences,
             _messenger);
         vm.ViewCreated();
@@ -1400,6 +1402,86 @@ public class WorkbenchViewModelTests
 
         Assert.IsTrue(vm.ActiveCache!.IsSolved);
         Assert.IsTrue(vm.Corrected.HasSaved);
+    }
+
+    // Tool in its own window
+
+    private (WorkbenchViewModel Vm, WorkbenchToolTab Tool) CreateWithOpenTool()
+    {
+        _session.Open(A);
+        var vm = Create();
+        vm.AddTool(Pick(vm, "Caesar"));
+        return (vm, vm.ActiveCache!.SelectedTool!);
+    }
+
+    [TestMethod]
+    public void PopOut_OpensTheToolInItsOwnWindow()
+    {
+        var (vm, tool) = CreateWithOpenTool();
+
+        vm.PopOutCommand.Execute(tool);
+
+        Assert.IsTrue(tool.IsPoppedOut);
+        CollectionAssert.AreEqual(new[] { tool }, _toolWindows.Open.ToArray());
+        Assert.AreEqual("Caesar cipher · GC1AAA", _toolWindows.LastTitle);
+    }
+
+    [TestMethod]
+    public void PopOut_KeepsTheToolInTheCacheSoItsStateIsStillSaved()
+    {
+        var (vm, tool) = CreateWithOpenTool();
+        vm.PopOutCommand.Execute(tool);
+        FakeStatefulTool inWindow = new();
+
+        tool.Attach(inWindow);
+        inWindow.Text = "typed in the window";
+
+        Assert.AreSame(tool, vm.ActiveCache!.Tools.Single());
+        Assert.AreEqual("typed in the window", _toolStore.Load(A)!.Tools[0].Inputs!["text"]);
+    }
+
+    [TestMethod]
+    public void ToolWindowClosed_BringsTheToolBack()
+    {
+        var (vm, tool) = CreateWithOpenTool();
+        vm.PopOutCommand.Execute(tool);
+
+        _toolWindows.UserCloses(tool);
+
+        Assert.IsFalse(tool.IsPoppedOut);
+    }
+
+    [TestMethod]
+    public void BringBack_ClosesTheToolWindow()
+    {
+        var (vm, tool) = CreateWithOpenTool();
+        vm.PopOutCommand.Execute(tool);
+
+        vm.BringBackCommand.Execute(tool);
+
+        Assert.AreEqual(0, _toolWindows.Open.Count);
+        Assert.IsFalse(tool.IsPoppedOut);
+    }
+
+    [TestMethod]
+    public void CloseTool_PoppedOut_ClosesItsWindow()
+    {
+        var (vm, tool) = CreateWithOpenTool();
+        vm.PopOutCommand.Execute(tool);
+
+        vm.CloseTool(tool);
+
+        Assert.AreEqual(0, _toolWindows.Open.Count);
+    }
+
+    [TestMethod]
+    public void PopOut_WithoutWindows_IsUnavailable()
+    {
+        _toolWindows.IsSupported = false;
+        var (vm, tool) = CreateWithOpenTool();
+
+        Assert.IsFalse(vm.CanPopOut);
+        Assert.IsFalse(vm.PopOutCommand.CanExecute(tool));
     }
 
     // Opening a stored cache

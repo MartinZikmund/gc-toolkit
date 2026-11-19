@@ -292,4 +292,119 @@ public class VariableCoordinateCalculatorViewModelTests
         Assert.AreEqual(1, vm.Stages.Count);
         Assert.AreEqual(string.Empty, vm.Stages[0].Template);
     }
+
+    // Filling variables from outside (the workbench's "To variables")
+
+    [TestMethod]
+    public void NextEmptyVariable_IsTheFirstMissingTemplateVariable()
+    {
+        var vm = Create();
+        vm.Stages[0].Template = Template;
+        Fill(vm, "A", "1");
+
+        Assert.AreEqual("B", vm.NextEmptyVariable);
+    }
+
+    [TestMethod]
+    public void NextEmptyVariable_WithoutTemplate_IsTheFirstUnusedLetter()
+    {
+        var vm = Create();
+
+        Assert.AreEqual("A", vm.NextEmptyVariable);
+
+        vm.SetVariable("A", "1");
+
+        Assert.AreEqual("B", vm.NextEmptyVariable);
+    }
+
+    [TestMethod]
+    public void NextEmptyVariable_AllTemplateVariablesFilled_IsTheFirstUnusedLetter()
+    {
+        var vm = Create();
+        vm.Stages[0].Template = "N 50° 0B.000 E 014° 25.000";
+        Fill(vm, "B", "1");
+
+        Assert.AreEqual("A", vm.NextEmptyVariable);
+    }
+
+    [TestMethod]
+    public void SetVariable_FillsTheGridAndSolves()
+    {
+        var vm = Create();
+        vm.Stages[0].Template = "N 50° 0A.000 E 014° 25.000";
+
+        vm.SetVariable("a", "3");
+
+        Assert.AreEqual("3", vm.Variables.Single(v => v.Name == "A").Value);
+        Assert.IsTrue(vm.Stages[0].IsComplete);
+    }
+
+    [TestMethod]
+    public void SetVariable_ReturnsThePreviousValue()
+    {
+        var vm = Create();
+        vm.SetVariable("A", "1");
+
+        Assert.AreEqual("1", vm.SetVariable("A", "2"));
+        Assert.AreEqual(string.Empty, vm.SetVariable("B", "5"));
+        Assert.AreEqual("2", vm.ValueOf("A"));
+    }
+
+    [TestMethod]
+    public void SetVariable_Blank_RemovesIt()
+    {
+        var vm = Create();
+        vm.SetVariable("A", "1");
+
+        vm.SetVariable("A", string.Empty);
+
+        Assert.AreEqual(string.Empty, vm.ValueOf("A"));
+        Assert.AreEqual("A", vm.NextEmptyVariable);
+    }
+
+    [TestMethod]
+    public void VariableChoices_TemplateVariablesFirst_ThenTheRestOfTheAlphabet()
+    {
+        var vm = Create();
+        vm.Stages[0].Template = "N 50° 0X.Y00 E 014° 25.000";
+
+        var choices = vm.VariableChoices;
+
+        CollectionAssert.AreEqual(new[] { "X", "Y", "A", "B" }, choices.Take(4).ToArray());
+        Assert.AreEqual(26, choices.Count);
+    }
+
+    [TestMethod]
+    public void Edited_IsRaisedWhenAVariableChanges()
+    {
+        var vm = Create();
+        var raised = 0;
+        vm.Edited += (_, _) => raised++;
+
+        vm.SetVariable("A", "1");
+
+        Assert.AreEqual(1, raised);
+    }
+
+    [TestMethod]
+    public void SetVariable_NotInAnyTemplate_StillShowsInTheGrid()
+    {
+        var vm = Create();
+        vm.Stages[0].Template = "N 50° 0B.000 E 014° 25.000";
+
+        vm.SetVariable("C", "7");
+
+        CollectionAssert.AreEqual(new[] { "B", "C" }, vm.Variables.Select(v => v.Name).ToArray());
+    }
+
+    [TestMethod]
+    public void SetVariable_ClearedAndNotInAnyTemplate_LeavesTheGrid()
+    {
+        var vm = Create();
+        vm.SetVariable("C", "7");
+
+        vm.SetVariable("C", string.Empty);
+
+        Assert.AreEqual(0, vm.Variables.Count);
+    }
 }

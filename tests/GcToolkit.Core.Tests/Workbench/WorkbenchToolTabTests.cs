@@ -120,4 +120,40 @@ public partial class WorkbenchToolTabTests
         [ObservableProperty]
         public partial string Text { get; set; } = string.Empty;
     }
+
+    [TestMethod]
+    public void Output_FollowsTheAttachedTool()
+    {
+        WorkbenchToolTab tab = new("Fake", "Fake", null, typeof(FakeStatefulTool));
+        FakeStatefulTool tool = new() { Output = "42" };
+        var raised = 0;
+        tab.OutputChanged += (_, _) => raised++;
+
+        tab.Attach(tool);
+        tool.Output = "43";
+
+        Assert.AreEqual("43", tab.Output);
+        Assert.AreEqual(2, raised);
+    }
+
+    [TestMethod]
+    public void Output_ToolWithoutOutput_IsNull()
+    {
+        WorkbenchToolTab tab = new("Fake", "Fake", null, typeof(FakePlainTool));
+
+        tab.Attach(new FakePlainTool());
+
+        Assert.IsNull(tab.Output);
+    }
+
+    [TestMethod]
+    public void Output_AfterDetach_IsNull()
+    {
+        WorkbenchToolTab tab = new("Fake", "Fake", null, typeof(FakeStatefulTool));
+        tab.Attach(new FakeStatefulTool { Output = "42" });
+
+        tab.Detach();
+
+        Assert.IsNull(tab.Output);
+    }
 }

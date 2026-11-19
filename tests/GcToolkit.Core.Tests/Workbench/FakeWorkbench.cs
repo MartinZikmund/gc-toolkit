@@ -59,8 +59,10 @@ internal sealed class FakeWorkbenchSession : IWorkbenchSessionService
 }
 
 /// <summary>A tool whose one input, <see cref="Text"/>, takes part in workbench state.</summary>
-internal sealed partial class FakeStatefulTool : ObservableObject, IToolStateful, IToolTextInput
+internal sealed partial class FakeStatefulTool : ObservableObject, IToolStateful, IToolTextInput, IToolTextOutput
 {
+    string IToolTextOutput.OutputText => Output;
+
     public string InputText
     {
         get => Text;
@@ -83,4 +85,11 @@ internal sealed partial class FakeStatefulTool : ObservableObject, IToolStateful
     public ToolInputState CaptureState() => StateWith(Text);
 
     public void RestoreState(ToolInputState state) => Text = state.GetString("text");
+}
+
+/// <summary>A tool with no text output, like a map or a figure.</summary>
+internal sealed partial class FakePlainTool : ObservableObject
+{
+    [ObservableProperty]
+    public partial string Text { get; set; } = string.Empty;
 }

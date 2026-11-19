@@ -1135,6 +1135,146 @@ public class WorkbenchViewModelTests
         Assert.AreEqual("N 49° 00.000 E 016° 00.000", second.Variables.PostedCoordinate);
     }
 
+    // To variables
+
+    private (WorkbenchViewModel Vm, FakeStatefulTool Tool) CreateWithResultTool(string output = "42")
+    {
+        _session.Open(A);
+        var vm = Create();
+        vm.AddTool(Pick(vm, "Caesar"));
+        FakeStatefulTool tool = new() { Output = output };
+        vm.ActiveCache!.SelectedTool!.Attach(tool);
+        return (vm, tool);
+    }
+
+    [TestMethod]
+    public void ToVariables_ToolWithoutResult_IsUnavailable()
+    {
+        var (vm, _) = CreateWithResultTool(output: "");
+
+        Assert.IsFalse(vm.HasToolResult);
+        Assert.IsFalse(vm.SendResultToVariablesCommand.CanExecute(null));
+    }
+
+    [TestMethod]
+    public void ToVariables_ResultAppears_BecomesAvailable()
+    {
+        var (vm, tool) = CreateWithResultTool(output: "");
+
+        tool.Output = "42";
+
+        Assert.IsTrue(vm.HasToolResult);
+        Assert.IsTrue(vm.SendResultToVariablesCommand.CanExecute(null));
+    }
+
+    [TestMethod]
+    public void ToVariables_FillsTheNextEmptyLetter()
+    {
+        var (vm, _) = CreateWithResultTool();
+        vm.Variables.SetVariable("A", "7");
+
+        Assert.AreEqual("B", vm.ResultTarget);
+
+        vm.SendResultToVariablesCommand.Execute(null);
+
+        Assert.AreEqual("42", vm.Variables.ValueOf("B"));
+        Assert.AreEqual("C", vm.ResultTarget);
+        Assert.AreEqual("B = 42", vm.LastSentToVariables);
+    }
+
+    [TestMethod]
+    public void ToVariables_PickedLetter_IsFilledInstead()
+    {
+        var (vm, _) = CreateWithResultTool();
+
+        vm.SendResultToVariablesCommand.Execute("D");
+
+        Assert.AreEqual("42", vm.Variables.ValueOf("D"));
+        Assert.AreEqual(string.Empty, vm.Variables.ValueOf("A"));
+    }
+
+    [TestMethod]
+    public void ToVariables_ResultIsTrimmed()
+    {
+        var (vm, _) = CreateWithResultTool(output: "  42\r\n");
+
+        vm.SendResultToVariablesCommand.Execute(null);
+
+        Assert.AreEqual("42", vm.Variables.ValueOf("A"));
+    }
+
+    [TestMethod]
+    public void ToVariables_Undo_RestoresThePreviousValue()
+    {
+        var (vm, _) = CreateWithResultTool();
+        vm.Variables.SetVariable("A", "7");
+        vm.SendResultToVariablesCommand.Execute("A");
+
+        vm.UndoSendToVariablesCommand.Execute(null);
+
+        Assert.AreEqual("7", vm.Variables.ValueOf("A"));
+        Assert.IsFalse(vm.UndoSendToVariablesCommand.CanExecute(null));
+        Assert.AreEqual(string.Empty, vm.LastSentToVariables);
+    }
+
+    [TestMethod]
+    public void ToVariables_UndoOfAnEmptyLetter_EmptiesItAgain()
+    {
+        var (vm, _) = CreateWithResultTool();
+        vm.SendResultToVariablesCommand.Execute(null);
+
+        vm.UndoSendToVariablesCommand.Execute(null);
+
+        Assert.AreEqual(string.Empty, vm.Variables.ValueOf("A"));
+        Assert.AreEqual("A", vm.ResultTarget);
+    }
+
+    [TestMethod]
+    public void ToVariables_SwitchingToAToolWithoutResult_MakesItUnavailable()
+    {
+        var (vm, _) = CreateWithResultTool();
+        vm.AddTool(Pick(vm, "Morse"));
+        vm.ActiveCache!.SelectedTool!.Attach(new FakePlainTool());
+
+        Assert.IsFalse(vm.HasToolResult);
+
+        vm.ActiveCache.SelectedTool = vm.ActiveCache.Tools[0];
+
+        Assert.IsTrue(vm.HasToolResult);
+    }
+
+    [TestMethod]
+    public void ToVariables_LetterTypedInTheSheet_MovesTheTarget()
+    {
+        var (vm, _) = CreateWithResultTool();
+
+        vm.Variables.SetVariable("A", "1");
+
+        Assert.AreEqual("B", vm.ResultTarget);
+    }
+
+    [TestMethod]
+    public void ToVariables_UndoIsForgottenWhenTheCacheChanges()
+    {
+        _session.Open(B);
+        var (vm, _) = CreateWithResultTool();
+        vm.SendResultToVariablesCommand.Execute(null);
+
+        vm.ActiveCache = vm.OpenCaches.Single(c => c.Code == B);
+
+        Assert.IsFalse(vm.UndoSendToVariablesCommand.CanExecute(null));
+    }
+
+    [TestMethod]
+    public void ToVariables_LastCacheClosed_IsUnavailable()
+    {
+        var (vm, _) = CreateWithResultTool();
+
+        vm.CloseCache(vm.ActiveCache!);
+
+        Assert.IsFalse(vm.HasToolResult);
+    }
+
     private sealed class FilteringCatalog(params string[] toolIds) : ICatalogService
     {
         private readonly IReadOnlyList<ToolDescriptor> _tools =

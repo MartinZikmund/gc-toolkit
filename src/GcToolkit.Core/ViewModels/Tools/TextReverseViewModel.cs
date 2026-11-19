@@ -21,7 +21,7 @@ namespace GcToolkit.Core.ViewModels.Tools;
       Introduced = "2026-06-13", Updated = "2026-06-13",
       Keywords = ["reverse", "text", "mirror", "flip", "upside down", "backwards", "shuffle", "anagram", "typoglycemia",
                   "obrátit", "obrácený", "text", "zrcadlo", "vzhůru nohama", "pozpátku", "zamíchat"])]
-public sealed partial class TextReverseViewModel : ToolViewModelBase, IToolTextInput
+public sealed partial class TextReverseViewModel : ToolViewModelBase, IToolTextInput, IToolTextOutput
 {
     private readonly TextReverseCodec _codec = new();
     private readonly IClipboardService _clipboard;

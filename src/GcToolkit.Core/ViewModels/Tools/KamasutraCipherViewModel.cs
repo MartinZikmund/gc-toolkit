@@ -22,7 +22,7 @@ namespace GcToolkit.Core.ViewModels.Tools;
       Introduced = "2026-06-13", Updated = "2026-06-13",
       Keywords = ["kamasutra", "vatsyayana", "reciprocal", "substitution", "pairs", "involution", "cipher",
                   "kámasútra", "vátsjájana", "reciproční", "substituce", "páry", "šifra"])]
-public sealed partial class KamasutraCipherViewModel : ToolViewModelBase, IToolTextInput
+public sealed partial class KamasutraCipherViewModel : ToolViewModelBase, IToolTextInput, IToolTextOutput
 {
     private readonly KamasutraCipher _cipher = new();
     private readonly IClipboardService _clipboard;

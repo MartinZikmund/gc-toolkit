@@ -324,6 +324,7 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="{x:Bind local:WorkbenchView.ToolRowHeight(ViewModel.IsToolTabsVisible), Mode=OneWay}" />
                             <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
                             <RowDefinition Height="{x:Bind local:WorkbenchView.DockRowHeight(ViewModel.IsDockVisible, ViewModel.IsCompact, ViewModel.DockHeight), Mode=OneWay}" />
                         </Grid.RowDefinitions>
 
@@ -406,6 +407,63 @@
                             </TabView.TabStripFooter>
                         </TabView>
 
+                        <!--  The selected tool's result → the variable sheet (#464, experiment).  -->
+                        <StackPanel
+                            Grid.Row="1"
+                            Padding="16,4,16,8"
+                            HorizontalAlignment="Right"
+                            Orientation="Horizontal"
+                            Spacing="8"
+                            Visibility="{x:Bind local:WorkbenchView.ShowResultBar(ViewModel.IsToolTabsVisible, ViewModel.HasToolResult), Mode=OneWay}">
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                FontFamily="{ThemeResource AppMonoFontFamily}"
+                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                MaxLines="1"
+                                Text="{x:Bind ViewModel.LastSentToVariables, Mode=OneWay}"
+                                TextTrimming="CharacterEllipsis" />
+                            <HyperlinkButton
+                                VerticalAlignment="Center"
+                                AutomationProperties.AutomationId="WorkbenchUndoToVariables"
+                                Command="{x:Bind ViewModel.UndoSendToVariablesCommand}"
+                                Content="{markup:Localize Key=Workbench_Undo}"
+                                Visibility="{x:Bind local:WorkbenchView.ShowWhenText(ViewModel.LastSentToVariables), Mode=OneWay}" />
+                            <SplitButton
+                                AutomationProperties.AutomationId="WorkbenchToVariables"
+                                AutomationProperties.Name="{x:Bind local:WorkbenchView.ToVariableLabel(ViewModel.ResultTarget), Mode=OneWay}"
+                                Command="{x:Bind ViewModel.SendResultToVariablesCommand}"
+                                ToolTipService.ToolTip="{markup:Localize Key=Workbench_ToVariablesTooltip}">
+                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                    <FontIcon FontSize="14" Glyph="&#xE8EF;" />
+                                    <TextBlock Text="{x:Bind local:WorkbenchView.ToVariableLabel(ViewModel.ResultTarget), Mode=OneWay}" />
+                                </StackPanel>
+                                <SplitButton.Flyout>
+                                    <Flyout x:Name="VariablePickerFlyout" Placement="TopEdgeAlignedRight">
+                                        <StackPanel Width="272" Spacing="8">
+                                            <TextBlock Style="{StaticResource BodyStrongTextBlockStyle}" Text="{markup:Localize Key=Workbench_ToVariablesPick}" />
+                                            <GridView
+                                                AutomationProperties.AutomationId="WorkbenchVariablePicker"
+                                                AutomationProperties.Name="{markup:Localize Key=Workbench_ToVariablesPick}"
+                                                IsItemClickEnabled="True"
+                                                ItemClick="OnVariablePicked"
+                                                ItemsSource="{x:Bind ViewModel.VariableChoices, Mode=OneWay}"
+                                                SelectionMode="None">
+                                                <GridView.ItemTemplate>
+                                                    <DataTemplate x:DataType="x:String">
+                                                        <TextBlock
+                                                            Width="32"
+                                                            FontFamily="{ThemeResource AppMonoFontFamily}"
+                                                            Text="{x:Bind}"
+                                                            TextAlignment="Center" />
+                                                    </DataTemplate>
+                                                </GridView.ItemTemplate>
+                                            </GridView>
+                                        </StackPanel>
+                                    </Flyout>
+                                </SplitButton.Flyout>
+                            </SplitButton>
+                        </StackPanel>
+
                         <!--  Empty tool pane: points at the ＋ in the tab strip.  -->
                         <StackPanel
                             MaxWidth="280"
@@ -428,7 +486,7 @@
 
                         <controls:PaneResizer
                             x:Name="DockSplitter"
-                            Grid.Row="1"
+                            Grid.Row="2"
                             Height="12"
                             AutomationProperties.AutomationId="WorkbenchDockSplitter"
                             AutomationProperties.Name="{markup:Localize Key=Workbench_ResizeDock}"
@@ -440,7 +498,7 @@
                         <!--  Docked panel: Variables · Scratchpad. On phones each is its own section.  -->
                         <Grid
                             x:Name="DockPanel"
-                            Grid.Row="2"
+                            Grid.Row="3"
                             Padding="16,0,16,12"
                             RowSpacing="8"
                             Visibility="{x:Bind ViewModel.IsDockVisible, Mode=OneWay}">

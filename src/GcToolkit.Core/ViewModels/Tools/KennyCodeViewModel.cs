@@ -28,7 +28,7 @@ public readonly record struct KennyCodeTableRow(char Letter, string Trigram)
 [Tool("KennyCode", ToolCategory.Ciphers,
       Introduced = "2026-06-13", Updated = "2026-06-13",
       Keywords = ["kenny", "south park", "mmm", "mpf", "mpp", "bacon", "trigram", "cipher", "šifra", "jihozápadní park"])]
-public sealed partial class KennyCodeViewModel : ToolViewModelBase, IToolTextInput
+public sealed partial class KennyCodeViewModel : ToolViewModelBase, IToolTextInput, IToolTextOutput
 {
     private readonly KennyCodeCodec _codec = new();
     private readonly IClipboardService _clipboard;

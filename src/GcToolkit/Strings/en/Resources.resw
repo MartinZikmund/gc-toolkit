@@ -5498,4 +5498,19 @@
   <data name="ResectionWarnIllConditioned" xml:space="preserve">
     <value>The sight lines are almost parallel, so a tiny error in any bearing moves your position a long way. Pick landmarks further apart in direction.</value>
   </data>
+  <data name="Workbench_ToVariables" xml:space="preserve">
+    <value>To variables</value>
+  </data>
+  <data name="Workbench_ToVariableFormat" xml:space="preserve">
+    <value>To variable {0}</value>
+  </data>
+  <data name="Workbench_ToVariablesTooltip" xml:space="preserve">
+    <value>Put the tool's result into the next empty variable</value>
+  </data>
+  <data name="Workbench_ToVariablesPick" xml:space="preserve">
+    <value>Put the result into</value>
+  </data>
+  <data name="Workbench_Undo" xml:space="preserve">
+    <value>Undo</value>
+  </data>
 </root>

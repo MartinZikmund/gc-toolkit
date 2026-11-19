@@ -20,7 +20,7 @@ namespace GcToolkit.Core.ViewModels.Tools;
 [Tool("NumbersToLetters", ToolCategory.Text,
       Introduced = "2026-06-06", Updated = "2026-06-07",
       Keywords = ["a1z26", "numbers", "letters", "alphabet", "position", "index", "method", "umlaut", "german", "nordic", "conversion table", "číslapísmena", "čísla", "písmena", "abeceda", "pozice", "metoda", "převodní tabulka", "letter to number", "number to letter"])]
-public sealed partial class NumbersToLettersViewModel : ToolViewModelBase, IToolTextInput
+public sealed partial class NumbersToLettersViewModel : ToolViewModelBase, IToolTextInput, IToolTextOutput
 {
     private readonly AlphabetNumbers _codec = new();
     private readonly IClipboardService _clipboard;

@@ -22,7 +22,7 @@ namespace GcToolkit.Core.ViewModels.Tools;
 [Tool("ScytaleCipher", ToolCategory.Ciphers,
       Introduced = "2026-06-13", Updated = "2026-06-13",
       Keywords = ["scytale", "skytale", "rod", "rail", "transposition", "columns", "caesar box", "cipher", "skytalé", "tyč", "sloupce", "transpozice", "šifra"])]
-public sealed partial class ScytaleCipherViewModel : ToolViewModelBase, IToolTextInput
+public sealed partial class ScytaleCipherViewModel : ToolViewModelBase, IToolTextInput, IToolTextOutput
 {
     private const int DefaultColumns = 4;
 

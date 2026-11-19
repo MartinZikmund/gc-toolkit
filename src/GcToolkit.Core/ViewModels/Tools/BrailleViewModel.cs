@@ -23,7 +23,7 @@ namespace GcToolkit.Core.ViewModels.Tools;
 [Tool("Braille", ToolCategory.Alphabets,
       Introduced = "2026-06-06", Updated = "2026-06-07",
       Keywords = ["braille", "dots", "tactile", "blind", "abeceda", "slepecké", "písmo", "body", "unicode"])]
-public sealed partial class BrailleViewModel : ToolViewModelBase, IToolTextInput
+public sealed partial class BrailleViewModel : ToolViewModelBase, IToolTextInput, IToolTextOutput
 {
     private readonly BrailleCodec _codec = new();
     private readonly IClipboardService _clipboard;

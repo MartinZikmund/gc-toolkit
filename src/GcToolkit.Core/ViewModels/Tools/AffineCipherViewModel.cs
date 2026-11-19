@@ -22,7 +22,7 @@ namespace GcToolkit.Core.ViewModels.Tools;
 [Tool("AffineCipher", ToolCategory.Ciphers,
       Introduced = "2026-06-13", Updated = "2026-06-13",
       Keywords = ["affine", "cipher", "monoalphabetic", "substitution", "modular", "afinní", "afinni", "šifra", "sifra", "substituce", "modulární"])]
-public sealed partial class AffineCipherViewModel : ToolViewModelBase, IToolTextInput
+public sealed partial class AffineCipherViewModel : ToolViewModelBase, IToolTextInput, IToolTextOutput
 {
     private readonly AffineCipher _cipher = new();
     private readonly IClipboardService _clipboard;

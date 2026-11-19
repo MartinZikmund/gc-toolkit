@@ -23,7 +23,7 @@ namespace GcToolkit.Core.ViewModels.Tools;
 [Tool("TrithemiusCipher", ToolCategory.Ciphers,
       Introduced = "2026-06-13", Updated = "2026-06-13",
       Keywords = ["trithemius", "progressive", "polyalphabetic", "tabula recta", "vigenere", "cipher", "šifra", "progresivní", "polyalfabetická"])]
-public sealed partial class TrithemiusCipherViewModel : ToolViewModelBase, IToolTextInput
+public sealed partial class TrithemiusCipherViewModel : ToolViewModelBase, IToolTextInput, IToolTextOutput
 {
     private readonly TrithemiusCipher _cipher = new();
     private readonly IClipboardService _clipboard;

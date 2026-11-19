@@ -52,6 +52,16 @@ public sealed partial class WorkbenchView : WorkbenchViewBase
 
     public static Visibility Not(bool value) => value ? Visibility.Collapsed : Visibility.Visible;
 
+    public static Visibility ShowWhenText(string text) => string.IsNullOrEmpty(text) ? Visibility.Collapsed : Visibility.Visible;
+
+    public static Visibility ShowResultBar(bool toolTabsVisible, bool hasResult)
+        => toolTabsVisible && hasResult ? Visibility.Visible : Visibility.Collapsed;
+
+    public static string ToVariableLabel(string? target)
+        => target is null
+            ? Localizer.Instance["Workbench_ToVariables"]
+            : string.Format(CultureInfo.CurrentCulture, Localizer.Instance["Workbench_ToVariableFormat"], target);
+
     public static Visibility ShowSelectionBar(bool compact, bool hasSelection, bool listingVisible)
         => compact && hasSelection && listingVisible ? Visibility.Visible : Visibility.Collapsed;
 
@@ -182,6 +192,15 @@ public sealed partial class WorkbenchView : WorkbenchViewBase
     }
 
     private void OnToolPickerOpening(object? sender, object e) => ViewModel?.RefreshToolPicker();
+
+    private void OnVariablePicked(object sender, ItemClickEventArgs e)
+    {
+        if (e.ClickedItem is string name)
+        {
+            VariablePickerFlyout.Hide();
+            ViewModel?.SendResultToVariablesCommand.Execute(name);
+        }
+    }
 
     private void OnToolPicked(object sender, ItemClickEventArgs e)
     {

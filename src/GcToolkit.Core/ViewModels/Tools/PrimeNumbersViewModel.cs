@@ -19,8 +19,10 @@ namespace GcToolkit.Core.ViewModels.Tools;
 [Tool("PrimeNumbers", ToolCategory.Numbers,
       Introduced = "2026-06-09", Updated = "2026-06-09",
       Keywords = ["prime", "primes", "factorization", "factor", "nth", "prvočíslo", "prvočísla", "rozklad", "dělitel"])]
-public sealed partial class PrimeNumbersViewModel : ToolViewModelBase, IToolTextInput
+public sealed partial class PrimeNumbersViewModel : ToolViewModelBase, IToolTextInput, IToolTextOutput
 {
+    string IToolTextOutput.OutputText => ResultText;
+
     // Mode indices — must match the RadioButtons order in the view.
     private const int PrimalityMode = 0;
     private const int NthPrimeMode = 1;

@@ -4905,10 +4905,10 @@
     <value>Open cache</value>
   </data>
   <data name="Workbench_OpenCacheHint" xml:space="preserve">
-    <value>Until the offline cache store arrives, open a cache by its code.</value>
+    <value>Search your stored caches by name or code, or type any GC code.</value>
   </data>
   <data name="Workbench_CacheCodePlaceholder" xml:space="preserve">
-    <value>Cache code, e.g. GC8KX2Q</value>
+    <value>Name or code, e.g. GC8KX2Q</value>
   </data>
   <data name="Workbench_Open" xml:space="preserve">
     <value>Open</value>

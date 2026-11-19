@@ -199,6 +199,12 @@ public sealed class WorkbenchToolTab(string toolId, string name, string? iconKey
     public override string ToString() => Name;
 }
 
+/// <summary>A stored cache offered by the "open cache" box.</summary>
+public sealed record CacheSuggestion(GeocacheCode Code, string Name)
+{
+    public override string ToString() => $"{Name} ({Code.Value})";
+}
+
 /// <summary>A tool offered by the "add tool" picker.</summary>
 public sealed record ToolPickerItem(string ToolId, string Name, string? IconKey, Type ViewModelType)
 {

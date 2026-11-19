@@ -4905,10 +4905,10 @@
     <value>Otevřít keš</value>
   </data>
   <data name="Workbench_OpenCacheHint" xml:space="preserve">
-    <value>Než přibude offline úložiště keší, otevřete keš podle jejího kódu.</value>
+    <value>Hledejte v uložených keších podle názvu nebo kódu, nebo zadejte libovolný GC kód.</value>
   </data>
   <data name="Workbench_CacheCodePlaceholder" xml:space="preserve">
-    <value>Kód keše, např. GC8KX2Q</value>
+    <value>Název nebo kód, např. GC8KX2Q</value>
   </data>
   <data name="Workbench_Open" xml:space="preserve">
     <value>Otevřít</value>

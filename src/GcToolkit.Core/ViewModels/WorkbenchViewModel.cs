@@ -58,6 +58,8 @@ public partial class WorkbenchViewModel : ViewModelBase
     private readonly IRecentsService _recents;
     private readonly IPreferences _preferences;
     private readonly IWorkbenchProgressRecorder _progress;
+    private readonly IGeocacheStore _store;
+    private int _suggestionVersion;
     private readonly Dictionary<GeocacheCode, WorkbenchCacheTab> _tabs = [];
     private double _availableWidth;
     private double _requestedToolPaneWidth = WorkbenchLayout.DefaultToolPaneWidth;
@@ -82,6 +84,7 @@ public partial class WorkbenchViewModel : ViewModelBase
         GeocacheDetailViewModel listing,
         VariableCoordinateCalculatorViewModel variables,
         IWorkbenchProgressRecorder progress,
+        IGeocacheStore store,
         IPreferences preferences,
         IMessenger? messenger = null)
     {
@@ -103,6 +106,7 @@ public partial class WorkbenchViewModel : ViewModelBase
         Variables = variables;
         Variables.Edited += (_, _) => OnVariablesEdited();
         _progress = progress;
+        _store = store;
         Scratchpad.PropertyChanged += (_, e) =>
         {
             if (e.PropertyName == nameof(ScratchpadViewModel.SaveState))
@@ -138,7 +142,10 @@ public partial class WorkbenchViewModel : ViewModelBase
     [ObservableProperty]
     public partial WorkbenchCacheTab? ActiveCache { get; set; }
 
-    /// <summary>Typed cache code; a stand-in for a picker over the offline store (#408).</summary>
+    /// <summary>Stored caches whose name or code contains <see cref="NewCacheCode"/>.</summary>
+    public ObservableCollection<CacheSuggestion> CacheSuggestions { get; } = [];
+
+    /// <summary>Text typed into the "open cache" box: part of a stored cache's name, or any GC code.</summary>
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(OpenCacheCommand))]
     public partial string NewCacheCode { get; set; } = string.Empty;
@@ -596,6 +603,43 @@ public partial class WorkbenchViewModel : ViewModelBase
     }
 
     private bool CanOpenCache() => GeocacheCode.TryParse(NewCacheCode, out _);
+
+    public void OpenSuggestedCache(CacheSuggestion suggestion)
+    {
+        NewCacheCode = string.Empty;
+        _session.Open(suggestion.Code);
+    }
+
+    partial void OnNewCacheCodeChanged(string value) => _ = RefreshCacheSuggestionsAsync(value);
+
+    private async Task RefreshCacheSuggestionsAsync(string text)
+    {
+        var version = ++_suggestionVersion;
+        IReadOnlyList<GeocacheSummary> found = [];
+        if (!string.IsNullOrWhiteSpace(text))
+        {
+            try
+            {
+                found = (await _store.QueryAsync(new() { Text = text.Trim(), Sort = GeocacheSort.Name, Take = 8 })).Items;
+            }
+            catch (Exception)
+            {
+                // No suggestions; a typed code still opens.
+            }
+        }
+
+        // A slower, older query must not overwrite the newer one's results.
+        if (version != _suggestionVersion)
+        {
+            return;
+        }
+
+        CacheSuggestions.Clear();
+        foreach (var cache in found)
+        {
+            CacheSuggestions.Add(new CacheSuggestion(cache.Code, cache.Name));
+        }
+    }
 
     [RelayCommand]
     private void ToggleToolPane() => IsToolPaneOpen = !IsToolPaneOpen;

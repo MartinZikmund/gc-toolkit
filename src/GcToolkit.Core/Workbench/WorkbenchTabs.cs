@@ -74,7 +74,7 @@ public sealed partial class WorkbenchCacheTab : ObservableObject
 /// A tool open in the workbench's tool pane, with its saved inputs. A class, not a record: the head keys
 /// the hosted view on its identity.
 /// </summary>
-public sealed class WorkbenchToolTab(string toolId, string name, string? iconKey, Type viewModelType, ToolInputState? state = null)
+public sealed partial class WorkbenchToolTab(string toolId, string name, string? iconKey, Type viewModelType, ToolInputState? state = null) : ObservableObject
 {
     private IToolStateful? _tool;
     private IToolTextInput? _input;
@@ -94,6 +94,10 @@ public sealed class WorkbenchToolTab(string toolId, string name, string? iconKey
 
     /// <summary>Raised when the attached tool's inputs differ from <see cref="State"/>.</summary>
     public event EventHandler? StateChanged;
+
+    /// <summary>The tool is shown in its own window; the workbench pane shows a placeholder meanwhile.</summary>
+    [ObservableProperty]
+    public partial bool IsPoppedOut { get; set; }
 
     /// <summary>The attached tool's text result; null when no tool is attached or it has no text result.</summary>
     public string? Output { get; private set; }

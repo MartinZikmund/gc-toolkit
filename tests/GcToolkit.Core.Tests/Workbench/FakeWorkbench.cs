@@ -5,6 +5,34 @@ using GcToolkit.Core.Workbench;
 
 namespace GcToolkit.Core.Tests.Workbench;
 
+internal sealed class FakeToolWindowService : IToolWindowService
+{
+    private readonly Dictionary<WorkbenchToolTab, Action> _open = [];
+
+    public bool IsSupported { get; set; } = true;
+
+    public IReadOnlyCollection<WorkbenchToolTab> Open => _open.Keys;
+
+    public string? LastTitle { get; private set; }
+
+    public void Show(WorkbenchToolTab tool, string title, Action closed)
+    {
+        LastTitle = title;
+        _open[tool] = closed;
+    }
+
+    public void Close(WorkbenchToolTab tool)
+    {
+        if (_open.Remove(tool, out var closed))
+        {
+            closed();
+        }
+    }
+
+    /// <summary>The user closes the tool's window.</summary>
+    public void UserCloses(WorkbenchToolTab tool) => Close(tool);
+}
+
 internal sealed class FakeProgressProvider : IWorkbenchProgressProvider
 {
     public List<CacheProgress> Items { get; } = [];

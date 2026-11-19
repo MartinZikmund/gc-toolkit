@@ -216,6 +216,22 @@ public sealed partial class WorkbenchView : WorkbenchViewBase
         OpenCacheFlyout.Hide();
     }
 
+    private void OnPopOutClick(object sender, RoutedEventArgs e)
+    {
+        if (ViewModel?.ActiveCache?.SelectedTool is { } tool)
+        {
+            ViewModel.PopOutCommand.Execute(tool);
+        }
+    }
+
+    private void OnBringBackClick(object sender, RoutedEventArgs e)
+    {
+        if (sender is FrameworkElement { Tag: WorkbenchToolTab tool })
+        {
+            ViewModel?.BringBackCommand.Execute(tool);
+        }
+    }
+
     private void OnVariablePicked(object sender, ItemClickEventArgs e)
     {
         if (e.ClickedItem is string name)

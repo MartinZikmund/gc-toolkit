@@ -20,7 +20,10 @@ public sealed partial class WorkbenchToolHost : ContentControl
         typeof(WorkbenchToolHost),
         new PropertyMetadata(null, (d, _) => ((WorkbenchToolHost)d).Attach()));
 
-    private static readonly ConditionalWeakTable<WorkbenchToolTab, Frame> _frames = new();
+    // Per window: a frame (like any element) belongs to one XamlRoot, and a popped-out tool gets its own.
+    private static readonly ConditionalWeakTable<WorkbenchToolTab, Dictionary<XamlRoot, Frame>> _frames = new();
+
+    private WorkbenchToolTab? _watched;
 
     public WorkbenchToolHost()
     {
@@ -29,7 +32,39 @@ public sealed partial class WorkbenchToolHost : ContentControl
         Loaded += (_, _) => Attach();
 
         // A frame can only have one parent; let go of it so the next host showing this tab can take it.
-        Unloaded += (_, _) => Content = null;
+        Unloaded += (_, _) => Release();
+    }
+
+    /// <summary>Drops the frame and stops following the tab.</summary>
+    public void Release()
+    {
+        Watch(null);
+        Content = null;
+    }
+
+    // When a tool comes back from its own window, this window's view model takes over its inputs again.
+    private void Watch(WorkbenchToolTab? tool)
+    {
+        if (_watched is not null)
+        {
+            _watched.PropertyChanged -= OnToolPropertyChanged;
+        }
+
+        _watched = tool;
+        if (_watched is not null)
+        {
+            _watched.PropertyChanged += OnToolPropertyChanged;
+        }
+    }
+
+    private void OnToolPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(WorkbenchToolTab.IsPoppedOut)
+            && _watched is { IsPoppedOut: false } tool
+            && Content is Frame { Content: IViewBase { ViewModel: { } viewModel } })
+        {
+            tool.Attach(viewModel);
+        }
     }
 
     public WorkbenchToolTab? Tool
@@ -40,18 +75,20 @@ public sealed partial class WorkbenchToolHost : ContentControl
 
     private void Attach()
     {
-        if (!IsLoaded || Tool is not { } tool || FindShell() is not { } shell)
+        if (!IsLoaded || Tool is not { } tool || FindShell() is not { } shell || XamlRoot is not { } root)
         {
             return;
         }
 
-        if (!_frames.TryGetValue(tool, out var frame))
+        Watch(tool);
+        var frames = _frames.GetOrCreateValue(tool);
+        if (!frames.TryGetValue(root, out var frame))
         {
             frame = new Frame();
             var navigation = (NavigationService)shell.ServiceProvider.GetRequiredService<INavigationService>();
             var viewType = navigation.GetViewType(tool.ViewModelType) ?? typeof(ToolHostView);
             frame.Navigate(viewType, tool.ViewModelType, new SuppressNavigationTransitionInfo());
-            _frames.Add(tool, frame);
+            frames[root] = frame;
             AttachWhenCreated(tool, frame);
         }
 

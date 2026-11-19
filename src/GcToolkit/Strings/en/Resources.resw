@@ -5537,4 +5537,13 @@
   <data name="Workbench_CorrectedNeedsStore" xml:space="preserve">
     <value>Import this cache to save corrected coordinates.</value>
   </data>
+  <data name="Workbench_PopOut" xml:space="preserve">
+    <value>Open in a new window</value>
+  </data>
+  <data name="Workbench_ToolInOwnWindow" xml:space="preserve">
+    <value>This tool is open in its own window.</value>
+  </data>
+  <data name="Workbench_BringBack" xml:space="preserve">
+    <value>Bring it back</value>
+  </data>
 </root>

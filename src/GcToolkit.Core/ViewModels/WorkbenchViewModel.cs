@@ -743,6 +743,10 @@ public partial class WorkbenchViewModel : ViewModelBase
         {
             LoadCache(current.Code);
         }
+        else
+        {
+            WatchActiveCache();
+        }
     }
 
     private void OnOpenCachesChanged(object? sender, NotifyCollectionChangedEventArgs e)

@@ -29,7 +29,7 @@ public sealed record SpellingAlphabetVariantOption(SpellingAlphabetVariant Varia
           "spelling", "alphabet", "phonetic", "nato", "icao", "alfa", "bravo", "charlie", "radio",
           "callsign", "hláskovací", "abeceda", "fonetická", "telefonní", "alfa bravo",
       ])]
-public sealed partial class SpellingAlphabetViewModel : ToolViewModelBase, IToolTextInput
+public sealed partial class SpellingAlphabetViewModel : ToolViewModelBase, IToolTextInput, IToolTextOutput
 {
     private readonly SpellingAlphabetCodec _codec = new();
     private readonly IStringLocalizer _localizer;

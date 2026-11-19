@@ -31,6 +31,7 @@ public sealed partial class VariableCoordinateCalculatorViewModel : ToolViewMode
     private const string ExamplePosted = "N 50° 01.000 E 014° 25.000";
     private const string ExampleLetters = "ABCDEFGH";
     private const string ExampleDigits = "12345678";
+    private static readonly string[] _letters = [.. Enumerable.Range('A', 26).Select(c => ((char)c).ToString())];
 
     private readonly IClipboardService _clipboard;
     private readonly IShareService _share;
@@ -90,6 +91,47 @@ public sealed partial class VariableCoordinateCalculatorViewModel : ToolViewMode
         ShareAllCommand.NotifyCanExecuteChanged();
     }
 
+    /// <summary>Raised after the user (or <see cref="SetVariable"/>) changes the sheet.</summary>
+    public event EventHandler? Edited;
+
+    /// <summary>The first variable a template still waits for, else the first letter with no value; null when A–Z are all taken.</summary>
+    public string? NextEmptyVariable
+        => Variables.FirstOrDefault(v => v.IsMissing)?.Name
+            ?? _letters.FirstOrDefault(l => !_values.ContainsKey(l));
+
+    /// <summary>Letters a value can go to: the templates' variables first, then the rest of A–Z.</summary>
+    public IReadOnlyList<string> VariableChoices
+        => [.. Variables.Select(v => v.Name).Concat(_letters).Distinct(StringComparer.OrdinalIgnoreCase)];
+
+    public string ValueOf(string name) => _values.GetValueOrDefault(name.Trim(), string.Empty);
+
+    /// <summary>Sets a variable (a blank value clears it) and returns what it held before.</summary>
+    public string SetVariable(string name, string value)
+    {
+        var key = name.Trim().ToUpperInvariant();
+        var previous = ValueOf(key);
+        value = value.Trim();
+        if (_items.TryGetValue(key, out var item))
+        {
+            item.Value = value;
+        }
+        else if (value != previous)
+        {
+            if (value.Length == 0)
+            {
+                _values.Remove(key);
+            }
+            else
+            {
+                _values[key] = value;
+            }
+
+            SheetChanged();
+        }
+
+        return previous;
+    }
+
     /// <summary>Switches to the sheet of <paramref name="code"/>, kept apart from the standalone calculator's sheet.</summary>
     public void ShowSheetOf(GeocacheCode code)
     {
@@ -114,6 +156,7 @@ public sealed partial class VariableCoordinateCalculatorViewModel : ToolViewMode
 
         Recompute();
         Save();
+        Edited?.Invoke(this, EventArgs.Empty);
     }
 
     private CoordinateStageItem NewStage(string name, string template) => new(name, template, SheetChanged, RemoveStage, CopyText);
@@ -135,7 +178,9 @@ public sealed partial class VariableCoordinateCalculatorViewModel : ToolViewMode
         }
 
         var solutions = Stages.Select(s => CoordinateTemplateSolver.Solve(s.Template, _values, posted)).ToList();
-        SyncVariables(solutions.SelectMany(s => s.Variables).Distinct().ToList());
+        // Values no template uses yet (e.g. sent from a workbench tool) still get a row, after the used ones.
+        var used = solutions.SelectMany(s => s.Variables).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
+        SyncVariables([.. used, .. _values.Keys.Except(used, StringComparer.OrdinalIgnoreCase).Order(StringComparer.OrdinalIgnoreCase)]);
 
         // Values may have been touched by the sync, so solve once more on the final set.
         solutions = [.. Stages.Select(s => CoordinateTemplateSolver.Solve(s.Template, _values, posted))];

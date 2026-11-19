@@ -5498,4 +5498,19 @@
   <data name="ResectionWarnIllConditioned" xml:space="preserve">
     <value>Zaměření jsou téměř rovnoběžná, takže drobná chyba v kterémkoli azimutu posune vaši polohu hodně daleko. Vyberte body v různějších směrech.</value>
   </data>
+  <data name="Workbench_ToVariables" xml:space="preserve">
+    <value>Do proměnných</value>
+  </data>
+  <data name="Workbench_ToVariableFormat" xml:space="preserve">
+    <value>Do proměnné {0}</value>
+  </data>
+  <data name="Workbench_ToVariablesTooltip" xml:space="preserve">
+    <value>Vloží výsledek nástroje do další prázdné proměnné</value>
+  </data>
+  <data name="Workbench_ToVariablesPick" xml:space="preserve">
+    <value>Vložit výsledek do</value>
+  </data>
+  <data name="Workbench_Undo" xml:space="preserve">
+    <value>Zpět</value>
+  </data>
 </root>

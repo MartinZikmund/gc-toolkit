@@ -25,8 +25,10 @@ namespace GcToolkit.Core.ViewModels.Tools;
 [Tool("BaseConverter", ToolCategory.Numbers,
       Introduced = "2026-02-10", Updated = "2026-08-07",
       Keywords = ["binary", "hex", "hexadecimal", "octal", "decimal", "base", "radix", "number", "base62", "soustava", "převod", "číslo", "dvojková", "šestnáctková"])]
-public sealed partial class BaseConverterViewModel : ToolViewModelBase, IToolTextInput
+public sealed partial class BaseConverterViewModel : ToolViewModelBase, IToolTextInput, IToolTextOutput
 {
+    string IToolTextOutput.OutputText => TargetOutput;
+
     /// <summary>The bases the reference site names rather than numbering.</summary>
     private static readonly Dictionary<int, string> _baseNameKeys = new()
     {

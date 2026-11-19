@@ -64,6 +64,9 @@ public partial class WorkbenchViewModel : ViewModelBase
     private bool _syncing;
     private GeocacheCode? _loadedCode;
     private string _pastedListing = string.Empty;
+    private WorkbenchCacheTab? _watchedCache;
+    private WorkbenchToolTab? _resultTool;
+    private (string Name, string Previous)? _lastSend;
 
     public WorkbenchViewModel(
         IWorkbenchSessionService session,
@@ -94,6 +97,7 @@ public partial class WorkbenchViewModel : ViewModelBase
             }
         };
         Variables = variables;
+        Variables.Edited += (_, _) => RefreshResultTarget();
         _preferences = preferences;
         RestoreLayout();
 
@@ -279,6 +283,119 @@ public partial class WorkbenchViewModel : ViewModelBase
                 _preferences.Set(PastedListingKeyPrefix + code.Value, value);
             }
         }
+    }
+
+    // Tool result → variables
+
+    /// <summary>The selected tool has a text result that can go to the variable sheet.</summary>
+    public bool HasToolResult => !string.IsNullOrWhiteSpace(_resultTool?.Output);
+
+    /// <summary>The letter the result goes to unless the user picks another: the next empty one.</summary>
+    [ObservableProperty]
+    public partial string? ResultTarget { get; private set; }
+
+    public IReadOnlyList<string> VariableChoices => Variables.VariableChoices;
+
+    /// <summary>What the last "To variables" did, e.g. "B = 42"; empty once undone or after switching caches.</summary>
+    [ObservableProperty]
+    public partial string LastSentToVariables { get; private set; } = string.Empty;
+
+    [RelayCommand(CanExecute = nameof(HasToolResult))]
+    private void SendResultToVariables(string? name)
+    {
+        var target = string.IsNullOrWhiteSpace(name) ? ResultTarget : name.Trim().ToUpperInvariant();
+        if (target is null || _resultTool?.Output is not { } output)
+        {
+            return;
+        }
+
+        var value = output.Trim();
+        var previous = Variables.SetVariable(target, value);
+        _lastSend = (target, previous);
+        LastSentToVariables = $"{target} = {value}";
+        UndoSendToVariablesCommand.NotifyCanExecuteChanged();
+    }
+
+    [RelayCommand(CanExecute = nameof(CanUndoSendToVariables))]
+    private void UndoSendToVariables()
+    {
+        if (_lastSend is not { } last)
+        {
+            return;
+        }
+
+        ForgetLastSend();
+        Variables.SetVariable(last.Name, last.Previous);
+    }
+
+    private bool CanUndoSendToVariables() => _lastSend is not null;
+
+    private void ForgetLastSend()
+    {
+        _lastSend = null;
+        LastSentToVariables = string.Empty;
+        UndoSendToVariablesCommand.NotifyCanExecuteChanged();
+    }
+
+    private void RefreshResultTarget()
+    {
+        ResultTarget = Variables.NextEmptyVariable;
+        OnPropertyChanged(nameof(VariableChoices));
+    }
+
+    private void WatchActiveCache()
+    {
+        if (ReferenceEquals(_watchedCache, ActiveCache))
+        {
+            return;
+        }
+
+        if (_watchedCache is not null)
+        {
+            _watchedCache.PropertyChanged -= OnWatchedCacheChanged;
+        }
+
+        _watchedCache = ActiveCache;
+        if (_watchedCache is not null)
+        {
+            _watchedCache.PropertyChanged += OnWatchedCacheChanged;
+        }
+
+        WatchSelectedTool();
+    }
+
+    private void OnWatchedCacheChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(WorkbenchCacheTab.SelectedTool))
+        {
+            WatchSelectedTool();
+        }
+    }
+
+    private void WatchSelectedTool()
+    {
+        var tool = _watchedCache?.SelectedTool;
+        if (!ReferenceEquals(tool, _resultTool))
+        {
+            if (_resultTool is not null)
+            {
+                _resultTool.OutputChanged -= OnToolResultChanged;
+            }
+
+            _resultTool = tool;
+            if (_resultTool is not null)
+            {
+                _resultTool.OutputChanged += OnToolResultChanged;
+            }
+        }
+
+        OnToolResultChanged(this, EventArgs.Empty);
+    }
+
+    private void OnToolResultChanged(object? sender, EventArgs e)
+    {
+        OnPropertyChanged(nameof(HasToolResult));
+        SendResultToVariablesCommand.NotifyCanExecuteChanged();
     }
 
     /// <summary>Called by the view whenever its width changes.</summary>
@@ -641,15 +758,18 @@ public partial class WorkbenchViewModel : ViewModelBase
 
     private async void LoadCache(GeocacheCode code)
     {
+        WatchActiveCache();
         if (_loadedCode == code)
         {
             return;
         }
 
         _loadedCode = code;
+        ForgetLastSend();
         SelectedText = string.Empty;
         LoadPastedListing(code);
         Variables.ShowSheetOf(code);
+        RefreshResultTarget();
         var listing = Listing.LoadAsync(code);
         try
         {

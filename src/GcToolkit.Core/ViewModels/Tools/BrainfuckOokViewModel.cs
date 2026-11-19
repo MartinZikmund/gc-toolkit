@@ -22,7 +22,7 @@ namespace GcToolkit.Core.ViewModels.Tools;
 [Tool("BrainfuckOok", ToolCategory.Alphabets,
       Introduced = "2026-06-13", Updated = "2026-06-13",
       Keywords = ["brainfuck", "ook", "esoteric", "interpreter", "code", "ezoterický", "jazyk", "interpret", "kód", "opice"])]
-public sealed partial class BrainfuckOokViewModel : ToolViewModelBase, IToolTextInput
+public sealed partial class BrainfuckOokViewModel : ToolViewModelBase, IToolTextInput, IToolTextOutput
 {
     private readonly BrainfuckOok _codec = new();
     private readonly IClipboardService _clipboard;

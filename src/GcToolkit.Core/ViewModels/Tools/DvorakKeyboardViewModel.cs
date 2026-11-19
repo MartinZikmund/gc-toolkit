@@ -23,7 +23,7 @@ namespace GcToolkit.Core.ViewModels.Tools;
 [Tool("DvorakKeyboard", ToolCategory.Alphabets,
       Introduced = "2026-06-13", Updated = "2026-06-13",
       Keywords = ["dvorak", "qwerty", "keyboard", "layout", "remap", "klávesnice", "rozložení", "rozlozeni", "klavesnice", "one-handed"])]
-public sealed partial class DvorakKeyboardViewModel : ToolViewModelBase, IToolTextInput
+public sealed partial class DvorakKeyboardViewModel : ToolViewModelBase, IToolTextInput, IToolTextOutput
 {
     private const int RecomputeDebounceMs = 200;
 

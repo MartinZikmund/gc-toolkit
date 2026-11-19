@@ -22,7 +22,7 @@ namespace GcToolkit.Core.ViewModels.Tools;
       Introduced = "2026-06-13", Updated = "2026-06-13",
       Keywords = ["substitution", "monoalphabetic", "cipher", "cryptogram", "alphabet", "key", "keyword",
                   "substituce", "substituční", "šifra", "klíč", "abeceda", "kryptogram"])]
-public sealed partial class SubstitutionCipherViewModel : ToolViewModelBase, IToolTextInput
+public sealed partial class SubstitutionCipherViewModel : ToolViewModelBase, IToolTextInput, IToolTextOutput
 {
     private readonly SubstitutionCipher _cipher = new();
     private readonly IClipboardService _clipboard;

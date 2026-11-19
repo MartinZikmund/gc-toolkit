@@ -74,6 +74,7 @@ public sealed class WorkbenchToolTab(string toolId, string name, string? iconKey
 {
     private IToolStateful? _tool;
     private IToolTextInput? _input;
+    private IToolTextOutput? _output;
     private string? _pendingText;
 
     public string ToolId { get; } = toolId;
@@ -89,6 +90,11 @@ public sealed class WorkbenchToolTab(string toolId, string name, string? iconKey
 
     /// <summary>Raised when the attached tool's inputs differ from <see cref="State"/>.</summary>
     public event EventHandler? StateChanged;
+
+    /// <summary>The attached tool's text result; null when no tool is attached or it has no text result.</summary>
+    public string? Output { get; private set; }
+
+    public event EventHandler? OutputChanged;
 
     /// <summary>
     /// Connects the tool's view model once it exists: restores <see cref="State"/> into it, then tracks its
@@ -117,6 +123,18 @@ public sealed class WorkbenchToolTab(string toolId, string name, string? iconKey
             _pendingText = null;
             _input.InputText = text;
         }
+
+        if (!ReferenceEquals(viewModel, _output))
+        {
+            DetachOutput();
+            _output = viewModel as IToolTextOutput;
+            if (_output is INotifyPropertyChanged source)
+            {
+                source.PropertyChanged += OnOutputSourceChanged;
+            }
+        }
+
+        UpdateOutput();
     }
 
     /// <summary>Puts <paramref name="text"/> into the tool's input now, or as soon as the tool is attached.</summary>
@@ -141,6 +159,30 @@ public sealed class WorkbenchToolTab(string toolId, string name, string? iconKey
 
         _tool = null;
         _input = null;
+        DetachOutput();
+        UpdateOutput();
+    }
+
+    private void DetachOutput()
+    {
+        if (_output is INotifyPropertyChanged source)
+        {
+            source.PropertyChanged -= OnOutputSourceChanged;
+        }
+
+        _output = null;
+    }
+
+    private void OnOutputSourceChanged(object? sender, PropertyChangedEventArgs e) => UpdateOutput();
+
+    private void UpdateOutput()
+    {
+        var output = _output?.OutputText;
+        if (output != Output)
+        {
+            Output = output;
+            OutputChanged?.Invoke(this, EventArgs.Empty);
+        }
     }
 
     private void OnToolPropertyChanged(object? sender, PropertyChangedEventArgs e)

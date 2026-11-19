@@ -22,7 +22,7 @@ namespace GcToolkit.Core.ViewModels.Tools;
 [Tool("GcCodeId", ToolCategory.Alphabets,
       Introduced = "2026-06-13", Updated = "2026-06-13",
       Keywords = ["gc", "code", "id", "waypoint", "geocache", "kód", "převod", "číslo", "identifikátor", "base31"])]
-public sealed partial class GcCodeIdViewModel : ToolViewModelBase, IToolTextInput
+public sealed partial class GcCodeIdViewModel : ToolViewModelBase, IToolTextInput, IToolTextOutput
 {
     private const string InvalidToken = "?";
 

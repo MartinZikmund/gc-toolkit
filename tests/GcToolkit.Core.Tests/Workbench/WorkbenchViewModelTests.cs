@@ -54,6 +54,7 @@ public class WorkbenchViewModelTests
             new GeocacheDetailViewModel(_store, new FakeClipboardService(), new FakeNavigationService(), localizer, new FakeAppPreferences()),
             CreateSheet(),
             _progress,
+            _store,
             _layoutPreferences,
             _messenger);
         vm.ViewCreated();
@@ -1368,6 +1369,49 @@ public class WorkbenchViewModelTests
         Create();
 
         Assert.IsFalse(_progress.GetProgress().Any(p => p.IsInProgress));
+    }
+
+    // Opening a stored cache
+
+    [TestMethod]
+    public async Task NewCacheCode_PartOfAName_SuggestsStoredCaches()
+    {
+        await _store.UpsertAsync(
+        [
+            new Geocache { Code = A, Name = "The Lost Legion", Coordinate = new(50, 14) },
+            new Geocache { Code = B, Name = "Bridge of Sighs", Coordinate = new(50, 14) },
+        ]);
+        var vm = Create();
+
+        vm.NewCacheCode = "legion";
+        await Task.Yield();
+
+        Assert.AreEqual(A, vm.CacheSuggestions.Single().Code);
+        Assert.AreEqual("The Lost Legion (GC1AAA)", vm.CacheSuggestions.Single().ToString());
+    }
+
+    [TestMethod]
+    public async Task OpenSuggestedCache_OpensItAndClearsTheBox()
+    {
+        await _store.UpsertAsync([new Geocache { Code = B, Name = "Bridge of Sighs", Coordinate = new(50, 14) }]);
+        var vm = Create();
+        vm.NewCacheCode = "bridge";
+        await Task.Yield();
+
+        vm.OpenSuggestedCache(vm.CacheSuggestions.Single());
+
+        Assert.AreEqual(B, vm.ActiveCache!.Code);
+        Assert.AreEqual(string.Empty, vm.NewCacheCode);
+    }
+
+    [TestMethod]
+    public void NewCacheCode_NothingStored_SuggestsNothing()
+    {
+        var vm = Create();
+
+        vm.NewCacheCode = "GC1";
+
+        Assert.AreEqual(0, vm.CacheSuggestions.Count);
     }
 
     private sealed class FilteringCatalog(params string[] toolIds) : ICatalogService

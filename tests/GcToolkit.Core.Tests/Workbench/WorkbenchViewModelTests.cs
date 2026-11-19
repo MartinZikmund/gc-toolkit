@@ -1475,6 +1475,17 @@ public class WorkbenchViewModelTests
     }
 
     [TestMethod]
+    public void CloseCache_ClosesItsToolWindows()
+    {
+        var (vm, tool) = CreateWithOpenTool();
+        vm.PopOutCommand.Execute(tool);
+
+        vm.CloseCache(vm.ActiveCache!);
+
+        Assert.AreEqual(0, _toolWindows.Open.Count);
+    }
+
+    [TestMethod]
     public void PopOut_WithoutWindows_IsUnavailable()
     {
         _toolWindows.IsSupported = false;

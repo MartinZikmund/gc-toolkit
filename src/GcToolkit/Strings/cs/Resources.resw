@@ -5537,4 +5537,13 @@
   <data name="Workbench_CorrectedNeedsStore" xml:space="preserve">
     <value>Pro uložení opravených souřadnic tuto keš importujte.</value>
   </data>
+  <data name="Workbench_PopOut" xml:space="preserve">
+    <value>Otevřít v novém okně</value>
+  </data>
+  <data name="Workbench_ToolInOwnWindow" xml:space="preserve">
+    <value>Tento nástroj je otevřený ve vlastním okně.</value>
+  </data>
+  <data name="Workbench_BringBack" xml:space="preserve">
+    <value>Vrátit zpět</value>
+  </data>
 </root>

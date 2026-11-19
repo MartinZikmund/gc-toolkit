@@ -27,6 +27,7 @@ public sealed partial class WindowShell : Page, IWindowShell
     private bool _isWindowClosed;
     private ViewModelBase? _currentPageViewModel;
     private bool _suppressSelectionChanged;
+    private Views.WorkbenchToolHost? _toolHost;
 
     public WindowShell(IServiceProvider serviceProvider, Window associatedWindow)
     {
@@ -62,6 +63,29 @@ public sealed partial class WindowShell : Page, IWindowShell
 
     public IServiceProvider ServiceProvider => _windowScope.ServiceProvider;
 
+    /// <summary>Turns this window into a single workbench tool: no navigation, no search (#420).</summary>
+    public void ShowToolOnly(Core.Workbench.WorkbenchToolTab tool, string title)
+    {
+        _toolHost = new Views.WorkbenchToolHost { Tool = tool };
+        NavView.IsPaneVisible = false;
+        NavView.IsBackButtonVisible = NavigationViewBackButtonVisible.Collapsed;
+        NavView.IsSettingsVisible = false;
+        NavView.AutoSuggestBox = null;
+        NavView.Content = _toolHost;
+#if !HAS_UNO
+        AppTitleBar.Title = title;
+        AppTitleBar.Content = null;
+#endif
+        _associatedWindow.Title = title;
+    }
+
+    /// <summary>Lets go of the tool shown by <see cref="ShowToolOnly"/>, so the workbench can show it again.</summary>
+    public void ReleaseTool()
+    {
+        _toolHost?.Release();
+        _toolHost = null;
+    }
+
     public WindowShellViewModel ViewModel { get; }
 
     public SearchViewModel Search { get; }
@@ -80,7 +104,7 @@ public sealed partial class WindowShell : Page, IWindowShell
 
     private void UpdateWindowTitle()
     {
-        if (ViewModel.Title is not null && !_isWindowClosed)
+        if (ViewModel.Title is not null && !_isWindowClosed && _toolHost is null)
         {
             _associatedWindow.Title = ViewModel.Title;
         }

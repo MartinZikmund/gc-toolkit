@@ -18,6 +18,7 @@ using GcToolkit.Core.Services.Settings;
 using GcToolkit.Core.Services.Theming;
 using GcToolkit.Core.ViewModels;
 using GcToolkit.Core.Workbench;
+using GcToolkit.Services;
 using GcToolkit.Services.Devices;
 using GcToolkit.Services.Dialogs;
 using GcToolkit.Services.Files;
@@ -111,6 +112,8 @@ public partial class App : Application, IApplication
             MainWindow.Content = shell;
         }
 
+        // Tool windows belong to the main window's workbench; they go with it.
+        MainWindow.Closed += (_, _) => Host.Services.GetRequiredService<ToolWindowService>().CloseAll();
         MainWindow.Activate();
     }
 
@@ -193,6 +196,8 @@ public partial class App : Application, IApplication
         services.AddSingleton<IWorkbenchSessionService, WorkbenchSessionService>();
         services.AddSingleton<IScratchpadRepository, StoreScratchpadRepository>();
         services.AddSingleton<IWorkbenchToolStore, PreferencesWorkbenchToolStore>();
+        services.AddSingleton<ToolWindowService>();
+        services.AddSingleton<IToolWindowService>(sp => sp.GetRequiredService<ToolWindowService>());
 
         // Scoped ViewModels
         services.AddScoped<WindowShellViewModel>();

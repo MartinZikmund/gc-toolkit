@@ -59,6 +59,7 @@ public partial class WorkbenchViewModel : ViewModelBase
     private readonly IPreferences _preferences;
     private readonly IWorkbenchProgressRecorder _progress;
     private readonly IGeocacheStore _store;
+    private readonly IToolWindowService _toolWindows;
     private int _suggestionVersion;
     private readonly Dictionary<GeocacheCode, WorkbenchCacheTab> _tabs = [];
     private double _availableWidth;
@@ -86,6 +87,7 @@ public partial class WorkbenchViewModel : ViewModelBase
         CorrectedCoordinatesViewModel corrected,
         IWorkbenchProgressRecorder progress,
         IGeocacheStore store,
+        IToolWindowService toolWindows,
         IPreferences preferences,
         IMessenger? messenger = null)
     {
@@ -110,6 +112,7 @@ public partial class WorkbenchViewModel : ViewModelBase
         Corrected = corrected;
         Corrected.SolvedChanged += (_, _) => OnSolvedChanged();
         _store = store;
+        _toolWindows = toolWindows;
         Scratchpad.PropertyChanged += (_, e) =>
         {
             if (e.PropertyName == nameof(ScratchpadViewModel.SaveState))
@@ -573,8 +576,36 @@ public partial class WorkbenchViewModel : ViewModelBase
         }
     }
 
+    /// <summary>Desktop heads can show a tool in its own window.</summary>
+    public bool CanPopOut => _toolWindows.IsSupported;
+
+    [RelayCommand(CanExecute = nameof(CanPopOutTool))]
+    private void PopOut(WorkbenchToolTab? tool)
+    {
+        var cache = OpenCaches.FirstOrDefault(c => tool is not null && c.Tools.Contains(tool));
+        if (tool is null || cache is null || tool.IsPoppedOut)
+        {
+            return;
+        }
+
+        tool.IsPoppedOut = true;
+        _toolWindows.Show(tool, $"{tool.Name} · {cache.Title}", () => tool.IsPoppedOut = false);
+    }
+
+    private bool CanPopOutTool(WorkbenchToolTab? tool) => CanPopOut && tool is not null;
+
+    [RelayCommand]
+    private void BringBack(WorkbenchToolTab? tool)
+    {
+        if (tool is not null)
+        {
+            _toolWindows.Close(tool);
+        }
+    }
+
     public void CloseTool(WorkbenchToolTab tool)
     {
+        _toolWindows.Close(tool);
         var cache = OpenCaches.FirstOrDefault(c => c.Tools.Contains(tool));
         if (cache is null)
         {

@@ -26,6 +26,8 @@ public partial class WorkbenchViewModel : ViewModelBase
         (nameof(IsCompact), vm => vm.IsCompact),
         (nameof(IsMedium), vm => vm.IsMedium),
         (nameof(IsWide), vm => vm.IsWide),
+        (nameof(IsSpanned), vm => vm.IsSpanned),
+        (nameof(HingeWidth), vm => vm.HingeWidth),
         (nameof(IsToolPaneOpen), vm => vm.IsToolPaneOpen),
         (nameof(IsToolPaneInline), vm => vm.IsToolPaneInline),
         (nameof(PaneLength), vm => vm.PaneLength),
@@ -63,6 +65,7 @@ public partial class WorkbenchViewModel : ViewModelBase
     private int _suggestionVersion;
     private readonly Dictionary<GeocacheCode, WorkbenchCacheTab> _tabs = [];
     private double _availableWidth;
+    private WorkbenchSpan? _span;
     private double _requestedToolPaneWidth = WorkbenchLayout.DefaultToolPaneWidth;
     private bool _isOverlayOpen;
     private bool _syncing;
@@ -179,12 +182,17 @@ public partial class WorkbenchViewModel : ViewModelBase
 
     public bool IsWide => LayoutMode == WorkbenchLayoutMode.Wide;
 
+    public bool IsSpanned => LayoutMode == WorkbenchLayoutMode.Spanned;
+
+    /// <summary>Gap the listing leaves for the hinge, so nothing sits under it.</summary>
+    public double HingeWidth => IsSpanned ? _span!.Value.HingeWidth : 0;
+
     /// <summary>Always open when wide; toggled (or light-dismissed) when medium; follows the section on phones.</summary>
     public bool IsToolPaneOpen
     {
         get => LayoutMode switch
         {
-            WorkbenchLayoutMode.Wide => true,
+            WorkbenchLayoutMode.Wide or WorkbenchLayoutMode.Spanned => true,
             WorkbenchLayoutMode.Medium => _isOverlayOpen,
             _ => PhoneSection != WorkbenchPhoneSection.Listing,
         };
@@ -240,6 +248,7 @@ public partial class WorkbenchViewModel : ViewModelBase
     {
         WorkbenchLayoutMode.Wide => ToolPaneWidth,
         WorkbenchLayoutMode.Medium => WorkbenchLayout.OverlayPaneWidth,
+        WorkbenchLayoutMode.Spanned => Math.Max(0, _availableWidth - _span!.Value.HingeStart - _span.Value.HingeWidth),
         _ => _availableWidth,
     };
 
@@ -474,8 +483,23 @@ public partial class WorkbenchViewModel : ViewModelBase
         }
 
         _availableWidth = width;
-        LayoutMode = WorkbenchLayout.ModeFor(width);
+        UpdateLayoutMode();
         OnPropertyChanged(nameof(ToolPaneWidth));
+    }
+
+    /// <summary>Called by the view when the window starts or stops spanning a hinge.</summary>
+    public void UpdateSpan(WorkbenchSpan? span)
+    {
+        if (span != _span)
+        {
+            _span = span;
+            UpdateLayoutMode();
+        }
+    }
+
+    private void UpdateLayoutMode()
+    {
+        LayoutMode = _span is null ? WorkbenchLayout.ModeFor(_availableWidth) : WorkbenchLayoutMode.Spanned;
         RaiseLayoutChanged();
     }
 

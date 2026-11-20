@@ -10,7 +10,13 @@ public enum WorkbenchLayoutMode
 
     /// <summary>Listing and tool pane side by side with a draggable divider.</summary>
     Wide,
+
+    /// <summary>The window spans a foldable's hinge: listing on the first screen, tools on the second.</summary>
+    Spanned,
 }
+
+/// <summary>Where a vertical hinge crosses the workbench, in the workbench's own coordinates.</summary>
+public readonly record struct WorkbenchSpan(double HingeStart, double HingeWidth);
 
 /// <summary>What a phone-sized workbench shows.</summary>
 public enum WorkbenchPhoneSection

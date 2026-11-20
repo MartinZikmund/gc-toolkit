@@ -17,11 +17,20 @@ public partial class WorkbenchViewBase : ViewBase<WorkbenchViewModel> { }
 
 public sealed partial class WorkbenchView : WorkbenchViewBase
 {
+#if __ANDROID__
+    private readonly HingeWatcher _hinge;
+#endif
+
     public WorkbenchView()
     {
         this.InitializeComponent();
 #if HAS_UNO
         Split.RegisterPropertyChangedCallback(SplitView.OpenPaneLengthProperty, (_, _) => RefreshInlinePane());
+#endif
+#if __ANDROID__
+        _hinge = new(this, span => ViewModel?.UpdateSpan(span));
+        Loaded += (_, _) => _hinge.Start();
+        Unloaded += (_, _) => _hinge.Stop();
 #endif
     }
 
@@ -51,6 +60,9 @@ public sealed partial class WorkbenchView : WorkbenchViewBase
         => toolTabsVisible && !hasTools ? Visibility.Visible : Visibility.Collapsed;
 
     public static Visibility Not(bool value) => value ? Visibility.Collapsed : Visibility.Visible;
+
+    // Keeps the listing off the hinge when the window spans one.
+    public static Thickness HingeGap(double hingeWidth) => new(0, 0, hingeWidth, 0);
 
     public static Visibility ShowWhenText(string text) => string.IsNullOrEmpty(text) ? Visibility.Collapsed : Visibility.Visible;
 
@@ -156,7 +168,13 @@ public sealed partial class WorkbenchView : WorkbenchViewBase
     }
 
     // The only layout input the view supplies; the view model decides the mode from it.
-    private void OnSizeChanged(object sender, SizeChangedEventArgs e) => ViewModel?.UpdateAvailableWidth(e.NewSize.Width);
+    private void OnSizeChanged(object sender, SizeChangedEventArgs e)
+    {
+        ViewModel?.UpdateAvailableWidth(e.NewSize.Width);
+#if __ANDROID__
+        _hinge.Refresh();
+#endif
+    }
 
     // The pane sits on the right and the panel at the bottom, so dragging left/up makes them bigger.
     private void OnPaneResized(object? sender, double delta)

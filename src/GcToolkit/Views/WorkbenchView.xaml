@@ -246,7 +246,7 @@
             PanePlacement="Right"
             Visibility="{x:Bind ViewModel.HasOpenCaches, Mode=OneWay}">
 
-            <Grid>
+            <Grid Margin="{x:Bind local:WorkbenchView.HingeGap(ViewModel.HingeWidth), Mode=OneWay}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
@@ -736,6 +736,15 @@
                     <VisualState.StateTriggers>
                         <StateTrigger IsActive="{x:Bind ViewModel.IsWide, Mode=OneWay}" />
                     </VisualState.StateTriggers>
+                </VisualState>
+                <!--  Spanning a foldable's hinge (#466): each screen keeps its pane, nothing to resize.  -->
+                <VisualState x:Name="SpannedState">
+                    <VisualState.StateTriggers>
+                        <StateTrigger IsActive="{x:Bind ViewModel.IsSpanned, Mode=OneWay}" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="PaneSizer.Visibility" Value="Collapsed" />
+                    </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="MediumState">
                     <VisualState.StateTriggers>

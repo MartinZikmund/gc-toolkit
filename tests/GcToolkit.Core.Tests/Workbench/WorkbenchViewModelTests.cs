@@ -285,6 +285,78 @@ public class WorkbenchViewModelTests
         Assert.IsTrue(vm.IsDockSelectorVisible);
     }
 
+    // Foldables (#466): the inner screen of a 7.6" fold is ~673 wide, a medium width on its own.
+
+    [TestMethod]
+    public void UpdateSpan_Hinge_ListingOnFirstScreenToolsOnSecond()
+    {
+        var vm = Create(673);
+
+        vm.UpdateSpan(new WorkbenchSpan(336, 1));
+
+        Assert.IsTrue(vm.IsSpanned);
+        Assert.IsTrue(vm.IsListingVisible);
+        Assert.IsTrue(vm.IsToolTabsVisible);
+        Assert.IsTrue(vm.IsDockVisible);
+        Assert.IsTrue(vm.IsToolPaneOpen);
+        Assert.IsTrue(vm.IsToolPaneInline);
+        Assert.AreEqual(336, vm.PaneLength);
+        Assert.AreEqual(1, vm.HingeWidth);
+    }
+
+    [TestMethod]
+    public void UpdateSpan_WidthChangesWhileSpanned_StaysSpanned()
+    {
+        var vm = Create(673);
+        vm.UpdateSpan(new WorkbenchSpan(336, 1));
+
+        vm.UpdateAvailableWidth(1200);
+
+        Assert.IsTrue(vm.IsSpanned);
+        Assert.AreEqual(1200 - 337, vm.PaneLength);
+    }
+
+    [TestMethod]
+    public void UpdateSpan_Unspanned_FallsBackToTheModeForTheWidth()
+    {
+        var vm = Create(673);
+        vm.UpdateSpan(new WorkbenchSpan(336, 1));
+
+        vm.UpdateSpan(null);
+
+        Assert.IsFalse(vm.IsSpanned);
+        Assert.IsTrue(vm.IsMedium);
+        Assert.AreEqual(0, vm.HingeWidth);
+    }
+
+    [TestMethod]
+    public void UpdateSpan_SpanAndUnspan_KeepsWhatThePhoneShowed()
+    {
+        var vm = Create(400);
+        vm.PhoneSection = WorkbenchPhoneSection.Notes;
+
+        vm.UpdateSpan(new WorkbenchSpan(200, 1));
+        vm.UpdateSpan(null);
+
+        Assert.IsTrue(vm.IsCompact);
+        Assert.AreEqual(WorkbenchPhoneSection.Notes, vm.PhoneSection);
+    }
+
+    [TestMethod]
+    public void UpdateSpan_Spanned_RaisesLayoutProperties()
+    {
+        var vm = Create(673);
+        List<string?> changed = [];
+        vm.PropertyChanged += (_, e) => changed.Add(e.PropertyName);
+
+        vm.UpdateSpan(new WorkbenchSpan(336, 1));
+
+        CollectionAssert.Contains(changed, nameof(WorkbenchViewModel.IsSpanned));
+        CollectionAssert.Contains(changed, nameof(WorkbenchViewModel.IsToolPaneOpen));
+        CollectionAssert.Contains(changed, nameof(WorkbenchViewModel.PaneLength));
+        CollectionAssert.Contains(changed, nameof(WorkbenchViewModel.HingeWidth));
+    }
+
     [TestMethod]
     public void UpdateAvailableWidth_ModeChanges_RaisesDerivedProperties()
     {

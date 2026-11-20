@@ -69,6 +69,11 @@
         <UnoFeatures>$(UnoFeatures);WebView;</UnoFeatures>
     </PropertyGroup>
 
+    <!-- Fold and hinge positions for the spanned workbench (#466). -->
+    <ItemGroup Condition="'$(IsAndroid)' == 'true'">
+        <PackageReference Include="Xamarin.AndroidX.Window.WindowJava" />
+    </ItemGroup>
+
     <ItemGroup>
         <PackageReference Include="MZikmund.Toolkit.WinUI" />
         <PackageReference Include="sqlite-net-e" />
